@@ -1,44 +1,42 @@
-/**
- * v2 object row — replaces `UnitListRow`.
- *
- * v1's row was a fixed 56px with secondary icons parked at `opacity: 0.5` and
- * snapped to 1 on hover (`.opacity50` → `.clear-opacity`). v2 keeps the reveal for
- * *actions* only — state and values are always at full contrast — and takes its
- * height from `--ds-row-h-lg`, so a compact object panel is 44px instead of 56px
- * and shows three more objects per screen.
- *
- * The subtitle is set in the mono face because it is almost always a plate plus a
- * timestamp, which must not jitter as the clock ticks.
- *
- * `actions` and `badge` also accept children carrying `slot="actions"` / `slot="badge"`.
- */
+/** Строка объекта с основной областью и независимыми дополнительными действиями. */
 export interface DsListRowProps {
-  /** Slot children for actions and badge. */
+  /** Дочерние элементы со slot="actions" или slot="badge". */
   children?: React.ReactNode;
+  /** Основное название объекта; сокращается при нехватке места. */
   title?: React.ReactNode;
-  /** Plate, IMEI, last-message time. Rendered in --ds-font-mono. */
+  /** Номер, время или пояснение; по умолчанию обычный шрифт. */
   subtitle?: React.ReactNode;
-  /** Draws a DsStateIcon instead of `icon`. */
+  /** Моноширинный подзаголовок для номеров и времени. */
+  subtitleMono?: boolean;
+  /** Статусный символ DsStateIcon; имеет приоритет над icon. */
   state?: 'moving' | 'parked' | 'offline' | 'invalid' | 'alarm' | 'nodata';
-  /** Course in degrees, for `state="moving"`. */
+  /** Направление в градусах для state="moving". */
   course?: number;
-  /** Trailing primary value — speed, fuel, count. Mono. */
+  /** Короткое значение справа: скорость, топливо, количество. */
   value?: React.ReactNode;
-  /** Second trailing line under `value`. */
+  /** Дополнительная подпись под value; без value не отображается. */
   valueMeta?: React.ReactNode;
-  /** Material Symbols ligature, used when there is no `state`. */
+  /** Имя Material Symbols; используется, если не задан state. */
   icon?: string;
-  /** Row under inspection — tinted ground plus a 2px inset brand bar. */
+  /** Открытый для просмотра объект: подложка, полоса слева и aria-current. */
   active?: boolean;
-  /** Multi-select membership — tinted ground, no bar. */
+  /** Подложка множественного выбора. Доступный контрол выбора задаёт родитель. */
   selected?: boolean;
+  /** Нажатие основной кнопки. При as="div" не вызывается. */
   onClick?: () => void;
-  /** Icon buttons; faded to 55% until the row is hovered or active. */
+  /** Адрес перехода. Создаёт нативную ссылку вместо кнопки, кроме as="div". */
+  href?: string;
+  /** Цель открытия ссылки, например _blank. */
+  target?: string;
+  /** Отношение ссылки. Для target="_blank" по умолчанию noopener noreferrer. */
+  rel?: string;
+  /** Независимые кнопки действий с доступными именами; имя показывается в подсказке. */
   actions?: React.ReactNode;
-  /** A DsLozenge shown after the title. */
+  /** Резерв ширины действий в px, в том числе без actions. Одинаковый для строк одного списка. */
+  actionsWidth?: number;
+  /** Короткая неинтерактивная метка DsLozenge после названия. */
   badge?: React.ReactNode;
-  /** `div` when the row already contains its own buttons. Default `button`. */
+  /** div отключает действие и ссылку. Без href и onClick основная область всегда div. @default button */
   as?: 'button' | 'div';
 }
-/** The main area is a button when `onClick` is set; `actions` are its siblings, never its children. */
 export declare function DsListRow(props: DsListRowProps): JSX.Element;

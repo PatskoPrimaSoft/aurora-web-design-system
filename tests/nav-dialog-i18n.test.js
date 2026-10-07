@@ -127,6 +127,24 @@ const items = [{ id: 'a', label: 'Профиль' }, { id: 'b', label: 'Наст
   ok(d.activeElement === fm.box.querySelector('input'), 'DsFilterMenu: открытие переводит фокус в поле');
   key(d.activeElement, 'Escape'); ok(!fm.box.querySelector('[role="dialog"]') && d.activeElement === fb, 'DsFilterMenu: Escape закрывает и возвращает фокус');
 }
+// Подсказка строки поглощает только первый Escape, сохраняя внешний диалог.
+for(const trigger of ['title','action']){
+  let closed=0;
+  const fixture=mount(h(NS.DsDialog,{title:'Объект',onClose:()=>closed++},
+    h(NS.DsListRow,{title:'Полное название объекта',onClick:()=>{},
+      actions:h(NS.DsIconButton,{icon:'info',label:'Сведения об объекте'})})));
+  const row=d.querySelector('[role="dialog"] [data-ds-list-row]');
+  const title=row.querySelector('[data-ds-list-title]');
+  Object.defineProperty(title,'scrollWidth',{value:200});Object.defineProperty(title,'clientWidth',{value:100});
+  const control=trigger==='title'?row.querySelector('button'):row.querySelector('[data-ds-list-actions] button');
+  act(()=>control.focus());
+  ok(!!row.querySelector('[role="tooltip"]'),`DsListRow ${trigger}: подсказка открыта в диалоге`);
+  const first=key(control,'Escape');
+  ok(first.defaultPrevented&&!row.querySelector('[role="tooltip"]')&&closed===0,`DsListRow ${trigger}: первый Escape закрывает только подсказку`);
+  key(control,'Escape');
+  ok(closed===1,`DsListRow ${trigger}: без подсказки Escape закрывает диалог`);
+  fixture.unmount();
+}
 // ---------------- строки интерфейса
 {
   const ru = mount(h(NS.DsToast, { action: () => {} }, 'x')).box;

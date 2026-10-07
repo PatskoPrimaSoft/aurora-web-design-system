@@ -1,21 +1,45 @@
-<!-- @dsCard group="5 · Компоненты · данные" height=220 subtitle="Строка панели объектов: глиф состояния, две строки, значение справа" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=700 subtitle="Строка объекта со статусом, подписью, значением и дополнительными действиями" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:32px}
+.section{display:flex;flex-direction:column;gap:16px;min-width:0}
+.list{display:flex;flex-direction:column;gap:2px;max-width:560px;min-width:0}
+.choice{display:flex;align-items:center;gap:var(--ds-gap-sm);min-width:0}
+h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
+.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var a=React.useState(1);
-  return h('div',{className:'col',style:{gap:2,maxWidth:380}},
-    h(S.DsListRow,{title:'MAZ 5440',subtitle:'AB 1234-7 · 14:32:07',state:'moving',course:135,value:'62 км/ч',valueMeta:'Иванов П.',active:a[0]===1,onClick:function(){a[1](1);},
-      actions:h(S.DsIconButton,{icon:'more_vert',label:'Действия',size:'sm'})}),
-    h(S.DsListRow,{title:'Volvo FH16',subtitle:'AC 8871-2 · 13:05:44',state:'parked',value:'0 км/ч',active:a[0]===2,onClick:function(){a[1](2);},badge:h(S.DsLozenge,{tone:'info',size:'sm'},'Pro')}),
-    h(S.DsListRow,{title:'Склад №2',subtitle:'геозона',icon:'place',selected:true}));}
+var objects=[
+  {title:'MAZ 5440',subtitle:'AB 1234-7 · Движется',state:'moving',course:135,value:'62 км/ч',valueMeta:'Иванов П.'},
+  {title:'Volvo FH16',subtitle:'AC 8871-2 · Стоянка',state:'parked',value:'0 км/ч'},
+  {title:'Служебный автомобиль северо-западного подразделения',subtitle:'AE 3401-7 · Нет связи',state:'offline'}];
+function App(){var active=React.useState(0),selected=React.useState([0]),message=React.useState(''),checkSide=React.useState('left');
+  return h('div',{className:'examples'},
+    h('section',{className:'section','aria-label':'Просмотр объекта'},
+      h('h3',null,'Просмотр и действия'),
+      h('div',{className:'list'},objects.map(function(object,i){return h(S.DsListRow,Object.assign({},object,{key:i,active:active[0]===i,onClick:function(){active[1](i);},
+        badge:i===1?h(S.DsLozenge,{tone:'info',size:'sm'},'Pro'):undefined,
+        actionsWidth:32,actions:i===2?undefined:h(S.DsIconButton,{icon:'info',label:'Сведения: '+object.title,size:'sm',onClick:function(){message[1]('Сведения об объекте '+object.title);}})}));})),
+      h('p',{className:'cap',role:'status'},'Открыт: '+objects[active[0]].title+'.'),
+      h('p',{className:'cap',role:'status'},message[0]||'Нажмите строку или кнопку сведений.')),
+    h('section',{className:'section','aria-label':'Множественный выбор'},
+      h('h3',null,'Выбор нескольких объектов'),
+      h('div',null,h(S.DsButton,{id:'list-row-check-side',tone:'secondary',size:'sm',onClick:function(){checkSide[1](checkSide[0]==='left'?'right':'left');}},checkSide[0]==='left'?'Чекбоксы справа':'Чекбоксы слева')),
+      h('div',{className:'list'},objects.slice(0,2).map(function(object,i){
+        var checkbox=h(S.DsCheckbox,{key:'check',state:selected[0].includes(i)?'checked':'unchecked',ariaLabel:'Выбрать: '+object.title,onChange:function(next){selected[1](next==='checked'?selected[0].concat(i):selected[0].filter(function(id){return id!==i;}));}}),
+          row=h(S.DsListRow,Object.assign({},object,{key:'row',as:'div',selected:selected[0].includes(i)}));
+        return h('div',{className:'choice',key:i},checkSide[0]==='left'?[checkbox,row]:[row,checkbox]);})),
+      h('p',{className:'cap',role:'status'},'Выбрано объектов: '+selected[0].length+'.')),
+    h('section',{className:'section','aria-label':'Переход к объекту'},
+      h('h3',null,'Переход по ссылке'),
+      h('div',{className:'list'},h(S.DsListRow,{title:'Состояния объектов',subtitle:'Открыть DsStateIcon в новой вкладке',icon:'open_in_new',href:'../../index.html?card=DsStateIcon',target:'_blank'}))),
+    h('section',{className:'section','aria-label':'Строки без действия'},
+      h('h3',null,'Без действия по строке'),
+      h('div',{className:'list'},
+        h(S.DsListRow,{as:'div',title:'Склад №2',subtitle:'Геозона',icon:'place',value:'12',valueMeta:'объектов'}),
+        h(S.DsListRow,{as:'div',title:'Датчик топлива',subtitle:'Тревога: низкий уровень',state:'alarm',value:'8 %'}),
+        h(S.DsListRow,{as:'div',title:'Резервный трекер',subtitle:'359881234567890 · 14:32:07',subtitleMono:true,state:'nodata'}))));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

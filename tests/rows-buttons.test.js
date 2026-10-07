@@ -138,12 +138,41 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
 }
 // ---------------- №3 DsListRow
 {
+  const open=spy();
+  const link=render(h(NS.DsListRow,{title:'Объект',href:'#object',active:true,actionsWidth:32}));
+  ok(link.querySelector('a')?.getAttribute('href')==='#object'&&link.querySelector('a')?.getAttribute('aria-current')==='page','DsListRow: переход — нативная ссылка с текущей страницей');
+  ok(link.querySelector('[data-ds-list-actions]')?.style.width==='32px','DsListRow: пустое место действий сохраняет ширину колонки');
+  const passive=render(h(NS.DsListRow,{title:'Объект',as:'div',href:'#object',onClick:open}));
+  ok(!passive.querySelector('a,button'),'DsListRow: as=div отключает и ссылку, и кнопку');
+  const text=render(h(NS.DsListRow,{title:'Объект',subtitle:'Нет связи',onClick:open}));
+  ok(text.querySelector('[data-ds-list-subtitle]')?.style.fontFamily!=='var(--ds-font-mono)','DsListRow: пояснение использует обычный шрифт');
+  const mono=render(h(NS.DsListRow,{title:'Объект',subtitle:'AB 1234-7',subtitleMono:true}));
+  ok(mono.querySelector('[data-ds-list-subtitle]')?.style.fontFamily==='var(--ds-font-mono)','DsListRow: номера можно оформить моноширинным шрифтом');
+  const button=text.querySelector('button');
+  key(button,'keydown',' ');
+  ok(text.firstElementChild.style.background==='var(--ds-surface-active)','DsListRow: клавиатурное нажатие меняет подложку');
+  fire(button,'focusout');
+  ok(text.firstElementChild.style.background!=='var(--ds-surface-active)','DsListRow: потеря фокуса сбрасывает нажатие');
+}
+{
   const open = spy(), del = spy();
   const box = render(h(NS.DsListRow, { title: 'MAZ 5440', onClick: open, actions: h(NS.DsIconButton, { icon: 'delete', label: 'Удалить', onClick: del }) }));
   const btn = box.querySelector('button[aria-label="Удалить"]');
   ok(nested(box) === 0, 'DsListRow: действия не вложены в основную кнопку');
   click(btn); ok(del.calls.length === 1 && open.calls.length === 0, 'DsListRow: действие не открывает строку');
   click(box.querySelector('button:not([aria-label])')); ok(open.calls.length === 1, 'DsListRow: основная зона открывает');
+  ok(!btn.hasAttribute('title'),'DsListRow: DsIconButton не дублирует подсказку нативным title');
+  fire(btn,'focusin');
+  ok(box.querySelector('[role="tooltip"]')?.textContent==='Удалить','DsListRow: действие показывает подпись с клавиатуры');
+  fire(box.querySelector('[data-ds-list-title]'),'pointerover',{pointerType:'mouse'});
+  await new Promise(resolve=>w.setTimeout(resolve,0));
+  ok(!box.querySelector('[role="tooltip"]'),'DsListRow: переход к короткому названию закрывает подсказку действия');
+  const title=box.querySelector('[data-ds-list-title]');
+  Object.defineProperty(title,'scrollWidth',{value:200});Object.defineProperty(title,'clientWidth',{value:100});
+  fire(box.querySelector('button:not([aria-label])'),'focusin');
+  ok(box.querySelector('[role="tooltip"]')?.textContent==='MAZ 5440','DsListRow: сокращённое название раскрывается при фокусе');
+  key(box.querySelector('button:not([aria-label])'),'keydown','Escape');
+  ok(!box.querySelector('[role="tooltip"]'),'DsListRow: Escape закрывает подсказку');
 }
 // ---------------- №3 + №4 DsTable
 const ROWS = [{ id: 3, name: 'Scania' }, { id: 4, name: 'Renault' }];
