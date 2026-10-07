@@ -16,7 +16,7 @@ input[type=range]{width:100%;accent-color:var(--ds-brand)}
 output{font:var(--ds-type-mono);color:var(--ds-fg-muted)}
 @media(max-width:720px){body{padding:16px}.grid{grid-template-columns:minmax(0,1fr)}}
 </style></head><body><div id="root"></div><script type="text/babel">
-const { DsButton, DsIconButton, DsCheckbox, DsSwitch, DsCheckButton, DsField, DsDuration, DsTabs, DsTabPanel, DsMenu } = window.AuroraWebDesignSystem_96e210;
+const { DsButton, DsIconButton, DsCheckbox, DsSwitch, DsField, DsDuration, DsTabs, DsTabPanel, DsMenu } = window.AuroraWebDesignSystem_96e210;
 function App(){
   const [checked,setChecked]=React.useState(false);
   const [radio,setRadio]=React.useState('all');
@@ -43,13 +43,13 @@ function App(){
       <section className="sample" aria-labelledby="selection-heading">
         <h2 id="selection-heading">Выбор и переключение</h2>
         <div className="stack">
-          <DsCheckbox label="Показывать названия" checked={checked} onChange={e=>setChecked(e.target.checked)}/>
+          <DsCheckbox label="Показывать названия" state={checked?'checked':'unchecked'} onChange={next=>setChecked(next==='checked')}/>
           <div className="controls" role="group" aria-label="Объекты">
-            <DsCheckbox radio name="focus-objects" label="Все объекты" checked={radio==='all'} onChange={()=>setRadio('all')}/>
-            <DsCheckbox radio name="focus-objects" label="Избранные" checked={radio==='favorites'} onChange={()=>setRadio('favorites')}/>
+            <DsCheckbox radio name="focus-objects" label="Все объекты" state={radio==='all'?'checked':'unchecked'} onChange={()=>setRadio('all')}/>
+            <DsCheckbox radio name="focus-objects" label="Избранные" state={radio==='favorites'?'checked':'unchecked'} onChange={()=>setRadio('favorites')}/>
           </div>
           <DsSwitch label="Автообновление" checked={enabled} onChange={e=>setEnabled(e.target.checked)}/>
-          <div className="controls"><DsCheckButton label="Выбрать строку" state={selection} onChange={setSelection}/><span>Выбор строки</span></div>
+          <div className="controls"><DsCheckbox ariaLabel="Выбрать строку" state={selection} onChange={setSelection}/><span>Выбор строки</span></div>
           <DsCheckbox label="Недоступный выбор" disabled/>
         </div>
       </section>

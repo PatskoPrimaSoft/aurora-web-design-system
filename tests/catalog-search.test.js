@@ -8,9 +8,10 @@ import {fixtureRoot} from './helpers/build-root.js';
 import {mkdirSync,writeFileSync,rmSync} from 'node:fs';
 import {join} from 'node:path';
 const root=fileURLToPath(new URL('../',import.meta.url)),cards=readCards(root);
-assert.ok(searchCards(cards,' dsselectbox ').some(c=>c.id==='DsSelectBox'));
+assert.ok(!cards.some(c=>['DsCheck','DsCheckButton','DsSelectBox'].includes(c.id)));
+assert.ok(searchCards(cards,'радио').some(c=>c.id==='DsCheckbox'));
 assert.ok(searchCards(cards,'ВЫБОР').some(c=>c.id==='DsCheckbox'));
-assert.ok(searchCards(cards,'CHECKBOX').some(c=>c.id==='DsCheckButton'));
+assert.ok(searchCards(cards,'CHECKBOX').some(c=>c.id==='DsCheckbox'));
 assert.deepEqual(searchCards(cards,'неизвестно-12345'),[]);
 assert.equal(searchCards([{id:'New',title:'Новая карточка',searchText:'loading onClick'}],' ＬＯＡＤＩＮＧ onclick ')[0].id,'New');
 assert.equal(searchCards([{id:'New',title:'Новая карточка'}],'новая отсутствует').length,0);
@@ -24,7 +25,7 @@ try{
 }finally{rmSync(fixture,{recursive:true,force:true});}
 const state=parseState(new URL('http://local/index.html?card=DsButton&theme=bad&appearance=bad&density=bad&compare=evil'),cards);
 assert.deepEqual(state.scope,{theme:'DEFAULT',appearance:'light',density:'cozy'});assert.equal(state.compare,false);
-assert.equal(parseState(new URL('http://local/index.html#DsCheckButton'),cards).cardId,'DsCheckButton');
+assert.equal(parseState(new URL('http://local/index.html#DsCheckbox'),cards).cardId,'DsCheckbox');
 for(const suffix of ['?card=DsHeader&theme=RED2&appearance=dark&density=compact&compare=1','#DsHeader']){
  const redirected=parseState(new URL('http://local/index.html'+suffix),cards);
  assert.equal(redirected.cardId,'DsAppHeader');assert.equal(redirected.unknown,false);

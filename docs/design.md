@@ -75,7 +75,7 @@ Aurora — платформа GPS-мониторинга коммерческо�
 - **Словарь автопарка** — `ds-state-moving` / `-parked` / `-offline` / `-invalid` / `-alarm` / `-nodata` сводят состояние объекта на палитру статусов; из них `DsStateIcon` и `DsObjectRow` берут чернила глифа, так что цвет состояния живёт в одном месте, а тонированный диск за ним остаётся на тоне статуса. `nodata` нейтрален, как `parked`: их различает глиф, а не ступень серого.
 - **Свежесть данных** — `ds-fresh-live` / `-recent` / `-late` / `-none` (как давно пришло последнее сообщение) красит диск строки объекта, чернила — `ds-fresh-on`. Состояние и свежесть — разные факты: стоящий объект может быть совершенно свежим.
 - **Иконки карты** — `ds-map-point` (`#2b8cf7`) на `ds-map-ground` (белый): глиф точки в белом диске, её подпись, заливка пинов. **Намеренно не зависят ни от темы, ни от режима:** тайлы карты светлые и в dark, поэтому одно значение на все четыре набора. Остальные стили карты — треки, геозоны, кластеры — живут в `aur-openlayers`.
-- **Чекбоксы используют одну модель выбора** — `'unchecked' | 'checked' | 'indeterminate'`, рисуются примитивом `DsCheck`. Чекбокс формы сводит `checked` + `indeterminate` на него; агрегатная строка (пользователь, группа, «выбрать всё») обязана уметь `indeterminate` и не заводит свой. У радио только два состояния: `unchecked` и `checked`.
+- **Чекбоксы используют один компонент `DsCheckbox`** и состояния `'unchecked' | 'checked' | 'indeterminate'`. `onChange(nextState)` возвращает новое состояние; частичный выбор при активации становится полным. У радио только `unchecked` и `checked`. Без видимой подписи задаётся `ariaLabel`.
 - **Отключённое — это цветовой токен (`ds-fg-disabled`, `ds-surface-disabled`), никогда не прозрачность.**
 - **Чернила на заливке — токен:** `ds-on-brand` на брендовой заливке, `ds-on-solid` на любой `*-solid` статуса. Оба переворачиваются в dark, потому что сами заливки там светлеют.
 
@@ -257,9 +257,9 @@ SVG-логотипа, локапа только из словесного зна
 
 | Группа | Компоненты |
 |---|---|
-| примитивы | `DsIcon` · `DsCheck` · `DsCheckButton` |
+| примитивы | `DsIcon` |
 | кнопки | `DsButton` · `DsIconButton` · `DsFab` |
-| формы | `DsField` · `DsCheckbox` · `DsSelectBox` · `DsSwitch` · `DsDuration` · `DsFilterMenu` |
+| формы | `DsField` · `DsCheckbox` · `DsSwitch` · `DsDuration` · `DsFilterMenu` |
 | данные | `DsTable` · `DsFilterBar` · `DsPagination` · `DsChip` · `DsBadge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkBar` · `DsStateIcon` |
 | обратная связь | `DsBanner` · `DsToast` · `DsToastStack` · `DsEmptyState` · `DsSpinner` · `DsSkeleton` |
 | графики | `DsChart` · `DsChartLegend` · `DsChartTooltip` · `DsSparkline` · `DsScoreBar` |

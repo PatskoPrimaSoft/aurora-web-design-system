@@ -21,18 +21,20 @@ const render = (el) => { const box = w.document.createElement('div'); w.document
 const h = React.createElement;
 
 // №1 — контролы, у которых граница единственный признак
-let box = render(h(NS.DsCheck, { state: 'unchecked' }));
-ok(box.firstChild.style.border.includes('var(--ds-border-control)'), 'DsCheck unchecked: граница ds-border-control');
-box = render(h(NS.DsCheck, { state: 'unchecked', hover: true }));
-ok(box.firstChild.style.border.includes('var(--ds-border-control-hover)'), 'DsCheck unchecked + hover: ds-border-control-hover');
-box = render(h(NS.DsCheck, { state: 'unchecked', radio: true }));
-ok(box.firstChild.style.border.includes('var(--ds-border-control)'), 'радио unchecked: граница ds-border-control');
+let box = render(h(NS.DsCheckbox, { state: 'unchecked' }));
+ok(box.querySelector('[aria-hidden="true"]').style.border.includes('var(--ds-border-control)'), 'DsCheckbox unchecked: граница ds-border-control');
+box = render(h(NS.DsCheckbox, { state: 'unchecked' }));
+ReactDOM.flushSync(()=>box.querySelector('label').dispatchEvent(new w.MouseEvent('mouseover',{bubbles:true})));
+await new Promise(resolve=>setTimeout(resolve,0));
+ok(box.querySelector('[aria-hidden="true"]').style.border.includes('var(--ds-border-control-hover)'), 'DsCheckbox unchecked + hover: ds-border-control-hover');
+box = render(h(NS.DsCheckbox, { state: 'unchecked', radio: true }));
+ok(box.querySelector('[aria-hidden="true"]').style.border.includes('var(--ds-border-control)'), 'радио unchecked: граница ds-border-control');
 box = render(h(NS.DsSwitch, { checked: false, label: 'Показывать треки' }));
 const track = box.querySelector('span[aria-hidden="true"]');
 ok(track.style.border.includes('var(--ds-border-control)') && track.style.background.includes('var(--ds-border-control)'),
   'DsSwitch off: трек — ds-border-control (граница и заливка)');
-ok(!fs.readFileSync(path.join(ROOT, 'components/src/components/primitives/DsCheck.jsx'), 'utf8').includes('border-field'),
-  'DsCheck больше не использует ds-border-field');
+ok(!fs.readFileSync(path.join(ROOT, 'components/src/components/forms/DsCheckbox.jsx'), 'utf8').includes('border-field'),
+  'DsCheckbox больше не использует ds-border-field');
 
 // №2 — действие в тосте
 box = render(h(NS.DsToast, { action: () => {}, actionLabel: 'Отменить' }, 'Объект перемещён в архив'));

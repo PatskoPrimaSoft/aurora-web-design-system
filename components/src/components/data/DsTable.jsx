@@ -1,6 +1,6 @@
 import React from 'react';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
-import { DsCheckButton } from '../primitives/DsCheck.jsx';
+import { DsCheckbox } from '../forms/DsCheckbox.jsx';
 import { dsSlots } from '../layout/DsPageLayout.jsx';
 import { useDsStrings } from '../primitives/DsStrings.jsx';
 
@@ -57,8 +57,8 @@ export function DsTable({columns=[],rows=[],rowKey='id',selectable=false,selecte
     <table style={{width:'100%',borderCollapse:'collapse',font:'var(--ds-type-body)',color:'var(--ds-fg)'}}>
       <thead><tr>
         {selectable?<th style={{...th,width:40,paddingRight:0}}>
-          <DsCheckButton hit={24} state={headState} disabled={!rows.length} onChange={()=>toggleVisible(headState==='checked'?'unchecked':'checked')}
-            label={S.table.selectPage}/></th>:null}
+          <DsCheckbox hit={24} state={headState} disabled={!rows.length} onChange={toggleVisible}
+            ariaLabel={S.table.selectPage}/></th>:null}
         {columns.map(c=>{const active=sortKey===c.key,sortable=c.sortable&&onSort;
           return <th key={c.key} style={{...th,width:c.width,textAlign:c.align||'left'}}
             aria-sort={active?(sortDir==='asc'?'ascending':'descending'):sortable?'none':undefined}>
@@ -83,7 +83,7 @@ export function DsTable({columns=[],rows=[],rowKey='id',selectable=false,selecte
           const label=rowLabel?rowLabel(r):String(r[actionKey]??k);
           return <Row key={k} sel={sel} act={act} onClick={onRowClick?()=>onRowClick(r):undefined}>
             {selectable?<td style={{padding:'0 0 0 var(--ds-cell-pad-x)',width:40}}>
-              <DsCheckButton hit={24} state={sel?'checked':'unchecked'} onChange={()=>onToggleRow&&onToggleRow(k)} label={S.selectItem(label)}/></td>:null}
+              <DsCheckbox hit={24} state={sel?'checked':'unchecked'} onChange={()=>onToggleRow&&onToggleRow(k)} ariaLabel={S.selectItem(label)}/></td>:null}
             {columns.map(c=><td key={c.key} style={{padding:'var(--ds-cell-pad-y) var(--ds-cell-pad-x)',
               textAlign:c.align||'left',font:c.mono?'var(--ds-type-mono)':undefined,
               fontWeight:c.strong?'var(--ds-weight-medium)':undefined,color:c.muted?'var(--ds-fg-muted)':undefined,

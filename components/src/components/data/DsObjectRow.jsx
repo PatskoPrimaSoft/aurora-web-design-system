@@ -1,6 +1,6 @@
 import React from 'react';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
-import { DsSelectBox } from '../forms/DsSelectBox.jsx';
+import { DsCheckbox } from '../forms/DsCheckbox.jsx';
 import { dsFleetState } from './DsStateIcon.jsx';
 import { useDsStrings, dsStringsRu } from '../primitives/DsStrings.jsx';
 const SIGNAL={good:'var(--ds-success-solid)',weak:'var(--ds-warning-solid)',none:'var(--ds-fg-disabled)'};
@@ -82,6 +82,6 @@ export function DsObjectRow({name,details,state='parked',stateLabel,course,signa
       font:'var(--ds-type-eyebrow)',display:'flex',alignItems:'center',justifyContent:'center'}}>{badge}</span>:null}
     </Main>
     {select?<span style={{flex:'none',marginRight:-8}}>
-      <DsSelectBox state={select} label={S.selectItem(name)} onChange={onSelectChange}/></span>:null}
+      <DsCheckbox state={select} ariaLabel={S.selectItem(name)} onChange={onSelectChange}/></span>:null}
   </div>;
 }

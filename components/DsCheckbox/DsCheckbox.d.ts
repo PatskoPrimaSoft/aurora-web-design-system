@@ -1,23 +1,21 @@
-/**
- * v2 checkbox and radio (one component, `radio` flag).
- *
- * Deliberate correction of a legacy inconsistency: in the Angular product
- * selection controls are `accent`-coloured while the selected calendar date is
- * `primary`. v2 makes every selected state `--ds-brand` and reserves the accent
- * for attention (badges, the environment tag), which is one fewer rule to remember.
- */
+﻿export type DsCheckboxState = 'unchecked' | 'checked' | 'indeterminate';
+
+/** Checkbox and radio with one controlled selection model. */
 export interface DsCheckboxProps {
+  /** Radio uses unchecked or checked; indeterminate is treated as unchecked. */
+  state?: DsCheckboxState;
+  /** unchecked/indeterminate selects all; checked deselects. Radio never deselects itself. */
+  onChange?: (nextState: 'unchecked' | 'checked') => void;
   label?: React.ReactNode;
-  /** Optional second line under the label — used by filter lists. */
+  /** Accessible name; required when no visible label is provided. */
+  ariaLabel?: string;
+  /** Second line, linked to the input as its accessible description. */
   description?: string;
-  checked?: boolean;
-  /** Renders a dash. Used by a table's header select-all. Ignored when `radio`. */
-  indeterminate?: boolean;
   radio?: boolean;
   disabled?: boolean;
-  /** An indeterminate checkbox selects all on activation: e.target.checked is true. */
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
   value?: string;
+  /** Minimum hit area edge. @default var(--ds-control-h) */
+  hit?: number | string;
 }
 export declare function DsCheckbox(props: DsCheckboxProps): JSX.Element;

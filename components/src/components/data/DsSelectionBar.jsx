@@ -1,5 +1,5 @@
 import React from 'react';
-import { DsSelectBox } from '../forms/DsSelectBox.jsx';
+import { DsCheckbox } from '../forms/DsCheckbox.jsx';
 import { dsSlots } from '../layout/DsPageLayout.jsx';
 import { useDsStrings } from '../primitives/DsStrings.jsx';
 
@@ -20,7 +20,7 @@ export function DsSelectionBar({selected=0,total=0,onSelectAll,onClear,actions,c
       <span className="material-symbols-outlined" aria-hidden="true" style={{fontSize:'var(--ds-icon-sm)',lineHeight:1}}>remove_done</span>
     </button>:null}
     <span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)',fontVariantNumeric:'tabular-nums'}}>{selected} / {total}</span>
-    <span style={{marginRight:-8}}><DsSelectBox state={state} label={S.selectAllObjects}
+    <span style={{marginRight:-8}}><DsCheckbox state={state} ariaLabel={S.selectAllObjects}
       onChange={next=>onSelectAll&&onSelectAll(next==='checked')}/></span>
   </div>;
 }

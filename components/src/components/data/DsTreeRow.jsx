@@ -1,6 +1,6 @@
 import React from 'react';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
-import { DsSelectBox } from '../forms/DsSelectBox.jsx';
+import { DsCheckbox } from '../forms/DsCheckbox.jsx';
 import { useDsStrings } from '../primitives/DsStrings.jsx';
 function initials(s){return String(s||'').trim().split(/[\s-]+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase()}
 
@@ -56,6 +56,6 @@ export function DsTreeRow({title,meta,icon,avatarSrc,avatar=false,level=0,expand
         fontVariantNumeric:'tabular-nums'}}>{(selected||0)+' / '+total}</span>:null}
     </Main>
     {select?<span style={{flex:'none',marginRight:-8}}>
-      <DsSelectBox state={select} disabled={selectDisabled} label={S.selectAllIn(title)} onChange={onSelectChange}/></span>:null}
+      <DsCheckbox state={select} disabled={selectDisabled} ariaLabel={S.selectAllIn(title)} onChange={onSelectChange}/></span>:null}
   </div>;
 }

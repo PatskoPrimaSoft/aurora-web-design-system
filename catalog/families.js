@@ -1,5 +1,5 @@
 export const families=[
- {id:'selection',title:'Выбор',cards:['DsCheck','DsCheckButton','DsSelectBox','DsCheckbox'],aliases:['selection','checkbox','чекбокс']},
+ {id:'selection',title:'Выбор',cards:['DsCheckbox'],aliases:['selection','checkbox','чекбокс']},
  {id:'charts',title:'Графики',cards:['DsCharts','DsChart','DsChartLegend','DsChartTooltip','DsSparkline','DsScoreBar'],aliases:['chart','график']},
  {id:'header',title:'Шапка',cards:['DsAppHeader','DsUserMenu'],aliases:['header','навигация']},
 ];

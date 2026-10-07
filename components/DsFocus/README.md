@@ -30,8 +30,7 @@
 
 У составных полей контур рисует `[data-ds-field]`, а у чекбокса, радио
 и переключателя — видимая часть рядом с нативным input. Декоративный
-[DsCheck](../DsCheck/README.md) сам фокус не получает: используйте
-[DsCheckbox](../DsCheckbox/README.md) или [DsCheckButton](../DsCheckButton/README.md).
+[DsCheckbox](../DsCheckbox/README.md) получает фокус через настоящий input; кольцо рисуется вокруг области выбора.
 
 ## Как проверить
 

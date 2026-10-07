@@ -12,7 +12,7 @@ import {renderMarkdown,renderProps,documentPage} from '../docs/markdown.mjs';
 import {renderTokenReference} from '../docs/tokens.mjs';
 import {validateLinks} from '../docs/links.mjs';
 import {cardRedirects} from '../../catalog/state.js';
-const hasInlineDescription = card => card.id === 'DsCheck' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
+const hasInlineDescription = card => card.id === 'DsCheckbox' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
 export async function buildCatalogue({ root, outDir }) {
   if (resolve(root) === resolve(outDir)) throw new Error('Catalogue output must not replace source root');
   const cards = readCards(root);

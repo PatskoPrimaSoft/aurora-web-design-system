@@ -1,24 +1,30 @@
-<!-- @dsCard aliases="выбор|checkbox|чекбокс" group="5 · Компоненты · формы" height=400 subtitle="Чекбокс и радио одним компонентом; выбранное — бренд, не акцент" -->
+﻿<!-- @dsCard aliases="выбор|checkbox|чекбокс|radio|радио" group="5 · Компоненты · формы" height=560 subtitle="Чекбокс и радио: с подписью или без, одна модель выбора" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
 body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+table{width:100%;max-width:660px;border-collapse:collapse;table-layout:fixed}
+th,td{padding:4px 8px;text-align:center;border-bottom:1px solid var(--ds-divider)}
+th{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+th:first-child{text-align:left;width:50%}
+.stack{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.hint{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:8px 0 0}
+@media(max-width:400px){body{padding:12px}th,td{padding:4px 2px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var a=React.useState(true),b=React.useState('b'),all=React.useState(false),mixed=React.useState(true);
-  return h('div',{className:'col'},
-    h(S.DsCheckbox,{label:'Отправка команд',checked:a[0],onChange:function(e){a[1](e.target.checked);}}),
-    h(S.DsCheckbox,{label:'Все объекты группы',checked:all[0],indeterminate:mixed[0],onChange:function(e){all[1](e.target.checked);mixed[1](false);}}),
-    h(S.DsCheckbox,{label:'Изменение параметров эко-вождения',disabled:true,description:'Недоступно для вашей роли'}),
-    h(S.DsCheckbox,{label:'Уведомления включены',checked:true,disabled:true}),
-    h(S.DsCheckbox,{label:'Выбрана часть объектов',indeterminate:true,disabled:true}),
-    h('div',{className:'row'},['a','b'].map(function(v){return h(S.DsCheckbox,{key:v,radio:true,name:'r',value:v,label:v==='a'?'Сутки':'Неделя',checked:b[0]===v,onChange:function(){b[1](v);}});})),
-    h('div',{className:'row'},h(S.DsCheckbox,{radio:true,label:'Радио: не выбран',disabled:true}),h(S.DsCheckbox,{radio:true,label:'Радио: выбран',checked:true,disabled:true})));}
+var examples=[['unchecked','Чекбокс: не выбран',false],['checked','Чекбокс: выбран',false],['indeterminate','Чекбокс: частично',false],['unchecked','Радио: не выбран',true],['checked','Радио: выбран',true]];
+function App(){var a=React.useState('checked'),mixed=React.useState('indeterminate'),radio=React.useState('week'),row=React.useState('unchecked');
+ return h('div',null,
+  h('table',{'aria-label':'Состояния чекбокса и радио'},
+   h('thead',null,h('tr',null,h('th',{scope:'col'},'Состояние'),h('th',{scope:'col'},'Обычное'),h('th',{scope:'col'},'Недоступно'))),
+   h('tbody',null,examples.map(function(example,i){return h('tr',{key:i},h('th',{scope:'row'},example[1]),[false,true].map(function(disabled){return h('td',{key:String(disabled)},h(S.DsCheckbox,{state:example[0],radio:example[2],disabled:disabled,ariaLabel:example[1]+(disabled?' — недоступно':''),name:'sample-'+i+'-'+disabled}));}));}))),
+  h('p',{className:'hint'},'Наведите указатель на доступный контрол, чтобы увидеть hover.'),
+  h('div',{className:'stack'},
+   h(S.DsCheckbox,{label:'Отправка команд',state:a[0],onChange:a[1]}),
+   h(S.DsCheckbox,{label:'Все объекты группы',state:mixed[0],onChange:mixed[1]}),
+   h(S.DsCheckbox,{label:'Изменение параметров',disabled:true,description:'Недоступно для вашей роли'}),
+   h('div',{className:'row',role:'group','aria-label':'Период'},['day','week'].map(function(value){return h(S.DsCheckbox,{key:value,radio:true,name:'period',value:value,label:value==='day'?'Сутки':'Неделя',state:radio[0]===value?'checked':'unchecked',onChange:function(){radio[1](value);}});})),
+   h('div',{className:'row'},h(S.DsCheckbox,{ariaLabel:'Выбрать строку',state:row[0],onChange:row[1],hit:24}),h('span',{className:'hint'},'Без подписи — для таблиц и деревьев'))));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

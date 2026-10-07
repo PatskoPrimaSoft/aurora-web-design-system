@@ -13,6 +13,8 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ### Removed
 
+- **Breaking:** `DsCheck`, `DsCheckButton` и `DsSelectBox` объединены в `DsCheckbox`, без алиасов. Вместо `checked` / `indeterminate` используется `state`; `onChange(nextState)` получает строку, а не DOM-событие. Без подписи задайте `ariaLabel`. Выбор использует нативные Space и стрелки радио; Enter больше не переключает чекбокс. Изменение требует MAJOR-релиза.
+
 - **Breaking:** удалены `DsHeaderChip`, `DsHeaderChipProps`, отдельная карточка
   и проп `DsAppHeader.user`. Используйте `DsUserMenu` в `actions` шапки.
   Алиасов и перенаправлений для `DsHeaderChip` нет; изменение требует MAJOR-релиза.

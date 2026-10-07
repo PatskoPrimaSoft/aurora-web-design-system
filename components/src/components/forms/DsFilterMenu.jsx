@@ -64,7 +64,7 @@ export function DsFilterMenu({label,type='string',value,options=[],onApply,onCle
         display:'inline-flex',alignItems:'center',justifyContent:'center',gap:4});
       return <div style={{display:'flex',flexDirection:'column',gap:6}}>
         {options.map(o=>{const v=typeof o==='string'?o:o.value,l=typeof o==='string'?o:o.label;
-          return <DsCheckbox key={v} radio name="dsfm" label={l} checked={key===v}
+          return <DsCheckbox key={v} radio name="dsfm" label={l} state={key===v?'checked':'unchecked'}
             onChange={()=>set(two?{key:v,dir:(typeof o==='object'&&o.group)?null:(draft.dir||'asc')}:v)}/>;})}
         {two&&!grouping?<div style={{display:'flex',gap:6,borderTop:'1px solid var(--ds-divider)',paddingTop:6}}>
           <button type="button" style={dirBtn(draft.dir!=='desc')} onClick={()=>set({...draft,dir:'asc'})}>
@@ -76,7 +76,7 @@ export function DsFilterMenu({label,type='string',value,options=[],onApply,onCle
     const arr=Array.isArray(draft)?draft:[];
     return <div style={{display:'flex',flexDirection:'column',gap:6,maxHeight:200,overflowY:'auto'}}>
       {options.map(o=>{const v=typeof o==='string'?o:o.value,l=typeof o==='string'?o:o.label,c=typeof o==='object'?o.count:null;
-        return <DsCheckbox key={v} label={l} description={c!=null?S.objects(c):undefined} checked={arr.includes(v)}
+        return <DsCheckbox key={v} label={l} description={c!=null?S.objects(c):undefined} state={arr.includes(v)?'checked':'unchecked'}
           onChange={()=>set(arr.includes(v)?arr.filter(x=>x!==v):[...arr,v])}/>;})}</div>;
   };
   const btn={display:'inline-flex',alignItems:'center',gap:6,height:'var(--ds-control-h)',padding:'0 10px',

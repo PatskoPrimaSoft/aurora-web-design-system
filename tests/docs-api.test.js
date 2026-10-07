@@ -32,7 +32,8 @@ for(const [transform,expected] of [
 const actualRoot=fileURLToPath(new URL('../',import.meta.url)),actual=extractApi({root:actualRoot});
 assert.ok(!actual.some(c=>c.name==='DsHeaderChip'));
 assert.ok(!actual.find(c=>c.name==='DsAppHeader').props.some(p=>p.name==='user'));
-assert.equal(actual.find(c=>c.name==='DsCheckButton').declarationPath,'components/DsCheck/DsCheck.d.ts');
+assert.equal(actual.find(c=>c.name==='DsCheckbox').declarationPath,'components/DsCheckbox/DsCheckbox.d.ts');
+assert.ok(!actual.some(c=>['DsCheck','DsCheckButton','DsSelectBox'].includes(c.name)));
 assert.ok(actual.find(c=>c.name==='DsTabPanel').props.some(p=>p.name==='idBase'));
 assert.equal(actual.find(c=>c.name==='DsField').forwardsNativeAttributes,true);
 assert.equal(actual.find(c=>c.name==='DsButton').forwardsNativeAttributes,true);

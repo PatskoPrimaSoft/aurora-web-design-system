@@ -10,7 +10,7 @@ test('disabled selection stays legible and mixed selection selects all with the 
   try {
     for (const [theme, appearance, density] of [['DEFAULT', 'light', 'cozy'], ['DEFAULT', 'dark', 'compact'], ['RED2', 'light', 'cozy'], ['RED2', 'dark', 'compact']]) {
       const query = `theme=${theme}&appearance=${appearance}&density=${density}`;
-      await page.goto(`${served.url}/components/DsCheck/preview.html?${query}`);
+      await page.goto(`${served.url}/components/DsCheckbox/preview.html?${query}`);
       await page.locator('#root > *').waitFor();
       const checks = await page.locator('#root').evaluate(root => {
         const luminance = color => {
@@ -27,7 +27,7 @@ test('disabled selection stays legible and mixed selection selects all with the 
         const surface = getComputedStyle(document.body).backgroundColor;
         // The disabled column must preserve all three glyphs: tick, dash and radio dot.
         const rows = [...root.querySelectorAll('tbody tr')];
-        const disabled = rows.map(row => row.querySelector('td:last-child > span'));
+        const disabled = rows.map(row => row.querySelector('td:last-child [aria-hidden="true"]'));
         return disabled.filter(Boolean).map(box => {
           const css = getComputedStyle(box), mark = box.firstElementChild;
           const ink = mark && getComputedStyle(mark);
@@ -43,25 +43,82 @@ test('disabled selection stays legible and mixed selection selects all with the 
         if (check.mark !== null) expect(check.mark).toBeGreaterThanOrEqual(3);
       }
       await page.screenshot({ path: testInfo.outputPath(`selection-${theme}-${appearance}.png`) });
-      await page.goto(`${served.url}/components/DsCheckButton/preview.html?${query}`);
-      const control = page.getByRole('checkbox').first();
-      await expect(control).toHaveAttribute('aria-checked', 'mixed');
-      await control.focus();
-      await page.keyboard.press('Space');
-      await expect(control).toHaveAttribute('aria-checked', 'true');
-      await page.keyboard.press('Enter');
-      await expect(control).toHaveAttribute('aria-checked', 'false');
-      await expect(control).toBeFocused();
-      await page.goto(`${served.url}/components/DsCheckbox/preview.html?${query}`);
       const mixed = page.getByRole('checkbox', { name: 'Все объекты группы' });
       await expect(mixed).toHaveJSProperty('indeterminate', true);
       await mixed.focus();
       await page.keyboard.press('Space');
       await expect(mixed).toBeChecked();
       await expect(mixed).toHaveJSProperty('indeterminate', false);
+      await page.keyboard.press('Enter');
+      await expect(mixed).toBeChecked();
+      await expect(mixed).toBeFocused();
+      expect(await mixed.evaluate(input=>getComputedStyle(input.nextElementSibling).outlineStyle)).toBe('solid');
+      await page.keyboard.press('Space');
+      await expect(mixed).not.toBeChecked();
+      const week=page.getByRole('radio',{name:'Неделя',exact:true});
+      const day=page.getByRole('radio',{name:'Сутки',exact:true});
+      await week.focus();await page.keyboard.press('ArrowLeft');
+      await expect(day).toBeChecked();await expect(week).not.toBeChecked();
+      await page.keyboard.press('ArrowRight');
+      await expect(week).toBeChecked();await expect(day).not.toBeChecked();
+      await expect(page.getByRole('radio',{name:'Радио: выбран',exact:true})).toBeChecked();
+      await expect(page.getByRole('checkbox',{name:'Изменение параметров',exact:true})).toHaveAccessibleDescription('Недоступно для вашей роли');
+      const bare=page.getByRole('checkbox',{name:'Выбрать строку',exact:true});
+      expect(await bare.evaluate(el=>el.nextElementSibling.getBoundingClientRect().width)).toBe(24);
+      await bare.focus();await page.keyboard.press('Space');await expect(bare).toBeChecked();
+      const unchecked=page.getByRole('checkbox',{name:'Чекбокс: не выбран',exact:true});
+      await unchecked.locator('..').hover();
+      const hover=await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--ds-border-control-hover').trim());
+      // Resolve the token through an element to compare normalized browser colors.
+      const expectedHover=await page.evaluate(value=>{const el=document.createElement('span');el.style.color=value;document.body.append(el);const color=getComputedStyle(el).color;el.remove();return color},hover);
+      await expect.poll(()=>unchecked.evaluate(el=>getComputedStyle(el.nextElementSibling.firstElementChild).borderColor)).toBe(expectedHover);
+      await unchecked.focus();await page.keyboard.press('Space');await expect(unchecked).not.toBeChecked();
+      await page.setViewportSize({width:390,height:560});
+      expect(await page.evaluate(()=>document.body.scrollWidth)).toBeLessThanOrEqual(390);
+      expect(await page.evaluate(()=>document.body.scrollHeight)).toBeLessThanOrEqual(560);
+      await page.screenshot({path:testInfo.outputPath(`selection-mobile-${theme}-${appearance}.png`)});
+      await page.setViewportSize({width:1180,height:800});
     }
   } finally {
     served.server.closeAllConnections();
     await new Promise(resolve => served.server.close(resolve));
+  }
+});
+
+test('native selection does not submit forms or activate table and tree rows',async({page})=>{
+  await buildCatalogue({root,outDir:`${root}/site`});
+  const served=await serveRoot(`${root}/site`);
+  try {
+    await page.goto(`${served.url}/components/DsCheckbox/preview.html`);
+    await page.evaluate(()=>{
+      const {React,ReactDOM}=window,h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
+      window.selectionEvents={submit:0,open:0,expand:0,select:0};
+      const events=window.selectionEvents;
+      const host=document.createElement('div');host.id='integration';document.body.append(host);
+      function App(){
+        const [state,setState]=React.useState('indeterminate');
+        return h('form',{onSubmit:e=>{e.preventDefault();events.submit++}},
+          h(S.DsCheckbox,{label:'Form selection',state,onChange:setState}),
+          h(S.DsTable,{columns:[{key:'name',label:'Name'}],rows:[{id:1,name:'Row'}],selectable:true,
+            onRowClick:()=>events.open++,onToggleRow:()=>events.select++}),
+          h(S.DsObjectRow,{name:'Object',select:'unchecked',onClick:()=>events.open++,onSelectChange:()=>events.select++}),
+          h(S.DsTreeRow,{title:'Tree',select:'indeterminate',onToggle:()=>events.expand++,onSelectChange:()=>events.select++}));
+      }
+      ReactDOM.flushSync(()=>ReactDOM.createRoot(host).render(h(App)));
+    });
+    const form=page.getByRole('checkbox',{name:'Form selection',exact:true});
+    await form.locator('..').click();await expect(form).toBeChecked();
+    await form.focus();await page.keyboard.press('Enter');await expect(form).toBeChecked();
+    const controls=page.locator('#integration input[type="checkbox"]');
+    // Form checkbox, table header, table row, object row, tree row.
+    await expect(controls).toHaveCount(5);
+    for(const index of [2,3,4]){
+      const control=controls.nth(index);
+      await control.locator('..').click();
+      await control.focus();await page.keyboard.press('Space');
+    }
+    expect(await page.evaluate(()=>window.selectionEvents)).toEqual({submit:0,open:0,expand:0,select:6});
+  }finally{
+    served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));
   }
 });

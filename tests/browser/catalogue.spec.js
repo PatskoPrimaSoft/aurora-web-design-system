@@ -75,12 +75,12 @@ test('API references use real declarations, defaults and token source',async({pa
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
  await page.route('**/*',r=>r.request().url().startsWith(served.url+'/')?r.continue():r.abort());
  try{
-  for(const name of ['DsButton','DsCheckButton','DsChartLegend','DsChartTooltip','DsTabPanel']){
+  for(const name of ['DsButton','DsCheckbox','DsChartLegend','DsChartTooltip','DsTabPanel']){
    await page.goto(`${served.url}/api/components/${name}.html`);
    await expect(page.getByRole('heading',{level:1}).first()).toHaveText(name);
    await expect(page.getByRole('table',{name:'Props '+name})).toBeVisible();
   }
-  await page.goto(served.url+'/api/components/DsCheckButton.html');await expect(page.getByText('components/DsCheck/DsCheck.d.ts',{exact:true})).toBeVisible();
+  await page.goto(served.url+'/api/components/DsCheckbox.html');await expect(page.getByText('components/DsCheckbox/DsCheckbox.d.ts',{exact:true})).toBeVisible();
   await page.goto(served.url+'/api/components/DsButton.html');await expect(page.getByRole('row').filter({has:page.getByRole('rowheader',{name:'tone',exact:true})})).toContainText("'primary'");
   await page.goto(served.url+'/api/tokens.html');await expect(page.locator('#ds-brand')).toBeVisible();expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
@@ -91,7 +91,7 @@ test('search, URL history and scope comparison preserve preview contracts',async
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
   await page.goto(served.url+'/index.html#DsButton');await expect(page.locator('#title')).toHaveText('DsButton');
-  await page.locator('#search').fill('CHECKBOX');await expect(page.locator('nav a[data-id="DsCheckButton"]')).toBeVisible();
+  await page.locator('#search').fill('CHECKBOX');await expect(page.locator('nav a[data-id="DsCheckbox"]')).toBeVisible();
   await page.locator('#search').fill('loading');await expect(page.locator('nav a[data-id="DsButton"]')).toBeVisible();
   await page.locator('#search').fill('not-a-card-12345');await expect(page.locator('#search-empty')).toBeVisible();
   await page.locator('#search').fill('');await page.locator('#theme').selectOption('RED2');await page.locator('#appearance').selectOption('dark');await page.locator('#density').selectOption('compact');
