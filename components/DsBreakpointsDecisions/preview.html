@@ -1,142 +1,47 @@
-<!-- @dsCard name="Брейкпоинты: решения по миграции" aliases="DsBreakpointsDecisions|breakpoints|адаптивность" group="3 · Миграция" height=4000 subtitle="Откуда взялись четыре порога, семь решений по ним и список долга в SCSS. Решения приняты, токены в layout.css." page -->
+<!-- @dsCard name="Брейкпоинты: решения по миграции" aliases="DsBreakpointsDecisions|breakpoints|адаптивность" group="3 · Миграция" height=1800 subtitle="Принятые решения и порядок обновления адаптивности в locator-front" page -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Брейкпоинты: решения по миграции</title><style>
 *{box-sizing:border-box}
-body{margin:0;padding:40px 32px 96px;background:var(--ds-bg);color:var(--ds-fg);font:var(--ds-type-body);-webkit-font-smoothing:antialiased}
-.wrap{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-.eyebrow{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-h1{font:var(--ds-type-display);letter-spacing:var(--ds-tracking-tight);margin:6px 0 10px}
-h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);margin:0}
-h3{font:var(--ds-type-section);margin:0}
-p{margin:0;max-width:72ch;text-wrap:pretty}
-.lead{color:var(--ds-fg-muted)}
-section{display:flex;flex-direction:column;gap:16px}
-.shead{display:flex;flex-direction:column;gap:6px;padding-bottom:12px;border-bottom:1px solid var(--ds-border)}
-.card{background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg,10px);padding:20px 22px;display:flex;flex-direction:column;gap:12px}
-table{width:100%;border-collapse:collapse;font:var(--ds-type-body)}
-th{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle);text-align:left;padding:0 14px 8px 0;border-bottom:1px solid var(--ds-border)}
-td{padding:11px 14px 11px 0;border-bottom:1px solid var(--ds-divider);vertical-align:top}
-tr:last-child td{border-bottom:none}
-code,.mono{font:var(--ds-type-mono);background:var(--ds-n-a4);border-radius:4px;padding:1px 5px;white-space:nowrap}
-td code{background:none;padding:0}
-.tag{display:inline-block;align-self:flex-start;font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;padding:3px 7px;border-radius:4px;background:var(--ds-neutral-bg);color:var(--ds-neutral-fg);white-space:nowrap}
-.tag.s{background:var(--ds-info-bg);color:var(--ds-info-fg)}
-.tag.m{background:var(--ds-success-bg);color:var(--ds-success-fg)}
-.tag.l{background:var(--ds-warning-bg);color:var(--ds-warning-fg)}
-.tag.xl{background:var(--ds-danger-bg);color:var(--ds-danger-fg)}
-.ladder{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2px;background:var(--ds-border);border:1px solid var(--ds-border);border-radius:8px;overflow:hidden}
-.rung{background:var(--ds-surface);padding:14px 16px;display:flex;flex-direction:column;gap:7px}
-.rung .px{font:var(--ds-type-mono);color:var(--ds-fg-muted)}
-.rung .dev{font:var(--ds-type-caption);color:var(--ds-fg-subtle)}
-.rules{display:flex;flex-direction:column;gap:2px;background:var(--ds-border);border:1px solid var(--ds-border);border-radius:8px;overflow:hidden}
-.rule{background:var(--ds-surface);padding:15px 18px;display:grid;grid-template-columns:110px minmax(0,1fr);gap:18px;align-items:start}
-.rule .what{display:flex;flex-direction:column;gap:6px}
-.rule .src{font:var(--ds-type-caption);color:var(--ds-fg-subtle);font-family:var(--ds-font-mono);font-size:11px;line-height:1.5;text-wrap:pretty}
-.step{background:var(--ds-bg-sunken);padding:10px 18px;font:var(--ds-type-ui);color:var(--ds-fg-muted);display:flex;gap:10px;align-items:center}
-.step b{font-weight:var(--ds-weight-semibold);color:var(--ds-fg)}
-.d{display:grid;grid-template-columns:28px minmax(0,1fr);gap:16px;background:var(--ds-surface);border:1px solid var(--ds-border);border-left:3px solid var(--ds-border-strong);border-radius:8px;padding:18px 20px}
-.d.open{border-left-color:var(--ds-warning-solid)}
-.d.bug{border-left-color:var(--ds-danger-solid)}
-.num{font:var(--ds-type-mono);color:var(--ds-fg-subtle);padding-top:1px}
-.d .body{display:flex;flex-direction:column;gap:9px;min-width:0}
-.rec{font:var(--ds-type-body-strong);color:var(--ds-fg)}
-.rec::before{content:"Предлагаю — ";color:var(--ds-fg-subtle);font-weight:var(--ds-weight-regular)}
-ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--ds-fg-muted)}
-.note{font:var(--ds-type-caption);color:var(--ds-fg-subtle);text-wrap:pretty}
-@media (max-width:860px){.ladder{grid-template-columns:repeat(2,minmax(0,1fr))}.rule{grid-template-columns:1fr;gap:8px}}
-@media (max-width:560px){.ladder{grid-template-columns:1fr}body{padding:28px 18px 64px}}
-
-body{background:var(--ds-bg);max-width:1120px;margin:0 auto;padding:22px 24px 26px}
-</style></head><body>
-<div class="wrap">
-
-<header>
-<div class="eyebrow">Aurora / решения приняты · перенесено в layout.css</div>
-<h1>Брейкпоинты: решения по миграции</h1>
-<p class="lead">Правила выведены из кода <code>locator-front</code> — из <code>ViewBreakpointService</code> и ~45 мест, где компоненты читают <code>size$</code>. Ничего не придумано: у каждого правила указан источник. Решения ниже приняты и перенесены в <code>tokens/layout.css</code> и карточку «Breakpoints» в Foundations; этот документ остаётся как их обоснование и как список долга в коде приложения.</p>
-</header>
-
-<section>
-<div class="shead"><h2>1. Шкала</h2><p class="note">Как есть в <code>view-breakpoint.service.ts</code>. Цифры менять не предлагаю.</p></div>
-<div class="ladder">
-<div class="rung"><span class="tag s">S</span><span class="px">0 – 719</span><span class="dev">телефон, узкая панель</span></div>
-<div class="rung"><span class="tag m">M</span><span class="px">720 – 959</span><span class="dev">планшет портрет</span></div>
-<div class="rung"><span class="tag l">L</span><span class="px">960 – 1139</span><span class="dev">планшет альбом, малый ноут</span></div>
-<div class="rung"><span class="tag xl">XL</span><span class="px">1140 – ∞</span><span class="dev">десктоп</span></div>
-</div>
+body{margin:0 auto;padding:22px 24px 26px;max-width:1120px;background:var(--ds-bg);color:var(--ds-fg);font:var(--ds-type-body)}
+.wrap,section{display:flex;flex-direction:column;gap:16px}.wrap{gap:32px}
+h1{font:var(--ds-type-title);margin:0}h2{font:var(--ds-type-section);margin:0}
+p{margin:0;max-width:960px}a{color:var(--ds-brand-text)}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+.note{color:var(--ds-fg-muted)}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th,td{padding:12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--ds-divider);overflow-wrap:anywhere}
+th{font:var(--ds-type-body-strong);background:var(--ds-surface)}
+ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:12px}
+@media(max-width:600px){body{padding:18px}table,tbody,tr,td{display:block}thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}tr{padding:8px 0;border-bottom:1px solid var(--ds-border)}td{border:0;padding:6px 0}td::before{content:attr(data-label);display:block;font:var(--ds-type-body-strong);margin-bottom:4px}}
+</style></head><body><div class="wrap">
+<section aria-labelledby="intro">
+<h2 id="intro">Статус миграции</h2>
+<p>Как привести <code>locator-front</code> к согласованным правилам адаптивности. Шкала и общие правила находятся в разделе <a href="../DsBreakpoints/preview.html">«Адаптивность и брейкпоинты»</a>.</p>
+<p class="note">Решения приняты. Токены добавлены в дизайн-систему; выполнение работ в приложении здесь не подтверждено. Колонка «Было» и список ниже основаны на прежнем разборе <code>ViewBreakpointService</code> и его использований. Перед изменениями сверьте их с текущим кодом приложения.</p>
 </section>
 
-<section>
-<div class="shead"><h2>2. Семантика сравнений</h2><p>Это главная ловушка API: сравнения <b>строгие</b>. <code>more('m')</code> — это не «M и выше», а «строго больше M», то есть L и XL. Ниже — что реально означает каждый вызов, в человеческих терминах.</p></div>
-<div class="card">
-<table>
-<thead><tr><th>Вызов в коде</th><th>Истинно на</th><th>Читать как</th></tr></thead>
+<section aria-labelledby="decisions">
+<h2 id="decisions">Что меняется</h2>
+<table aria-labelledby="decisions">
+<thead><tr><th scope="col">Было</th><th scope="col">Принято</th><th scope="col">Что изменить в приложении</th></tr></thead>
 <tbody>
-<tr><td><code>size.equal('s')</code></td><td>S</td><td>только самый узкий</td></tr>
-<tr><td><code>size.more('s')</code></td><td>M, L, XL</td><td>≥ M</td></tr>
-<tr><td><code>size.more('m')</code></td><td>L, XL</td><td>≥ L</td></tr>
-<tr><td><code>size.less('l')</code></td><td>S, M</td><td>≤ M</td></tr>
-<tr><td><code>size.more('l')</code></td><td>XL</td><td>= XL</td></tr>
-</tbody>
-</table>
-<p class="note">Предложение для ДС: в документации и в названиях CSS-классов писать порог в виде «≥ L», а не повторять <code>more('m')</code> — иначе каждый читающий пересчитывает смещение на единицу заново. Существующие классы (<code>column_le_l</code>, <code>padding_eq_s</code>) как раз так и названы — по результату, а не по вызову; это верно, оставляем.</p>
-</div>
+<tr><td data-label="Было">Имя пользователя появлялось с L в админке и с XL в портале; подписи навигации — с XL.</td><td data-label="Принято">Имя и подписи навигации показываются с L (960px).</td><td data-label="Что изменить в приложении">Согласовать условия в обеих шапках и <code>header-nav</code>. Для строгого <code>more()</code> это <code>more('m')</code>; значение <code>labelsFrom</code> — <code>'m'</code>. Проверить длинные имена и подписи.</td></tr>
+<tr><td data-label="Было">Уменьшенные отступы на S описывались как компактная плотность всего интерфейса.</td><td data-label="Принято">Ширина определяет компоновку. Плотность задаётся отдельно через <code>data-ds-density</code>.</td><td data-label="Что изменить в приложении">Проверить правила <code>*_eq_s</code>: отделить адаптивные отступы страницы от размеров контролов. Не переключать плотность только из-за ширины окна.</td></tr>
+<tr><td data-label="Было">Для широких экранов не было единого ограничения ширины форм и текста.</td><td data-label="Принято">Формы и текстовые страницы используют <code>--ds-content-max</code> (1440px); длинный текст — <code>--ds-content-max-prose</code> (72ch). Карта и таблицы используют доступную ширину.</td><td data-label="Что изменить в приложении">Применить ограничение к нужным контейнерам. Оно не требует отдельного переключения на XL: <code>max-width</code> влияет на ширину только после достижения предела.</td></tr>
+<tr><td data-label="Было">Наряду со шкалой использовались отдельные пороги 380–1350px.</td><td data-label="Принято">Сохраняются S, M, L, XL. Для локальной адаптации компонента используются container queries.</td><td data-label="Что изменить в приложении">Разобрать каждый случай из списка ниже: правило страницы привязать к общей шкале, правило компонента — к ширине его контейнера.</td></tr>
+<tr><td data-label="Было"><code>max-width:720px</code> пересекался с началом M; <code>equal('xl')</code> использовался для поведения «начиная с XL».</td><td data-label="Принято">Диапазоны не пересекаются. Условие должно выражать нужный диапазон, а не случайно совпадать с ним.</td><td data-label="Что изменить в приложении">Для S использовать ширину меньше 720px. Для «XL и шире» — <code>more('l')</code>. Оставлять <code>equal()</code>, когда нужен именно один диапазон.</td></tr>
+</tbody></table>
 </section>
 
-<section>
-<div class="shead"><h2>3. Выведенные правила</h2><p>Три порога делают три разные вещи. Внутри каждого — что именно меняется и где это уже реализовано.</p></div>
-
-<div class="rules">
-<div class="step"><span class="tag s">S</span><b>базовое состояние</b> — одна колонка, сжатая плотность, вторичное скрыто</div>
-<div class="rule"><div class="what"><span class="tag">плотность</span></div><div class="what"><div>Уменьшенные отступы карточек, таблиц и диалогов; заголовок страницы обрезается по ширине.</div><div class="src">*_eq_s: unit-log, user-log, retranslator-log-dialog, sensor-list, camera-list, children-user, brand, axle-load</div></div></div>
-<div class="rule"><div class="what"><span class="tag">структура</span></div><div class="what"><div>Всё в одну колонку: форма, список+деталь, футер.</div><div class="src">two-column-page-layout (as-split → vertical), entity-select-list, calc-form, footer</div></div></div>
-<div class="rule"><div class="what"><span class="tag">содержимое</span></div><div class="what"><div>Скрыты: колонка действий в таблицах, кнопки «первая/последняя» в пагинаторе, текст логотипа, имя пользователя, подписи в навигации, вспомогательные подсказки в диалогах.</div><div class="src">users, retranslators, template-set-list, paginator, logo-title, header-nav, import-*-dialog</div></div></div>
-
-<div class="step"><span class="tag m">M</span><b>720</b> — возвращается вторичное содержимое, плотность нормальная</div>
-<div class="rule"><div class="what"><span class="tag">содержимое</span></div><div class="what"><div>В таблицах появляется колонка действий; в пагинаторе — переход к первой/последней; у логотипа — текстовая часть; в диалогах — поясняющие блоки.</div><div class="src">@if more('s') — users, retranslators, template-set-list, create-set-from-sensors, import-from-template / -unit / -units; paginator.showFirstLastButtons; logo-title</div></div></div>
-<div class="rule"><div class="what"><span class="tag">плотность</span></div><div class="what"><div>Отступы становятся полными (снимаются <code>*_eq_s</code>).</div><div class="src">все компоненты из строки «плотность» выше</div></div></div>
-<div class="rule"><div class="what"><span class="tag">структура</span></div><div class="what"><div>Не меняется. Раскладка остаётся вертикальной — это делает следующий порог.</div><div class="src">less('l') всё ещё истинно</div></div></div>
-
-<div class="step"><span class="tag l">L</span><b>960</b> — главный структурный порог: колонки встают рядом</div>
-<div class="rule"><div class="what"><span class="tag">структура</span></div><div class="what"><div>Двухколоночный layout разворачивается горизонтально; поля форм встают в строку; футер перестраивается.</div><div class="src">two-column-page-layout, calc-form, template-set, unit-details, user-details, entity-select-list, date-range-picker, footer — все через less('l')</div></div></div>
-<div class="rule"><div class="what"><span class="tag">содержимое</span></div><div class="what"><div>Вкладки вместо выпадающего списка; имя пользователя в шапке админки; график занимает доступную ширину; календарь применяет период сразу, без кнопки.</div><div class="src">tabs, admin header, build-chart, message, unit-log, user-log, date-range-picker.autoApply — через more('m')</div></div></div>
-<div class="rule"><div class="what"><span class="tag">масштаб</span></div><div class="what"><div>Панель калькулятора в диалогах — двойной ширины.</div><div class="src">axle-load-dialog, add-tank-dialog, add-sensor-dialog: less('l') ? W : W*2</div></div></div>
-
-<div class="step"><span class="tag xl">XL</span><b>1140</b> — только подписи; порог почти не нагружен</div>
-<div class="rule"><div class="what"><span class="tag">содержимое</span></div><div class="what"><div>Подписи под иконками в главной навигации; имя пользователя в шапке пользовательского портала.</div><div class="src">header-nav (labelsFrom='l' по умолчанию), user-portal header (equal('xl'))</div></div></div>
-<div class="rule"><div class="what"><span class="tag">структура</span></div><div class="what"><div>Не меняется ничем.</div><div class="src">—</div></div></div>
-</div>
-
-<p class="note">Итого связка простая: <b>S→M возвращает содержимое</b>, <b>M→L меняет структуру</b>, <b>L→XL добавляет подписи</b>. Если это совпадает с замыслом, так и запишу в ДС — и дальше любой новый экран будет обязан раскладываться по этим же трём осям, а не по своим.</p>
+<section aria-labelledby="work">
+<h2 id="work">Где проверить и исправить</h2>
+<p class="note">Это ориентиры для поиска в <code>locator-front</code>, а не подтверждённый список открытых ошибок. Точные пути и статус нужно уточнить в приложении.</p>
+<ul>
+<li><b>Шапки и навигация:</b> admin header, user-portal header, <code>header-nav</code>. Проверить пороги имени и подписей; после изменения проверить, нужен ли ещё порог 1350px в портале.</li>
+<li><b>Отступы на S:</b> <code>*_eq_s</code> в unit-log, user-log, retranslator-log-dialog, sensor-list, camera-list, children-user, brand и axle-load.</li>
+<li><b>Граница 720px:</b> schedule-checkpoint-card и one-off-run-schedule-step — устранить пересечение условий S и M.</li>
+<li><b>600px:</b> file-dropzone, stepper-header и экраны geofence-import. <b>900px:</b> stepper-header и geofence header. <b>520px и 380px:</b> schedule-common-deviation. Для каждого случая выбрать адаптацию страницы или контейнера.</li>
+<li><b>Ширина контента и сравнения:</b> найти контейнеры форм и текстовых страниц, а также вызовы <code>equal('xl')</code>; проверить назначение каждого перед заменой.</li>
+</ul>
 </section>
-
-<section>
-<div class="shead"><h2>4. Что надо решить</h2><p>Семь мест, где код сам с собой не согласен. Ответ нужен только по ним.</p></div>
-
-<div class="d open"><div class="num">01</div><div class="body"><h3>Имя пользователя в шапке появляется на разных размерах</h3><p>Админка — с L (<code>more('m')</code>). Пользовательский портал — только на XL (<code>equal('xl')</code>). Одинаковый компонент <code>cmn-auth-user-chip</code>, разные пороги.</p><p class="rec">унифицировать на <b>≥ L</b>: на 960 места достаточно, а XL слишком поздно.</p></div></div>
-
-<div class="d open"><div class="num">02</div><div class="body"><h3>Подписи в навигации включаются только на XL</h3><p><code>labelsFrom</code> по умолчанию <code>'l'</code>, а <code>more('l')</code> истинно лишь на XL. То есть на ноутбуке 1024 навигация иконочная, хотя ширины хватает.</p><p class="rec">сменить умолчание на <code>'m'</code> (подписи с L) и связать с решением 01 — имя пользователя и подписи должны появляться на одном пороге, иначе шапка «достраивается» в два приёма.</p></div></div>
-
-<div class="d open"><div class="num">03</div><div class="body"><h3>Порог XL почти пустой</h3><p>Кроме подписей он не делает ничего. Если принять 01 и 02, он опустеет полностью — четыре размера, из которых работают три.</p><p class="rec">оставить XL в API (ломать типы ради этого не стоит), но дать ему одну настоящую задачу — <b>ограничение ширины контента</b>. Сейчас на 2560px формы и таблицы растягиваются на всю ширину, и строка таблицы становится нечитаемой. Токен <code>--ds-content-max</code>, около 1440px, применяется к формам и текстовым страницам; карта и таблицы остаются во всю ширину.</p></div></div>
-
-<div class="d open"><div class="num">04</div><div class="body"><h3>Пятый размер (xs ~480) — не вводить</h3><p>Диапазон S сейчас 0–719: телефон 360 и планшет 719 получают одинаковую раскладку. Соблазн разрезать есть.</p><p class="rec">не вводить. Каждый новый tier умножается на ~45 мест использования. Если внутри S что-то реально ломается (сейчас это видно по ad-hoc правилам на 600, 520 и 380px), это лечится container query на конкретном компоненте, а не глобальным порогом. Правило в ДС: <b>глобальных порогов ровно четыре, локальная адаптация — только container query</b>.</p></div></div>
-
-<div class="d bug"><div class="num">05</div><div class="body"><h3>Ошибка на 1px</h3><p><code>max-width: 720px</code> в <code>schedule-checkpoint-card</code> и <code>one-off-run-schedule-step</code> пересекается с <code>min-width: 720px</code> из шкалы: ровно на 720 срабатывают оба правила. Должно быть 719.</p><p class="rec">исправить в коде; в ДС зафиксировать формулу «верхняя граница = следующий порог минус 1».</p></div></div>
-
-<div class="d bug"><div class="num">06</div><div class="body"><h3>Вторая, случайная шкала в SCSS</h3><p>Параллельно с сервисом живут пороги, которых нет нигде в системе:</p><ul><li><code>600px</code> — file-dropzone, stepper-header, пять экранов geofence-import</li><li><code>900px</code> — stepper-header, geofence header</li><li><code>1350px</code> — шапка пользовательского портала</li><li><code>520px</code>, <code>380px</code> — schedule-common-deviation</li></ul><p class="rec">записать это в ДС как явный долг со списком файлов, а новые значения запретить. 1350px в шапке — отдельный случай: это подпорка под решение 01, после унификации она, скорее всего, не нужна.</p></div></div>
-
-<div class="d open"><div class="num">07</div><div class="body"><h3><code>equal('xl')</code> как условие — хрупко</h3><p>Любое расширение шкалы вверх молча сломает такие проверки (на новом размере условие станет ложным и элемент исчезнет).</p><p class="rec">правило: <code>equal()</code> допустим только для <code>'s'</code> (проверка «самый узкий»), во всех остальных случаях — <code>more()</code> / <code>less()</code>.</p></div></div>
-</section>
-
-<section>
-<div class="shead"><h2>5. Что попадёт в дизайн-систему</h2></div>
-<div class="card">
-<p><code>tokens/layout.css</code> — <code>--ds-bp-m: 720px</code>, <code>--ds-bp-l: 960px</code>, <code>--ds-bp-xl: 1140px</code>, <code>--ds-content-max</code> (решение 03 принято).</p>
-<p>карточка <code>DsBreakpoints</code> — карточка Foundations: шкала, таблица семантики из раздела 2, три правила из раздела 3, запрет на промежуточные пороги, список долга из решения 06.</p>
-<p class="note">Код <code>locator-front</code> я не трогаю — это дизайн-система, а не рефакторинг приложения. Решения 05 и 06 фиксируются как долг, исправлять их в приложении вы будете отдельно.</p>
-</div>
-</section>
-
-</div>
-</body></html>
+</div></body></html>

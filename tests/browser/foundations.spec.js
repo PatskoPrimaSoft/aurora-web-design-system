@@ -76,7 +76,7 @@ test('foundation and map descriptions stay with examples through navigation, com
     await expect(description).toBeVisible();
     for (let index = 0; index < 4; index++) {
       const frame = page.frameLocator('#preview-' + index);
-      await expect(frame.getByRole('heading', { name: 'Брейкпоинты: решения по миграции', exact: true })).toBeVisible();
+      await expect(frame.getByRole('heading', { name: 'Статус миграции', exact: true })).toBeVisible();
       await expect.poll(() => frame.locator('body').evaluate(body =>
         body.scrollHeight <= window.innerHeight + 1 && document.documentElement.scrollWidth <= window.innerWidth
       )).toBe(true);

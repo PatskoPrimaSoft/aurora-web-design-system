@@ -23,14 +23,13 @@ body{background:var(--ds-bg);max-width:1120px;margin:0 auto;padding:22px 24px 26
 <div style="background:var(--ds-surface);padding:12px 14px;display:flex;flex-direction:column;gap:5px"><span class="eb">L</span><span style="font:var(--ds-type-mono);color:var(--ds-fg)">960 – 1139</span><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">планшет горизонтально, небольшой ноутбук</span></div>
 <div style="background:var(--ds-surface);padding:12px 14px;display:flex;flex-direction:column;gap:5px"><span class="eb">XL</span><span style="font:var(--ds-type-mono);color:var(--ds-fg)">1140 +</span><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">десктоп</span></div></div>
 
-<div><h3>Каждый порог переключает ровно одну вещь</h3>
+<div><h3>Целевая компоновка страницы</h3>
 <table class="matrix"><thead><tr><th style="width:34%">&nbsp;</th><th>S</th><th>M</th><th>L</th><th>XL</th></tr></thead><tbody>
-<tr><td>Отступы и высота строки</td><td><span class="flip">compact</span></td><td class="on">полные</td><td class="on">полные</td><td class="on">полные</td></tr>
 <tr><td>Структура страницы</td><td class="on">одна колонка</td><td class="on">одна колонка</td><td><span class="flip">две колонки</span></td><td class="on">две колонки</td></tr>
-<tr><td>Второстепенное содержимое<br><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">действия в строке, края пагинатора, словесный логотип</span></td><td class="off">скрыто</td><td><span class="flip">показано</span></td><td class="on">показано</td><td class="on">показано</td></tr>
+<tr><td>Второстепенное содержимое<br><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">края пагинатора, словесный логотип</span></td><td class="off">скрыто</td><td><span class="flip">показано</span></td><td class="on">показано</td><td class="on">показано</td></tr>
 <tr><td>Подписи и имена<br><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">подписи навигации, имя пользователя, вкладки вместо селекта</span></td><td class="off">скрыто</td><td class="off">скрыто</td><td><span class="flip">показано</span></td><td class="on">показано</td></tr>
-<tr><td>Ширина контента</td><td class="on">резиновая</td><td class="on">резиновая</td><td class="on">резиновая</td><td><span class="flip">ограничена 1440</span></td></tr>
-</tbody></table></div>
+</tbody></table>
+<p style="color:var(--ds-fg-muted);margin-top:9px">Эти переходы реализует приложение. Плотность задаётся независимо от ширины окна. Действия при смене компоновки должны оставаться доступными, например через меню строки.</p></div>
 
 <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;align-items:start">
 
@@ -42,16 +41,16 @@ body{background:var(--ds-bg);max-width:1120px;margin:0 auto;padding:22px 24px 26
 <tr><td class="mono">less('l')</td><td>S M</td><td>&le; M</td></tr>
 <tr><td class="mono">more('l')</td><td>XL</td><td>= XL</td></tr>
 </tbody></table>
-<p style="font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:9px"><span class="mono">more('m')</span> — это не «M и шире». Называйте классы и пишите документацию по результату: <span class="mono">column_le_l</span>, а не <span class="mono">more_m</span>.</p></div>
+<p style="font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:9px">Это API <span class="mono">ViewBreakpointService</span> из приложения. <span class="mono">more('m')</span> означает «L и шире». В документации указывайте результирующий диапазон.</p></div>
 
 <div style="display:flex;flex-direction:column;gap:14px">
 <div><h3>Правила</h3>
-<p style="font:var(--ds-type-body);color:var(--ds-fg-muted)">Четыре глобальных порога, пятого нет. Всё, что мельче, — <b style="color:var(--ds-fg);font-weight:var(--ds-weight-medium)">container query</b> на конкретном компоненте.<br>
-Верхняя граница диапазона = следующий порог &minus; 1px. Никогда <span class="mono">max-width:720px</span>.<br>
-<span class="mono">equal()</span> — только для <span class="mono">'s'</span>; во всех остальных случаях <span class="mono">more()</span> / <span class="mono">less()</span>, чтобы расширение шкалы не спрятало элемент молча.<br>
-Ничто не появляется на двух шагах: имя и его подпись живут на одном пороге.</p></div>
-<div><h3 style="color:var(--ds-danger-fg)">Долг — не расширять</h3>
-<p style="font:var(--ds-type-caption);color:var(--ds-fg-muted)">Пороги в SCSS, не принадлежащие ни одной шкале: <span class="mono">600px</span> file-dropzone, stepper-header, geofence-import · <span class="mono">900px</span> stepper-header, geofence header · <span class="mono">1350px</span> user-portal header · <span class="mono">520 / 380px</span> schedule-common-deviation · <span class="mono">max-width:720px</span> schedule-checkpoint-card, one-off-run (ошибка на 1px).</p></div>
+<p style="font:var(--ds-type-body);color:var(--ds-fg-muted)">Четыре диапазона, три порога перехода: 720, 960 и 1140px. Локальная адаптация — через container queries.<br>
+Диапазоны не пересекаются: S — ширина меньше 720px, M начинается с 720px. Целочисленные верхние границы — 719, 959 и 1139px.<br>
+Для поведения «начиная с размера» используйте <span class="mono">more()</span> / <span class="mono">less()</span>. <span class="mono">equal()</span> подходит для одного конкретного диапазона.</p></div>
+<div><h3>Ширина контента</h3>
+<p style="font:var(--ds-type-caption);color:var(--ds-fg-muted)">Формы и текстовые страницы ограничивайте токеном <span class="mono">--ds-content-max</span> (1440px), длинный текст — <span class="mono">--ds-content-max-prose</span> (72ch). Карта и таблицы используют доступную ширину. Ограничение не требует отдельного переключения на XL.</p></div>
+<p><a href="../DsBreakpointsDecisions/preview.html">Решения и список работ по миграции</a></p>
 </div>
 
 </div>
