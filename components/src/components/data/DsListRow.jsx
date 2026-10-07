@@ -22,6 +22,7 @@ export function DsListRow({title,subtitle,subtitleMono=false,state,course,value,
   const clickable=as!=='div'&&(link||!!onClick);
   const Main=link?'a':clickable?'button':'div';
   const [focused,setFocused]=React.useState(false),[tip,setTip]=React.useState(null);
+  const [rowHover,setRowHover]=React.useState(false);
   const titleRef=React.useRef(null),tipRef=React.useRef(null);
   const showTitle=()=>{
     const el=titleRef.current;
@@ -50,8 +51,10 @@ export function DsListRow({title,subtitle,subtitleMono=false,state,course,value,
     return ()=>{window.removeEventListener('scroll',hideTip,true);window.removeEventListener('resize',hideTip);};
   },[tip]);
   const tinted=active||selected;
-  const overlay=pressed&&tinted?'linear-gradient(0deg,color-mix(in oklab,var(--ds-brand-text) var(--ds-overlay-press),transparent),color-mix(in oklab,var(--ds-brand-text) var(--ds-overlay-press),transparent))':undefined;
+  const depth=pressed?'var(--ds-overlay-press)':'var(--ds-overlay-hover)';
+  const overlay=tinted&&(pressed||rowHover)?'linear-gradient(0deg,color-mix(in oklab,var(--ds-brand-text) '+depth+',transparent),color-mix(in oklab,var(--ds-brand-text) '+depth+',transparent))':undefined;
   return <div data-ds-list-row="" onMouseLeave={hideTip}
+    onPointerEnter={e=>{if(e.pointerType==='mouse')setRowHover(true);}} onPointerLeave={()=>setRowHover(false)}
     onPointerOver={e=>{
       if(e.pointerType!=='mouse'||tipRef.current?.contains(e.target))return;
       const action=e.target.closest('[data-ds-list-actions] button,[data-ds-list-actions] a[href]');

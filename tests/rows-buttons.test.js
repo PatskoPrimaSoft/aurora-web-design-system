@@ -138,6 +138,26 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
 }
 // ---------------- №3 DsListRow
 {
+  for(const props of [{active:true},{selected:true}]){
+    const box=render(h(NS.DsListRow,{title:'Объект',onClick:()=>{},...props}));
+    const button=box.querySelector('button');
+    fire(button,'pointerover',{pointerType:'mouse'});
+    await new Promise(resolve=>w.setTimeout(resolve,0));
+    ok(box.firstElementChild.style.backgroundImage.includes('overlay-hover'),'DsListRow: выбранная строка реагирует на наведение');
+    fire(button,'pointerdown',{pointerType:'mouse',button:0});
+    ok(box.firstElementChild.style.backgroundImage.includes('overlay-press'),'DsListRow: нажатие усиливает оверлей выбранной строки');
+    fire(button,'pointerup',{pointerType:'mouse'});
+    ok(box.firstElementChild.style.backgroundImage.includes('overlay-hover'),'DsListRow: отпускание возвращает наведение');
+  }
+}
+{
+  for(const [active,selected] of [[true,false],[false,true],[true,true]]){
+    const row=render(h(NS.DsListRow,{title:'Объект',active,selected})).firstElementChild;
+    ok(row.style.background==='var(--ds-surface-selected)',`DsListRow active=${active} selected=${selected}: подложка просмотра и выбора`);
+    ok(row.style.boxShadow.includes('inset')===active,`DsListRow active=${active} selected=${selected}: полоса только для просмотра`);
+  }
+}
+{
   const open=spy();
   const link=render(h(NS.DsListRow,{title:'Объект',href:'#object',active:true,actionsWidth:32}));
   ok(link.querySelector('a')?.getAttribute('href')==='#object'&&link.querySelector('a')?.getAttribute('aria-current')==='page','DsListRow: переход — нативная ссылка с текущей страницей');

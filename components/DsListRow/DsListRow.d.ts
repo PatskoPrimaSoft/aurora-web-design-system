@@ -18,7 +18,7 @@ export interface DsListRowProps {
   valueMeta?: React.ReactNode;
   /** Имя Material Symbols; используется, если не задан state. */
   icon?: string;
-  /** Открытый для просмотра объект: подложка, полоса слева и aria-current. */
+  /** Открытый для просмотра объект: подложка, полоса слева и aria-current. Независим от selected. */
   active?: boolean;
   /** Подложка множественного выбора. Доступный контрол выбора задаёт родитель. */
   selected?: boolean;
