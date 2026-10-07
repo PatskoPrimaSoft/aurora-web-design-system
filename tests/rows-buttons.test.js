@@ -25,6 +25,29 @@ const key = (el, type, k) => fire(el, type, { key: k }, w.KeyboardEvent);
 const click = (el) => act(() => el.click());
 const spy = () => { const f = (...a) => { f.calls.push(a); }; f.calls = []; return f; };
 const nested = (box) => box.querySelectorAll('button button, [role="button"] button, button [role="button"]').length;
+// DsChipGroup: композиция не перехватывает действия чипов, очистка управляется родителем.
+{
+  ok(typeof NS.DsChipGroup === 'function', 'DsChipGroup: экспортируется');
+  if(NS.DsChipGroup){
+    const clear=spy(),select=spy(),remove=spy();
+    const chips=[h(NS.DsChip,{key:'a',selected:true,onClick:select},'Нет связи'),h(NS.DsChip,{key:'b',onClick:select},'Грузовики')];
+    const box=render(h(NS.DsChipGroup,{ariaLabel:'Типы объектов',onClearAll:clear},chips));
+    ok(box.firstElementChild.getAttribute('role')==='group'&&box.firstElementChild.getAttribute('aria-label')==='Типы объектов','DsChipGroup: доступное имя группы');
+    const buttons=box.querySelectorAll('button');
+    click(buttons[0]);click(buttons[2]);
+    ok(select.calls.length===1&&clear.calls.length===1&&buttons[2].textContent==='Очистить все','DsChipGroup: выбор и очистка вызывают независимые обработчики');
+    ok(box.querySelectorAll('[aria-pressed]').length===2&&nested(box)===0,'DsChipGroup: очистка не меняет дочерние чипы и не создаёт вложенных кнопок');
+    const values=render(h(NS.DsChipGroup,{ariaLabel:'Значения'},h(NS.DsChip,{removable:true,onRemove:remove},'Топливо')));
+    click(values.querySelector('button'));
+    ok(remove.calls.length===1&&values.querySelectorAll('button').length===1,'DsChipGroup: без onClearAll остаётся только удаление значения');
+    const empty=render(h(NS.DsChipGroup,{ariaLabel:'Пустая',onClearAll:clear},[null,false]));
+    ok(!empty.firstElementChild,'DsChipGroup: пустая группа не показывает очистку');
+    const fragment=render(h(NS.DsChipGroup,{ariaLabel:'Пустая',onClearAll:clear},h(React.Fragment,null,false)));
+    ok(!fragment.firstElementChild,'DsChipGroup: пустой фрагмент не показывает очистку');
+    const en=render(h(NS.DsStringsProvider,{strings:NS.dsStringsEn},h(NS.DsChipGroup,{ariaLabel:'Values',onClearAll:clear},h(NS.DsChip,null,'Fuel'))));
+    ok(en.querySelector('button').textContent==='Clear all','DsChipGroup: очистка локализована');
+  }
+}
 // DsChip: семантика выбора, блокировка удаления и имена одинаковых крестиков.
 {
   const select = spy(), remove = spy();

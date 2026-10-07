@@ -260,7 +260,7 @@ SVG-логотипа, локапа только из словесного зна
 | примитивы | `DsIcon` |
 | кнопки | `DsButton` · `DsIconButton` · `DsFab` |
 | формы | `DsField` · `DsCheckbox` · `DsSwitch` · `DsDuration` · `DsFilterMenu` |
-| данные | `DsTable` · `DsFilterBar` · `DsPagination` · `DsChip` · `DsLozenge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkActionsBar` · `DsStateIcon` |
+| данные | `DsTable` · `DsFilterBar` · `DsPagination` · `DsChip` · `DsChipGroup` · `DsLozenge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkActionsBar` · `DsStateIcon` |
 | обратная связь | `DsBanner` · `DsToast` · `DsToastStack` · `DsEmptyState` · `DsSpinner` · `DsSkeleton` |
 | графики | `DsChart` · `DsChartLegend` · `DsChartTooltip` · `DsSparkline` · `DsScoreBar` |
 | раскладка | `DsPanel` · `DsDialog` · `DsPageLayout` |
