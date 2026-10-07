@@ -1,5 +1,5 @@
 /** Панель общих действий над выбранными строками таблицы. */
-export interface DsBulkBarProps {
+export interface DsBulkActionsBarProps {
   /** Число выбранных строк. При нуле панель не отображается. */
   count?: number;
   /** Число строк в отфильтрованном результате. Вместе с onSelectAll включает кнопку выбора всех. */
@@ -19,4 +19,4 @@ export interface DsBulkBarProps {
   /** Стили корневой панели, например перенос содержимого на узком экране. */
   style?: React.CSSProperties;
 }
-export declare function DsBulkBar(props: DsBulkBarProps): JSX.Element;
+export declare function DsBulkActionsBar(props: DsBulkActionsBarProps): JSX.Element;

@@ -4,7 +4,7 @@ import { dsSlots } from '../layout/DsPageLayout.jsx';
 import { useDsStrings } from '../primitives/DsStrings.jsx';
 
 /** Contextual toolbar for what you can do with N selected rows. Absent at rest. */
-export function DsBulkBar({count=0,total,noun,onSelectAll,onClear,actions,children,floating=true,style}){
+export function DsBulkActionsBar({count=0,total,noun,onSelectAll,onClear,actions,children,floating=true,style}){
   const S=useDsStrings();
   const [s]=dsSlots(children,['actions'],{actions});
   if(!count)return null;

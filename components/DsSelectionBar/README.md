@@ -3,4 +3,4 @@
 **Потребитель задаёт** `selected`, `total`, `onSelectAll(all)`, `onClear`, `actions` — `DsIconButton` или малые `DsButton`, при необходимости `rule`.
 
 - Действия показываются только пока что-то выбрано.
-- Для таблицы есть отдельный компонент — `DsBulkBar`.
+- Для таблицы есть отдельный компонент — `DsBulkActionsBar`.

@@ -25,27 +25,28 @@ const key = (el, type, k) => fire(el, type, { key: k }, w.KeyboardEvent);
 const click = (el) => act(() => el.click());
 const spy = () => { const f = (...a) => { f.calls.push(a); }; f.calls = []; return f; };
 const nested = (box) => box.querySelectorAll('button button, [role="button"] button, button [role="button"]').length;
-// DsBulkBar: один сброс при любом объёме выбора, с сохранением обоих контрактов обработчиков.
+// DsBulkActionsBar: один сброс при любом объёме выбора, с сохранением обоих контрактов обработчиков.
 {
+  ok(typeof NS.DsBulkActionsBar === 'function' && NS.DsBulkBar === undefined, 'DsBulkActionsBar: новое имя экспортируется без старого алиаса');
   const select = spy(), clear = spy();
-  const bulk = (props) => render(h(NS.DsBulkBar, { count: 12, total: 148, noun: 'объектов',
+  const bulk = (props) => render(h(NS.DsBulkActionsBar, { count: 12, total: 148, noun: 'объектов',
     onSelectAll: select, onClear: clear, actions: h(NS.DsButton, null, 'Экспорт'), ...props }));
   const partial = bulk({});
-  ok(partial.textContent.includes('Выбрано: 12 объектов'), 'DsBulkBar: единая подпись частичного выбора');
+  ok(partial.textContent.includes('Выбрано: 12 объектов'), 'DsBulkActionsBar: единая подпись частичного выбора');
   const buttons = [...partial.querySelectorAll('button')];
-  ok(buttons.map(b => b.textContent).join('|') === 'Выбрать все 148|Экспорт|Снять выбор', 'DsBulkBar: порядок и единственная кнопка сброса');
-  ok(buttons[2].style.height === 'var(--ds-control-h-sm)' && buttons[2].style.borderRadius === 'var(--ds-radius-control)', 'DsBulkBar: выравнивание сброса не заменяет оформление DsButton');
+  ok(buttons.map(b => b.textContent).join('|') === 'Выбрать все 148|Экспорт|Снять выбор', 'DsBulkActionsBar: порядок и единственная кнопка сброса');
+  ok(buttons[2].style.height === 'var(--ds-control-h-sm)' && buttons[2].style.borderRadius === 'var(--ds-radius-control)', 'DsBulkActionsBar: выравнивание сброса не заменяет оформление DsButton');
   click(buttons[0]); click(buttons[2]);
-  ok(select.calls[0]?.[0] === true && clear.calls.length === 1, 'DsBulkBar: выбрать все и очистить используют свои обработчики');
+  ok(select.calls[0]?.[0] === true && clear.calls.length === 1, 'DsBulkActionsBar: выбрать все и очистить используют свои обработчики');
   const full = bulk({count: 148});
-  ok(full.textContent.includes('Выбраны все 148 объектов') && full.querySelectorAll('button').length === 2, 'DsBulkBar: полный выбор без дублирующего сброса');
+  ok(full.textContent.includes('Выбраны все 148 объектов') && full.querySelectorAll('button').length === 2, 'DsBulkActionsBar: полный выбор без дублирующего сброса');
   const fallback = bulk({count: 148, onClear: undefined});
   click([...fallback.querySelectorAll('button')].find(b => b.textContent === 'Снять выбор'));
-  ok(select.calls.at(-1)?.[0] === false, 'DsBulkBar: без onClear сброс вызывает onSelectAll(false)');
+  ok(select.calls.at(-1)?.[0] === false, 'DsBulkActionsBar: без onClear сброс вызывает onSelectAll(false)');
   const empty = bulk({count: 0});
-  ok(!empty.querySelector('[role="toolbar"]'), 'DsBulkBar: при пустом выборе панель скрыта');
-  const en = render(h(NS.DsStringsProvider, {strings:NS.dsStringsEn}, h(NS.DsBulkBar, {count:148,total:148})));
-  ok(en.textContent.includes('All 148 objects selected'), 'DsBulkBar: полный выбор локализован');
+  ok(!empty.querySelector('[role="toolbar"]'), 'DsBulkActionsBar: при пустом выборе панель скрыта');
+  const en = render(h(NS.DsStringsProvider, {strings:NS.dsStringsEn}, h(NS.DsBulkActionsBar, {count:148,total:148})));
+  ok(en.textContent.includes('All 148 objects selected'), 'DsBulkActionsBar: полный выбор локализован');
 }
 
 // Unified state transitions are covered in checkbox.test.js.

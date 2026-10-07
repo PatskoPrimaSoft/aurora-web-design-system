@@ -16,7 +16,7 @@
 
 ```jsx
 import { useState } from 'react';
-import { DsBulkBar, DsButton } from '@primasoftllc/design-system';
+import { DsBulkActionsBar, DsButton } from '@primasoftllc/design-system';
 
 export function Example() {
   const [count, setCount] = useState(12);
@@ -25,7 +25,7 @@ export function Example() {
   return (
     <>
       <DsButton onClick={() => setCount(12)}>Выбрать 12 строк</DsButton>
-      <DsBulkBar
+      <DsBulkActionsBar
         count={count}
         total={148}
         noun="объектов"

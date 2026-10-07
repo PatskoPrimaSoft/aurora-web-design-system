@@ -16,7 +16,7 @@ function App(){var count=React.useState(12),floating=React.useState(true),messag
     h('div',{className:'controls'},
       h(S.DsButton,{tone:'secondary',onClick:function(){select(12);}},'Выбрать 12 строк'),
       h(S.DsSwitch,{label:'Плавающий вид',checked:floating[0],onChange:function(e){floating[1](e.target.checked);}})),
-    h(S.DsBulkBar,{count:count[0],total:148,noun:'объектов',floating:floating[0],style:{flexWrap:'wrap'},
+    h(S.DsBulkActionsBar,{count:count[0],total:148,noun:'объектов',floating:floating[0],style:{flexWrap:'wrap'},
       onSelectAll:function(all){select(all?148:0);},onClear:function(){select(0);},
       actions:[
         h(S.DsButton,{key:'group',size:'sm',tone:'secondary',icon:'label',onClick:function(){message[1]('Пример: назначение группы для '+count[0]+' объектов запрошено.');}},'В группу'),

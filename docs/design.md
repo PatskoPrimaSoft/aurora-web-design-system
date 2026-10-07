@@ -155,7 +155,7 @@ Aurora — платформа GPS-мониторинга коммерческо�
 - Высота диалога — по контенту; действия справа, «отмена» затем «подтвердить».
 - CSS Grid — для форм и сеток метрик, flexbox — для всего остального. Отрицательные отступы запрещены.
 - **Переиспользуемые компоненты не задают себе внешних отступов — отступы задаёт родитель.**
-- **Пропсы регионов принимают и слоты.** `DsPageLayout` (`header` / `pageHeader` / `left` / `right` / `footer`), `DsPanel` (`actions` / `footer`), `DsAppHeader` (`actions`), `DsPageHeader` (`actions` / `meta` / `tabs`), `DsDialog` (`actions`), `DsBanner` (`actions`), `DsEmptyState` (`action` / `secondary`), `DsTable` (`empty` / `footer`), `DsBulkBar` (`actions`), `DsSelectionBar` (`actions`) и `DsListRow` (`actions` / `badge`) принимают либо React-узел в пропсе, либо дочерний элемент с `slot="<имя>"` (`data-slot` тоже работает). Поэтому экран собирается из статической разметки, а не в коде. Если заданы оба, побеждает пропс; дети без слота — основной регион.
+- **Пропсы регионов принимают и слоты.** `DsPageLayout` (`header` / `pageHeader` / `left` / `right` / `footer`), `DsPanel` (`actions` / `footer`), `DsAppHeader` (`actions`), `DsPageHeader` (`actions` / `meta` / `tabs`), `DsDialog` (`actions`), `DsBanner` (`actions`), `DsEmptyState` (`action` / `secondary`), `DsTable` (`empty` / `footer`), `DsBulkActionsBar` (`actions`), `DsSelectionBar` (`actions`) и `DsListRow` (`actions` / `badge`) принимают либо React-узел в пропсе, либо дочерний элемент с `slot="<имя>"` (`data-slot` тоже работает). Поэтому экран собирается из статической разметки, а не в коде. Если заданы оба, побеждает пропс; дети без слота — основной регион.
 - Брейкпоинты приходят из `ViewBreakpointService` с именами `s` / `m` / `l` / `xl` (`ds-bp-m`, `ds-bp-l`, `ds-bp-xl`); компоненты ветвятся по `size.more('m')`, а не по media-запросам. Ширины контента — `ds-content-max`, `ds-content-max-prose`. Карточки [«Адаптивность и брейкпоинты»](../components/DsBreakpoints/README.md) и `DsBreakpointsDecisions`; последняя хранит решения и долг по брейкпоинтам приложения.
 
 ### Графики
@@ -260,7 +260,7 @@ SVG-логотипа, локапа только из словесного зна
 | примитивы | `DsIcon` |
 | кнопки | `DsButton` · `DsIconButton` · `DsFab` |
 | формы | `DsField` · `DsCheckbox` · `DsSwitch` · `DsDuration` · `DsFilterMenu` |
-| данные | `DsTable` · `DsFilterBar` · `DsPagination` · `DsChip` · `DsLozenge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkBar` · `DsStateIcon` |
+| данные | `DsTable` · `DsFilterBar` · `DsPagination` · `DsChip` · `DsLozenge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkActionsBar` · `DsStateIcon` |
 | обратная связь | `DsBanner` · `DsToast` · `DsToastStack` · `DsEmptyState` · `DsSpinner` · `DsSkeleton` |
 | графики | `DsChart` · `DsChartLegend` · `DsChartTooltip` · `DsSparkline` · `DsScoreBar` |
 | раскладка | `DsPanel` · `DsDialog` · `DsPageLayout` |
