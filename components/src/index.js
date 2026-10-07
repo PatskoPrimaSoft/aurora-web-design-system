@@ -10,7 +10,7 @@ export * from './components/buttons/DsIconButton.jsx';
 export * from './components/charts/DsChart.jsx';
 export * from './components/charts/DsScoreBar.jsx';
 export * from './components/charts/DsSparkline.jsx';
-export * from './components/data/DsBadge.jsx';
+export * from './components/data/DsLozenge.jsx';
 export * from './components/data/DsBulkBar.jsx';
 export * from './components/data/DsChip.jsx';
 export * from './components/data/DsFilterBar.jsx';

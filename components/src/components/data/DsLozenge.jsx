@@ -1,7 +1,7 @@
 import React from 'react';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
-/** Status badge. Five theme-independent tones, tint or solid. */
-export function DsBadge({tone='neutral',solid=false,dot=false,icon,children,size='md'}){
+/** Compact status label. Five theme-independent tones, tint or solid. */
+export function DsLozenge({tone='neutral',solid=false,dot=false,icon,children,size='md'}){
   const bg=solid?'var(--ds-'+tone+'-solid)':'var(--ds-'+tone+'-bg)';
   const fg=solid?'var(--ds-on-solid)':'var(--ds-'+tone+'-fg)';
   return <span style={{display:'inline-flex',alignItems:'center',gap:6,flex:'none',

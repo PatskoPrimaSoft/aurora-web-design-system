@@ -20,4 +20,4 @@
 Обычные статусные цвета не рассчитаны на такую поверхность.
 
 Передавайте смысл подписью или иконкой вместе с цветом.
-Примеры применения: [DsBadge](../DsBadge/README.md) и [DsToast](../DsToast/README.md).
+Примеры применения: [DsLozenge](../DsLozenge/README.md) и [DsToast](../DsToast/README.md).

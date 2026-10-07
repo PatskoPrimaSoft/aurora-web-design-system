@@ -7,7 +7,7 @@ a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--ds-border-strong);border-radius:99px;border:3px solid transparent;background-clip:content-box}</style>
 <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head><body><div id="root"></div><script type="text/babel">
-const { DsPageLayout, DsAppHeader, DsUserMenu, DsTabs, DsIconButton, DsButton, DsField, DsChip, DsBadge, DsBanner, DsPanel, DsSwitch, DsFilterBar,
+const { DsPageLayout, DsAppHeader, DsUserMenu, DsTabs, DsIconButton, DsButton, DsField, DsChip, DsLozenge, DsBanner, DsPanel, DsSwitch, DsFilterBar,
   DsObjectRow, DsTreeRow, DsSelectionBar, DsFilterMenu, DsEmptyState } = window.AuroraWebDesignSystem_96e210;
 
 function Chrome({state,set,children,label}){
@@ -161,7 +161,7 @@ function App(){
           <DsPanel padding={false} style={{flex:1,minHeight:0,display:'flex'}}>
             <MapGround><MapControls layers={layers} setLayers={setLayers}/></MapGround></DsPanel>
           <DsPanel eyebrow="Объект" title={o.name+' · '+o.plate} style={{flex:'none'}}
-            actions={<><DsBadge tone={TONE[o.state]} dot>{LABEL[o.state]}</DsBadge>
+            actions={<><DsLozenge tone={TONE[o.state]} dot>{LABEL[o.state]}</DsLozenge>
               <DsButton size="sm" tone="secondary" icon="assessment">Построить трек</DsButton>
               <DsIconButton icon="edit" label="Изменить объект"/><DsIconButton icon="more_vert" label="Ещё"/></>}>
             {o.state==='alarm'?<div style={{marginBottom:'var(--ds-gap-sm-plus)'}}>

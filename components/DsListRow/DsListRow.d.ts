@@ -35,7 +35,7 @@ export interface DsListRowProps {
   onClick?: () => void;
   /** Icon buttons; faded to 55% until the row is hovered or active. */
   actions?: React.ReactNode;
-  /** A DsBadge shown after the title. */
+  /** A DsLozenge shown after the title. */
   badge?: React.ReactNode;
   /** `div` when the row already contains its own buttons. Default `button`. */
   as?: 'button' | 'div';

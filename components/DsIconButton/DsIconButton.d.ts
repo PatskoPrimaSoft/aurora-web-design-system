@@ -22,7 +22,7 @@ export interface DsIconButtonProps {
   active?: boolean;
   loading?: boolean;
   disabled?: boolean;
-  /** Accent pip in the corner: this control has something applied (an active filter, a narrowed user list). Not a count — use DsBadge for counts. */
+  /** Accent pip in the corner: this control has something applied (an active filter, a narrowed user list). Use a separate numeric counter for counts. */
   dot?: boolean;
   /** Degrees. Carries meaning (heading, measuring line), never decoration. */
   rotate?: number;

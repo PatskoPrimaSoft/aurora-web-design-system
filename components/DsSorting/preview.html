@@ -99,7 +99,7 @@ table.spec td.k{font:var(--ds-type-mono);font-size:13px;color:var(--ds-fg);white
 <div class="note">Компоненты: <code>DsTable</code> — <code>sortKey</code>, <code>sortDir</code>, <code>onSort(key, dir)</code>, колонка с <code>sortable</code> и при необходимости <code>sortBy</code>.</div>
 </div>
 <script type="text/babel">
-const { DsTable, DsBadge, DsPanel, DsObjectRow, DsIconButton, DsFilterMenu, DsPagination } = window.AuroraWebDesignSystem_96e210;
+const { DsTable, DsLozenge, DsPanel, DsObjectRow, DsIconButton, DsFilterMenu, DsPagination } = window.AuroraWebDesignSystem_96e210;
 
 const TONE={moving:'success',parked:'neutral',offline:'neutral',alarm:'danger',nodata:'warning'};
 const LABEL={moving:'Движется',parked:'Стоит',offline:'Offline',alarm:'Alarm',nodata:'Нет данных'};
@@ -122,7 +122,7 @@ function TableDemo(){
     {key:'driver',label:'Водитель',sortable:true,sortBy:'driver.lastName',width:100},
     {key:'speed',label:'Скорость',sortable:true,mono:true,align:'right',width:88,
       render:r=>r.speed==null?'—':r.speed+' км/ч'},
-    {key:'state',label:'Состояние',sortable:true,width:118,render:r=><DsBadge tone={TONE[r.state]} dot>{LABEL[r.state]}</DsBadge>},
+    {key:'state',label:'Состояние',sortable:true,width:118,render:r=><DsLozenge tone={TONE[r.state]} dot>{LABEL[r.state]}</DsLozenge>},
     {key:'last',label:'Последнее сообщение',sortable:true,mono:true,muted:true,align:'right',width:122},
     {key:'mileage',label:'Пробег за сутки',mono:true,align:'right',width:108,render:r=>r.mileage==null?'—':r.mileage+' км'}];
   const val=r=>{

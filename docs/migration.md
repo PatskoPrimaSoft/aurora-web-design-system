@@ -69,7 +69,7 @@ reduction on the v1 side comes from v1 encoding variants as separate components.
 | `SlideToggle` | `DsSwitch` | 1:1 | — |
 | `CommonFilter` | `DsFilterMenu + DsFilterBar` | split | The editor moves into a popover (all eight types); the applied value becomes a removable chip in the bar. |
 | `MessageBanner` | `DsBanner` | 1:1 | `type="WARNING"` → `tone="warning"`. No 4px left bar; `role` still derives from tone. |
-| `StatusChip` | `DsBadge` | 1:1 | v1 was a written spec with no implementation. v2 ships it, plus `solid` and `dot`. |
+| `StatusChip` | `DsLozenge` | 1:1 | v1 was a written spec with no implementation. v2 ships it, plus `solid` and `dot`. |
 | `SnackBar` | `DsToast` | 1:1 | Inverse ground so a toast can never be confused with a banner. `DsToastStack` positions them. |
 | `Spinner` | `DsSpinner` | 1:1 | v1 was raw `mat-spinner`. `DsSkeleton` is new and is preferred inside tables. |
 | `Table` | `DsTable` | 1:1 | No 2px primary rules, no `mat-elevation-z3`. Adds sorting, selection, sticky header, mono columns, density-driven rows. |

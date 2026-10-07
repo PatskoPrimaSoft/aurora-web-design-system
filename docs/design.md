@@ -260,13 +260,13 @@ SVG-логотипа, локапа только из словесного зна
 | примитивы | `DsIcon` |
 | кнопки | `DsButton` · `DsIconButton` · `DsFab` |
 | формы | `DsField` · `DsCheckbox` · `DsSwitch` · `DsDuration` · `DsFilterMenu` |
-| данные | `DsTable` · `DsFilterBar` · `DsPagination` · `DsChip` · `DsBadge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkBar` · `DsStateIcon` |
+| данные | `DsTable` · `DsFilterBar` · `DsPagination` · `DsChip` · `DsLozenge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkBar` · `DsStateIcon` |
 | обратная связь | `DsBanner` · `DsToast` · `DsToastStack` · `DsEmptyState` · `DsSpinner` · `DsSkeleton` |
 | графики | `DsChart` · `DsChartLegend` · `DsChartTooltip` · `DsSparkline` · `DsScoreBar` |
 | раскладка | `DsPanel` · `DsDialog` · `DsPageLayout` |
 | навигация | `DsAppHeader` · `DsTabs` · `DsPageHeader` · `DsStepper` · `DsMenu` · `DsUserMenu` |
 
-**`DsBadge` реализован в React-эталоне системы.** Наличие соответствующего Angular-компонента проверяйте в приложении; описание поведения — в карточке `DsBadge`.
+**`DsLozenge` реализован в React-эталоне системы.** Наличие соответствующего Angular-компонента проверяйте в приложении; описание поведения — в карточке `DsLozenge`.
 
 Имена токенов — в [регламенте](tokens.md), подключение линтера и внедрение по срезам — в [руководстве по использованию](usage.md).
 

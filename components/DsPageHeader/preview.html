@@ -13,7 +13,7 @@ body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
 function App(){var t=React.useState('o');
   return h(S.DsPageHeader,{eyebrow:'Администрирование',title:'Объекты',onBack:function(){},breadcrumbs:[{label:'Администрирование',onClick:function(){}},{label:'Объекты'}],
-    meta:h(S.DsBadge,{tone:'info',size:'sm'},'148'),actions:h(S.DsButton,{icon:'add'},'Добавить объект'),border:true,
+    meta:h('span',null,'148 объектов'),actions:h(S.DsButton,{icon:'add'},'Добавить объект'),border:true,
     tabs:h(S.DsTabs,{tone:'underline',active:t[0],onChange:t[1],items:[{id:'o',label:'Объекты'},{id:'a',label:'Архив'}]})});}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
