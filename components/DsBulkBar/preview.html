@@ -1,21 +1,27 @@
-<!-- @dsCard group="5 · Компоненты · данные" height=120 subtitle="Панель действий над N выбранными строками таблицы; в покое её нет" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=240 subtitle="Общие действия над выбранными строками таблицы" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.example{display:flex;flex-direction:column;gap:16px}
+.controls{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
+.status{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var c=React.useState(12);
-  return c[0]?h(S.DsBulkBar,{count:c[0],total:148,noun:'объектов',onSelectAll:function(all){c[1](all?148:0);},onClear:function(){c[1](0);}},
-      h(S.DsButton,{slot:'actions',size:'sm',tone:'secondary',icon:'label'},'В группу'),
-      h(S.DsButton,{slot:'actions',size:'sm',tone:'secondary',icon:'download'},'Экспорт'),
-      h(S.DsButton,{slot:'actions',size:'sm',tone:'danger',icon:'archive'},'В архив'))
-    :h(S.DsButton,{tone:'secondary',onClick:function(){c[1](12);}},'Выбрать 12 строк');}
+function App(){var count=React.useState(12),floating=React.useState(true),message=React.useState('');
+  function select(n){count[1](n);message[1]('');if(!n)document.querySelector('.controls button').focus();}
+  return h('section',{className:'example','aria-label':'Массовые действия'},
+    h('h3',null,'Выбор строк и действия'),
+    h('div',{className:'controls'},
+      h(S.DsButton,{tone:'secondary',onClick:function(){select(12);}},'Выбрать 12 строк'),
+      h(S.DsSwitch,{label:'Плавающий вид',checked:floating[0],onChange:function(e){floating[1](e.target.checked);}})),
+    h(S.DsBulkBar,{count:count[0],total:148,noun:'объектов',floating:floating[0],style:{flexWrap:'wrap'},
+      onSelectAll:function(all){select(all?148:0);},onClear:function(){select(0);},
+      actions:[
+        h(S.DsButton,{key:'group',size:'sm',tone:'secondary',icon:'label',onClick:function(){message[1]('Пример: назначение группы для '+count[0]+' объектов запрошено.');}},'В группу'),
+        h(S.DsButton,{key:'export',size:'sm',tone:'secondary',icon:'download',onClick:function(){message[1]('Пример: экспорт '+count[0]+' объектов запрошен.');}},'Экспорт')]}),
+    h('p',{className:'status',role:'status'},message[0]|| (count[0]?'Выбрано строк: '+count[0]+'.':'Строки не выбраны — панель скрыта.')));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

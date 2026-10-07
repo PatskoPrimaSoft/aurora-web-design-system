@@ -37,6 +37,7 @@ export interface DsStrings {
   bulk: {
     toolbar: (count: number) => string;
     selected: string;
+    allSelected: (selection: string) => string;
     deselectAll: string;
     selectAll: (count: number) => string;
   };
