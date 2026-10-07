@@ -14,7 +14,6 @@ export * from './components/data/DsLozenge.jsx';
 export * from './components/data/DsBulkActionsBar.jsx';
 export * from './components/data/DsChip.jsx';
 export * from './components/data/DsChipGroup.jsx';
-export * from './components/data/DsFilterBar.jsx';
 export * from './components/data/DsListRow.jsx';
 export * from './components/data/DsObjectRow.jsx';
 export * from './components/data/DsPagination.jsx';

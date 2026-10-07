@@ -62,12 +62,12 @@ reduction on the v1 side comes from v1 encoding variants as separate components.
 | `IconTextButtonFixedWidth` | `DsButton` | folded in | `<DsButton icon=… fullWidth>` inside a fixed-width parent. The 250px literal is not a component concern. |
 | `FormField` | `DsField` | 1:1 | Floating label → static label (`labelMode="notch"` restores the `mat-form-field` outline notch where parity is needed). `errors[]` → one `error`; several simultaneous messages were never readable. |
 | `SelectField` | `DsField` | folded in | `as="select"` + `options`. |
-| `Search` | `DsField / DsFilterBar` | folded in | `<DsField icon="search">` standalone; inside a toolbar DsFilterBar owns the search box and the clear button. |
+| `Search` | `DsField` | folded in | Use `<DsField icon="search">` with an accessible search label. Compose the surrounding actions in the screen. |
 | `TimePicker` | `DsDuration` | 1:1 | Rebuilt on the shared field tokens; the `дд d чч : мм` mask is now translatable unit labels. |
 | `Checkbox` | `DsCheckbox` | 1:1 | Selected state is brand, not accent. |
 | `RadioButton` | `DsCheckbox` | folded in | `radio` flag. |
 | `SlideToggle` | `DsSwitch` | 1:1 | — |
-| `CommonFilter` | `DsFilterMenu + DsFilterBar` | split | The editor moves into a popover (all eight types); the applied value becomes a removable chip in the bar. |
+| `CommonFilter` | `DsFilterMenu + DsChipGroup` | split | The editor moves into a popover (all eight types); applied values become removable DsChip elements in DsChipGroup next to the table. |
 | `MessageBanner` | `DsBanner` | 1:1 | `type="WARNING"` → `tone="warning"`. No 4px left bar; `role` still derives from tone. |
 | `StatusChip` | `DsLozenge` | 1:1 | v1 was a written spec with no implementation. v2 ships it, plus `solid` and `dot`. |
 | `SnackBar` | `DsToast` | 1:1 | Inverse ground so a toast can never be confused with a banner. `DsToastStack` positions them. |
@@ -153,9 +153,9 @@ reduction on the v1 side comes from v1 encoding variants as separate components.
 1. Wrap the screen in `DsPageLayout` and put a `DsAppHeader` in `header`.
 2. Replace `Card` with `DsPanel`, and delete every 2px primary rule you find —
    adjacent panels are separated by the page ground showing through the gap.
-3. Replace the table: `DsTable` + `DsFilterBar` + `DsPagination`. Move each
+3. Replace the table: `DsTable` + `DsField` + `DsChipGroup` + `DsPagination`. Move each
    per-column `CommonFilter` into a `DsFilterMenu` and let the applied value render
-   as a chip in the bar. Leave the header sorting only.
+   as a removable `DsChip` in the group. Leave the header sorting only.
 4. Replace fields one for one with `DsField`; collapse multi-`mat-error` stacks to
    the single most actionable message.
 5. Swap buttons: `variant` → `tone`, and drop every semantic wrapper — `Save` and

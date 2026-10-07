@@ -21,6 +21,8 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ### Removed
 
+- **Breaking:** удалены `DsFilterBar`, `DsFilterBarProps` и `DsAppliedFilter`, без алиасов совместимости. Собирайте поиск и действия на экране из `DsField` и `DsButton`, применённые фильтры — из `DsChip` в `DsChipGroup`. Изменение требует MAJOR-релиза.
+
 - **Breaking:** `DsBulkBar` переименован в `DsBulkActionsBar`, `DsBulkBarProps` — в `DsBulkActionsBarProps`, без алиасов. Обновите импорты и JSX; параметры и поведение сохранены. Изменение требует MAJOR-релиза.
 
 - **Breaking:** `DsBadge` переименован в `DsLozenge`, `DsBadgeProps` — в `DsLozengeProps`, без алиасов. Обновите импорты и JSX; параметры и внешний вид сохранены. Компонент обозначает статус или значимый атрибут объекта, а не числовой счётчик. Изменение требует MAJOR-релиза.

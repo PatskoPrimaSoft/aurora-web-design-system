@@ -4,7 +4,7 @@
  * v1 put one of these inside every table header cell, which made the header two
  * rows tall, pushed the column labels up, and hid what was actually applied. v2
  * moves the editor into a popover opened from a labelled button, and the *result*
- * becomes a removable chip in DsFilterBar. The header goes back to doing one job:
+ * becomes a removable DsChip in DsChipGroup. The header goes back to doing one job:
  * sorting.
  *
  * Values are held as a draft until Apply, so a half-typed range never re-queries.

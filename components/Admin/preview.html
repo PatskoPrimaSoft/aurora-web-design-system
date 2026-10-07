@@ -7,7 +7,7 @@ a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:var(--ds-border-strong);border-radius:99px;border:3px solid transparent;background-clip:content-box}</style>
 <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head><body><div id="root"></div><script type="text/babel">
-const { DsPageLayout, DsAppHeader, DsUserMenu, DsTabs, DsIconButton, DsButton, DsField, DsChip, DsLozenge, DsBanner, DsPanel, DsTable, DsFilterBar, DsCheckbox } = window.AuroraWebDesignSystem_96e210;
+const { DsPageLayout, DsAppHeader, DsUserMenu, DsTabs, DsIconButton, DsButton, DsField, DsChip, DsChipGroup, DsLozenge, DsBanner, DsPanel, DsTable, DsCheckbox } = window.AuroraWebDesignSystem_96e210;
 
 function Chrome({state,set,children,label}){
   const {theme,appearance,density}=state;
@@ -79,12 +79,16 @@ function App(){
         <DsTabs tone="underline" active={tab} onChange={setTab} items={[{id:'units',label:'Объекты',badge:148},
           {id:'users',label:'Пользователи'},{id:'retr',label:'Ретрансляторы'},{id:'tmpl',label:'Наборы шаблонов'},{id:'drv',label:'Водители'},{id:'arc',label:'Архив'}]}/>
       </div>}>
-          <DsFilterBar search={q} onSearch={setQ} searchPlaceholder="Поиск объекта, номера или IMEI"
-            filters={chips} onRemoveFilter={id=>setChips(chips.filter(c=>c.id!==id))} onClearAll={()=>setChips([])}
-            resultCount={rows.length+' из 148'} density={s.density} onDensityChange={v=>set({density:v})}>
+          <div style={{display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',flexWrap:'wrap'}}>
+            <DsField id="admin-search" icon="search" value={q} onChange={e=>setQ(e.target.value)}
+              placeholder="Поиск объекта, номера или IMEI" aria-label="Поиск объектов" width={360}/>
             <DsButton tone="secondary" icon="filter_alt" iconRight="expand_more">Фильтры</DsButton>
             <DsButton tone="primary" icon="add">Добавить объект</DsButton>
-          </DsFilterBar>
+            <span style={{marginLeft:'auto',font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>{rows.length+' из 148'}</span>
+          </div>
+          <DsChipGroup ariaLabel="Применённые фильтры" onClearAll={()=>{setChips([]);document.getElementById('admin-search').focus();}}>
+            {chips.map(c=><DsChip key={c.id} removable onRemove={()=>{setChips(chips.filter(item=>item.id!==c.id));document.getElementById('admin-search').focus();}}>{c.label+': '+c.value}</DsChip>)}
+          </DsChipGroup>
           <div style={{flex:1,minHeight:0,display:'flex'}}>
             <DsTable columns={cols} rows={rows} selectable selectedIds={sel} activeId={active}
               onToggleRow={id=>setSel(x=>x.includes(id)?x.filter(y=>y!==id):[...x,id])}

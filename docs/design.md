@@ -211,7 +211,7 @@ WCAG AA — заявленный минимум, новый UI проходит 
 - **Пустые значения всегда на слабом конце** шкалы, какое бы направление ни было выбрано.
 - Смена порядка возвращает на первую страницу, живёт в **URL** рядом с фильтрами и держит строки на месте под `DsSkeleton` во время перезапроса.
 - **Без заголовков колонок порядком владеет меню сортировки** — панель объектов, дерево и списки карточек используют `DsFilterMenu type="sort-by"`. Эти списки загружены целиком, поэтому сортировка честно клиентская. **Поле и направление — раздельно:** радиосписок полей плюс одна пара направлений с подписями от поля (`Newest first`, `A → Z`, `Highest first`). Группировка — не сортировка; `Clear` возвращает порядок по умолчанию.
-- **Сортировка — не фильтр**: никогда не чип в `DsFilterBar`. Она видна как активный заголовок или как точка на иконке `sort`, пока отличается от умолчания.
+- **Сортировка — не фильтр**: никогда не чип применённого фильтра в `DsChipGroup`. Она видна как активный заголовок или как точка на иконке `sort`, пока отличается от умолчания.
 - **Некоторые порядки не оператору менять:** иерархия пользователь → группа → объект, датчики в карточке объекта, хронологические строки (направление можно перевернуть, поле — нет), шаги степпера, строки отчёта, чей порядок — часть отчёта.
 
 Порядки по умолчанию для каждой поверхности и таблица по колонкам — карточки [«Сортировка в таблице»](../components/DsSorting/README.md) и [«Сортировка вне таблицы»](../components/DsSortingMenu/README.md).
@@ -260,7 +260,7 @@ SVG-логотипа, локапа только из словесного зна
 | примитивы | `DsIcon` |
 | кнопки | `DsButton` · `DsIconButton` · `DsFab` |
 | формы | `DsField` · `DsCheckbox` · `DsSwitch` · `DsDuration` · `DsFilterMenu` |
-| данные | `DsTable` · `DsFilterBar` · `DsPagination` · `DsChip` · `DsChipGroup` · `DsLozenge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkActionsBar` · `DsStateIcon` |
+| данные | `DsTable` · `DsPagination` · `DsChip` · `DsChipGroup` · `DsLozenge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkActionsBar` · `DsStateIcon` |
 | обратная связь | `DsBanner` · `DsToast` · `DsToastStack` · `DsEmptyState` · `DsSpinner` · `DsSkeleton` |
 | графики | `DsChart` · `DsChartLegend` · `DsChartTooltip` · `DsSparkline` · `DsScoreBar` |
 | раскладка | `DsPanel` · `DsDialog` · `DsPageLayout` |
