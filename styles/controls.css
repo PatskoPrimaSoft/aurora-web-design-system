@@ -1,4 +1,6 @@
-:where(button,a[href],[role="button"],[role="menuitem"],[role="tab"],[role="checkbox"],[role="switch"],[role="option"],[tabindex]:not([tabindex="-1"])):focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+:where(button,a[href],input:not([type="hidden"]),select,textarea,summary,[contenteditable="true"],[role="button"],[role="menuitem"],[role="menuitemcheckbox"],[role="menuitemradio"],[role="tab"],[role="checkbox"],[role="radio"],[role="switch"],[role="slider"],[role="spinbutton"],[role="combobox"],[role="option"],[role="treeitem"],[tabindex]):not(:where([data-ds-field] input,[data-ds-field] select,[data-ds-field] textarea)):focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+
+:where(input:not([type="hidden"],[type="checkbox"],[type="radio"],[type="range"],[type="button"],[type="submit"],[type="reset"],[type="image"],[type="color"],[type="file"]),select,textarea,[contenteditable="true"]):not(:where([data-ds-field] *)):focus{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
 
 :where(input[type="checkbox"],input[type="radio"]):focus-visible+span{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
 
@@ -10,6 +12,8 @@
 
 [data-ds-field="warning"]{border-color:var(--ds-warning-solid)}
 
-[data-ds-field]:focus-within{border-color:var(--ds-brand);box-shadow:var(--ds-focus-ring)}
+[data-ds-field]:focus-within{border-color:var(--ds-brand);outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
 
-[data-ds-field="error"]:focus-within{border-color:var(--ds-danger-solid);box-shadow:var(--ds-focus-ring-danger)}
+[data-ds-field="error"]:focus-within{border-color:var(--ds-danger-solid)}
+
+[data-ds-field="warning"]:focus-within{border-color:var(--ds-warning-solid)}

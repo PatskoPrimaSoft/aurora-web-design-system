@@ -1,0 +1,78 @@
+<!-- @dsCard name="Фокус" group="2 · Основы" height=920 aliases="focus|focus-visible|обводка|клавиатура|доступность" subtitle="Единая обводка и живые примеры фокуса для интерактивных контролов" page -->
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>Фокус</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:24px;-webkit-font-smoothing:antialiased}
+main{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+h2{margin:0;font:var(--ds-type-section);color:var(--ds-fg-strong)}
+p{margin:0;color:var(--ds-fg-muted);max-width:88ch}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+.sample{min-width:0;display:flex;flex-direction:column;gap:20px;padding:20px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-container)}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:20px}
+.stack{display:flex;flex-direction:column;gap:20px}
+a{color:var(--ds-brand-text)}
+.range{display:flex;flex-direction:column;gap:12px}
+input[type=range]{width:100%;accent-color:var(--ds-brand)}
+output{font:var(--ds-type-mono);color:var(--ds-fg-muted)}
+@media(max-width:720px){body{padding:16px}.grid{grid-template-columns:minmax(0,1fr)}}
+</style></head><body><div id="root"></div><script type="text/babel">
+const { DsButton, DsIconButton, DsCheckbox, DsSwitch, DsCheckButton, DsField, DsDuration, DsTabs, DsTabPanel, DsMenu } = window.AuroraWebDesignSystem_96e210;
+function App(){
+  const [checked,setChecked]=React.useState(false);
+  const [radio,setRadio]=React.useState('all');
+  const [enabled,setEnabled]=React.useState(false);
+  const [selection,setSelection]=React.useState('unchecked');
+  const [tab,setTab]=React.useState('objects');
+  const [scale,setScale]=React.useState(50);
+  const [duration,setDuration]=React.useState({h:'01',m:'30'});
+  const [message,setMessage]=React.useState('Активируйте любой контрол');
+  return <main>
+    <p>Кликните кнопку и нажмите Tab: контур появится при переходе клавиатурой. Поля и селекты показывают его также после клика. Переключатели каталога применяются ко всем примерам.</p>
+    <div className="grid">
+      <section className="sample" aria-labelledby="actions-heading">
+        <h2 id="actions-heading">Кнопки и ссылки</h2>
+        <div className="controls">
+          <DsButton onClick={()=>setMessage('Основная кнопка нажата')}>Построить</DsButton>
+          <DsButton tone="secondary" onClick={()=>setMessage('Вторичная кнопка нажата')}>Сохранить</DsButton>
+          <DsIconButton icon="settings" label="Настройки" onClick={()=>setMessage('Настройки нажаты')}/>
+          <DsButton disabled>Недоступно</DsButton>
+          <a href="../DsButton/preview.html">Все кнопки</a>
+        </div>
+        <p role="status">{message}</p>
+      </section>
+      <section className="sample" aria-labelledby="selection-heading">
+        <h2 id="selection-heading">Выбор и переключение</h2>
+        <div className="stack">
+          <DsCheckbox label="Показывать названия" checked={checked} onChange={e=>setChecked(e.target.checked)}/>
+          <div className="controls" role="group" aria-label="Объекты">
+            <DsCheckbox radio name="focus-objects" label="Все объекты" checked={radio==='all'} onChange={()=>setRadio('all')}/>
+            <DsCheckbox radio name="focus-objects" label="Избранные" checked={radio==='favorites'} onChange={()=>setRadio('favorites')}/>
+          </div>
+          <DsSwitch label="Автообновление" checked={enabled} onChange={e=>setEnabled(e.target.checked)}/>
+          <div className="controls"><DsCheckButton label="Выбрать строку" state={selection} onChange={setSelection}/><span>Выбор строки</span></div>
+          <DsCheckbox label="Недоступный выбор" disabled/>
+        </div>
+      </section>
+      <section className="sample" aria-labelledby="fields-heading">
+        <h2 id="fields-heading">Поля и селекты</h2>
+        <DsField label="Название объекта" placeholder="Введите название"/>
+        <DsField label="Группа" as="select" options={['Все объекты','Избранные']}/>
+        <DsField label="Комментарий" as="textarea" rows={2}/>
+        <DsField label="Поле с ошибкой" error="Укажите название"/>
+        <DsDuration label="Длительность" value={duration} onChange={setDuration}/>
+      </section>
+      <section className="sample" aria-labelledby="navigation-heading">
+        <h2 id="navigation-heading">Вкладки, меню и слайдер</h2>
+        <DsTabs idBase="focus-tabs" aria-label="Представление" items={[{id:'objects',label:'Объекты'},{id:'events',label:'События'}]} active={tab} onChange={setTab}/>
+        <DsTabPanel idBase="focus-tabs" id="objects" active={tab==='objects'}>Список объектов</DsTabPanel>
+        <DsTabPanel idBase="focus-tabs" id="events" active={tab==='events'}>Список событий</DsTabPanel>
+        <DsMenu trigger={<DsButton tone="secondary">Действия</DsButton>} items={[{id:'export',label:'Экспортировать'},{id:'copy',label:'Копировать'}]} onSelect={item=>setMessage(item.id==='export'?'Выбран экспорт':'Выбрано копирование')}/>
+        <label className="range">Масштаб<input type="range" min="0" max="100" value={scale} onChange={e=>setScale(Number(e.target.value))}/></label>
+        <output aria-live="polite">{scale}%</output>
+        <p>Во вкладках и меню используйте стрелки. В меню Escape возвращает фокус на кнопку; у слайдера стрелки меняют значение.</p>
+      </section>
+    </div>
+  </main>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>
