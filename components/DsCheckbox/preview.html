@@ -1,8 +1,8 @@
-<!-- @dsCard aliases="выбор|checkbox|чекбокс" group="5 · Компоненты · формы" height=150 subtitle="Чекбокс и радио одним компонентом; выбранное — бренд, не акцент" -->
+<!-- @dsCard aliases="выбор|checkbox|чекбокс" group="5 · Компоненты · формы" height=400 subtitle="Чекбокс и радио одним компонентом; выбранное — бренд, не акцент" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
@@ -11,11 +11,14 @@ body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var a=React.useState(true),b=React.useState('b');
+function App(){var a=React.useState(true),b=React.useState('b'),all=React.useState(false),mixed=React.useState(true);
   return h('div',{className:'col'},
     h(S.DsCheckbox,{label:'Отправка команд',checked:a[0],onChange:function(e){a[1](e.target.checked);}}),
-    h(S.DsCheckbox,{label:'Все объекты группы',indeterminate:true,onChange:function(){}}),
+    h(S.DsCheckbox,{label:'Все объекты группы',checked:all[0],indeterminate:mixed[0],onChange:function(e){all[1](e.target.checked);mixed[1](false);}}),
     h(S.DsCheckbox,{label:'Изменение параметров эко-вождения',disabled:true,description:'Недоступно для вашей роли'}),
-    h('div',{className:'row'},['a','b'].map(function(v){return h(S.DsCheckbox,{key:v,radio:true,name:'r',value:v,label:v==='a'?'Сутки':'Неделя',checked:b[0]===v,onChange:function(){b[1](v);}});})));}
+    h(S.DsCheckbox,{label:'Уведомления включены',checked:true,disabled:true}),
+    h(S.DsCheckbox,{label:'Выбрана часть объектов',indeterminate:true,disabled:true}),
+    h('div',{className:'row'},['a','b'].map(function(v){return h(S.DsCheckbox,{key:v,radio:true,name:'r',value:v,label:v==='a'?'Сутки':'Неделя',checked:b[0]===v,onChange:function(){b[1](v);}});})),
+    h('div',{className:'row'},h(S.DsCheckbox,{radio:true,label:'Радио: не выбран',disabled:true}),h(S.DsCheckbox,{radio:true,label:'Радио: выбран',checked:true,disabled:true})));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

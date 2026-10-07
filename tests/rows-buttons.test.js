@@ -26,10 +26,45 @@ const click = (el) => act(() => el.click());
 const spy = () => { const f = (...a) => { f.calls.push(a); }; f.calls = []; return f; };
 const nested = (box) => box.querySelectorAll('button button, [role="button"] button, button [role="button"]').length;
 
+// Selection state names must drive both the glyph and the accessible control.
+for (const [state, aria, glyph, next] of [
+  ['unchecked', 'false', '', 'checked'],
+  ['checked', 'true', 'check', 'unchecked'],
+  ['indeterminate', 'mixed', 'remove', 'checked'],
+]) {
+  const change = spy();
+  const box = render(h(NS.DsCheckButton, { state, label: 'Select objects', onChange: change }));
+  const checkbox = box.querySelector('[role="checkbox"]');
+  ok(checkbox.getAttribute('aria-checked') === aria && checkbox.textContent === glyph, `DsCheckButton ${state}: semantics and glyph agree`);
+  click(checkbox);
+  ok(change.calls[0]?.[0] === next, `DsCheckButton ${state}: emits ${next}`);
+}
+{
+  const selectAll = spy();
+  const box = render(h(NS.DsSelectionBar, { selected: 2, total: 5, onSelectAll: selectAll }));
+  click(box.querySelector('[role="checkbox"]'));
+  ok(selectAll.calls[0]?.[0] === true, 'DsSelectionBar: partial selection selects all objects');
+  const change = spy();
+  const disabled = render(h(NS.DsCheckButton, { state: 'checked', disabled: true, onChange: change }));
+  click(disabled.querySelector('button'));
+  ok(change.calls.length === 0, 'DsCheckButton disabled: click does not change the value');
+}
+{
+  const box = render(h(NS.DsCheckbox, { radio: true, checked: false, indeterminate: true, label: 'Radio' }));
+  ok(!box.querySelector('input').indeterminate && !box.querySelector('span[aria-hidden="true"]').firstChild,
+    'DsCheckbox radio: indeterminate does not override unchecked state');
+}
+for (const checked of [false, true]) {
+  const change = spy();
+  const box = render(h(NS.DsCheckbox, { checked, indeterminate: true, label: 'All objects', onChange: event => change(event.target.checked) }));
+  click(box.querySelector('input'));
+  ok(change.calls[0]?.[0] === true, `DsCheckbox indeterminate (checked=${checked}): selects all`);
+}
+
 // ---------------- №3 DsObjectRow
 {
   const open = spy(), sel = spy();
-  const box = render(h(NS.DsObjectRow, { name: 'Volvo FH16', state: 'alarm', select: 'off', onSelectChange: sel, onClick: open }));
+  const box = render(h(NS.DsObjectRow, { name: 'Volvo FH16', state: 'alarm', select: 'unchecked', onSelectChange: sel, onClick: open }));
   const cb = box.querySelector('[role="checkbox"]'), main = box.querySelector('button[aria-label="Volvo FH16"]');
   ok(main && nested(box) === 0, 'DsObjectRow: основная зона — кнопка, вложенных контролов нет');
   ok(!main.contains(cb), 'DsObjectRow: чекбокс — сосед основной зоны');
@@ -43,7 +78,7 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
 // ---------------- №3 DsTreeRow
 {
   const open = spy(), tog = spy(), sel = spy();
-  const box = render(h(NS.DsTreeRow, { title: 'Грузовики', expanded: true, onToggle: tog, onClick: open, select: 'some', onSelectChange: sel }));
+  const box = render(h(NS.DsTreeRow, { title: 'Грузовики', expanded: true, onToggle: tog, onClick: open, select: 'indeterminate', onSelectChange: sel }));
   const chev = box.querySelector('button[aria-expanded]'), cb = box.querySelector('[role="checkbox"]');
   const main = [...box.querySelectorAll('button')].find((b) => b !== chev && b !== cb);
   ok(nested(box) === 0 && chev && main, 'DsTreeRow: шеврон, основная зона и чекбокс — соседи');
@@ -82,17 +117,17 @@ const head = (box) => box.querySelector('th [role="checkbox"]');
   ok(box.querySelectorAll('td [role="checkbox"]')[0].getAttribute('aria-label') === 'Выбрать «Scania»', 'DsTable: чекбокс строки назван по строке');
 }
 ok(head(table({ selectedIds: [1, 2] })).getAttribute('aria-checked') === 'false', '№4: выбранные на другой странице не включают «выбрать все»');
-ok(head(table({ selectedIds: [1, 3] })).getAttribute('aria-checked') === 'mixed', '№4: часть видимых — some');
-ok(head(table({ selectedIds: [4, 1, 3] })).getAttribute('aria-checked') === 'true', '№4: все видимые (+ чужие) — on');
+ok(head(table({ selectedIds: [1, 3] })).getAttribute('aria-checked') === 'mixed', '№4: часть видимых — indeterminate');
+ok(head(table({ selectedIds: [4, 1, 3] })).getAttribute('aria-checked') === 'true', '№4: все видимые (+ чужие) — checked');
 {
   const tv = spy(); let box = table({ selectedIds: [3], onToggleVisible: tv }); click(head(box));
-  ok(JSON.stringify(tv.calls[0]) === JSON.stringify([[3, 4], 'on']), '№4: из some — onToggleVisible(видимые ID, "on")');
+  ok(JSON.stringify(tv.calls[0]) === JSON.stringify([[3, 4], 'checked']), '№4: из indeterminate — onToggleVisible(видимые ID, "checked")');
   box = table({ selectedIds: [3, 4], onToggleVisible: tv }); click(head(box));
-  ok(JSON.stringify(tv.calls[1]) === JSON.stringify([[3, 4], 'off']), '№4: из on — onToggleVisible(видимые ID, "off")');
+  ok(JSON.stringify(tv.calls[1]) === JSON.stringify([[3, 4], 'unchecked']), '№4: из checked — onToggleVisible(видимые ID, "unchecked")');
   const old = spy(), warns = []; const cw = w.console.warn; w.console.warn = (m) => warns.push(m);
   click(head(table({ selectedIds: [], onToggleAll: old }))); click(head(table({ selectedIds: [], onToggleAll: old })));
   w.console.warn = cw;
-  ok(old.calls.length === 2 && old.calls[0][0] === 'on' && warns.length === 1, '№4: старый onToggleAll работает, предупреждение одно');
+  ok(old.calls.length === 2 && old.calls[0][0] === 'checked' && warns.length === 1, '№4: старый onToggleAll работает, предупреждение одно');
 }
 {
   const all = spy(), clear = spy();

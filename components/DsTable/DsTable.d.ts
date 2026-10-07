@@ -52,9 +52,9 @@ export interface DsTableProps {
    * state; merge them into the selection yourself. The header state is computed from the
    * intersection of visible and selected IDs, so rows selected on another page never turn it on.
    */
-  onToggleVisible?: (visibleIds: Array<string | number>, next: 'on' | 'off') => void;
+  onToggleVisible?: (visibleIds: Array<string | number>, next: 'checked' | 'unchecked') => void;
   /** @deprecated Use `onToggleVisible`. Still called with the next state when `onToggleVisible` is absent. */
-  onToggleAll?: (next?: 'on' | 'off') => void;
+  onToggleAll?: (next?: 'checked' | 'unchecked') => void;
   /** Total rows across all pages. With `onSelectAll`, a fully selected page offers "Select all N". */
   totalCount?: number;
   /** The whole result set is selected, not just a page. Owned by the consumer. */
@@ -77,5 +77,5 @@ export interface DsTableProps {
   footer?: React.ReactNode;
 }
 export declare function DsTable(props: DsTableProps): JSX.Element;
-/** off / some / on for the visible rows — the header checkbox rule, exported for a custom header. */
-export declare function dsVisibleSelection(visibleIds: Array<string | number>, selectedIds: Array<string | number>, allSelected?: boolean): 'off' | 'some' | 'on';
+/** unchecked / indeterminate / checked for visible rows — the header checkbox rule, exported for a custom header. */
+export declare function dsVisibleSelection(visibleIds: Array<string | number>, selectedIds: Array<string | number>, allSelected?: boolean): 'unchecked' | 'indeterminate' | 'checked';

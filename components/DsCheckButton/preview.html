@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
@@ -11,10 +11,10 @@ body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var st=React.useState('some'),s=st[0],set=st[1];
+function App(){var st=React.useState('indeterminate'),s=st[0],set=st[1];
   return h('div',{className:'row'},
     h(S.DsCheckButton,{state:s,label:'Выбрать все объекты группы',onChange:set}),
     h('span',{className:'cap'},'state = '+s),
-    h(S.DsCheckButton,{state:'on',label:'Недоступно',disabled:true}));}
+    h(S.DsCheckButton,{state:'checked',label:'Недоступно',disabled:true}));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

@@ -16,10 +16,10 @@ import { useDsStrings } from '../primitives/DsStrings.jsx';
    общее число и умеет применить действие к выборке на сервере. */
 let dsWarnedToggleAll=false;
 export function dsVisibleSelection(visibleIds,selectedIds,allSelected=false){
-  if(!visibleIds.length)return 'off';
-  if(allSelected)return 'on';
+  if(!visibleIds.length)return 'unchecked';
+  if(allSelected)return 'checked';
   const sel=new Set(selectedIds);let n=0;for(const id of visibleIds)if(sel.has(id))n++;
-  return n===0?'off':n===visibleIds.length?'on':'some';
+  return n===0?'unchecked':n===visibleIds.length?'checked':'indeterminate';
 }
 export function DsTable({columns=[],rows=[],rowKey='id',selectable=false,selectedIds=[],onToggleRow,onToggleVisible,onToggleAll,
   totalCount,allSelected=false,onSelectAll,onClearSelection,
@@ -41,7 +41,7 @@ export function DsTable({columns=[],rows=[],rowKey='id',selectable=false,selecte
      строки по-прежнему открывает её — кроме кликов по другим контролам в строке. */
   const actionKey=(columns.find(c=>c.rowAction)||columns[0]||{}).key;
   const canSelectAll=selectable&&onSelectAll&&totalCount!=null&&totalCount>rows.length;
-  const pageAllOn=headState==='on'&&!allSelected;
+  const pageAllOn=headState==='checked'&&!allSelected;
   const colSpan=columns.length+(selectable?1:0);
   /* The sortable header is a real <button>: sorting is an action, so it has to be
      reachable by keyboard and carry the :focus-visible ring like any other control. */
@@ -57,7 +57,7 @@ export function DsTable({columns=[],rows=[],rowKey='id',selectable=false,selecte
     <table style={{width:'100%',borderCollapse:'collapse',font:'var(--ds-type-body)',color:'var(--ds-fg)'}}>
       <thead><tr>
         {selectable?<th style={{...th,width:40,paddingRight:0}}>
-          <DsCheckButton hit={24} state={headState} disabled={!rows.length} onChange={()=>toggleVisible(headState==='on'?'off':'on')}
+          <DsCheckButton hit={24} state={headState} disabled={!rows.length} onChange={()=>toggleVisible(headState==='checked'?'unchecked':'checked')}
             label={S.table.selectPage}/></th>:null}
         {columns.map(c=>{const active=sortKey===c.key,sortable=c.sortable&&onSort;
           return <th key={c.key} style={{...th,width:c.width,textAlign:c.align||'left'}}
@@ -83,7 +83,7 @@ export function DsTable({columns=[],rows=[],rowKey='id',selectable=false,selecte
           const label=rowLabel?rowLabel(r):String(r[actionKey]??k);
           return <Row key={k} sel={sel} act={act} onClick={onRowClick?()=>onRowClick(r):undefined}>
             {selectable?<td style={{padding:'0 0 0 var(--ds-cell-pad-x)',width:40}}>
-              <DsCheckButton hit={24} state={sel?'on':'off'} onChange={()=>onToggleRow&&onToggleRow(k)} label={S.selectItem(label)}/></td>:null}
+              <DsCheckButton hit={24} state={sel?'checked':'unchecked'} onChange={()=>onToggleRow&&onToggleRow(k)} label={S.selectItem(label)}/></td>:null}
             {columns.map(c=><td key={c.key} style={{padding:'var(--ds-cell-pad-y) var(--ds-cell-pad-x)',
               textAlign:c.align||'left',font:c.mono?'var(--ds-type-mono)':undefined,
               fontWeight:c.strong?'var(--ds-weight-medium)':undefined,color:c.muted?'var(--ds-fg-muted)':undefined,

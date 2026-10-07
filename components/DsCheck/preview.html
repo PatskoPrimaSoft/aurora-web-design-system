@@ -1,21 +1,22 @@
-<!-- @dsCard aliases="выбор|check|primitive" group="5 · Компоненты · примитивы" height=100 subtitle="Общий бокс выбора: off · on · some, квадрат и радио; рисует, но не объявляет" -->
+<!-- @dsCard aliases="выбор|check|primitive" group="5 · Компоненты · примитивы" height=310 subtitle="Общий бокс выбора: не выбран, выбран, частично выбран; квадрат и радио" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+table{width:100%;max-width:640px;border-collapse:collapse;table-layout:fixed}
+th,td{padding:12px 4px;text-align:center;vertical-align:middle}
+th{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+th:first-child{width:34%;text-align:left}
+tbody th{font:var(--ds-type-body);color:var(--ds-fg)}
+@media(max-width:400px){th,td{padding:10px 2px}thead th{font-size:11px}tbody th{font:var(--ds-type-caption)}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'row'},
-  ['off','on','some'].map(function(s){return h(S.DsCheck,{key:s,state:s});}),
-  h('span',{className:'sep'}),
-  h(S.DsCheck,{state:'off',radio:true}),h(S.DsCheck,{state:'on',radio:true}),
-  h('span',{className:'sep'}),
-  h(S.DsCheck,{state:'on',hover:true}),h(S.DsCheck,{state:'on',disabled:true}));}
+function App(){var examples=[['unchecked','Не выбран',false],['checked','Выбран',false],['indeterminate','Частично выбран',false],['unchecked','Радио: не выбран',true],['checked','Радио: выбран',true]];
+  return h('table',{'aria-label':'Состояния чекбокса и радио'},
+    h('thead',null,h('tr',null,['Состояние','Обычное','Наведение','Недоступно'].map(function(label){return h('th',{key:label,scope:'col'},label);}))),
+    h('tbody',null,examples.map(function(example){return h('tr',{key:example[1]},
+      h('th',{scope:'row'},example[1]),
+      [{},{hover:true},{disabled:true}].map(function(props,index){return h('td',{key:index},h(S.DsCheck,{state:example[0],radio:example[2],...props}));}));})));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

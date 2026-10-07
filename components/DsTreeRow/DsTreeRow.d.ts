@@ -28,8 +28,8 @@ export interface DsTreeRowProps {
   /** Aggregate counter — renders as `3 / 12` when `total` is given. */
   selected?: number;
   total?: number;
-  select?: 'on' | 'some' | 'off';
-  onSelectChange?: (next: 'on' | 'off') => void;
+  select?: 'checked' | 'indeterminate' | 'unchecked';
+  onSelectChange?: (next: 'checked' | 'unchecked') => void;
   selectDisabled?: boolean;
   unread?: number;
   onClick?: (e: React.SyntheticEvent) => void;

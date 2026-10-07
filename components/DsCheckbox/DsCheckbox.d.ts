@@ -15,6 +15,7 @@ export interface DsCheckboxProps {
   indeterminate?: boolean;
   radio?: boolean;
   disabled?: boolean;
+  /** An indeterminate checkbox selects all on activation: e.target.checked is true. */
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
   value?: string;

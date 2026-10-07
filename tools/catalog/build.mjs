@@ -12,6 +12,7 @@ import {renderMarkdown,renderProps,documentPage} from '../docs/markdown.mjs';
 import {renderTokenReference} from '../docs/tokens.mjs';
 import {validateLinks} from '../docs/links.mjs';
 import {cardRedirects} from '../../catalog/state.js';
+const hasInlineDescription = card => card.id === 'DsCheck' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
 export async function buildCatalogue({ root, outDir }) {
   if (resolve(root) === resolve(outDir)) throw new Error('Catalogue output must not replace source root');
   const cards = readCards(root);
@@ -19,7 +20,7 @@ export async function buildCatalogue({ root, outDir }) {
   const api=extractApi({root}),knownRoutes=new Map();
   const guides=readdirSync(root).filter(name=>name.endsWith('.md'));
   for(const guide of guides)knownRoutes.set(guide,`/docs/${guide.slice(0,-3)}.html`);
-  for(const card of cards){knownRoutes.set(card.previewPath,'/'+card.previewPath);if(card.readmePath)knownRoutes.set(card.readmePath,['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group)?`/index.html?card=${card.id}`:`/docs/cards/${card.id}.html`);}
+  for(const card of cards){knownRoutes.set(card.previewPath,'/'+card.previewPath);if(card.readmePath)knownRoutes.set(card.readmePath,hasInlineDescription(card)?`/index.html?card=${card.id}`:`/docs/cards/${card.id}.html`);}
   const redirects=Object.entries(cardRedirects).filter(([,target])=>cards.some(card=>card.id===target));
   for(const[old,target]of redirects){
     knownRoutes.set(`components/${old}/README.md`,knownRoutes.get(`components/${target}/README.md`)??`/index.html?card=${target}`);
@@ -52,7 +53,7 @@ export async function buildCatalogue({ root, outDir }) {
     const document=card.readmePath?renderMarkdown({root,path:card.readmePath,knownRoutes}):null;
     card.documentationPath=document?`docs/cards/${card.id}.html`:null;
     // Render from the same Markdown source as the standalone documentation.
-    if(document&&['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group))card.documentationHtml=document.html.replace(/^<h1\b[^>]*>[\s\S]*?<\/h1>\s*/,'');
+    if(document&&hasInlineDescription(card))card.documentationHtml=document.html.replace(/^<h1\b[^>]*>[\s\S]*?<\/h1>\s*/,'');
     card.searchText=[card.id,card.title,card.subtitle,document?.text??'',...contracts.flatMap(doc=>doc.props.map(prop=>prop.name))].join(' ');
     if(document)writePage(card.documentationPath,documentPage({title:card.title,html:document.html,back:`/index.html?card=${card.id}`}));
   }

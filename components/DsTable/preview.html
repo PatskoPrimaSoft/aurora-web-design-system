@@ -21,7 +21,7 @@ function App(){var sel=React.useState([2]),sort=React.useState({key:'name',dir:'
   var rows=ROWS.slice().sort(function(a,b){return (a[sort[0].key]>b[sort[0].key]?1:-1)*(sort[0].dir==='asc'?1:-1);});
   return h('div',{style:{height:260,display:'flex'}},h(S.DsTable,{rows:rows,selectable:true,selectedIds:sel[0],activeId:act[0],
     onToggleRow:function(id){sel[1](function(x){return x.indexOf(id)>-1?x.filter(function(y){return y!==id;}):x.concat(id);});},
-    onToggleVisible:function(ids,next){sel[1](function(x){return next==='on'?x.concat(ids.filter(function(i){return x.indexOf(i)<0;})):x.filter(function(y){return ids.indexOf(y)<0;});});},
+    onToggleVisible:function(ids,next){sel[1](function(x){return next==='checked'?x.concat(ids.filter(function(i){return x.indexOf(i)<0;})):x.filter(function(y){return ids.indexOf(y)<0;});});},
     sortKey:sort[0].key,sortDir:sort[0].dir,onSort:function(k,d){sort[1]({key:k,dir:d});},onRowClick:function(r){act[1](r.id);},
     columns:[{key:'name',label:'Объект',sortable:true,strong:true},{key:'plate',label:'Номер',mono:true},{key:'group',label:'Группа',sortable:true},
       {key:'state',label:'Состояние',render:function(r){return h(S.DsBadge,{tone:TONE[r.state],dot:true},LABEL[r.state]);}},

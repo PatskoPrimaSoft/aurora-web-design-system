@@ -21,12 +21,12 @@ const render = (el) => { const box = w.document.createElement('div'); w.document
 const h = React.createElement;
 
 // №1 — контролы, у которых граница единственный признак
-let box = render(h(NS.DsCheck, { state: 'off' }));
-ok(box.firstChild.style.border.includes('var(--ds-border-control)'), 'DsCheck off: граница ds-border-control');
-box = render(h(NS.DsCheck, { state: 'off', hover: true }));
-ok(box.firstChild.style.border.includes('var(--ds-border-control-hover)'), 'DsCheck off + hover: ds-border-control-hover');
-box = render(h(NS.DsCheck, { state: 'off', radio: true }));
-ok(box.firstChild.style.border.includes('var(--ds-border-control)'), 'радио off: граница ds-border-control');
+let box = render(h(NS.DsCheck, { state: 'unchecked' }));
+ok(box.firstChild.style.border.includes('var(--ds-border-control)'), 'DsCheck unchecked: граница ds-border-control');
+box = render(h(NS.DsCheck, { state: 'unchecked', hover: true }));
+ok(box.firstChild.style.border.includes('var(--ds-border-control-hover)'), 'DsCheck unchecked + hover: ds-border-control-hover');
+box = render(h(NS.DsCheck, { state: 'unchecked', radio: true }));
+ok(box.firstChild.style.border.includes('var(--ds-border-control)'), 'радио unchecked: граница ds-border-control');
 box = render(h(NS.DsSwitch, { checked: false, label: 'Показывать треки' }));
 const track = box.querySelector('span[aria-hidden="true"]');
 ok(track.style.border.includes('var(--ds-border-control)') && track.style.background.includes('var(--ds-border-control)'),

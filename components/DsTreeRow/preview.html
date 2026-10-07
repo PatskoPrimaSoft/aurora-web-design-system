@@ -13,8 +13,8 @@ body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
 function App(){var e=React.useState(true);
   return h('div',{className:'col',style:{gap:2,maxWidth:420}},
-    h(S.DsTreeRow,{title:'Петров С.',avatar:true,level:0,expanded:e[0],onToggle:e[1],selected:3,total:12,select:'some',onSelectChange:function(){},unread:2}),
-    h(S.DsTreeRow,{title:'Грузовики',icon:'label',level:1,expanded:false,onToggle:function(){},selected:3,total:8,select:'on',onSelectChange:function(){}}),
-    h(S.DsTreeRow,{title:'Фургоны',icon:'label',level:1,meta:'нет объектов',select:'off',selectDisabled:true}));}
+    h(S.DsTreeRow,{title:'Петров С.',avatar:true,level:0,expanded:e[0],onToggle:e[1],selected:3,total:12,select:'indeterminate',onSelectChange:function(){},unread:2}),
+    h(S.DsTreeRow,{title:'Грузовики',icon:'label',level:1,expanded:false,onToggle:function(){},selected:3,total:8,select:'checked',onSelectChange:function(){}}),
+    h(S.DsTreeRow,{title:'Фургоны',icon:'label',level:1,meta:'нет объектов',select:'unchecked',selectDisabled:true}));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

@@ -13,6 +13,9 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ### Fixed
 
+- Точка радио `DsCheck` использует целые отступы от внешнего круга:
+  при размере 18 px диаметр точки 8 px, отступы по 5 px без полупиксельного смещения.
+
 - Иконки статусов `DsToast` используют новые токены `ds-*-fg-on-inverse`,
   сохраняющие контраст на инверсном фоне в светлом и тёмном режимах DEFAULT и RED2.
 
@@ -20,6 +23,25 @@ Policy: [Versions and publishing](docs/release.md#versioning).
   как проверка dev-сервера, чтобы медленный CI не выдавал ложный сбой через 5 секунд.
 
 ### Changed
+
+- Чекбоксы и радио получили границы 2 px (`ds-border-width-control`) и отдельные
+  нейтральные токены disabled: `ds-border-control-disabled` и `ds-fg-control-disabled`.
+  Галочка, прочерк, точка и подпись остаются читаемыми; примеры показывают все состояния.
+- **Breaking:** нажатие на `indeterminate` теперь выбирает всё (`checked`) в
+  `DsCheckButton`, `DsSelectBox`, дереве, панели выбора и `DsCheckbox`, как в `DsTable`.
+  В обработчике формы обновляйте `checked` и сбрасывайте `indeterminate`.
+
+- **Breaking:** состояния выбора `off`, `on`, `some` заменены на `unchecked`,
+  `checked`, `indeterminate` без алиасов. Обновите `state` у `DsCheck`,
+  `DsCheckButton`, `DsSelectBox`, `select` у `DsObjectRow` и `DsTreeRow`,
+  обработчики `onChange` / `onSelectChange`, `DsTable.onToggleVisible` /
+  `onToggleAll` и использование результата `dsVisibleSelection`.
+  Булевы `DsCheckbox.checked` / `indeterminate` и `DsSelectionBar.onSelectAll`
+  сохраняются. Для радио частичное состояние не применяется.
+
+- Описание `DsCheck` показано прямо на странице компонента рядом с примерами.
+  Пример расположен на поверхности `ds-surface`: белой в светлой теме.
+  Описание содержит назначение используемых токенов и ссылки на интерактивные примеры.
 
 - Раздел о миграции брейкпоинтов сокращён до принятых решений и списка работ
   в приложении. Общие правила остаются в «Основах»; уточнены независимость

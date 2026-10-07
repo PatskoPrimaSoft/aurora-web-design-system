@@ -62,7 +62,7 @@ function ObjectTree({list,sel,setSel,active,setActive}){
   const isOpen=k=>open[k]!==false;
   const toggle=k=>setOpen(o=>({...o,[k]:!isOpen(k)}));
   const put=(ids,on)=>setSel(s=>{const n=new Set(s);ids.forEach(i=>on?n.add(i):n.delete(i));return n});
-  const boxOf=ids=>{const on=ids.filter(i=>sel.has(i)).length;return on===0?'off':on===ids.length?'on':'some'};
+  const boxOf=ids=>{const on=ids.filter(i=>sel.has(i)).length;return on===0?'unchecked':on===ids.length?'checked':'indeterminate'};
   const shown=id=>list.some(o=>o.id===id);
   return <>{USERS.map(u=>{
     const uIds=u.groups.flatMap(g=>g.ids.filter(shown));
@@ -70,21 +70,21 @@ function ObjectTree({list,sel,setSel,active,setActive}){
     return <div key={u.id} style={{borderBottom:'1px solid var(--ds-divider)'}}>
       <DsTreeRow avatar title={u.name} unread={u.unread} expanded={isOpen(u.id)} onToggle={()=>toggle(u.id)}
         selected={uIds.filter(i=>sel.has(i)).length} total={uIds.length}
-        select={boxOf(uIds)} onSelectChange={n=>put(uIds,n==='on')}/>
+        select={boxOf(uIds)} onSelectChange={n=>put(uIds,n==='checked')}/>
       {isOpen(u.id)?u.groups.map(g=>{
         const ids=g.ids.filter(shown);
         if(!ids.length)return null;
         return <div key={g.id}>
           <DsTreeRow level={1} icon={g.tag?'sell':'folder'} title={g.name} expanded={isOpen(g.id)} onToggle={()=>toggle(g.id)}
             selected={ids.filter(i=>sel.has(i)).length} total={ids.length}
-            select={boxOf(ids)} onSelectChange={n=>put(ids,n==='on')}/>
+            select={boxOf(ids)} onSelectChange={n=>put(ids,n==='checked')}/>
           {isOpen(g.id)?ids.map(id=>{const o=OBJECTS.find(x=>x.id===id);
             return <DsObjectRow key={id} indent={28} name={o.name} state={o.state} course={o.course} signal={o.signal}
               online={o.online} unread={o.unread||0} service={o.service}
               freshness={o.fresh} freshnessLabel={'Последнее сообщение '+o.last}
               details={o.speed+' · '+o.driver+' · '+o.last}
               active={id===active} onClick={()=>setActive(id)}
-              select={sel.has(id)?'on':'off'} onSelectChange={n=>put([id],n==='on')}/>;}):null}
+              select={sel.has(id)?'checked':'unchecked'} onSelectChange={n=>put([id],n==='checked')}/>;}):null}
         </div>;}):null}
     </div>;})}</>;
 }

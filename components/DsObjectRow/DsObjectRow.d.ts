@@ -41,8 +41,8 @@ export interface DsObjectRowProps {
   unread?: number;
   unreadPlacement?: 'avatar' | 'trailing';
   /** Omit to render a non-selectable row. */
-  select?: 'on' | 'off';
-  onSelectChange?: (next: 'on' | 'off') => void;
+  select?: 'checked' | 'unchecked';
+  onSelectChange?: (next: 'checked' | 'unchecked') => void;
   /** The row the map is centred on. */
   active?: boolean;
   onClick?: (e: React.SyntheticEvent) => void;

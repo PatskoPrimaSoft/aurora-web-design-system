@@ -9,7 +9,7 @@
  * twice, and the table's copy had drifted far enough to need its own keyboard fix.
  * They are now one primitive with two wrappers.
  *
- * **`state` is always the tri-state** `'off' | 'on' | 'some'` — `some` is the
+ * **`state` is the tri-state** `'unchecked' | 'checked' | 'indeterminate'` — `indeterminate` is the
  * mixed/indeterminate value that an aggregate row (a user, a group, select-all)
  * needs. `DsCheckbox` keeps its boolean `checked` + `indeterminate` props for form
  * use and maps them onto this.
@@ -20,8 +20,8 @@
  * come from the platform rather than from a hand-written key handler.
  */
 export interface DsCheckProps {
-  state?: 'off' | 'on' | 'some';
-  /** Circle with a centre dot instead of a square with a tick. */
+  state?: 'unchecked' | 'checked' | 'indeterminate';
+  /** Circle with a centre dot. Use only unchecked or checked; indeterminate draws an empty circle. */
   radio?: boolean;
   disabled?: boolean;
   /** Draw the hover treatment — the parent owns the pointer events. */
@@ -33,11 +33,12 @@ export interface DsCheckProps {
 export declare function DsCheck(props: DsCheckProps): JSX.Element;
 
 export interface DsCheckButtonProps {
-  state?: 'off' | 'on' | 'some';
+  state?: 'unchecked' | 'checked' | 'indeterminate';
   /** Required in practice: it is the accessible name of an icon-only control. */
   label?: string;
   disabled?: boolean;
-  onChange?: (next: 'on' | 'off') => void;
+  /** unchecked/indeterminate → checked; checked → unchecked. */
+  onChange?: (next: 'checked' | 'unchecked') => void;
   /** Hit area edge. Default `var(--ds-control-h)`, i.e. density-sized. */
   hit?: number | string;
   size?: number;

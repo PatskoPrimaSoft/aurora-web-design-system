@@ -253,6 +253,11 @@
         "usage": "Текст и глиф отключённого элемента. Отключённое — это цвет, а не прозрачность; к нему порог контраста не применяется."
       },
       {
+        "name": "ds-fg-control-disabled",
+        "value": "{ds-n-500}",
+        "usage": "Галочка, прочерк и точка отключённого контрола выбора. Нейтральные чернила сохраняют выбранное значение: контраст с `ds-surface-disabled` ≥ 3:1 в light и dark."
+      },
+      {
         "name": "ds-on-brand",
         "value": {
           "light": "#ffffff",
@@ -336,7 +341,7 @@
           "ds-appearance-dark-ds-default": "#1a1e25",
           "ds-appearance-dark-ds-red2": "#1a1e25"
         },
-        "usage": "Заливка отключённой кнопки или поля."
+        "usage": "Нейтральная заливка отключённого контрола: кнопки, поля, чекбокса, радио или переключателя."
       },
       {
         "name": "ds-surface-inverse",
@@ -437,6 +442,15 @@
           "ds-appearance-dark-ds-red2": "#737c8e"
         },
         "usage": "Граница контрола, у которого она — единственный признак: пустой чекбокс и радио, трек выключенного переключателя. WCAG 1.4.11 — ≥ 3:1 к `ds-surface`, `ds-bg`, `ds-surface-hover` и `ds-surface-selected` во всех наборах DEFAULT/RED2 × light/dark (проверяет `lint/test/run.js`)."
+      },
+      {
+        "name": "ds-border-control-disabled",
+        "value": {
+          "light": "{ds-n-400}",
+          "ds-appearance-dark-ds-default": "{ds-n-600}",
+          "ds-appearance-dark-ds-red2": "{ds-n-600}"
+        },
+        "usage": "Граница отключённого чекбокса и радио: приглушённая, но различимая на `ds-surface` (контраст ≥ 2:1)."
       },
       {
         "name": "ds-border-control-hover",
@@ -1093,6 +1107,11 @@
         "name": "ds-border-width-strong",
         "value": "1.5px",
         "usage": "Толщина усиленной границы."
+      },
+      {
+        "name": "ds-border-width-control",
+        "value": "2px",
+        "usage": "Толщина границы чекбокса и радио: целые 2 px сохраняют выразительность на экранах с DPR 1."
       },
       {
         "name": "ds-focus-width",

@@ -88,7 +88,7 @@ function App(){
           <div style={{flex:1,minHeight:0,display:'flex'}}>
             <DsTable columns={cols} rows={rows} selectable selectedIds={sel} activeId={active}
               onToggleRow={id=>setSel(x=>x.includes(id)?x.filter(y=>y!==id):[...x,id])}
-              onToggleVisible={(ids,next)=>setSel(x=>next==='on'?[...new Set([...x,...ids])]:x.filter(y=>!ids.includes(y)))}
+              onToggleVisible={(ids,next)=>setSel(x=>next==='checked'?[...new Set([...x,...ids])]:x.filter(y=>!ids.includes(y)))}
               sortKey={sort.key} sortDir={sort.dir} onSort={(key,dir)=>setSort({key,dir})}
               onRowClick={r=>setActive(r.id)}
               footer={<><span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>Выбрано: {sel.length}</span>

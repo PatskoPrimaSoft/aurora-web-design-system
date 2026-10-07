@@ -7,7 +7,7 @@ import { useDsStrings } from '../primitives/DsStrings.jsx';
 export function DsSelectionBar({selected=0,total=0,onSelectAll,onClear,actions,children,rule=true}){
   const S=useDsStrings();
   const [s]=dsSlots(children,['actions'],{actions});
-  const state=selected===0?'off':selected>=total?'on':'some';
+  const state=selected===0?'unchecked':selected>=total?'checked':'indeterminate';
   return <div style={{display:'flex',alignItems:'center',gap:'var(--ds-gap-2xs)',flex:'none',
     padding:'0 var(--ds-pad-md) var(--ds-gap-xs) var(--ds-pad-sm)',
     borderBottom:rule?'2px solid var(--ds-brand)':'none'}}>
@@ -21,6 +21,6 @@ export function DsSelectionBar({selected=0,total=0,onSelectAll,onClear,actions,c
     </button>:null}
     <span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)',fontVariantNumeric:'tabular-nums'}}>{selected} / {total}</span>
     <span style={{marginRight:-8}}><DsSelectBox state={state} label={S.selectAllObjects}
-      onChange={next=>onSelectAll&&onSelectAll(next==='on')}/></span>
+      onChange={next=>onSelectAll&&onSelectAll(next==='checked')}/></span>
   </div>;
 }
