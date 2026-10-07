@@ -25,6 +25,31 @@ const key = (el, type, k) => fire(el, type, { key: k }, w.KeyboardEvent);
 const click = (el) => act(() => el.click());
 const spy = () => { const f = (...a) => { f.calls.push(a); }; f.calls = []; return f; };
 const nested = (box) => box.querySelectorAll('button button, [role="button"] button, button [role="button"]').length;
+// DsChip: семантика выбора, блокировка удаления и имена одинаковых крестиков.
+{
+  const select = spy(), remove = spy();
+  const filter = render(h(NS.DsChip, {selected:true,count:0,onClick:select}, 'Нет связи'));
+  const button = filter.querySelector('button');
+  ok(button?.getAttribute('aria-pressed') === 'true' && button?.type === 'button', 'DsChip: фильтр — нативная кнопка с объявленным выбором');
+  ok(button?.querySelector('[aria-hidden="true"]')?.textContent === 'check' && button?.getAttribute('aria-label') === 'Нет связи 0', 'DsChip: выбранный фильтр отмечен галочкой, нулевой счётчик доступен');
+  if(button)click(button);
+  ok(select.calls.length === 1, 'DsChip: фильтр вызывает действие один раз');
+  const idle = render(h(NS.DsChip, {onClick:select}, 'Грузовики')).querySelector('button');
+  ok(idle?.getAttribute('aria-pressed') === 'false' && !idle?.querySelector('[aria-hidden="true"]'), 'DsChip: невыбранный фильтр объявлен без галочки');
+  const disabled = render(h(NS.DsChip, {disabled:true,removable:true,onRemove:remove}, 'Топливо'));
+  const cross = disabled.querySelector('button');
+  click(cross);
+  ok(cross.disabled && remove.calls.length === 0, 'DsChip: disabled блокирует удаление');
+  const value = render(h(NS.DsChip, {removable:true,onRemove:remove,onClick:select}, 'Пробег'));
+  ok(nested(value) === 0 && value.firstElementChild.tagName === 'SPAN', 'DsChip: удаляемое значение не содержит вложенных кнопок');
+  ok(value.querySelector('button').getAttribute('aria-label') === 'Убрать: Пробег', 'DsChip: имя крестика включает значение');
+  click(value.querySelector('button'));
+  ok(remove.calls.length === 1 && select.calls.length === 1, 'DsChip: удаление не запускает выбор');
+  const en = render(h(NS.DsStringsProvider, {strings:NS.dsStringsEn}, h(NS.DsChip, {removable:true}, 'Fuel')));
+  ok(en.querySelector('button').getAttribute('aria-label') === 'Remove: Fuel', 'DsChip: имя удаления локализовано');
+  const rich = render(h(NS.DsChip, {removable:true,ariaLabel:'Полное имя'}, h('strong', null, 'Имя')));
+  ok(rich.querySelector('button').getAttribute('aria-label') === 'Убрать: Полное имя', 'DsChip: сложное содержимое использует полную подпись');
+}
 // DsBulkActionsBar: один сброс при любом объёме выбора, с сохранением обоих контрактов обработчиков.
 {
   ok(typeof NS.DsBulkActionsBar === 'function' && NS.DsBulkBar === undefined, 'DsBulkActionsBar: новое имя экспортируется без старого алиаса');

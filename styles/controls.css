@@ -17,3 +17,6 @@
 [data-ds-field="error"]:focus-within{border-color:var(--ds-danger-solid)}
 
 [data-ds-field="warning"]:focus-within{border-color:var(--ds-warning-solid)}
+:where([data-ds-chip-remove]){background:transparent}
+:where([data-ds-chip-remove]:not(:disabled):hover){background:var(--ds-surface-hover)}
+:where([data-ds-chip-remove]:not(:disabled):active){background:var(--ds-surface-active)}

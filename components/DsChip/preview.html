@@ -1,22 +1,36 @@
-<!-- @dsCard group="5 · Компоненты · данные" height=110 subtitle="Чип-фильтр с выбором и счётчиком или удаляемое значение" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=340 subtitle="Компактный фильтр с выбором и счётчиком или удаляемое значение" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:32px}
+.section{display:flex;flex-direction:column;gap:16px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
+.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var s=React.useState(true);
-  return h('div',{className:'row'},
-    h(S.DsChip,{selected:s[0],count:12,onClick:function(){s[1](!s[0]);}},'Нет связи'),
-    h(S.DsChip,{icon:'local_shipping',onClick:function(){}},'Грузовики'),
-    h(S.DsChip,{removable:true,onRemove:function(){}},'Топливо · стандарт'),
-    h(S.DsChip,{icon:'add',onClick:function(){}},'Добавить'),
-    h(S.DsChip,{disabled:true},'Архив'));}
+function App(){var offline=React.useState(true),trucks=React.useState(false),values=React.useState(['Топливо','Пробег']),message=React.useState(''),longValue=React.useState(true);
+  function remove(value){values[1](values[0].filter(function(v){return v!==value;}));message[1]('Удалено значение «'+value+'».');document.getElementById('restore-values').focus();}
+  return h('div',{className:'examples'},
+    h('section',{className:'section','aria-label':'Выбор фильтров'},
+      h('h3',null,'Фильтры'),
+      h('div',{className:'row'},
+        h(S.DsChip,{selected:offline[0],count:12,onClick:function(){offline[1](!offline[0]);}},'Нет связи'),
+        h(S.DsChip,{selected:trucks[0],icon:'local_shipping',count:8,onClick:function(){trucks[1](!trucks[0]);}},'Грузовики'),
+        h(S.DsChip,{disabled:true,onClick:function(){}},'Архив')),
+      h('p',{className:'cap',role:'status'},'Активные фильтры: '+([offline[0]?'Нет связи':null,trucks[0]?'Грузовики':null].filter(Boolean).join(', ')||'нет')+'.')),
+    h('section',{className:'section','aria-label':'Удаление значений'},
+      h('h3',null,'Выбранные значения'),
+      h('div',{className:'row'},values[0].map(function(value){return h(S.DsChip,{key:value,removable:true,onRemove:function(){remove(value);}},value);})),
+      h('div',null,h(S.DsButton,{id:'restore-values',size:'sm',tone:'secondary',onClick:function(){values[1](['Топливо','Пробег']);longValue[1](true);message[1]('Значения восстановлены.');}},'Восстановить значения')),
+      h('p',{className:'cap',role:'status'},message[0]||'Удалите значение крестиком.')),
+    h('section',{className:'section','aria-label':'Длинные и недоступные значения'},
+      h('h3',null,'Длинные и недоступные значения'),
+      h('div',{className:'row'},
+        longValue[0]?h(S.DsChip,{removable:true,maxWidth:220,onRemove:function(){longValue[1](false);message[1]('Длинное значение удалено.');document.getElementById('restore-values').focus();}},'Объекты северо-западного подразделения'):null,
+        h(S.DsChip,{removable:true,disabled:true},'Обязательная группа')),
+      h('p',{className:'cap'},'Обязательная группа закреплена администратором.')));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
