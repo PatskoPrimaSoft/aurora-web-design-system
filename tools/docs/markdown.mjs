@@ -38,3 +38,12 @@ export function renderProps(component){
 export function documentPage({title,html,back='/index.html'}){
  return `<!doctype html><html lang="ru" data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)} · Aurora</title><script>(${applyQueryScope.toString()})(${JSON.stringify(scopeOptions)})</script><link rel="stylesheet" href="/dist/styles.css"><link rel="stylesheet" href="/styles.css"></head><body><main class="reference"><a href="${escapeHtml(back)}">← Каталог</a><h1>${escapeHtml(title)}</h1>${html}</main></body></html>`;
 }
+export function renderComponentProps(component){
+ if(!component.props.length)return '';
+ const name=escapeHtml(component.name),heading='parameters-'+name;
+ const rows=component.props.map(prop=>{
+  const defaultNote=prop.defaultDescription&&prop.defaultDescription!==prop.defaultValue?.replace(/^(['"])(.*)\1$/s,'$2')?`<p>${escapeHtml(prop.defaultDescription)}</p>`:'';
+  return `<tr><th scope="row"><code>${escapeHtml(prop.name)}</code>${prop.required?'<span class="prop-required">Обязательный</span>':''}</th><td><code>${escapeHtml(prop.type)}</code></td><td>${prop.defaultValue===null?'—':`<code>${escapeHtml(prop.defaultValue)}</code>`}${defaultNote}</td><td>${escapeHtml(prop.description)}</td></tr>`;
+ }).join('');
+ return `<h2 id="${heading}">Параметры</h2><div class="table-scroll" tabindex="0" role="region" aria-labelledby="${heading}"><table class="component-props" aria-label="Параметры ${name}"><thead><tr><th scope="col">Имя</th><th scope="col">Тип</th><th scope="col">По умолчанию</th><th scope="col">Описание</th></tr></thead><tbody>${rows}</tbody></table></div>${component.forwardsNativeAttributes?'<p>Остальные native attributes передаются DOM-элементу через rest.</p>':''}`;
+}

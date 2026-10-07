@@ -69,6 +69,11 @@ Follow [versions and publishing](docs/release.md). Agent restrictions are in
 
 ## Documentation
 
+New and reworked component pages follow the [component page standard](docs/component-pages.md),
+with `DsCheckbox` as the reference and `layout="component"` in `@dsCard`.
+The shared catalogue renders examples, usage, one code example, generated props
+and component tokens on the same page. Do not duplicate API tables in README files.
+
 README is the entry point; each guide owns one subject. Link to an existing rule
 instead of repeating it. Component READMEs hold usage and design decisions;
 generated API pages show checked props. Keep guide links and package documentation

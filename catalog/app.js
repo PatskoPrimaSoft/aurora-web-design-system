@@ -4,6 +4,7 @@ import {parseState,stateUrl,comparisonScopes} from './state.js';
 const cards=await(await fetch('cards.json')).json();
 let state=parseState(new URL(location.href),cards),renderedKey=null,frames=[];
 const nav=document.getElementById('cards'),viewports=document.getElementById('viewports'),search=document.getElementById('search'),compare=document.getElementById('compare');
+const examplesHeading=document.createElement('h2');examplesHeading.id='examples-heading';examplesHeading.textContent='Живые примеры';examplesHeading.hidden=true;viewports.before(examplesHeading);
 function save(push=false){history[push?'pushState':'replaceState'](null,'',stateUrl(location.href,state));}
 function drawNavigation(){
  const found=searchCards(cards,state.query),groups=new Map();nav.replaceChildren();
@@ -36,7 +37,7 @@ function scopePreviewLink(event,record){
 }
 function referenceLinks(card){
  const target=document.getElementById('reference-links');target.replaceChildren();
- for(const ref of [...(card.apiPaths??[]),...(card.documentationPath&&!card.documentationHtml?[{name:'Описание',path:card.documentationPath}]:[])]){
+ for(const ref of [...(card.apiHtml?[]:card.apiPaths??[]),...(card.documentationPath&&!card.documentationHtml?[{name:'Описание',path:card.documentationPath}]:[])]){
   const link=document.createElement('a'),url=new URL(ref.path,location.href);for(const[name,value]of Object.entries(state.scope))url.searchParams.set(name,value);
   link.href=url;link.textContent=ref.name==='Описание'?ref.name:'API '+ref.name;if(target.childNodes.length)target.append(document.createTextNode(' · '));target.append(link);
  }
@@ -44,9 +45,9 @@ function referenceLinks(card){
 }
 function describeCard(card){
  const target=document.getElementById('card-description');
- target.hidden=!card?.documentationHtml;
- // This HTML is generated locally by renderMarkdown with raw HTML disabled.
- target.innerHTML=card?.documentationHtml??'';
+ target.hidden=!card?.documentationHtml&&!card?.apiHtml;
+ // Locally generated Markdown and API markup; raw Markdown HTML is disabled and API text is escaped.
+ target.innerHTML=(card?.documentationHtml??'')+(card?.apiHtml??'');
  for(const link of target.querySelectorAll('a[href]')){
   const url=new URL(link.getAttribute('href'),location.href);
   if(url.origin!==location.origin)continue;
@@ -58,26 +59,34 @@ function render(){
  for(const[name,value]of Object.entries(state.scope)){document.documentElement.setAttribute('data-ds-'+name,value);document.getElementById(name).value=value;}
  search.value=state.query;compare.setAttribute('aria-pressed',String(state.compare));compare.disabled=state.unknown;drawNavigation();
  const card=cards.find(card=>card.id===state.cardId),error=document.getElementById('card-error');error.hidden=!!card;
+ document.querySelector('main').classList.toggle('component-page',card?.layout==='component');
+ examplesHeading.hidden=card?.layout!=='component';
+ if(card?.layout==='component')viewports.setAttribute('aria-labelledby',examplesHeading.id);else viewports.removeAttribute('aria-labelledby');
  describeCard(card);
  if(!card){document.getElementById('title').textContent='Карточка не найдена';document.getElementById('subtitle').textContent='Выберите карточку в навигации или вернитесь к началу.';document.getElementById('missing-id').textContent=state.cardId;for(const record of frames)record.resizeObserver?.disconnect();viewports.replaceChildren();document.getElementById('reference-links').replaceChildren();frames=[];renderedKey=null;document.getElementById('local-note').hidden=true;return;}
  document.getElementById('title').textContent=card.title;document.getElementById('subtitle').textContent=card.subtitle;document.getElementById('local-note').hidden=card.scopeMode!=='local';referenceLinks(card);
  const key=card.id+'|'+state.compare;
  const documentPreview=card.id==='overview'||card.id==='DsBreakpointsDecisions';
+ const responsivePreview=documentPreview||card.layout==='component';
  if(key!==renderedKey){
   for(const record of frames)record.resizeObserver?.disconnect();
   viewports.replaceChildren();frames=[];viewports.className=state.compare?'preview-matrix':'single-preview';
   for(const[index,fixed]of (state.compare?comparisonScopes:[state.scope]).entries()){
    const panel=document.createElement('figure'),caption=document.createElement('figcaption'),scroll=document.createElement('div'),frame=document.createElement('iframe');
    panel.className='preview-panel';scroll.className='preview-scroll';scroll.tabIndex=0;scroll.setAttribute('role','region');caption.id='preview-caption-'+index;scroll.setAttribute('aria-labelledby',caption.id);frame.id=state.compare?'preview-'+index:'preview';frame.style.width=card.viewport.width+'px';frame.style.height=card.viewport.height+'px';
-   if(documentPreview){
-    panel.classList.add('document-preview');frame.style.width='100%';
+   if(responsivePreview){
+    panel.classList.add(documentPreview?'document-preview':'component-preview');frame.style.width='100%';
     scroll.removeAttribute('tabindex');scroll.removeAttribute('role');scroll.removeAttribute('aria-labelledby');
    }
    const record={element:frame,caption,fixed,card};frames.push(record);frame.addEventListener('load',()=>{
     scopeFrame(record);
-    if(documentPreview){
+    if(responsivePreview){
      record.resizeObserver?.disconnect();
-     const fit=()=>{frame.style.height=Math.ceil(frame.contentDocument.body.getBoundingClientRect().height)+'px';};
+     const fit=()=>{
+      const body=frame.contentDocument.body,css=getComputedStyle(body);
+      const height=body.getBoundingClientRect().height+(parseFloat(css.marginTop)||0)+(parseFloat(css.marginBottom)||0);
+      frame.style.height=Math.ceil(height+frame.offsetHeight-frame.clientHeight)+'px';
+     };
      record.resizeObserver=new ResizeObserver(fit);record.resizeObserver.observe(frame.contentDocument.body);fit();
     }
     for(const event of ['click','auxclick','contextmenu'])frame.contentDocument.addEventListener(event,e=>scopePreviewLink(e,record));

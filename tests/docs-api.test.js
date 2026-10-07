@@ -4,7 +4,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {extractApi} from '../tools/docs/api.mjs';
-import {renderMarkdown,renderProps} from '../tools/docs/markdown.mjs';
+import {renderMarkdown,renderProps,renderComponentProps} from '../tools/docs/markdown.mjs';
 import {renderTokenReference} from '../tools/docs/tokens.mjs';
 import {readTokenModel} from '../tools/tokens/model.mjs';
 const fixture=fileURLToPath(new URL('./fixtures/api/',import.meta.url));
@@ -38,6 +38,14 @@ assert.ok(actual.find(c=>c.name==='DsTabPanel').props.some(p=>p.name==='idBase')
 assert.equal(actual.find(c=>c.name==='DsField').forwardsNativeAttributes,true);
 assert.equal(actual.find(c=>c.name==='DsButton').forwardsNativeAttributes,true);
 assert.match(renderProps({...demo,description:'<script>alert(1)</script>'}),/&lt;script&gt;/);
+const componentProps=renderComponentProps(demo);
+assert.match(componentProps,/<h2[^>]*>Параметры<\/h2>/);
+assert.match(componentProps,/aria-label="Параметры DsDemo"/);
+assert.match(componentProps,/<code>children<\/code>.*Обязательный/s);
+assert.ok(!componentProps.includes('Исходник:')&&!componentProps.includes('Default')&&!componentProps.includes('Обязателен</th>'));
+assert.match(renderComponentProps({...demo,props:[{...demo.props[0],description:'<script>bad</script>'}]}),/&lt;script&gt;bad&lt;\/script&gt;/);
+assert.equal(renderComponentProps({...demo,props:[]}), '');
+assert.equal((renderComponentProps({...demo,props:[{...demo.props[0],defaultValue:"'var(--ds-control-h)'",defaultDescription:'var(--ds-control-h)'}]}).match(/var\(--ds-control-h\)/g)??[]).length,1,'default annotation must not repeat its value');
 const scratch=mkdtempSync(join(tmpdir(),'aurora-markdown-'));
 try{
  writeFileSync(join(scratch,'README.md'),'# Title\n\n<script>alert(1)</script>\n\n[Demo](demo.md#props)\n\n```ts\nconst x = 3;\n```\n\n![Remote](https://example.com/picture.png)');

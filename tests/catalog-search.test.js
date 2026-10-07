@@ -20,8 +20,9 @@ assert.equal(new Set(families.flatMap(f=>f.cards)).size,families.flatMap(f=>f.ca
 const fixture=fixtureRoot();
 try{
  mkdirSync(join(fixture,'components/NewCard'));
- writeFileSync(join(fixture,'components/NewCard/preview.html'),'<!-- @dsCard group="New" name="New discovery" aliases="fresh|новая" --><html><head></head><body>new</body></html>');
+ writeFileSync(join(fixture,'components/NewCard/preview.html'),'<!-- @dsCard layout="component" group="New" name="New discovery" aliases="fresh|новая" --><html><head></head><body>new</body></html>');
  const discovered=readCards(fixture);assert.equal(discovered.length,3);assert.equal(searchCards(discovered,'новая')[0].id,'NewCard');assert.equal(familyFor('NewCard'),null);
+ assert.equal(discovered.find(card=>card.id==='NewCard').layout,'component');
 }finally{rmSync(fixture,{recursive:true,force:true});}
 const state=parseState(new URL('http://local/index.html?card=DsButton&theme=bad&appearance=bad&density=bad&compare=evil'),cards);
 assert.deepEqual(state.scope,{theme:'DEFAULT',appearance:'light',density:'cozy'});assert.equal(state.compare,false);

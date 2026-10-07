@@ -8,11 +8,11 @@ import { buildComponents } from '../build-components.mjs';
 import { writeTokenOutputs } from '../tokens/build.mjs';
 import {readTokenModel} from '../tokens/model.mjs';
 import {extractApi} from '../docs/api.mjs';
-import {renderMarkdown,renderProps,documentPage} from '../docs/markdown.mjs';
+import {renderMarkdown,renderProps,renderComponentProps,documentPage} from '../docs/markdown.mjs';
 import {renderTokenReference} from '../docs/tokens.mjs';
 import {validateLinks} from '../docs/links.mjs';
 import {cardRedirects} from '../../catalog/state.js';
-const hasInlineDescription = card => card.id === 'DsCheckbox' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
+const hasInlineDescription = card => card.layout === 'component' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
 export async function buildCatalogue({ root, outDir }) {
   if (resolve(root) === resolve(outDir)) throw new Error('Catalogue output must not replace source root');
   const cards = readCards(root);
@@ -26,7 +26,8 @@ export async function buildCatalogue({ root, outDir }) {
     knownRoutes.set(`components/${old}/README.md`,knownRoutes.get(`components/${target}/README.md`)??`/index.html?card=${target}`);
     knownRoutes.set(`components/${old}/preview.html`,`/index.html?card=${target}`);
   }
-  const documents=[...guides,...cards.map(card=>card.readmePath).filter(Boolean)],documentAssets=new Set();
+  const apiDescriptions=cards.map(card=>join(dirname(card.previewPath),'API.md')).filter(path=>existsSync(join(root,path)));
+  const documents=[...guides,...cards.map(card=>card.readmePath).filter(Boolean),...apiDescriptions],documentAssets=new Set();
   for(let index=0;index<documents.length;index++)for(const link of renderMarkdown({root,path:documents[index]}).links){
     if(/^(?:[a-z]+:|\/\/|#)/i.test(link))continue;
     const url=new URL(link,'http://aurora.local/'+documents[index]),target=decodeURIComponent(url.pathname).slice(1);
@@ -38,17 +39,24 @@ export async function buildCatalogue({ root, outDir }) {
   for(const guide of guides){const document=renderMarkdown({root,path:guide,knownRoutes});writePage(`docs/${guide.slice(0,-3)}.html`,documentPage({title:guide,html:document.html}));}
   for(const path of documents.filter(path=>!guides.includes(path)&&knownRoutes.get(path)?.startsWith('/docs/source/'))){const document=renderMarkdown({root,path,knownRoutes});writePage(knownRoutes.get(path).slice(1),documentPage({title:path,html:document.html}));}
   for(const path of documentAssets)if(path){const target=join(outDir,'source',path);mkdirSync(dirname(target),{recursive:true});writeFileSync(target,readFileSync(join(root,path)));}
+  const apiDetails=new Map();
   for(const doc of api){
     const card=cards.find(card=>card.id===doc.name)??cards.find(card=>card.id===doc.declarationPath.split('/')[1]);
     const readme=card?.readmePath;
     const markdown=readme?renderMarkdown({root,path:readme,knownRoutes}):null;
-    writePage(`api/components/${doc.name}.html`,documentPage({title:doc.name,html:renderProps(doc)+(markdown?.html??''),back:card?`/index.html?card=${card.id}`:'/index.html'}));
+    const apiDescription=card?join(dirname(card.previewPath),'API.md'):null;
+    const apiMarkdown=apiDescription&&existsSync(join(root,apiDescription))?renderMarkdown({root,path:apiDescription,knownRoutes}):null;
+    const props=card?.layout==='component'?renderComponentProps(doc):renderProps(doc);
+    apiDetails.set(doc.name,props+(apiMarkdown?.html??''));
+    const content=card?.layout==='component'?(markdown?.html??'')+props+(apiMarkdown?.html??''):props+(markdown?.html??'')+(apiMarkdown?.html??'');
+    writePage(`api/components/${doc.name}.html`,documentPage({title:doc.name,html:content,back:card?`/index.html?card=${card.id}`:'/index.html'}));
   }
   const reference=renderTokenReference(readTokenModel(css.source));
   writePage('api/tokens.html',documentPage({title:'CSS-токены',html:reference.html}));
   for(const card of cards){
     const contracts=api.filter(doc=>doc.name===card.id||doc.declarationPath.split('/')[1]===card.id);
     card.apiPaths=contracts.map(doc=>({name:doc.name,path:`api/components/${doc.name}.html`}));
+    if(card.layout==='component')card.apiHtml=contracts.map(doc=>apiDetails.get(doc.name)??'').join('');
     card.declarationPaths=[...new Set(contracts.map(doc=>doc.declarationPath))];
     const document=card.readmePath?renderMarkdown({root,path:card.readmePath,knownRoutes}):null;
     card.documentationPath=document?`docs/cards/${card.id}.html`:null;
