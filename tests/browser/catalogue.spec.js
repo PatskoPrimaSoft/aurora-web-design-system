@@ -7,7 +7,7 @@ test('all catalogue pages render from local files without runtime errors',async(
  await page.route('**/*',r=>r.request().url().startsWith(served.url+'/')?r.continue():r.abort('blockedbyclient'));
  try{
   await page.goto(served.url+'/index.html');await expect(page.locator('nav a')).toHaveCount(cards.length);
-  await expect(page.locator('nav h2')).toHaveText(['1 · Начало','2 · Основы',...['выбор','графики','данные','кнопки','навигация','обратная связь','примитивы','раскладка','формы','шапка'].map(name=>'3 · Компоненты · '+name),'4 · Бренд (общее)','5 · Карта','6 · Миграция','7 · Эталонные экраны']);
+  await expect(page.locator('nav h2')).toHaveText(['1 · Начало','2 · Основы','3 · Миграция','4 · Бренд (общее)',...['выбор','графики','данные','кнопки','навигация','обратная связь','примитивы','раскладка','формы','шапка'].map(name=>'5 · Компоненты · '+name),'6 · Карта','7 · Эталонные экраны']);
   await expect(page.locator('#subtitle')).toContainText(`${cards.length} карточек`);await expect(page.frameLocator('#preview').locator('body')).toContainText(`${cards.length} карточек`);
   await page.locator('nav a[data-id="DsButton"]').click();await expect(page.locator('h1')).toHaveText('DsButton');
   await page.locator('#theme').selectOption('RED2');await expect(page.locator('html')).toHaveAttribute('data-ds-theme','RED2');

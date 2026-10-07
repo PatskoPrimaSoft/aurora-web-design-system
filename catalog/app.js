@@ -62,19 +62,20 @@ function render(){
  if(!card){document.getElementById('title').textContent='Карточка не найдена';document.getElementById('subtitle').textContent='Выберите карточку в навигации или вернитесь к началу.';document.getElementById('missing-id').textContent=state.cardId;for(const record of frames)record.resizeObserver?.disconnect();viewports.replaceChildren();document.getElementById('reference-links').replaceChildren();frames=[];renderedKey=null;document.getElementById('local-note').hidden=true;return;}
  document.getElementById('title').textContent=card.title;document.getElementById('subtitle').textContent=card.subtitle;document.getElementById('local-note').hidden=card.scopeMode!=='local';referenceLinks(card);
  const key=card.id+'|'+state.compare;
+ const documentPreview=card.id==='overview'||card.id==='DsBreakpointsDecisions';
  if(key!==renderedKey){
   for(const record of frames)record.resizeObserver?.disconnect();
   viewports.replaceChildren();frames=[];viewports.className=state.compare?'preview-matrix':'single-preview';
   for(const[index,fixed]of (state.compare?comparisonScopes:[state.scope]).entries()){
    const panel=document.createElement('figure'),caption=document.createElement('figcaption'),scroll=document.createElement('div'),frame=document.createElement('iframe');
    panel.className='preview-panel';scroll.className='preview-scroll';scroll.tabIndex=0;scroll.setAttribute('role','region');caption.id='preview-caption-'+index;scroll.setAttribute('aria-labelledby',caption.id);frame.id=state.compare?'preview-'+index:'preview';frame.style.width=card.viewport.width+'px';frame.style.height=card.viewport.height+'px';
-   if(card.id==='overview'){
-    panel.classList.add('overview-preview');frame.style.width='100%';
+   if(documentPreview){
+    panel.classList.add('document-preview');frame.style.width='100%';
     scroll.removeAttribute('tabindex');scroll.removeAttribute('role');scroll.removeAttribute('aria-labelledby');
    }
    const record={element:frame,caption,fixed,card};frames.push(record);frame.addEventListener('load',()=>{
     scopeFrame(record);
-    if(card.id==='overview'){
+    if(documentPreview){
      record.resizeObserver?.disconnect();
      const fit=()=>{frame.style.height=Math.ceil(frame.contentDocument.body.getBoundingClientRect().height)+'px';};
      record.resizeObserver=new ResizeObserver(fit);record.resizeObserver.observe(frame.contentDocument.body);fit();

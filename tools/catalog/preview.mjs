@@ -39,7 +39,7 @@ export async function renderPreview({ root, card, mode = 'legacy', scope, standa
       }
       const path = decodeURIComponent(url.pathname).slice(1);
       const linkedCard = /^components\/([\w-]+)\/preview\.html$/.exec(path);
-      if (node.tagName === 'a' && ['2 · Основы', '5 · Карта'].includes(card.group) && linkedCard) {
+      if (node.tagName === 'a' && ['2 · Основы', '3 · Миграция', '4 · Бренд (общее)', '6 · Карта'].includes(card.group) && linkedCard) {
         if (!existsSync(join(root,path))) throw new Error(`${card.previewPath}: missing linked card ${path}`);
         a.value = posix.relative(posix.dirname(card.previewPath), 'index.html') + '?card=' + linkedCard[1];
         setAttr(node, 'target', '_top');
