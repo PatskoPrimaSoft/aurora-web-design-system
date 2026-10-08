@@ -96,7 +96,7 @@ reduction on the v1 side comes from v1 encoding variants as separate components.
 | `HeaderNav` | `DsTabs` | folded in | `tone="onHeader"`. Adds `underline` and `segmented` so content tabs stop borrowing header styling. |
 | `AuthUserChip + HeaderMenuItem` | `DsUserMenu` | folded in | Built on DsMenu, so the user menu and a table row menu are the same object. |
 | `HeaderDivider` | — | dropped | A 1px `rgba(255,255,255,0.15)` rule is one span; it does not need a component. |
-| `PageHeader` | `DsPageHeader` | 1:1 | Absorbs the breadcrumbs, back arrow, meta badges, actions and tab strip every screen used to hand-assemble around it. |
+| `PageHeader` | Разметка в приложении | Удалён | Заголовок, хлебные крошки и действия собираются в приложении; `DsPageLayout.pageHeader` принимает готовый React-узел. |
 | `StepperHeader` | `DsStepper` | 1:1 | Completed steps stay clickable; future steps are inert. |
 | `Card` | `DsPanel` | 1:1 | Radius 0 + 2px primary rule → 12px radius + 1px border. Adds header / footer / `flush` / `scroll`. |
 | `Dialog` | `DsDialog` | 1:1 | Content-driven height instead of a fixed 65vh; actions right-aligned, not centred; `tone` glyph for destructive confirms. |

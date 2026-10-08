@@ -1,17 +1,32 @@
-<!-- @dsCard group="5 · Компоненты · навигация" height=110 subtitle="Шаги короткой задачи: пройденные кликабельны, будущие — нет" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · навигация" height=420 subtitle="Шаги короткой задачи с возвратом к пройденным этапам" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
+h3{font:var(--ds-type-label);margin:0 0 12px}
+p{margin:12px 0;color:var(--ds-fg-muted)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+@media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var a=React.useState(1);
-  return h(S.DsStepper,{active:a[0],onSelect:a[1],steps:[{label:'Файл'},{label:'Сопоставление',hint:'столбцы → поля'},{label:'Проверка'}]});}
+var steps=[{id:'file',label:'Файл'},{id:'fields',label:'Поля',hint:'Сопоставление'},{id:'check',label:'Проверка'}];
+var content=['Выберите файл для импорта.','Сопоставьте столбцы файла с полями.','Проверьте данные перед импортом.'];
+function App(){var a=React.useState(1),finished=React.useState(false);
+ function select(index){a[1](index);finished[1](false);}
+ return h('div',{className:'examples'},
+  h('section',{'aria-labelledby':'flow-title'},
+   h('h3',{id:'flow-title'},'Прохождение задачи'),
+   h(S.DsStepper,{steps:steps,active:a[0],onSelect:select}),
+   h('p',{role:'status'},finished[0]?'Импорт завершён.':content[a[0]]),
+   h('div',{className:'actions'},
+    h(S.DsButton,{tone:'secondary',disabled:a[0]===0||finished[0],onClick:function(){select(a[0]-1);}},'Назад'),
+    h(S.DsButton,{disabled:finished[0],onClick:function(){if(a[0]<steps.length-1)select(a[0]+1);else finished[1](true);}},a[0]===steps.length-1?'Импортировать':'Далее'),
+    h(S.DsButton,{tone:'ghost',onClick:function(){select(0);}},'Начать заново'))),
+  h('section',{'aria-labelledby':'readonly-title'},
+   h('h3',{id:'readonly-title'},'Только для чтения'),
+   h(S.DsStepper,{steps:steps,active:2}),
+   h('p',null,'Без onSelect шаги показывают прогресс и не переключаются.')));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

@@ -19,7 +19,7 @@
 export interface DsPageLayoutProps {
   /** A DsAppHeader. */
   header?: React.ReactNode;
-  /** A DsPageHeader, below the app header. */
+  /** Application page heading markup, below the app header. */
   pageHeader?: React.ReactNode;
   left?: React.ReactNode;
   right?: React.ReactNode;

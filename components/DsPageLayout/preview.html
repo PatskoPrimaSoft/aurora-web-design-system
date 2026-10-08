@@ -14,7 +14,7 @@ body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding
 function App(){var box=function(t){return h(S.DsPanel,{title:t,height:'100%'},h('span',{className:'cap'},t));};
   return h('div',{style:{height:340,border:'1px solid var(--ds-border)'}},h(S.DsPageLayout,{
     header:h(S.DsAppHeader,{product:'Aurora',section:'Мониторинг',user:'a.ivanov'}),
-    pageHeader:h(S.DsPageHeader,{title:'Объекты',border:true}),
+    pageHeader:h('header',{style:{padding:'var(--ds-pad-md)',background:'var(--ds-surface)',borderBottom:'1px solid var(--ds-border)'}},h('h1',{style:{margin:0,font:'var(--ds-type-title)',color:'var(--ds-fg-strong)'}},'Объекты')),
     left:box('Левый регион'),right:box('Правый регион')},box('Главный регион')));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

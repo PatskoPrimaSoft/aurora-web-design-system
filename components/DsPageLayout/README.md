@@ -1,6 +1,6 @@
 Каркас обоих порталов: шапка приложения, шапка страницы, левый, главный и правый регионы.
 
-**Потребитель задаёт** `header` (`DsAppHeader`), при необходимости `pageHeader` (`DsPageHeader`), `left`, `right`, `footer`, главное содержимое в `children`, `leftWidth`, `rightWidth`, `gap`.
+**Потребитель задаёт** `header` (`DsAppHeader`), при необходимости `pageHeader` (разметка заголовка страницы приложения), `left`, `right`, `footer`, главное содержимое в `children`, `leftWidth`, `rightWidth`, `gap`.
 
 - Ширина левого региона по умолчанию `var(--ds-panel-w)`: 340px cozy, 300px compact. Правый — 360.
 - `gap={false}` — регионы вплотную, для экрана с картой во всю ширину.

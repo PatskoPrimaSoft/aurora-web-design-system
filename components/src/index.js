@@ -33,7 +33,6 @@ export * from './components/layout/DsPageLayout.jsx';
 export * from './components/layout/DsPanel.jsx';
 export * from './components/navigation/DsAppHeader.jsx';
 export * from './components/navigation/DsMenu.jsx';
-export * from './components/navigation/DsPageHeader.jsx';
 export * from './components/navigation/DsStepper.jsx';
 export * from './components/navigation/DsTabs.jsx';
 export * from './components/primitives/DsIcon.jsx';
