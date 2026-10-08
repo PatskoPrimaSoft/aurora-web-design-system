@@ -1,45 +1,38 @@
-/**
- * One collapsible level of the object tree. The panel nests it: user (level 0,
- * avatar) → group or label (level 1, `sell` icon) → DsListRow leaves.
- *
- * Why a separate component from DsListRow: the header carries aggregate state —
- * how many of its children are selected (`selected / total`), a tri-state
- * select-all, and an aggregated unread count — and it must stay visually lighter
- * than its leaves so the eye reads the tree structure before the rows. Group
- * headers are `--ds-fg-muted`; only user headers are full ink.
- *
- * `level` sets the 20px indent step. Groups with nothing to select pass
- * `selectDisabled` rather than hiding the box, so trailing controls stay in one
- * column down the whole panel.
- */
+/** Заголовок ветки с раскрытием и агрегированным выбором дочерних объектов. */
 export interface DsTreeRowProps {
+  /** Название ветки; для аватара с инициалами используйте текст. */
   title: React.ReactNode;
-  /** Small trailing note after the title, e.g. a tag name or "no objects". */
+  /** Короткая дополнительная подпись рядом с названием. */
   meta?: React.ReactNode;
-  /** Leading glyph for a group/label level (ignored when `avatar` is set). */
+  /** Иконка перед названием; аватар заменяет её. */
   icon?: string;
+  /** Изображение аватара вместо инициалов. */
   avatarSrc?: string;
-  /** Render the initials disc (user level) instead of a glyph. */
+  /** Показывать аватар с инициалами из title. */
   avatar?: boolean;
-  /** Indent step: 0 for users, 1 for groups. */
+  /** Уровень вложенности: отступ увеличивается на 20 px за шаг. */
   level?: number;
+  /** Раскрыта ли ветка; видимость дочерних строк задаёт родитель. */
   expanded?: boolean;
+  /** Изменение раскрытия ветки. */
   onToggle?: (next: boolean) => void;
-  /** Aggregate counter — renders as `3 / 12` when `total` is given. */
+  /** Число выбранных дочерних объектов в счётчике. */
   selected?: number;
+  /** Общее число дочерних объектов; включает счётчик selected / total. */
   total?: number;
+  /** Состояние группового чекбокса; без значения чекбокс скрыт. */
   select?: 'checked' | 'indeterminate' | 'unchecked';
+  /** Изменение группового выбора; частичный выбор переходит в checked. */
   onSelectChange?: (next: 'checked' | 'unchecked') => void;
+  /** Отключить групповой чекбокс, сохранив его место. */
   selectDisabled?: boolean;
+  /** Число непрочитанных: ноль скрыт, значения больше 99 показаны как 99+. */
   unread?: number;
+  /** Открытие объекта; при наличии onToggle раскрытие вынесено в отдельный шеврон. */
   onClick?: (e: React.SyntheticEvent) => void;
-  /** Chevron button names when both `onClick` and `onToggle` are set. */
+  /** Текст действия раскрытия отдельного шеврона; название ветки добавляется автоматически. */
   expandLabel?: string;
+  /** Текст действия сворачивания отдельного шеврона; название ветки добавляется автоматически. */
   collapseLabel?: string;
 }
-/**
- * Anatomy — siblings, never nested: with `onClick`, a chevron button (aria-expanded) plus an
- * open button; with `onToggle` only, one button that expands (aria-expanded). The group
- * checkbox is separate: Space on it selects and never collapses.
- */
 export declare function DsTreeRow(props: DsTreeRowProps): JSX.Element;

@@ -1,20 +1,51 @@
-<!-- @dsCard group="5 · Компоненты · данные" height=190 subtitle="Строка дерева пользователь → группа: раскрытие, агрегированный выбор, счётчик" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=900 subtitle="Строка иерархии с раскрытием, групповым выбором и счётчиком" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:32px}
+.section{display:flex;flex-direction:column;gap:16px;min-width:0}
+.tree{max-width:560px;min-width:0}
+.leaves{padding-left:40px}
+.leaf{display:flex;align-items:center;gap:var(--ds-gap-sm);min-width:0}
+.leaf>span{flex:1;min-width:0}
+h3{font:var(--ds-type-body-strong);margin:0}
+.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var e=React.useState(true);
-  return h('div',{className:'col',style:{gap:2,maxWidth:420}},
-    h(S.DsTreeRow,{title:'Петров С.',avatar:true,level:0,expanded:e[0],onToggle:e[1],selected:3,total:12,select:'indeterminate',onSelectChange:function(){},unread:2}),
-    h(S.DsTreeRow,{title:'Грузовики',icon:'label',level:1,expanded:false,onToggle:function(){},selected:3,total:8,select:'checked',onSelectChange:function(){}}),
-    h(S.DsTreeRow,{title:'Фургоны',icon:'label',level:1,meta:'нет объектов',select:'unchecked',selectDisabled:true}));}
+var groups=[{id:'trucks',title:'Грузовики',objects:['MAZ 5440','Volvo FH16']},{id:'vans',title:'Фургоны',objects:['GAZ Next']}];
+var ids=['MAZ 5440','Volvo FH16','GAZ Next'];
+function selection(items,chosen){var n=items.filter(function(id){return chosen.includes(id);}).length;return n===0?'unchecked':n===items.length?'checked':'indeterminate';}
+function TreeExample(){
+  var open=React.useState({user:true,trucks:true,vans:false}),chosen=React.useState(['Volvo FH16']);
+  function toggle(id,next){open[1](function(prev){return Object.assign({},prev,{[id]:next});});}
+  function choose(items,next){chosen[1](function(prev){var rest=prev.filter(function(id){return !items.includes(id);});return next==='checked'?rest.concat(items):rest;});}
+  return h('section',{className:'section','aria-label':'Иерархия и групповой выбор'},
+    h('h3',null,'Иерархия и групповой выбор'),
+    h('div',{className:'tree'},
+      h(S.DsTreeRow,{title:'Петров Сергей',avatar:true,expanded:open[0].user,onToggle:function(next){toggle('user',next);},selected:chosen[0].length,total:ids.length,select:selection(ids,chosen[0]),onSelectChange:function(next){choose(ids,next);},unread:2}),
+      open[0].user?groups.map(function(group){return h(React.Fragment,{key:group.id},
+        h(S.DsTreeRow,{title:group.title,icon:'label',level:1,expanded:open[0][group.id],onToggle:function(next){toggle(group.id,next);},selected:group.objects.filter(function(id){return chosen[0].includes(id);}).length,total:group.objects.length,select:selection(group.objects,chosen[0]),onSelectChange:function(next){choose(group.objects,next);}}),
+        open[0][group.id]?h('div',{className:'leaves'},group.objects.map(function(id){return h('div',{className:'leaf',key:id},h('span',null,id),h(S.DsCheckbox,{state:chosen[0].includes(id)?'checked':'unchecked',ariaLabel:'Выбрать: '+id,onChange:function(next){choose([id],next);}}));})):null); }):null),
+    h('p',{className:'cap',role:'status'},'Выбрано объектов: '+chosen[0].length+' из '+ids.length),
+    h('p',{className:'cap'},'Выбор группы меняет выбор её объектов. Сворачивание сохраняет выбор.'));
+}
+function ActionsExample(){
+  var open=React.useState(true),message=React.useState('Группа ещё не открыта.');
+  return h('section',{className:'section','aria-label':'Раскрытие и открытие группы'},
+    h('h3',null,'Раскрытие и открытие группы'),
+    h('div',{className:'tree'},h(S.DsTreeRow,{title:'Северный филиал',icon:'label',expanded:open[0],onToggle:open[1],onClick:function(){message[1]('Открыта группа «Северный филиал».');},total:2,selected:0}),
+      open[0]?h('div',{className:'leaves'},h(S.DsListRow,{title:'MAZ 5440',subtitle:'AB 1234-7'}),h(S.DsListRow,{title:'Volvo FH16',subtitle:'AC 8871-2'})):null),
+    h('p',{className:'cap',role:'status'},message[0]),
+    h('p',{className:'cap'},'Шеврон раскрывает ветку, название открывает группу. Действия работают независимо.'));
+}
+function StatesExample(){return h('section',{className:'section','aria-label':'Варианты строки'},
+  h('h3',null,'Варианты строки'),
+  h('div',{className:'tree'},
+    h(S.DsTreeRow,{title:'Иванова Анна',avatar:true,expanded:false,unread:120}),
+    h(S.DsTreeRow,{title:'Группа без объектов',icon:'label',level:1,expanded:false,total:0,selected:0,select:'unchecked',selectDisabled:true}),
+    h(S.DsTreeRow,{title:'Архив',icon:'label',level:1,expanded:false,meta:'только чтение'})),
+  h('p',{className:'cap'},'Инициалы, счётчик непрочитанных 99+, недоступный выбор и дополнительная подпись.'));}
+function App(){return h('div',{className:'examples'},h(TreeExample),h(ActionsExample),h(StatesExample));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
