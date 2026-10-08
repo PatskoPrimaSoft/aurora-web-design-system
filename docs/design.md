@@ -72,8 +72,8 @@ Aurora — платформа GPS-мониторинга коммерческо�
 - **Счётчик уведомлений в шапке** — сама заливка акцента (`ds-header-badge-bg` → `ds-accent`, чернила `ds-accent-on`), одна и та же на всех полосах, без обводки и внешнего ореола. Число читается за счёт контраста `ds-header-badge-fg` к заливке. **Бейдж окружения** (`DEV`, `LOCAL`) — заливка акцента (`ds-header-env-bg` / `-fg`): это метка арендатора с текстом, а не знак.
 - **Нейтрали** — одна холодная рампа из 13 ступеней, `ds-n-0` → `ds-n-950`, плюс альфа-нейтрали `ds-n-a*` / `ds-w-a*`. Экран называет только алиасы — `ds-bg`, `ds-surface`, `ds-fg`, `ds-fg-muted`, `ds-border`, `ds-divider` и их соседей, — **никогда ступень рампы**. Карточка [«Нейтральные цвета»](../components/DsNeutrals/README.md).
 - **Статус** — `success` / `warning` / `danger` / `info` (и `neutral`), у каждого `-bg` / `-fg` / `-line` / `-solid`. **Намеренно не зависят от темы:** объект офлайн должен читаться как офлайн в обоих брендах и в dark. Карточка [«Цвета статусов»](../components/DsStatus/README.md).
-- **Словарь автопарка** — `ds-state-moving` / `-parked` / `-offline` / `-invalid` / `-alarm` / `-nodata` сводят состояние объекта на палитру статусов; из них `DsStateIcon` и `DsObjectRow` берут чернила глифа, так что цвет состояния живёт в одном месте, а тонированный диск за ним остаётся на тоне статуса. `nodata` нейтрален, как `parked`: их различает глиф, а не ступень серого.
-- **Свежесть данных** — `ds-fresh-live` / `-recent` / `-late` / `-none` (как давно пришло последнее сообщение) красит диск строки объекта, чернила — `ds-fresh-on`. Состояние и свежесть — разные факты: стоящий объект может быть совершенно свежим.
+- **Словарь автопарка** — `ds-state-moving` / `-parked` / `-offline` / `-invalid` / `-alarm` / `-nodata` сводят состояние объекта на палитру статусов; из них `DsStateIcon` и `DsListRow` берут чернила глифа, так что цвет состояния живёт в одном месте, а тонированный диск за ним остаётся на тоне статуса. `nodata` нейтрален, как `parked`: их различает глиф, а не ступень серого.
+- **Свежесть данных** — `ds-fresh-live` / `-recent` / `-late` / `-none` (как давно пришло последнее сообщение) задают семантику свежести; чернила — `ds-fresh-fg`. Оформление индикатора выбирает приложение. Состояние и свежесть — разные факты: стоящий объект может быть совершенно свежим.
 - **Иконки карты** — `ds-map-point` (`#2b8cf7`) на `ds-map-ground` (белый): глиф точки в белом диске, её подпись, заливка пинов. **Намеренно не зависят ни от темы, ни от режима:** тайлы карты светлые и в dark, поэтому одно значение на все четыре набора. Остальные стили карты — треки, геозоны, кластеры — живут в `aur-openlayers`.
 - **Чекбоксы используют один компонент `DsCheckbox`** и состояния `'unchecked' | 'checked' | 'indeterminate'`. `onChange(nextState)` возвращает новое состояние; частичный выбор при активации становится полным. У радио только `unchecked` и `checked`. Без видимой подписи задаётся `ariaLabel`.
 - **Отключённое — это цветовой токен (`ds-fg-disabled`, `ds-surface-disabled`), никогда не прозрачность.**
@@ -260,7 +260,7 @@ SVG-логотипа, локапа только из словесного зна
 | примитивы | `DsIcon` |
 | кнопки | `DsButton` · `DsIconButton` · `DsFab` |
 | формы | `DsField` · `DsCheckbox` · `DsSwitch` · `DsDuration` · `DsFilterMenu` |
-| данные | `DsTable` · `DsPagination` · `DsChip` · `DsChipGroup` · `DsLozenge` · `DsListRow` · `DsObjectRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkActionsBar` · `DsStateIcon` |
+| данные | `DsTable` · `DsPagination` · `DsChip` · `DsChipGroup` · `DsLozenge` · `DsListRow` · `DsTreeRow` · `DsSelectionBar` · `DsBulkActionsBar` · `DsStateIcon` |
 | обратная связь | `DsBanner` · `DsToast` · `DsToastStack` · `DsEmptyState` · `DsSpinner` · `DsSkeleton` |
 | графики | `DsChart` · `DsChartLegend` · `DsChartTooltip` · `DsSparkline` · `DsScoreBar` |
 | раскладка | `DsPanel` · `DsDialog` · `DsPageLayout` |

@@ -6,8 +6,7 @@
  * 1.5px so it does not out-weigh the text in its own cell, and a gap in the data
  * stays a gap.
  *
- * Do not put one in a `DsObjectRow`'s primary line — the row already carries state,
- * freshness and selection; a fourth signal there is noise.
+ * Avoid adding a sparkline to a row that already carries several status indicators.
  */
 export interface DsSparklineProps {
   /** Ordered values. `null` / `NaN` is missing data and breaks the line. */

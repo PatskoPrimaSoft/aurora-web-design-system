@@ -23,6 +23,6 @@ export interface DsStateIconProps {
   label?: string;
 }
 export declare function DsStateIcon(props: DsStateIconProps): JSX.Element;
-/** The single fleet-state dictionary: glyph, status tone and label. Shared with DsObjectRow. */
+/** The single fleet-state dictionary: glyph, status tone and label. Shared with DsListRow. */
 export declare const dsFleetState: Record<'moving' | 'parked' | 'offline' | 'invalid' | 'alarm' | 'nodata',
   { glyph: string; tone: 'success' | 'neutral' | 'danger' | 'info' | 'warning'; label: string }>;

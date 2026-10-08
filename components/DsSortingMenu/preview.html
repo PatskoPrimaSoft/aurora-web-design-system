@@ -37,7 +37,7 @@ table.spec td.k{font:var(--ds-type-mono);font-size:13px;color:var(--ds-fg);white
 <div id="page">
 <div class="card">
 <h2>D · Вне таблицы: меню сортировки</h2>
-<p class="muted">В панели объектов заголовков столбцов нет — строка это <code>DsObjectRow</code>, а не набор ячеек. Порядком управляет меню, которое открывается иконкой <code>sort</code> в actions панели, рядом с фильтром и поиском. Список загружен целиком, поэтому здесь сортировка честно клиентская — ровно та причина, по которой в таблице она запрещена.</p>
+<p class="muted">В панели объектов заголовков столбцов нет — строка это <code>DsListRow</code>, а не набор ячеек. Порядком управляет меню, которое открывается иконкой <code>sort</code> в actions панели, рядом с фильтром и поиском. Список загружен целиком, поэтому здесь сортировка честно клиентская — ровно та причина, по которой в таблице она запрещена.</p>
 <div id="demo-menu"></div>
 <ul class="list cols">
 <li><strong>Поле и направление разделены.</strong> Радиосписок — это поля («Название», «Последнее сообщение», «Водитель»), под ним одна пара направлений. Бэкенд хранит их слитно (<code class="mono">BY_NAME_ASC</code>, <code class="mono">BY_SECONDS_AGO_DESC</code>, девять значений) — это форма перечисления, а не форма меню: девять пунктов оператор читает как девять разных сортировок.</li>
@@ -93,7 +93,7 @@ table.spec td.k{font:var(--ds-type-mono);font-size:13px;color:var(--ds-fg);white
 <div class="note">Компоненты: <code>DsFilterMenu type="sort-by"</code> — радиосписок полей; если значение хранится как <code class="mono">{key, dir}</code>, под списком появляется пара направлений, а опция с <code>group: true</code> её скрывает. Подписи направлений задаются на опции: <code class="mono">asc</code> / <code class="mono">desc</code>.</div>
 </div>
 <script type="text/babel">
-const { DsPanel, DsObjectRow, DsIconButton, DsFilterMenu } = window.AuroraWebDesignSystem_96e210;
+const { DsPanel, DsListRow, DsIconButton, DsFilterMenu } = window.AuroraWebDesignSystem_96e210;
 const ORDER_OPTIONS=[
   {value:'new',label:'Дате добавления',asc:'Сначала старые',desc:'Сначала новые'},
   {value:'name',label:'Названию',asc:'А → Я',desc:'Я → А'},
@@ -101,11 +101,11 @@ const ORDER_OPTIONS=[
   {value:'driver',label:'Водителю',asc:'А → Я',desc:'Я → А'},
   {value:'group',label:'Группам',group:true}];
 const PANEL=[
-  {id:1,name:'MAZ 5440',details:'62 км/ч · И. Иванов · 14:32:07',state:'moving',course:135,online:true,freshness:'live',freshnessLabel:'Сообщение 3 с назад'},
-  {id:6,name:'MAN TGX',details:'54 км/ч · В. Лукаш · 14:32:04',state:'moving',course:200,online:true,freshness:'live',freshnessLabel:'Сообщение 6 с назад'},
-  {id:2,name:'Volvo FH16',details:'Стоит 1 ч 12 мин · Минский склад',state:'parked',freshness:'live',freshnessLabel:'Сообщение 12 с назад'},
-  {id:3,name:'Scania R450',details:'78 км/ч · превышение в зоне 60',state:'alarm',course:88,freshness:'recent',freshnessLabel:'Сообщение 6 мин назад'},
-  {id:5,name:'Renault T',details:'Offline с 09:14:22',state:'offline',signal:'none',freshness:'late',freshnessLabel:'Сообщение 5 ч 18 мин назад'}];
+  {id:1,name:'MAZ 5440',details:'62 км/ч · И. Иванов · 14:32:07',state:'moving',course:135},
+  {id:6,name:'MAN TGX',details:'54 км/ч · В. Лукаш · 14:32:04',state:'moving',course:200},
+  {id:2,name:'Volvo FH16',details:'Стоит 1 ч 12 мин · Минский склад',state:'parked'},
+  {id:3,name:'Scania R450',details:'78 км/ч · превышение в зоне 60',state:'alarm',course:88},
+  {id:5,name:'Renault T',details:'Offline с 09:14:22',state:'offline'}];
 
 function MenuDemo(){
   const [order,setOrder]=React.useState({key:'new',dir:'desc'});
@@ -121,7 +121,7 @@ function MenuDemo(){
           trigger={<DsIconButton icon="sort" label="Сортировка" dot={!isDefault}/>}/>
         <DsIconButton icon="search" label="Поиск"/></>}>
       <div style={{padding:'var(--ds-gap-xs) 0'}}>
-        {PANEL.map(o=><DsObjectRow key={o.id} {...o} select="off"/>)}
+        {PANEL.map(o=><DsListRow key={o.id} title={o.name} subtitle={o.details} state={o.state} course={o.course}/>)}
       </div></DsPanel>
     <div className="cell" style={{gap:10}}>
       <span className="eb">состояние меню</span>

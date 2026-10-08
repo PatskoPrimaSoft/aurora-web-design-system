@@ -151,11 +151,10 @@ for(const trigger of ['title','action']){
   ok([...ru.querySelectorAll('button')].some((b) => b.textContent === 'Отменить'), 'строки: по умолчанию русские');
   const en = mount(h(NS.DsStringsProvider, { strings: NS.dsStringsEn },
     h(NS.DsToast, { action: () => {} }, 'x'), h(NS.DsTable, { columns: [{ key: 'n', label: 'N' }], rows: [] }),
-    h(NS.DsObjectRow, { name: 'Volvo', state: 'alarm', unread: 1, onClick: () => {} }))).box;
-  const row = en.querySelector('button[aria-describedby]');
+    h(NS.DsStateIcon, { state: 'alarm' }))).box;
   ok([...en.querySelectorAll('button')].some((b) => b.textContent === 'Undo'), 'строки: dsStringsEn — «Undo» в тосте');
   ok(en.textContent.includes('No data'), 'строки: dsStringsEn — «No data» в пустой таблице');
-  ok(d.getElementById(row.getAttribute('aria-describedby')).textContent.startsWith('Alarm'), 'строки: dsStringsEn — состояние объекта «Alarm»');
+  ok(en.querySelector('[role="img"]').getAttribute('aria-label') === 'Alarm', 'строки: dsStringsEn — состояние объекта «Alarm»');
   const part = mount(h(NS.DsStringsProvider, { strings: { undo: 'Вернуть', state: { alarm: 'Авария' } } },
     h(NS.DsToast, { action: () => {} }, 'x'), h(NS.DsStateIcon, { state: 'alarm' }), h(NS.DsStateIcon, { state: 'offline' }))).box;
   const labels = [...part.querySelectorAll('[role="img"]')].map((x) => x.getAttribute('aria-label'));

@@ -101,7 +101,7 @@ test('native selection does not submit forms or activate table and tree rows',as
           h(S.DsCheckbox,{label:'Form selection',state,onChange:setState}),
           h(S.DsTable,{columns:[{key:'name',label:'Name'}],rows:[{id:1,name:'Row'}],selectable:true,
             onRowClick:()=>events.open++,onToggleRow:()=>events.select++}),
-          h(S.DsObjectRow,{name:'Object',select:'unchecked',onClick:()=>events.open++,onSelectChange:()=>events.select++}),
+          h('div',null,h(S.DsListRow,{title:'Object',onClick:()=>events.open++}),h(S.DsCheckbox,{ariaLabel:'Select Object',state:'unchecked',onChange:()=>events.select++})),
           h(S.DsTreeRow,{title:'Tree',select:'indeterminate',onToggle:()=>events.expand++,onSelectChange:()=>events.select++}));
       }
       ReactDOM.flushSync(()=>ReactDOM.createRoot(host).render(h(App)));

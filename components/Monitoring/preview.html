@@ -8,7 +8,7 @@ a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
 <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head><body><div id="root"></div><script type="text/babel">
 const { DsPageLayout, DsAppHeader, DsUserMenu, DsTabs, DsIconButton, DsButton, DsField, DsChip, DsLozenge, DsBanner, DsPanel, DsSwitch,
-  DsObjectRow, DsTreeRow, DsSelectionBar, DsFilterMenu, DsEmptyState } = window.AuroraWebDesignSystem_96e210;
+  DsListRow, DsCheckbox, DsTreeRow, DsSelectionBar, DsFilterMenu, DsEmptyState } = window.AuroraWebDesignSystem_96e210;
 
 function Chrome({state,set,children,label}){
   const {theme,appearance,density}=state;
@@ -40,16 +40,14 @@ function MapGround({children}){return <div style={{position:'relative',flex:1,wi
   {children}</div>;}
 
 const OBJECTS=[
-{id:1,name:'MAZ 5440',plate:'AB 1234-7',state:'moving',speed:'62 км/ч',driver:'Иванов И.',last:'14:32:07',course:135,signal:'good',online:true,unread:3,fresh:'live'},
-{id:2,name:'Volvo FH16',plate:'AC 8871-2',state:'parked',speed:'0 км/ч',driver:'Петров С.',last:'14:31:55',course:0,signal:'good',fresh:'live'},
-{id:3,name:'GAZ Next',plate:'AH 4402-1',state:'moving',speed:'41 км/ч',driver:'—',last:'14:32:01',course:275,signal:'good',online:true,fresh:'live'},
-{id:4,name:'Scania R450',plate:'AB 3390-6',state:'alarm',speed:'78 км/ч',driver:'Новик П.',last:'14:32:06',course:88,signal:'good',unread:12,fresh:'live',
-  service:{icon:'schedule',tone:'warning',label:'Обслуживание истекает через 5 дней'}},
-{id:5,name:'Renault T',plate:'AK 1120-5',state:'offline',speed:'0 км/ч',driver:'Сидоров А.',last:'09:14:22',course:0,signal:'none',fresh:'late',
-  service:{icon:'block',tone:'danger',label:'Обслуживание заблокировано — неоплата'}},
-{id:6,name:'Ford Transit',plate:'AM 7781-3',state:'invalid',speed:'0 км/ч',driver:'Козлов Д.',last:'14:29:40',course:12,signal:'weak',fresh:'recent'},
-{id:7,name:'Iveco Daily',plate:'AO 5512-9',state:'parked',speed:'0 км/ч',driver:'—',last:'14:30:18',course:0,signal:'good',fresh:'recent'},
-{id:8,name:'MAN TGX',plate:'AP 2204-4',state:'moving',speed:'54 км/ч',driver:'Лукаш В.',last:'14:32:04',course:200,signal:'good',fresh:'live'}];
+{id:1,name:'MAZ 5440',plate:'AB 1234-7',state:'moving',speed:'62 км/ч',driver:'Иванов И.',last:'14:32:07',course:135},
+{id:2,name:'Volvo FH16',plate:'AC 8871-2',state:'parked',speed:'0 км/ч',driver:'Петров С.',last:'14:31:55',course:0},
+{id:3,name:'GAZ Next',plate:'AH 4402-1',state:'moving',speed:'41 км/ч',driver:'—',last:'14:32:01',course:275},
+{id:4,name:'Scania R450',plate:'AB 3390-6',state:'alarm',speed:'78 км/ч',driver:'Новик П.',last:'14:32:06',course:88},
+{id:5,name:'Renault T',plate:'AK 1120-5',state:'offline',speed:'0 км/ч',driver:'Сидоров А.',last:'09:14:22',course:0},
+{id:6,name:'Ford Transit',plate:'AM 7781-3',state:'invalid',speed:'0 км/ч',driver:'Козлов Д.',last:'14:29:40',course:12},
+{id:7,name:'Iveco Daily',plate:'AO 5512-9',state:'parked',speed:'0 км/ч',driver:'—',last:'14:30:18',course:0},
+{id:8,name:'MAN TGX',plate:'AP 2204-4',state:'moving',speed:'54 км/ч',driver:'Лукаш В.',last:'14:32:04',course:200}];
 const USERS=[
 {id:'u1',name:'Петров С.',unread:3,groups:[{id:'g1',name:'Дальние рейсы',ids:[1,2,4]},{id:'g2',name:'Доставка по городу',ids:[3,6,7]}]},
 {id:'u2',name:'Новик П.',unread:12,groups:[{id:'g3',name:'Прицепы',tag:true,ids:[5,8]}]}];
@@ -79,12 +77,13 @@ function ObjectTree({list,sel,setSel,active,setActive}){
             selected={ids.filter(i=>sel.has(i)).length} total={ids.length}
             select={boxOf(ids)} onSelectChange={n=>put(ids,n==='checked')}/>
           {isOpen(g.id)?ids.map(id=>{const o=OBJECTS.find(x=>x.id===id);
-            return <DsObjectRow key={id} indent={28} name={o.name} state={o.state} course={o.course} signal={o.signal}
-              online={o.online} unread={o.unread||0} service={o.service}
-              freshness={o.fresh} freshnessLabel={'Последнее сообщение '+o.last}
-              details={o.speed+' · '+o.driver+' · '+o.last}
-              active={id===active} onClick={()=>setActive(id)}
-              select={sel.has(id)?'checked':'unchecked'} onSelectChange={n=>put([id],n==='checked')}/>;}):null}
+            return <div key={id} style={{display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',paddingLeft:28}}>
+              <DsListRow title={o.name} state={o.state} course={o.course}
+                subtitle={o.speed+' · '+o.driver+' · '+o.last}
+                active={id===active} selected={sel.has(id)} onClick={()=>setActive(id)}/>
+              <DsCheckbox ariaLabel={'Выбрать '+o.name} state={sel.has(id)?'checked':'unchecked'}
+                onChange={n=>put([id],n==='checked')}/>
+            </div>;}):null}
         </div>;}):null}
     </div>;})}</>;
 }

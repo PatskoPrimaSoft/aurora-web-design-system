@@ -737,7 +737,7 @@
       {
         "name": "ds-state-moving",
         "value": "{ds-success-solid}",
-        "usage": "Состояние объекта «в движении» — глиф `DsStateIcon`, `DsObjectRow`. Алиас статуса success."
+        "usage": "Состояние объекта «в движении» — глиф `DsStateIcon`. Алиас статуса success."
       },
       {
         "name": "ds-state-parked",
@@ -1207,7 +1207,7 @@
           "light": "56px",
           "ds-density-compact": "44px"
         },
-        "usage": "Высота строки объекта в панели (`DsListRow`, `DsObjectRow`)."
+        "usage": "Высота строки объекта в панели (`DsListRow`)."
       },
       {
         "name": "ds-cell-pad-x",

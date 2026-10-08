@@ -14,6 +14,15 @@ Angular app.
 
 ## 1. Scope the switch
 
+### Upcoming breaking change: object row
+
+`DsObjectRow`, `DsObjectRowProps` and `dsObjectRowDescription` have been removed.
+Use `DsListRow` with `title` instead of `name` and `subtitle` instead of `details`.
+Compose a separate `DsCheckbox` when selection is needed. Avatar, signal, freshness,
+service and unread indicators belong to the application until their design is approved.
+There is no compatibility alias.
+
+
 ### Upcoming breaking change: user menu
 
 `DsHeaderChip`, `DsHeaderChipProps` and `DsAppHeader.user` have been removed.

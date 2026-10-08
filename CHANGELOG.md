@@ -21,6 +21,9 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ### Removed
 
+- **Breaking:** удалены `DsObjectRow`, его типы, `dsObjectRowDescription` и страница каталога: отдельный дизайн строки объекта пока не утверждён. Примеры используют `DsListRow` и при необходимости внешний `DsCheckbox`; специфичное оформление остаётся задачей приложения.
+
+
 - **Breaking:** удалены `DsFilterBar`, `DsFilterBarProps` и `DsAppliedFilter`, без алиасов совместимости. Собирайте поиск и действия на экране из `DsField` и `DsButton`, применённые фильтры — из `DsChip` в `DsChipGroup`. Изменение требует MAJOR-релиза.
 
 - **Breaking:** `DsBulkBar` переименован в `DsBulkActionsBar`, `DsBulkBarProps` — в `DsBulkActionsBarProps`, без алиасов. Обновите импорты и JSX; параметры и поведение сохранены. Изменение требует MAJOR-релиза.

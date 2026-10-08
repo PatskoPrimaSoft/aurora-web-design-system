@@ -2,7 +2,7 @@ import React from 'react';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
 import { useDsStrings } from '../primitives/DsStrings.jsx';
 /** Словарь состояний объекта — единственный: глиф, тон статуса и подпись.
- *  Им пользуются DsStateIcon и DsObjectRow; подпись — и видимая, и для скринридера. */
+ *  Им пользуются DsStateIcon и DsListRow; подпись — и видимая, и для скринридера. */
 export const dsFleetState={
   moving:{glyph:'navigation',tone:'success',label:'Движение'},
   parked:{glyph:'local_parking',tone:'neutral',label:'Стоянка'},

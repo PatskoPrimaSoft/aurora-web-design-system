@@ -105,20 +105,6 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
   ok(selectAll.calls[0]?.[0]===true,'DsSelectionBar: partial selection selects all');
 }
 
-// ---------------- №3 DsObjectRow
-{
-  const open = spy(), sel = spy();
-  const box = render(h(NS.DsObjectRow, { name: 'Volvo FH16', state: 'alarm', select: 'unchecked', onSelectChange: sel, onClick: open }));
-  const cb = box.querySelector('input[type="checkbox"]'), main = box.querySelector('button[aria-label="Volvo FH16"]');
-  ok(main && nested(box) === 0, 'DsObjectRow: основная зона — кнопка, вложенных контролов нет');
-  ok(!main.contains(cb), 'DsObjectRow: чекбокс — сосед основной зоны');
-  const ks = key(cb, 'keydown', ' '), ke = key(cb, 'keydown', 'Enter');
-  ok(!ks.defaultPrevented && !ke.defaultPrevented && open.calls.length === 0, 'DsObjectRow: Space/Enter на чекбоксе не перехватываются строкой');
-  click(cb); ok(sel.calls.length === 1 && open.calls.length === 0, 'DsObjectRow: клик по чекбоксу — только выбор');
-  click(main); ok(open.calls.length === 1, 'DsObjectRow: основная зона открывает объект');
-  const plain = render(h(NS.DsObjectRow, { name: 'GAZ', state: 'parked' }));
-  ok(!plain.querySelector('button') && plain.querySelector('[role="group"][aria-label="GAZ"]'), 'DsObjectRow без onClick — не контрол, но с именем');
-}
 // ---------------- №3 DsTreeRow
 {
   const open = spy(), tog = spy(), sel = spy();

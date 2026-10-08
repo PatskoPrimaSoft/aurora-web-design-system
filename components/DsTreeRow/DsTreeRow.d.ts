@@ -1,8 +1,8 @@
 /**
  * One collapsible level of the object tree. The panel nests it: user (level 0,
- * avatar) → group or label (level 1, `sell` icon) → DsObjectRow leaves.
+ * avatar) → group or label (level 1, `sell` icon) → DsListRow leaves.
  *
- * Why a separate component from DsObjectRow: the header carries aggregate state —
+ * Why a separate component from DsListRow: the header carries aggregate state —
  * how many of its children are selected (`selected / total`), a tri-state
  * select-all, and an aggregated unread count — and it must stay visually lighter
  * than its leaves so the eye reads the tree structure before the rows. Group
