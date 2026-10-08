@@ -1,4 +1,4 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · кнопки" height=780 subtitle="Кнопка действия с текстом, иконками и состоянием загрузки" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · кнопки" height=1400 subtitle="Кнопка действия с текстом, иконками и состоянием загрузки" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
@@ -6,15 +6,40 @@ body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);pa
 .examples{display:flex;flex-direction:column;gap:32px}
 .section{display:flex;flex-direction:column;gap:16px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.sample{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
-.form{display:flex;flex-direction:column;gap:16px;max-width:360px}
+.sample{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;max-width:100%}
+.form{display:flex;flex-direction:column;gap:16px;max-width:360px}.actions{justify-content:flex-end}
 h3{font:var(--ds-type-body-strong);margin:0}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
 function section(title,content){return h('section',{className:'section','aria-label':title},h('h3',null,title),content);}
+function SavePair(){
+  var name=React.useState(''),error=React.useState(''),message=React.useState('Измените название и сохраните объект.');
+  function submit(e){
+    e.preventDefault();
+    if(!name[0].trim()){error[1]('Введите название объекта.');message[1]('Объект не сохранён. Исправьте поле названия.');e.currentTarget.querySelector('input').focus();return;}
+    error[1]('');message[1]('Объект «'+name[0].trim()+'» сохранён.');
+  }
+  function cancel(){name[1]('');error[1]('');message[1]('Изменения отменены.');}
+  return section('Сохранение и отмена',h('form',{className:'form',noValidate:true,onSubmit:submit},
+    h(S.DsField,{label:'Название объекта',required:true,value:name[0],error:error[0],onChange:function(e){name[1](e.target.value);if(error[0])error[1]('');}}),
+    h('div',{className:'row actions'},h(S.DsButton,{tone:'secondary',onClick:cancel},'Отмена'),h(S.DsButton,{type:'submit'},'Сохранить')),
+    h('p',{className:'cap',role:'status'},message[0])));
+}
+function DeletePair(){
+  var deleted=React.useState(false),message=React.useState('Удалить объект «Volvo FH16» из примера?');
+  return section('Удаление и отмена',h('div',{className:'form'},
+    h('p',{className:'cap',role:'status'},message[0]),
+    h('div',{className:'row actions'},
+      deleted[0]?null:h(S.DsButton,{key:'cancel',tone:'secondary',onClick:function(){message[1]('Удаление отменено. Объект сохранён.');}},'Отмена'),
+      h(S.DsButton,{key:'action',tone:deleted[0]?'secondary':'danger',onClick:function(){
+        if(deleted[0]){deleted[1](false);message[1]('Удалить объект «Volvo FH16» из примера?');}
+        else{deleted[1](true);message[1]('Объект удалён из примера.');}
+      }},deleted[0]?'Восстановить пример':'Удалить объект'))));
+}
+
 function App(){
-  var action=React.useState('Нажмите любую доступную кнопку.'),saving=React.useState(false),saved=React.useState(false),timer=React.useRef();
+  var wide=React.useState(false),action=React.useState('Нажмите любую доступную кнопку.'),saving=React.useState(false),saved=React.useState(false),timer=React.useRef();
   React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
   function report(label){action[1]('Выполнено действие «'+label+'».');}
   function save(){saving[1](true);saved[1](false);timer.current=setTimeout(function(){saving[1](false);saved[1](true);},1200);}
@@ -29,9 +54,17 @@ function App(){
     section('Недоступное действие',h('div',{className:'row'},['primary','secondary','subtle','ghost','danger','accent'].map(function(tone){return h('div',{className:'sample',key:tone},h(S.DsButton,{tone:tone,disabled:true},tone==='danger'?'Удалить':'Сохранить'),h('span',{className:'cap'},tone));}))),
     h('p',{className:'cap',role:'status','aria-label':'Результат действия'},action[0]),
     section('Сохранение с загрузкой',h('div',{className:'form'},
-      h('p',{className:'cap'},'Кнопка на всю ширину области. Во время сохранения повторное нажатие недоступно.'),
-      h(S.DsButton,{fullWidth:true,icon:'save',loading:saving[0],onClick:save},saving[0]?'Сохранение…':'Сохранить изменения'),
-      h('p',{className:'cap',role:'status','aria-label':'Результат сохранения'},saving[0]?'Сохраняем изменения…':saved[0]?'Изменения сохранены.':'Изменения ещё не сохранены.'))));
+      h('p',{className:'cap'},'Цвет, ширина и фокус сохраняются. Повторное нажатие недоступно.'),
+      h('div',null,h(S.DsButton,{icon:'save',loading:saving[0],onClick:save},'Сохранить изменения')),
+      h(S.DsButton,{tone:'secondary',fullWidth:true,icon:'save',loading:saving[0],onClick:save},'Сохранить изменения'),
+      h('p',{className:'cap',role:'status','aria-label':'Результат сохранения'},saving[0]?'Сохраняем изменения…':saved[0]?'Изменения сохранены.':'Изменения ещё не сохранены.'))),
+    section('Длинная подпись',h('div',{className:'form'},
+      h('div',{style:{width:wide[0]?'100%':200,maxWidth:'100%',display:'flex'}},h(S.DsButton,{tone:'secondary',icon:'download',iconRight:'arrow_forward',fullWidth:true,onClick:function(){report('Скачать отчёт по выбранным объектам');}},'Скачать отчёт по выбранным объектам')),
+      h('div',null,h(S.DsButton,{tone:'ghost',size:'sm',onClick:function(){wide[1](!wide[0]);}},wide[0]?'Сузить область':'Расширить область')))),
+    h(SavePair),h(DeletePair),
+    section('Причина недоступности',h('div',{className:'form'},
+      h('div',null,h(S.DsButton,{tone:'secondary',disabled:true,'aria-describedby':'export-reason'},'Экспорт')),
+      h('p',{id:'export-reason',className:'cap'},'Экспорт доступен администратору. Обратитесь к администратору проекта.'))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

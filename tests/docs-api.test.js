@@ -38,6 +38,15 @@ assert.ok(actual.find(c=>c.name==='DsTabPanel').props.some(p=>p.name==='idBase')
 assert.equal(actual.find(c=>c.name==='DsField').forwardsNativeAttributes,true);
 assert.equal(actual.find(c=>c.name==='DsButton').forwardsNativeAttributes,true);
 assert.match(renderProps({...demo,description:'<script>alert(1)</script>'}),/&lt;script&gt;/);
+const buttonApi=actual.find(c=>c.name==='DsButton');
+assert.ok(buttonApi.props.some(p=>p.name==='form'&&p.forwarded),'native form attributes remain in extracted contract');
+for(const render of [renderProps,renderComponentProps]){
+ const html=render(buttonApi);
+ assert.ok(html.includes('<code>loading</code>'),'own button props remain documented');
+ assert.ok(!html.includes('<code>form</code>'),'inherited native props do not expand the component table');
+ assert.match(html,/native attributes/);
+}
+
 const componentProps=renderComponentProps(demo);
 assert.match(componentProps,/<h2[^>]*>Параметры<\/h2>/);
 assert.match(componentProps,/aria-label="Параметры DsDemo"/);

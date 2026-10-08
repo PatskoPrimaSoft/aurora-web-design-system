@@ -32,7 +32,7 @@ export function renderMarkdown({root,path,knownRoutes=new Map()}){
  return{html:md.renderer.render(tokens,md.options,{}),text:text.join(' '),links};
 }
 export function renderProps(component){
- const rows=component.props.map(prop=>`<tr><th scope="row"><code>${escapeHtml(prop.name)}</code></th><td><code>${escapeHtml(prop.type)}</code></td><td>${prop.required?'Да':'Нет'}</td><td>${prop.defaultValue===null?'—':`<code>${escapeHtml(prop.defaultValue)}</code>`}${prop.defaultDescription?`<p>${escapeHtml(prop.defaultDescription)}</p>`:''}</td><td>${escapeHtml(prop.description)}</td></tr>`).join('');
+ const rows=component.props.filter(prop=>!prop.forwarded).map(prop=>`<tr><th scope="row"><code>${escapeHtml(prop.name)}</code></th><td><code>${escapeHtml(prop.type)}</code></td><td>${prop.required?'Да':'Нет'}</td><td>${prop.defaultValue===null?'—':`<code>${escapeHtml(prop.defaultValue)}</code>`}${prop.defaultDescription?`<p>${escapeHtml(prop.defaultDescription)}</p>`:''}</td><td>${escapeHtml(prop.description)}</td></tr>`).join('');
  return `<p>${escapeHtml(component.description)}</p><p>Исходник: <code>${escapeHtml(component.sourcePath)}</code> · декларация: <code>${escapeHtml(component.declarationPath)}</code></p><div class="table-scroll"><table><caption>Props ${escapeHtml(component.name)}</caption><thead><tr><th scope="col">Имя</th><th scope="col">Тип</th><th scope="col">Обязателен</th><th scope="col">Default</th><th scope="col">Описание</th></tr></thead><tbody>${rows}</tbody></table></div>${component.forwardsNativeAttributes?'<p>Остальные native attributes передаются DOM-элементу через rest.</p>':''}`;
 }
 export function documentPage({title,html,back='/index.html'}){
@@ -41,7 +41,7 @@ export function documentPage({title,html,back='/index.html'}){
 export function renderComponentProps(component){
  if(!component.props.length)return '';
  const name=escapeHtml(component.name),heading='parameters-'+name;
- const rows=component.props.map(prop=>{
+ const rows=component.props.filter(prop=>!prop.forwarded).map(prop=>{
   const defaultNote=prop.defaultDescription&&prop.defaultDescription!==prop.defaultValue?.replace(/^(['"])(.*)\1$/s,'$2')?`<p>${escapeHtml(prop.defaultDescription)}</p>`:'';
   return `<tr><th scope="row"><code>${escapeHtml(prop.name)}</code>${prop.required?'<span class="prop-required">Обязательный</span>':''}</th><td><code>${escapeHtml(prop.type)}</code></td><td>${prop.defaultValue===null?'—':`<code>${escapeHtml(prop.defaultValue)}</code>`}${defaultNote}</td><td>${escapeHtml(prop.description)}</td></tr>`;
  }).join('');

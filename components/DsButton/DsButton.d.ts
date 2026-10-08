@@ -1,20 +1,22 @@
+import * as React from 'react';
+
 /** Кнопка действия. Размеры зависят от плотности интерфейса. */
-export interface DsButtonProps {
+export interface DsButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Визуальная важность действия; danger — разрушительное действие. */
   tone?: 'primary' | 'secondary' | 'subtle' | 'ghost' | 'danger' | 'accent';
   /** Высота кнопки из токенов плотности. */
   size?: 'sm' | 'md' | 'lg';
   /** Имя Material Symbols Outlined, иконка перед текстом. */
   icon?: string;
-  /** Иконка после текста. Скрывается во время загрузки. */
+  /** Иконка после текста; размер совпадает с левой. */
   iconRight?: string;
-  /** Спиннер вместо левой иконки; повторное нажатие недоступно. */
+  /** Спиннер по центру; сохраняет ширину, тон, доступное имя и фокус, блокирует повторное действие. */
   loading?: boolean;
   /** Отключает действие и исключает кнопку из последовательности Tab. */
   disabled?: boolean;
   /** Растягивает кнопку на ширину родителя. */
   fullWidth?: boolean;
-  /** Видимая подпись действия. */
+  /** Подпись действия; длинный текст сокращается визуально, доступное имя остаётся полным. */
   children?: React.ReactNode;
   /** Вызывается при активации доступной кнопки мышью или клавиатурой. */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;

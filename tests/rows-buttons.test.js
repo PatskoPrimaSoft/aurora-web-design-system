@@ -215,6 +215,29 @@ ok(head(table({ selectedIds: [4, 1, 3] })).checked === true, '№4: все ви�
   const e = render(h(NS.DsTable, { columns: cols, rows: [], selectable: true, selectedIds: [5] }));
   ok(head(e).disabled && head(e).checked === false, '№4: пустая таблица — «выбрать все» отключён');
 }
+// DsButton: загрузка сохраняет фокус, блокирует действие и отправку формы.
+{
+  const box=d.createElement('div');d.body.appendChild(box);
+  const root=ReactDOM.createRoot(box),action=spy(),submit=spy(),parentClick=spy();
+  function update(props){act(()=>root.render(h('form',{onSubmit:e=>{e.preventDefault();submit();},onClick:parentClick},
+    h(NS.DsButton,{type:'submit',icon:'save',iconRight:'arrow_forward',onClick:action,...props},'Сохранить изменения'))));}
+  update({});
+  const button=box.querySelector('button');act(()=>button.focus());
+  const color=button.style.color,background=button.style.background;
+  update({loading:true});
+  ok(!button.disabled&&button.getAttribute('aria-disabled')==='true'&&button.getAttribute('aria-busy')==='true','DsButton: загрузка объявлена и сохраняет фокусируемость');
+  ok(d.activeElement===button&&button.style.color===color&&button.style.background===background,'DsButton: загрузка сохраняет фокус и тон');
+  const event=fire(button,'click',{},w.MouseEvent);
+  ok(event.defaultPrevented&&action.calls.length===0&&submit.calls.length===0&&parentClick.calls.length===0,'DsButton: загрузка блокирует действие, отправку формы и всплытие клика');
+  ok(button.textContent.includes('Сохранить изменения'),'DsButton: при загрузке остаётся доступная подпись');
+  update({loading:false});
+  click(button);
+  ok(action.calls.length===1&&submit.calls.length===1,'DsButton: после загрузки действие и submit восстановлены');
+  update({disabled:true,loading:true});
+  ok(button.disabled,'DsButton: явный disabled сохраняет нативную блокировку');
+  act(()=>root.unmount());box.remove();
+}
+
 // ---------------- №8 нажатие
 const img = (el) => el.style.backgroundImage || '';
 const mouse = { pointerType: 'mouse', button: 0 };
