@@ -20,3 +20,7 @@
 :where([data-ds-chip-remove]){background:transparent}
 :where([data-ds-chip-remove]:not(:disabled):hover){background:var(--ds-surface-hover)}
 :where([data-ds-chip-remove]:not(:disabled):active){background:var(--ds-surface-active)}
+
+:where([data-ds-stepper-step]){background:transparent;transition:var(--ds-transition-control)}
+:where(button[data-ds-stepper-step]:not(:disabled):hover,button[data-ds-stepper-step]:not(:disabled):focus-visible){background:var(--ds-surface-hover)}
+:where(button[data-ds-stepper-step]:not(:disabled):active){background:var(--ds-surface-active)}

@@ -21,6 +21,26 @@ const mount = (el) => { const box = d.createElement('div'); d.body.appendChild(b
 const key = (el, k, extra = {}) => { const e = new w.KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true, ...extra }); act(() => el.dispatchEvent(e)); return e; };
 const click = (el) => act(() => el.click());
 
+// Stepper: completion must not make a locked step clickable or hide the current number.
+{
+  const steps=[{label:'Файл',disabled:true},{label:'Поля'},{label:'Проверка'}],seen=[];
+  const props={steps,active:1,completed:[0,1],onSelect:i=>seen.push(i),ariaLabel:'Импорт объектов'};
+  const {box,rerender,unmount}=mount(h(NS.DsStepper,props));
+  ok(box.querySelector('ol').getAttribute('aria-label')==='Импорт объектов','DsStepper: имя последовательности');
+  const buttons=box.querySelectorAll('button');
+  click(buttons[0]);ok(buttons[0].disabled&&seen.length===0,'DsStepper: завершённый disabled шаг не вызывает выбор');
+  click(buttons[1]);ok(seen.join()==='1','DsStepper: доступный текущий шаг вызывает выбор');
+  ok(buttons[1].querySelector('[aria-hidden="true"]')?.textContent==='2','DsStepper: текущий шаг сохраняет номер при completed');
+  ok(box.textContent.includes('Шаг 2 из 3')&&box.textContent.includes('текущий')&&box.textContent.includes('завершён')&&box.textContent.includes('недоступен'),'DsStepper: текстовые статусы шагов');
+  rerender(h(NS.DsStepper,{...props,isComplete:true}));
+  ok(!box.querySelector('[aria-current]')&&box.querySelectorAll('.material-symbols-outlined').length===3,'DsStepper: вся задача завершена без текущего шага');
+  rerender(h(NS.DsStepper,{steps,active:1}));
+  ok(!box.querySelector('button')&&box.querySelector('[aria-current="step"]'),'DsStepper: режим чтения без недоступных кнопок');
+  rerender(h(NS.DsStringsProvider,{strings:NS.dsStringsEn},h(NS.DsStepper,{steps,active:1})));
+  ok(box.querySelector('ol').getAttribute('aria-label')==='Task steps'&&box.textContent.includes('Step 2 of 3')&&box.textContent.includes('current'),'DsStepper: статусы используют общий словарь');
+  unmount();
+}
+
 // ---------------- №7 вкладки внутри страницы
 {
   const items = [{ id: 'a', label: 'Датчики' }, { id: 'b', label: 'Треки' }, { id: 'c', label: 'Отчёты' }];
