@@ -21,6 +21,25 @@ const mount = (el) => { const box = d.createElement('div'); d.body.appendChild(b
 const key = (el, k, extra = {}) => { const e = new w.KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true, ...extra }); act(() => el.dispatchEvent(e)); return e; };
 const click = (el) => act(() => el.click());
 
+// Banner: announcement urgency is explicit and independent of visual tone.
+{
+  let closed=0;
+  const props={tone:'danger',title:'Данные недоступны',children:'Попробуйте позднее.',onClose:()=>closed++,closeLabel:'Скрыть сообщение об ошибке'};
+  const view=mount(h(NS.DsBanner,props));
+  ok(!view.box.querySelector('[role="alert"],[role="status"],[aria-live]'),'DsBanner: статичная ошибка не объявляется автоматически');
+  ok(view.box.querySelector('h2')?.textContent==='Данные недоступны','DsBanner: заголовок по умолчанию h2');
+  const close=view.box.querySelector('button');
+  ok(close?.querySelector('[data-ds-icon-button-label]')?.textContent===props.closeLabel,'DsBanner: системная кнопка закрытия с контекстной подписью');
+  click(close);ok(closed===1,'DsBanner: закрытие сообщает родителю');
+  view.rerender(h(NS.DsBanner,{...props,announcement:'polite',headingLevel:'h4'}));
+  ok(view.box.querySelector('[role="status"][aria-atomic="true"]')&&view.box.querySelector('h4'),'DsBanner: polite и уровень заголовка независимы от danger');
+  view.rerender(h(NS.DsBanner,{...props,tone:'info',announcement:'assertive',headingLevel:'none'}));
+  ok(view.box.querySelector('[role="alert"][aria-atomic="true"]')&&!view.box.querySelector('h1,h2,h3,h4,h5,h6'),'DsBanner: assertive и обычная подпись независимы от info');
+  view.rerender(h(NS.DsStringsProvider,{strings:NS.dsStringsEn},h(NS.DsBanner,{title:'Notice',onClose:()=>{}})));
+  ok(view.box.querySelector('[data-ds-icon-button-label]')?.textContent==='Close','DsBanner: стандартная подпись закрытия локализована');
+  view.rerender(h(NS.DsBanner,{title:'Сообщение'}));ok(!view.box.querySelector('button'),'DsBanner: без onClose нет кнопки');view.unmount();
+}
+
 // Stepper: completion must not make a locked step clickable or hide the current number.
 {
   const steps=[{label:'Файл',disabled:true},{label:'Поля'},{label:'Проверка'}],seen=[];

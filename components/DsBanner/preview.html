@@ -1,4 +1,4 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=1050 subtitle="Сообщение об условии или проблеме рядом с содержимым страницы" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=1600 subtitle="Сообщение об условии или проблеме рядом с содержимым страницы" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
@@ -7,29 +7,63 @@ body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);pa
 h3{font:var(--ds-type-label);margin:0 0 12px}
 .variants{display:flex;flex-direction:column;gap:12px}
 p{margin:12px 0;color:var(--ds-fg-muted)}
+.text-link{color:var(--ds-brand-text);text-underline-offset:3px;overflow-wrap:anywhere}
+.text-link:hover{text-decoration-thickness:2px}
+.help{margin-top:12px;padding:12px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-container)}
+.help h4{font:var(--ds-type-label);margin:0}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 @media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
+function RetryExample(){var phase=React.useState('error'),attempts=React.useState(0),timer=React.useRef(null);
+ React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
+ function retry(){
+  if(phase[0]==='loading')return;
+  if(phase[0]==='ready'){phase[1]('error');attempts[1](0);return;}
+  phase[1]('loading');attempts[1](function(count){return count+1;});
+  timer.current=setTimeout(function(){phase[1]('ready');},1200);
+ }
+ var title=phase[0]==='ready'?'Соединение восстановлено':phase[0]==='loading'?'Загружаем отчёт':'Не удалось загрузить отчёт';
+ var body=phase[0]==='ready'?'Данные отчёта снова доступны.':phase[0]==='loading'?'Повторный запрос выполняется. Дождитесь ответа.':'Временно нет связи с сервисом отчётов. Повторите запрос; выбранный период сохранён.';
+ return h('section',{'aria-labelledby':'retry-title'},h('h3',{id:'retry-title'},'Повторный запрос'),
+  h(S.DsBanner,{headingLevel:'h4',tone:phase[0]==='error'?'danger':phase[0]==='ready'?'success':'info',announcement:'polite',title:title,
+   actions:h(S.DsButton,{tone:'secondary',size:'sm',loading:phase[0]==='loading',onClick:retry},phase[0]==='ready'?'Снова показать ошибку':'Повторить запрос')},body),
+  h('p',null,'Попыток: '+attempts[0]));
+}
+function TwoActionsExample(){var short=React.useState(false),help=React.useState(false),helpRef=React.useRef(null),linkRef=React.useRef(null);
+ React.useEffect(function(){if(help[0]&&helpRef.current)helpRef.current.focus();},[help[0]]);
+ return h('section',{'aria-labelledby':'two-actions-title'},h('h3',{id:'two-actions-title'},'Сообщение с двумя действиями'),
+  h(S.DsBanner,{headingLevel:'h4',tone:short[0]?'info':'warning',announcement:'polite',title:short[0]?'Период соответствует сроку хранения':'В отчёте за год будут доступны не все поездки',actions:[
+   h(S.DsButton,{key:'period',tone:'secondary',size:'sm',onClick:function(){short[1](!short[0]);}},short[0]?'Вернуть исходный период':'Выбрать 30 дней'),
+   h('a',{key:'help',className:'text-link',href:'#storage-help',ref:linkRef,onClick:function(event){event.preventDefault();help[1](true);}},'О сроке хранения данных')
+  ]},short[0]?'Для отчёта выбраны последние 30 дней. Все поездки этого периода доступны.':'История поездок хранится 90 дней. За более ранние даты подробные маршруты уже недоступны, поэтому итоговые показатели за год будут неполными. Выберите последние 30 дней или узнайте, какие данные сохраняются дольше.'),
+  h('div',{id:'storage-help',className:'help',hidden:!help[0],tabIndex:-1,ref:helpRef},
+   h('h4',null,'Срок хранения данных'),h('p',null,'Подробная история поездок хранится 90 дней. Сохранённые выгрузки доступны отдельно; изменение периода не восстанавливает удалённые маршруты.'),
+   h(S.DsButton,{tone:'ghost',size:'sm',onClick:function(){help[1](false);linkRef.current.focus();}},'Закрыть пояснение')));
+}
 function App(){var period=React.useState(false),shown=React.useState(true),restore=React.useRef(null);
  React.useEffect(function(){if(!shown[0]&&restore.current)restore.current.querySelector('button').focus();},[shown[0]]);
  return h('div',{className:'examples'},
   h('section',{'aria-labelledby':'tones-title'},h('h3',{id:'tones-title'},'Тоны сообщения'),
    h('div',{className:'variants'},
-    h(S.DsBanner,{tone:'info',title:'Отчёт строится'},'Данные за неделю появятся через пару минут.'),
-    h(S.DsBanner,{tone:'success',title:'Все объекты передают данные'},'В группе нет объектов с потерянной связью.'),
-    h(S.DsBanner,{tone:'warning',title:'Заканчивается срок хранения'},'Выгрузите данные за прошлый месяц до 15 октября.'),
-    h(S.DsBanner,{tone:'danger',title:'Не удалось загрузить данные'},'Проверьте соединение и повторите запрос.'),
-    h(S.DsBanner,{tone:'neutral',title:'Доступ только для чтения'},'Для редактирования обратитесь к администратору.'))),
+    h(S.DsBanner,{headingLevel:'h4',tone:'info',title:'Отчёт строится'},'Данные за неделю появятся через пару минут.'),
+    h(S.DsBanner,{headingLevel:'h4',tone:'success',title:'Все объекты передают данные'},'В группе нет объектов с потерянной связью.'),
+    h(S.DsBanner,{headingLevel:'h4',tone:'warning',title:'Заканчивается срок хранения'},'Выгрузите данные за прошлый месяц до 15 октября.'),
+    h(S.DsBanner,{headingLevel:'h4',tone:'danger',title:'Не удалось загрузить данные'},'Проверьте соединение и повторите запрос.'),
+    h(S.DsBanner,{headingLevel:'h4',tone:'neutral',title:'Доступ только для чтения'},'Для редактирования обратитесь к администратору.'))),
   h('section',{'aria-labelledby':'compact-title'},h('h3',{id:'compact-title'},'Компактное сообщение'),
-   h(S.DsBanner,{tone:'warning',compact:true,title:'У трёх объектов нет координат'})),
+   h(S.DsBanner,{headingLevel:'none',tone:'warning',compact:true,title:'У трёх объектов нет координат'})),
   h('section',{'aria-labelledby':'action-title'},h('h3',{id:'action-title'},'Исправление проблемы'),
    h('p',null,period[0]?'Период отчёта: последние 7 дней.':'Период отчёта: последний год.'),
-   period[0]?h(S.DsBanner,{tone:'info',title:'Доступны данные за весь выбранный период'},'Хранение данных — 90 дней.'):
-    h(S.DsBanner,{tone:'warning',title:'Период отчёта длиннее срока хранения',actions:h(S.DsButton,{size:'sm',tone:'secondary',onClick:function(){period[1](true);}},'Выбрать последние 7 дней')},'Часть данных за последний год уже недоступна. Выберите более короткий период.'),
+   period[0]?h(S.DsBanner,{headingLevel:'h4',announcement:'polite',tone:'info',title:'Доступны данные за весь выбранный период'},'Хранение данных — 90 дней.'):
+    h(S.DsBanner,{headingLevel:'h4',announcement:'polite',tone:'warning',title:'Период отчёта длиннее срока хранения',actions:h(S.DsButton,{size:'sm',tone:'secondary',onClick:function(){period[1](true);}},'Выбрать последние 7 дней')},'Часть данных за последний год уже недоступна. Выберите более короткий период.'),
    period[0]?h('div',{className:'actions'},h(S.DsButton,{size:'sm',tone:'ghost',onClick:function(){period[1](false);}},'Вернуть исходный период')):null),
+  h(RetryExample),
+  h(TwoActionsExample),
+  h('section',{'aria-labelledby':'no-title'},h('h3',{id:'no-title'},'Без заголовка'),
+   h(S.DsBanner,{tone:'neutral',compact:true},'Автоматическое обновление отключено. Данные обновятся после следующего запроса.')),
   h('section',{'aria-labelledby':'close-title'},h('h3',{id:'close-title'},'Закрытие сообщения'),
-   shown[0]?h(S.DsBanner,{tone:'info',title:'Плановые работы сегодня в 23:00',onClose:function(){shown[1](false);}},'В течение 10 минут отчёты могут открываться медленнее.'):h('p',null,'Сообщение скрыто.'),
+   shown[0]?h(S.DsBanner,{headingLevel:'h4',tone:'info',title:'Плановые работы сегодня в 23:00',closeLabel:'Скрыть сообщение о плановых работах',onClose:function(){shown[1](false);}},'В течение 10 минут отчёты могут открываться медленнее.'):h('p',null,'Сообщение скрыто.'),
    h('div',{className:'actions',ref:restore},h(S.DsButton,{size:'sm',tone:'secondary',disabled:shown[0],onClick:function(){shown[1](true);}},'Показать сообщение снова'))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
