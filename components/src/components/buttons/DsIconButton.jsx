@@ -59,7 +59,7 @@ export function DsIconButton({icon,label,tone='ghost',size='md',active,loading=f
   return <><button {...own} {...handlers} ref={buttonRef} type={type} aria-label={undefined} title={undefined}
     onFocus={e=>{showTip();own.onFocus?.(e);}} onBlur={e=>{hideTip();handlers.onBlur(e);}}
     onPointerEnter={e=>{handlers.onPointerEnter(e);if(e.pointerType==='mouse')showTip();}}
-    onPointerLeave={e=>{handlers.onPointerLeave(e);if(!tipRef.current?.contains(e.relatedTarget))hideTip();}}
+    onPointerLeave={e=>{handlers.onPointerLeave(e);if(!e.relatedTarget?.nodeType||!tipRef.current?.contains(e.relatedTarget))hideTip();}}
     aria-describedby={[own['aria-describedby'],tip?tipId:undefined].filter(Boolean).join(' ')||undefined}
     disabled={disabled} aria-disabled={loading||own['aria-disabled']} aria-busy={loading||own['aria-busy']} onClick={activate}
     aria-pressed={active==null?undefined:!!active}
@@ -75,7 +75,7 @@ export function DsIconButton({icon,label,tone='ghost',size='md',active,loading=f
       background:'var(--ds-accent-mark)',border:'1px solid '+(bg==='transparent'?'var(--ds-surface)':bg)}}/>:null}
   </button>
   {tip?createPortal(<span ref={tipRef} id={tipId} role="tooltip"
-    onPointerLeave={e=>{if(!buttonRef.current?.contains(e.relatedTarget))hideTip();}}
+    onPointerLeave={e=>{if(!e.relatedTarget?.nodeType||!buttonRef.current?.contains(e.relatedTarget))hideTip();}}
     style={{position:'fixed',left:tip.left,top:tip.top,zIndex:1000,maxWidth:'min(320px, calc(100vw - 8px))',
       padding:'var(--ds-pad-tight) var(--ds-pad-sm)',borderRadius:'var(--ds-radius-sm)',background:'var(--ds-surface-inverse)',color:'var(--ds-fg-on-inverse)',
       font:'var(--ds-type-caption)',overflowWrap:'anywhere',boxShadow:'var(--ds-shadow-sm)'}}>{label}</span>,document.body):null}

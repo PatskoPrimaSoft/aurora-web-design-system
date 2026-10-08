@@ -75,6 +75,38 @@ const items = [{ id: 'a', label: 'Профиль' }, { id: 'b', label: 'Наст
   click(mi()[1]); ok(picked[0] === 'b' && !box.querySelector('[role="menu"]') && d.activeElement === trig, 'меню: выбор пункта закрывает и возвращает фокус');
   key(trig, 'ArrowDown'); key(mi()[0], 'Tab'); ok(!box.querySelector('[role="menu"]'), 'меню: Tab закрывает меню');
 }
+// ---------------- Меню: семантика выбора, имя и поиск по подписи
+{
+  const picked=[];
+  const App=()=>{const [checked,setChecked]=React.useState(false);return h(NS.DsMenu,{
+    trigger:h(NS.DsButton,{id:'menu-selection-trigger'},'Вид'),
+    items:[{id:'map',label:'Карта',icon:'map',type:'radio',checked:true},
+      {id:'tracks',label:'Треки',type:'checkbox',checked},
+      {id:'disabled',label:'Точки',disabled:true},{id:'table',label:'Таблица'}],
+    onSelect:it=>{picked.push(it.id);if(it.id==='tracks')setChecked(v=>!v);}});};
+  const {box,unmount}=mount(h(App));const trigger=box.querySelector('button');click(trigger);
+  const menu=()=>box.querySelector('[role="menu"]');
+  ok(menu().getAttribute('aria-labelledby')===trigger.id,'меню: доступное имя связано с триггером');
+  const radio=box.querySelector('[role="menuitemradio"]');
+  ok(radio?.getAttribute('aria-checked')==='true','меню: radio объявляет выбранное значение');
+  const checkbox=()=>box.querySelector('[role="menuitemcheckbox"]');
+  ok(checkbox()?.getAttribute('aria-checked')==='false','меню: checkbox объявляет невыбранное значение');
+  key(d.activeElement,'т');
+  ok(d.activeElement===checkbox(),'меню: поиск по букве включает варианты выбора');
+  key(d.activeElement,'а');
+  ok(d.activeElement.textContent==='Таблица','меню: поиск по нескольким буквам пропускает disabled');
+  checkbox().focus();click(checkbox());
+  ok(menu()&&checkbox()?.getAttribute('aria-checked')==='true'&&d.activeElement===checkbox(),'меню: checkbox меняет значение без закрытия и потери фокуса');
+  ok(box.querySelectorAll('[data-ds-menu-icon-slot]').length===4,'меню: иконки имеют единую колонку');
+  if(radio)click(radio);
+  ok(!menu()&&d.activeElement===trigger&&picked.join() ==='tracks,map','меню: radio закрывает меню и возвращает фокус');
+  unmount();
+  const named=mount(h(NS.DsMenu,{menuLabel:'Фильтры объектов',trigger:h(NS.DsButton,null,'Фильтры'),items:[{label:'Активные',type:'checkbox',closeOnSelect:true}]}));
+  click(named.box.querySelector('button'));
+  ok(named.box.querySelector('[role="menu"]')?.getAttribute('aria-label')==='Фильтры объектов','меню: отдельное доступное имя');
+  click(named.box.querySelector('[role="menuitemcheckbox"]')||named.box.querySelector('[role="menuitem"]'));
+  ok(!named.box.querySelector('[role="menu"]'),'меню: closeOnSelect переопределяет поведение checkbox');named.unmount();
+}
 // ---------------- Меню пользователя — единственный публичный контрол профиля
 {
   ok(!('DsHeaderChip' in NS), 'DsHeaderChip удалён из публичного API без алиаса');
