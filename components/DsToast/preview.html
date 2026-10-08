@@ -1,21 +1,33 @@
-<!-- @dsCard group="5 · Компоненты · обратная связь" height=310 subtitle="Результат действия на инверсном грунте; одно действие — обычно «Отменить»" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=720 subtitle="Кратко сообщает результат действия и позволяет его отменить" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
+h3{font:var(--ds-type-label);margin:0 0 12px}
+.variants{display:flex;flex-direction:column;gap:12px;align-items:stretch;max-width:520px}
+.sample{display:flex;flex-direction:column;gap:8px;min-width:0}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.demo{position:relative;transform:translateZ(0);min-height:220px;overflow-wrap:anywhere}
+.demo>div{width:calc(100% - 32px);max-width:520px}
+.demo>div>div{width:100%}
+.description{margin:12px 0 0;color:var(--ds-fg-muted)}
+@media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'col',style:{alignItems:'flex-start'}},
-  h(S.DsToast,{tone:'neutral',icon:'info',onClose:function(){}},'Настройки сохранены.'),
-  h(S.DsToast,{tone:'info',onClose:function(){}},'Отчёт формируется. Это может занять несколько минут.'),
-  h(S.DsToast,{tone:'success',action:function(){},actionLabel:'Отменить',onClose:function(){}},'Объект «Volvo FH16» перемещён в архив.'),
-  h(S.DsToast,{tone:'warning',onClose:function(){}},'Данные объекта не обновлялись более 10 минут.'),
-  h(S.DsToast,{tone:'danger',onClose:function(){}},'Команда не доставлена: устройство не на связи.'));}
+var samples=[['neutral','Настройки сохранены.'],['info','Отчёт формируется. Это может занять несколько минут.'],['success','Объект «Volvo FH16» перемещён в архив.'],['warning','Данные объекта не обновлялись более 10 минут.'],['danger','Команда не доставлена: устройство не на связи.']];
+function ArchiveExample(){var archived=React.useState(false),toast=React.useState(null),position=React.useState('bottom-center');
+ function archive(){archived[1](true);toast[1]('archived');}
+ function undo(){archived[1](false);toast[1]('restored');}
+ return h('section',{'aria-label':'Архивирование и отмена'},h('h3',null,'Действие, отмена и закрытие'),
+  h('div',{className:'toolbar'},h(S.DsButton,{tone:'secondary',disabled:archived[0],onClick:archive},'Архивировать объект'),
+   h(S.DsButton,{tone:'subtle',onClick:function(){position[1](position[0]==='bottom-center'?'bottom-right':'bottom-center');}},position[0]==='bottom-center'?'Разместить справа':'Разместить по центру')),
+  h('p',{className:'description'},archived[0]?'Объект находится в архиве.':'Объект находится в списке.'),
+  h('div',{className:'demo'},h(S.DsToastStack,{position:position[0]},toast[0]?h(S.DsToast,{tone:'success',onClose:function(){toast[1](null);},action:toast[0]==='archived'?undo:undefined,actionLabel:'Отменить'},toast[0]==='archived'?'Объект «Volvo FH16» перемещён в архив.':'Объект «Volvo FH16» восстановлен.'):null)));}
+function App(){return h('div',{className:'examples'},
+ h('section',null,h('h3',null,'Тон сообщения'),h('div',{className:'variants'},samples.map(function(sample){return h('div',{className:'sample',key:sample[0]},h('span',{className:'cap'},sample[0]),h(S.DsToast,{tone:sample[0]},sample[1]));}))),
+ h('section',null,h('h3',null,'Своя иконка'),h('div',{className:'variants'},h(S.DsToast,{icon:'info'},'Настройки применятся при следующем входе.'))),
+ h(ArchiveExample));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

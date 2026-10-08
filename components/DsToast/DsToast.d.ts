@@ -1,25 +1,22 @@
-/**
- * v2 transient message — the replacement for `SnackBar` (`mat-snack-bar`).
- *
- * v1's snack-bar had no icon and accent-coloured actions, and it looked close enough
- * to the message banner that the two were used interchangeably. v2 makes the
- * distinction structural: a **banner** is tinted, permanent and sits in the layout;
- * a **toast** is inverse, floats, and goes away. If the operator must be able to
- * find the message again later, it is a banner.
- */
 export interface DsToastProps {
+  /** Смысл сообщения и цвет иконки; danger использует alert, остальные — status. */
   tone?: 'neutral' | 'info' | 'success' | 'warning' | 'danger';
+  /** Краткий текст результата действия. */
   children?: React.ReactNode;
-  /** One action only — normally Undo. */
+  /** Обработчик единственного действия, обычно отмены. */
   action?: () => void;
+  /** Подпись действия; по умолчанию локализованное «Отменить». */
   actionLabel?: string;
+  /** Показывает кнопку закрытия; родитель сам убирает тост. */
   onClose?: () => void;
-  /** Override the tone's default glyph. */
+  /** Имя иконки вместо стандартной для тона; neutral без icon не показывает иконку. */
   icon?: string;
 }
 export declare function DsToast(props: DsToastProps): JSX.Element;
 export interface DsToastStackProps {
+  /** Тосты в порядке появления; новое сообщение добавляется последним. */
   children?: React.ReactNode;
+  /** Фиксированное размещение у нижнего края окна. */
   position?: 'bottom-center' | 'bottom-right';
 }
 export declare function DsToastStack(props: DsToastStackProps): JSX.Element;
