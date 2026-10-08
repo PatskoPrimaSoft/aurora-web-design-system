@@ -28,6 +28,7 @@ export interface DsStrings {
   signal: Record<'good' | 'weak' | 'none', string>;
   filter: Record<'contains' | 'from' | 'to' | 'asc' | 'desc', string>;
   table: {
+    sort: (label: string, dir: 'asc' | 'desc') => string;
     selectPage: string;
     pageSelected: (count: number) => string;
     selectAllResults: (count: number) => string;

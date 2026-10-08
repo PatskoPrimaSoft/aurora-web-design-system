@@ -270,5 +270,53 @@ const mouse = { pointerType: 'mouse', button: 0 };
   const en=render(h(NS.DsStringsProvider,{strings:NS.dsStringsEn},h(NS.DsPagination,{length:30,pageSize:10,onPageChange:change})));
   ok(en.querySelector('nav')?.getAttribute('aria-label')==='Pagination'&&en.querySelector('[aria-current]')?.getAttribute('aria-label')==='Page 1','DsPagination: локализация навигации и номеров страниц');
 }
+
+// DsTable: имя, сортировка и раскрытие текста без вмешательства в действия строки.
+{
+  const sort=spy();
+  const box=render(h(NS.DsTable,{caption:'Транспорт',ariaLabel:'Транспорт компании',fixedLayout:true,
+    columns:[{key:'name',label:'Объект',sortable:true}],rows:ROWS,sortKey:'name',sortDir:'asc',onSort:sort}));
+  ok(box.querySelector('caption')?.textContent==='Транспорт'&&box.querySelector('table')?.getAttribute('aria-label')==='Транспорт компании','DsTable: подпись и доступное имя');
+  ok(box.querySelector('th')?.getAttribute('scope')==='col','DsTable: заголовок связан со столбцом');
+  ok(box.querySelector('table')?.style.tableLayout==='fixed','DsTable: фиксированная раскладка включается явно');
+  const button=box.querySelector('th button');
+  ok(button?.getAttribute('aria-label')==='Объект: сортировать по убыванию','DsTable: сортировка объявляет следующее действие');
+  click(button);
+  ok(JSON.stringify(sort.calls[0])===JSON.stringify(['name','desc']),'DsTable: сортировка сохраняет управляемый контракт');
+  const en=render(h(NS.DsStringsProvider,{strings:NS.dsStringsEn},h(NS.DsTable,{columns:[{key:'name',label:'Name',sortable:true}],onSort:sort})));
+  ok(en.querySelector('th button')?.getAttribute('aria-label')==='Name: sort ascending','DsTable: действие сортировки локализовано');
+}
+{
+  const box=table({selectedIds:[3],activeId:4}),rows=box.querySelectorAll('tbody tr');
+  for(const row of rows){
+    fire(row,'mouseover',{relatedTarget:null},w.MouseEvent);
+    await new Promise(resolve=>setTimeout(resolve,30));
+    ok(row.style.backgroundImage.includes('overlay-hover'),'DsTable: наведение видно поверх выбора и просмотра');
+    fire(row,'mouseout',{relatedTarget:d.body},w.MouseEvent);
+  }
+}
+{
+  const open=spy();
+  const box=render(h(NS.DsTable,{columns:[{key:'name',label:'Имя'}],rows:[{id:1,name:'Очень длинное имя объекта'}],onRowClick:open}));
+  const button=box.querySelector('[data-ds-row-action]'),text=button?.querySelector('[data-ds-table-text]');
+  // jsdom не выполняет раскладку: задаём только результат измерения обрезки.
+  if(text){Object.defineProperty(text,'scrollWidth',{value:200});Object.defineProperty(text,'clientWidth',{value:80});}
+  fire(button,'focusin',{},w.FocusEvent);
+  const tip=d.querySelector('[role="tooltip"]');
+  ok(tip?.textContent==='Очень длинное имя объекта','DsTable: фокус раскрывает обрезанное значение');
+  act(()=>button.focus());
+  fire(w,'resize');
+  ok(d.querySelector('[role="tooltip"]')?.textContent==='Очень длинное имя объекта','DsTable: подсказка сфокусированного текста сохраняется при изменении размера');
+  const dismissed=key(button,'keydown','Escape');
+  ok(dismissed.defaultPrevented&&!d.querySelector('[role="tooltip"]'),'DsTable: Escape потребляется только при открытой подсказке');
+  ok(!key(button,'keydown','Escape').defaultPrevented,'DsTable: без подсказки Escape проходит к родительскому слою');
+  act(()=>button.blur());
+  fire(button,'mouseover',{relatedTarget:null},w.MouseEvent);
+  await new Promise(resolve=>setTimeout(resolve,30));
+  const hoverEscape=key(d,'keydown','Escape');
+  ok(hoverEscape.defaultPrevented&&!d.querySelector('[role="tooltip"]'),'DsTable: Escape закрывает подсказку наведения при фокусе вне ячейки');
+  click(button);ok(open.calls.length===1,'DsTable: подсказка не меняет действие строки');
+}
+
 if (fails) { console.error(`${fails} FAIL`); process.exit(1); }
 console.log('все проверки прошли');
