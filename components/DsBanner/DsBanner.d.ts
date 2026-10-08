@@ -1,24 +1,15 @@
-/**
- * v2 message banner. Carries over the legacy rule that this is the ONE sanctioned
- * permanent message surface — but drops the 4px left accent bar, which is the most
- * dated pattern in the old library, and the Roboto fallback the Material banner
- * pulled in.
- *
- * Tone sets `role` automatically: `danger` announces as `alert`, everything else
- * as `status`.
- *
- * `actions` also accepts a child carrying `slot="actions"`; unslotted children are
- * the body copy.
- */
 export interface DsBannerProps {
+  /** Смысл сообщения и оформление; danger объявляется как alert, остальные — как status. */
   tone?: 'info' | 'success' | 'warning' | 'danger' | 'neutral';
+  /** Краткий заголовок сообщения. */
   title?: React.ReactNode;
-  /** Body copy. Full sentences here take a terminal period; the title does not. */
+  /** Пояснение; дочерний элемент с slot="actions" задаёт область действий. */
   children?: React.ReactNode;
-  /** Buttons — normally one DsButton tone="secondary" size="sm". */
+  /** Действия для устранения условия, обычно одна кнопка. */
   actions?: React.ReactNode;
-  /** Omit for a message the operator must not be able to hide. */
+  /** Показывает кнопку закрытия; родитель сам убирает баннер из интерфейса. */
   onClose?: () => void;
+  /** Уменьшенные внутренние отступы для плотного интерфейса. */
   compact?: boolean;
 }
 export declare function DsBanner(props: DsBannerProps): JSX.Element;

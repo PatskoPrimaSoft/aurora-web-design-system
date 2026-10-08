@@ -1,20 +1,36 @@
-<!-- @dsCard group="5 · Компоненты · обратная связь" height=280 subtitle="Единственная постоянная поверхность сообщения; роль следует из тона" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=1050 subtitle="Сообщение об условии или проблеме рядом с содержимым страницы" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
+h3{font:var(--ds-type-label);margin:0 0 12px}
+.variants{display:flex;flex-direction:column;gap:12px}
+p{margin:12px 0;color:var(--ds-fg-muted)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+@media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'col'},
-  h(S.DsBanner,{tone:'info',title:'Отчёт строится',onClose:function(){}},'Данные за неделю появятся через пару минут.'),
-  h(S.DsBanner,{tone:'warning',title:'Интервал отчёта длиннее периода хранения',actions:h(S.DsButton,{size:'sm',tone:'secondary'},'Изменить период')}),
-  h(S.DsBanner,{tone:'danger',title:'Объект не на связи 2 часа',compact:true}),
-  h(S.DsBanner,{tone:'success',title:'Шаблон применён к 12 объектам',compact:true}));}
+function App(){var period=React.useState(false),shown=React.useState(true),restore=React.useRef(null);
+ React.useEffect(function(){if(!shown[0]&&restore.current)restore.current.querySelector('button').focus();},[shown[0]]);
+ return h('div',{className:'examples'},
+  h('section',{'aria-labelledby':'tones-title'},h('h3',{id:'tones-title'},'Тоны сообщения'),
+   h('div',{className:'variants'},
+    h(S.DsBanner,{tone:'info',title:'Отчёт строится'},'Данные за неделю появятся через пару минут.'),
+    h(S.DsBanner,{tone:'success',title:'Все объекты передают данные'},'В группе нет объектов с потерянной связью.'),
+    h(S.DsBanner,{tone:'warning',title:'Заканчивается срок хранения'},'Выгрузите данные за прошлый месяц до 15 октября.'),
+    h(S.DsBanner,{tone:'danger',title:'Не удалось загрузить данные'},'Проверьте соединение и повторите запрос.'),
+    h(S.DsBanner,{tone:'neutral',title:'Доступ только для чтения'},'Для редактирования обратитесь к администратору.'))),
+  h('section',{'aria-labelledby':'compact-title'},h('h3',{id:'compact-title'},'Компактное сообщение'),
+   h(S.DsBanner,{tone:'warning',compact:true,title:'У трёх объектов нет координат'})),
+  h('section',{'aria-labelledby':'action-title'},h('h3',{id:'action-title'},'Исправление проблемы'),
+   h('p',null,period[0]?'Период отчёта: последние 7 дней.':'Период отчёта: последний год.'),
+   period[0]?h(S.DsBanner,{tone:'info',title:'Доступны данные за весь выбранный период'},'Хранение данных — 90 дней.'):
+    h(S.DsBanner,{tone:'warning',title:'Период отчёта длиннее срока хранения',actions:h(S.DsButton,{size:'sm',tone:'secondary',onClick:function(){period[1](true);}},'Выбрать последние 7 дней')},'Часть данных за последний год уже недоступна. Выберите более короткий период.'),
+   period[0]?h('div',{className:'actions'},h(S.DsButton,{size:'sm',tone:'ghost',onClick:function(){period[1](false);}},'Вернуть исходный период')):null),
+  h('section',{'aria-labelledby':'close-title'},h('h3',{id:'close-title'},'Закрытие сообщения'),
+   shown[0]?h(S.DsBanner,{tone:'info',title:'Плановые работы сегодня в 23:00',onClose:function(){shown[1](false);}},'В течение 10 минут отчёты могут открываться медленнее.'):h('p',null,'Сообщение скрыто.'),
+   h('div',{className:'actions',ref:restore},h(S.DsButton,{size:'sm',tone:'secondary',disabled:shown[0],onClick:function(){shown[1](true);}},'Показать сообщение снова'))));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
