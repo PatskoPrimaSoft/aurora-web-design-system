@@ -1,81 +1,76 @@
-/**
- * v2 data table — the admin portal's whole reason to exist, and the loudest
- * "Material 2015" surface in the legacy product.
- *
- * What changed: the 2px `--color-primary` rules above the header and below the
- * footer are gone (they read as a 2014 Material data-table), `mat-elevation-z3`
- * is gone, and the table is now a bordered container with one tinted header band.
- * Row height, cell padding and the header eyebrow all come from density tokens, so
- * `[data-ds-density="compact"]` on the page turns a 44px row into 34px without a
- * prop. The active row keeps a 2px inset brand bar instead of a full-bleed fill,
- * so a selected row and a hovered row are distinguishable.
- *
- * `empty` and `footer` also accept children carrying `slot="empty"` / `slot="footer"`.
- */
+/** Столбец таблицы: данные, оформление и доступные действия. */
 export interface DsTableColumn {
+  /** Ключ поля строки и идентификатор столбца для сортировки. */
   key: string;
+  /** Заголовок столбца. */
   label: string;
+  /** Ширина столбца в px или CSS-значение. */
   width?: number | string;
+  /** Выравнивание заголовка и ячеек. */
   align?: 'left' | 'right' | 'center';
-  /**
-   * Marks the column as sortable: the header label becomes a real button that
-   * cycles ascending → descending (never back to "unsorted" — the default order
-   * is itself a sort). Only set it on a column the data source can actually
-   * order by: with server pagination a client-side sort would reorder the
-   * current page only. See the "Sorting" foundation card.
-   */
+  /** Кнопка сортировки в заголовке; требует onSort. Сортирует данные экран. */
   sortable?: boolean;
-  /** This column carries the row's open button (keyboard access to `onRowClick`). Default: the first column. */
+  /** Опорный столбец с кнопкой открытия строки; иначе используется первый. */
   rowAction?: boolean;
-  /** Field to order by when it differs from `key` — a composite or rendered cell. */
+  /** Метаданные поля сортировки для экрана. onSort передаёт key; сопоставление выполняет потребитель. */
   sortBy?: string;
-  /** Render this column in --ds-font-mono — speeds, coordinates, IMEI, timestamps. */
+  /** Моноширинный текст для номеров, времени и координат. */
   mono?: boolean;
+  /** Выделение опорной ячейки средним начертанием. */
   strong?: boolean;
+  /** Вторичный цвет текста. */
   muted?: boolean;
-  /** Allow wrapping. Cells clip with an ellipsis by default. */
+  /** Разрешает перенос текста; по умолчанию ячейка однострочная. */
   wrap?: boolean;
+  /** Содержимое ячейки; получает всю строку. */
   render?: (row: any) => React.ReactNode;
 }
 export interface DsTableProps {
-  /** Composition slots, including footer. */
+  /** Дочерние элементы со slot="empty" или slot="footer". */
   children?: React.ReactNode;
+  /** Столбцы в порядке отображения. */
   columns?: DsTableColumn[];
+  /** Видимые строки; фильтрацию, сортировку и пагинацию выполняет экран. */
   rows?: any[];
-  /** Field to read each row's identity from. Default `id`. */
+  /** Поле уникального стабильного идентификатора строки. */
   rowKey?: string;
+  /** Показывает чекбоксы строк и выбора видимой страницы. */
   selectable?: boolean;
+  /** Выбранные ID, в том числе с других страниц. */
   selectedIds?: Array<string | number>;
+  /** Запрос на переключение выбора строки. */
   onToggleRow?: (id: string | number) => void;
-  /**
-   * Header checkbox: select / clear the VISIBLE rows. Receives the visible IDs and the next
-   * state; merge them into the selection yourself. The header state is computed from the
-   * intersection of visible and selected IDs, so rows selected on another page never turn it on.
-   */
+  /** Выбрать или снять выбор видимых ID. Выбор остальных строк сохраняет потребитель. */
   onToggleVisible?: (visibleIds: Array<string | number>, next: 'checked' | 'unchecked') => void;
-  /** @deprecated Use `onToggleVisible`. Still called with the next state when `onToggleVisible` is absent. */
+  /** @deprecated Используйте onToggleVisible. Вызывается, если onToggleVisible отсутствует. */
   onToggleAll?: (next?: 'checked' | 'unchecked') => void;
-  /** Total rows across all pages. With `onSelectAll`, a fully selected page offers "Select all N". */
+  /** Размер всей выборки. Вместе с onSelectAll включает предложение выбрать все результаты. */
   totalCount?: number;
-  /** The whole result set is selected, not just a page. Owned by the consumer. */
+  /** Выбрана вся выборка, включая невидимые строки; состоянием управляет экран. */
   allSelected?: boolean;
+  /** Запрос на выбор всей выборки после выбора видимой страницы. */
   onSelectAll?: () => void;
+  /** Запрос на снятие выбора всей выборки. */
   onClearSelection?: () => void;
-  /** The one column currently ordering the table. Single-column sort only. */
+  /** Ключ единственного столбца с текущей сортировкой. */
   sortKey?: string;
+  /** Направление текущей сортировки. */
   sortDir?: 'asc' | 'desc';
-  /** Fires with the next direction. The screen re-queries and returns to page 1. */
+  /** Ключ столбца и следующее направление; экран обновляет данные и сбрасывает страницу. */
   onSort?: (key: string, dir: 'asc' | 'desc') => void;
-  /** Row under inspection — gets the inset brand bar. */
+  /** ID объекта под просмотром: фон выделения и полоса слева, независимо от чекбоксов. */
   activeId?: string | number;
+  /** Открытие строки мышью или кнопкой в опорном столбце. */
   onRowClick?: (row: any) => void;
-  /** Accessible name of a row for its checkbox ("Select «…»"). Default: the row-action column's value. */
+  /** Имя объекта для чекбокса. По умолчанию — значение опорного столбца. */
   rowLabel?: (row: any) => string;
+  /** Закрепляет заголовок внутри области прокрутки таблицы. */
   stickyHeader?: boolean;
+  /** Содержимое при отсутствии строк; по умолчанию локализованное «Нет данных». */
   empty?: React.ReactNode;
-  /** Footer band — normally a DsPaginator or a selection summary. */
+  /** Подвал: например, DsPagination или сводка выбора. */
   footer?: React.ReactNode;
 }
 export declare function DsTable(props: DsTableProps): JSX.Element;
-/** unchecked / indeterminate / checked for visible rows — the header checkbox rule, exported for a custom header. */
+/** Состояние выбора видимых строк для собственного заголовка. */
 export declare function dsVisibleSelection(visibleIds: Array<string | number>, selectedIds: Array<string | number>, allSelected?: boolean): 'unchecked' | 'indeterminate' | 'checked';
