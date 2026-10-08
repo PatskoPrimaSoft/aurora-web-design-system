@@ -1,50 +1,44 @@
-/**
- * v2 tab rail, three tones.
- *
- * Legacy `HeaderNav` drew the active tab with a 10% white wash plus a 3px
- * `currentColor` bar with `3px 3px 0 0` corners and 8px side insets — a very
- * specific 2015 Material detail. v2 keeps the idea (wash + bar) and adds two
- * content tones so a tab strip inside a page does not have to borrow header
- * styling.
- *
- * In the header the tab stacks its icon over its label. That buys horizontal room,
- * which is the scarce axis once labels are translated into 23 locales — `Monitoring`
- * becomes `Benachrichtigungen` — and it fits both densities (35px of content in the
- * 56px cozy bar, 33px in the 48px compact bar). The notification count then sits on
- * the glyph rather than after the label.
- *
- * Header tabs take every colour from `--ds-header-*`, so they follow the header
- * band automatically.
- */
 export interface DsTabItem {
   id: string;
   label: React.ReactNode;
-  /** Material Symbols Outlined ligature. */
+  /** Имя иконки Material Symbols Outlined. */
   icon?: string;
-  /** Count pill. On a stacked header tab it rides the icon's top-right corner. */
+  /** Счётчик во всех вариантах; у stacked-вкладки расположен на иконке. */
   badge?: number | string;
 }
-export interface DsTabsProps {
-  /** Prefix shared with DsTabPanel for tab/panel IDs. */
+interface DsTabsCommonProps {
+  /** Уникальный префикс связи с DsTabPanel; обязателен для underline и segmented, совпадает у группы и панелей. */
   idBase?: string;
+  /** Доступное название группы; внутри DsAppHeader название навигации задаёт шапка. */
   'aria-label'?: string;
+  /** Вкладки с уникальными id. */
   items?: DsTabItem[];
+  /** id выбранной вкладки. */
   active?: string;
+  /** Выбор вкладки; родитель обновляет active. */
   onChange?: (id: string) => void;
-  /** `onHeader` inside DsAppHeader · `underline` in page content · `segmented` for a 2-3 option switch. */
+  /** onHeader — разделы приложения; underline — вкладки страницы; segmented — короткие варианты. */
   tone?: 'onHeader' | 'underline' | 'segmented';
-  /**
-   * Stack the icon above the label. `onHeader` only, on by default. Set false for a
-   * header with two or three short labels, where the row reads calmer.
-   */
+  /** Иконка над подписью; только для onHeader. false — иконка и подпись в строку. */
   stack?: boolean;
 }
+/** Для вкладок страницы idBase обязателен; навигация в шапке не связана с панелями. */
+export type DsTabsProps = DsTabsCommonProps & (
+  | { tone: 'onHeader'; idBase?: string }
+  | { tone?: 'underline' | 'segmented'; idBase: string }
+);
 export declare function DsTabs(props: DsTabsProps): JSX.Element;
 export interface DsTabPanelProps {
+  /** Тот же префикс, что у связанной группы DsTabs. */
   idBase: string;
+  /** id соответствующей вкладки. */
   id: string;
+  /** Показывает панель. Содержимое монтируется при первом открытии и сохраняется при скрытии. */
   active: boolean;
+  /** Размонтировать содержимое скрытой панели и сбросить его локальное состояние. */
+  unmountOnHide?: boolean;
   children?: React.ReactNode;
+  /** Стили контейнера панели. */
   style?: React.CSSProperties;
 }
 export declare function DsTabPanel(props: DsTabPanelProps): JSX.Element;

@@ -41,6 +41,28 @@ const click = (el) => act(() => el.click());
   unmount();
 }
 
+// Tabs: visited panels preserve local state, explicit unmount opts into reset.
+{
+  let mounts=0;
+  function Form(){React.useEffect(()=>{mounts++;},[]);return h('input',{'aria-label':'Название',defaultValue:'Исходное'});}
+  const panel=active=>h(NS.DsTabPanel,{idBase:'preserve',id:'form',active},h(Form));
+  const view=mount(panel(false));
+  ok(!view.box.querySelector('input'),'DsTabPanel: неоткрытая панель не монтирует форму');
+  view.rerender(panel(true));const input=view.box.querySelector('input');input.value='Черновик';
+  view.rerender(panel(false));
+  ok(view.box.querySelector('input')===input&&view.box.querySelector('[role="tabpanel"]').hidden,'DsTabPanel: посещённая панель сохраняет скрытое содержимое');
+  view.rerender(panel(true));
+  ok(view.box.querySelector('input').value==='Черновик'&&mounts===1,'DsTabPanel: ввод сохраняется после возврата');
+  view.rerender(h(NS.DsTabPanel,{idBase:'preserve',id:'form',active:false,unmountOnHide:true},h(Form)));
+  ok(!view.box.querySelector('input'),'DsTabPanel: unmountOnHide сбрасывает содержимое');view.unmount();
+  const items=[{id:'a',label:'Первый',badge:0},{id:'b',label:'Второй',badge:12}];
+  const tabs=mount(h(NS.DsTabs,{idBase:'fallback',items,active:'removed'}));
+  ok([...tabs.box.querySelectorAll('[role="tab"]')].map(t=>t.tabIndex).join()==='0,-1','DsTabs: неизвестный active оставляет вход через Tab');
+  ok(!tabs.box.querySelector('[aria-selected="true"]'),'DsTabs: fallback не объявляет невыбранную панель выбранной');
+  tabs.rerender(h(NS.DsTabs,{idBase:'fallback',tone:'segmented',items,active:'a'}));
+  ok(tabs.box.querySelectorAll('[data-ds-tab-count]').length===2&&tabs.box.textContent.includes('12'),'DsTabs: segmented показывает счётчики, включая ноль');tabs.unmount();
+}
+
 // ---------------- №7 вкладки внутри страницы
 {
   const items = [{ id: 'a', label: 'Датчики' }, { id: 'b', label: 'Треки' }, { id: 'c', label: 'Отчёты' }];

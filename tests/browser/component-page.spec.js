@@ -46,3 +46,15 @@ test('component page keeps one reading order, inline reference and responsive pr
     expect(errors).toEqual([]);
   }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });
+
+test('tabs page groups both contracts before a single token reference',async()=>{
+  const cards=await buildCatalogue({root,outDir:`${root}/site`});
+  const card=cards.find(card=>card.id==='DsTabs');
+  expect(card.layout).toBe('component');
+  expect(card.apiHtml.match(/<h2\b/g)).toHaveLength(2);
+  expect(card.apiHtml).toContain('Параметры DsTabs');
+  expect(card.apiHtml).toContain('Параметры DsTabPanel');
+  expect(card.apiHtml).toContain('>DsTabPanel</h3>');
+  expect(card.apiHtml.match(/>Токены<\/h2>/g)).toHaveLength(1);
+  expect(card.apiHtml.indexOf('Параметры DsTabPanel')).toBeLessThan(card.apiHtml.indexOf('>Токены</h2>'));
+});

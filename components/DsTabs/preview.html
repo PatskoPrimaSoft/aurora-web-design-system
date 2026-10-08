@@ -1,19 +1,38 @@
-<!-- @dsCard group="5 · Компоненты · навигация" height=170 subtitle="Табы в трёх тонах: в шапке, подчёркнутые в контенте, сегменты для 2–3 вариантов" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · навигация" height=1100 subtitle="Вкладки внутри страницы и навигация между разделами в шапке" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
+h3{font:var(--ds-type-label);margin:0 0 12px}
+p{margin:12px 0;color:var(--ds-fg-muted)}
+.panel{padding:16px 0}
+.panel p{margin:0 0 12px}
+.header{background:var(--ds-header-bg);color:var(--ds-header-fg);padding:0 8px;border-radius:var(--ds-radius-control)}
+@media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var a=React.useState('o'),b=React.useState('d');
-  return h('div',{className:'col'},
-    h(S.DsTabs,{tone:'underline',active:a[0],onChange:a[1],items:[{id:'o',label:'Обзор'},{id:'h',label:'История'},{id:'s',label:'Настройки',badge:2}]}),
-    h('div',null,h(S.DsTabs,{tone:'segmented',active:b[0],onChange:b[1],items:[{id:'d',label:'День'},{id:'w',label:'Неделя'},{id:'m',label:'Месяц'}]})));}
+var pages=[{id:'overview',label:'Обзор'},{id:'history',label:'История',badge:12},{id:'settings',label:'Настройки'}];
+var periods=[{id:'day',label:'День'},{id:'week',label:'Неделя',badge:7},{id:'month',label:'Месяц'}];
+var longTabs=['Обзор','Состав группы','История изменений','Планирование','Отчёты по поездкам','Настройки доступа'].map(function(label,index){return {id:String(index),label:label};});
+var sections=[{id:'objects',label:'Объекты',icon:'directions_car'},{id:'reports',label:'Отчёты',icon:'bar_chart'},{id:'alerts',label:'События',icon:'notifications',badge:2}];
+function App(){var saved=React.useState('form'),narrow=React.useState('4');var a=React.useState('overview'),b=React.useState('day'),c=React.useState('objects'),d=React.useState('objects');
+ var pageContent={overview:'В группе 12 объектов. Данные обновлены сегодня.',history:'Последнее изменение: объект «Грузовик 12» добавлен в группу.',settings:'Название группы: «Основной парк». Уведомления включены.'};
+ var periodContent={day:'За сегодня: 18 поездок, 240 км.',week:'За неделю: 94 поездки, 1 380 км.',month:'За месяц: 386 поездок, 5 720 км.'};
+ function panel(items,state,idBase,content){return items.map(function(it){return h(S.DsTabPanel,{key:it.id,idBase:idBase,id:it.id,active:state===it.id},h('div',{className:'panel'},h('p',null,content[it.id])));});}
+ function header(title,state,stack){return h('section',null,h('h3',null,title),h('div',{className:'header'},h(S.DsTabs,{tone:'onHeader',stack:stack,items:stack?sections:sections.map(function(it){return {id:it.id,label:it.label,badge:it.badge};}),active:state[0],onChange:state[1],'aria-label':title})),h('p',null,'Открыт раздел: '+sections.find(function(it){return it.id===state[0];}).label+'.'));}
+ return h('div',{className:'examples'},
+  h('section',null,h('h3',null,'Вкладки страницы'),h(S.DsTabs,{idBase:'object-tabs',items:pages,active:a[0],onChange:a[1],'aria-label':'Карточка группы'}),panel(pages,a[0],'object-tabs',pageContent)),
+  h('section',null,h('h3',null,'Переключение периода'),h(S.DsTabs,{tone:'segmented',idBase:'period-tabs',items:periods,active:b[0],onChange:b[1],'aria-label':'Период отчёта'}),panel(periods,b[0],'period-tabs',periodContent)),
+  h('section',null,h('h3',null,'Сохранение введённых данных'),
+   h(S.DsTabs,{idBase:'draft-tabs',items:[{id:'form',label:'Название'},{id:'help',label:'Подсказка'}],active:saved[0],onChange:saved[1],'aria-label':'Редактирование группы'}),
+   h(S.DsTabPanel,{idBase:'draft-tabs',id:'form',active:saved[0]==='form'},h('div',{className:'panel'},h(S.DsField,{label:'Название группы',defaultValue:'Основной парк'}))),
+   h(S.DsTabPanel,{idBase:'draft-tabs',id:'help',active:saved[0]==='help'},h('p',null,'Вернитесь на вкладку «Название»: введённый текст сохранится.'))),
+  h('section',null,h('h3',null,'Длинная полоса вкладок'),
+   h('div',{style:{maxWidth:360}},h(S.DsTabs,{idBase:'narrow-tabs',items:longTabs,active:narrow[0],onChange:narrow[1],'aria-label':'Разделы карточки'})),
+   panel(longTabs,narrow[0],'narrow-tabs',Object.fromEntries(longTabs.map(function(it){return [it.id,'Открыта вкладка «'+it.label+'».'];})))),
+  header('Навигация в шапке',c,true),
+  header('Короткая навигация в одну строку',d,false));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

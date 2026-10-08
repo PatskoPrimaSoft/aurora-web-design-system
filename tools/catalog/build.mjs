@@ -39,7 +39,6 @@ export async function buildCatalogue({ root, outDir }) {
   for(const guide of guides){const document=renderMarkdown({root,path:guide,knownRoutes});writePage(`docs/${guide.slice(0,-3)}.html`,documentPage({title:guide,html:document.html}));}
   for(const path of documents.filter(path=>!guides.includes(path)&&knownRoutes.get(path)?.startsWith('/docs/source/'))){const document=renderMarkdown({root,path,knownRoutes});writePage(knownRoutes.get(path).slice(1),documentPage({title:path,html:document.html}));}
   for(const path of documentAssets)if(path){const target=join(outDir,'source',path);mkdirSync(dirname(target),{recursive:true});writeFileSync(target,readFileSync(join(root,path)));}
-  const apiDetails=new Map();
   for(const doc of api){
     const card=cards.find(card=>card.id===doc.name)??cards.find(card=>card.id===doc.declarationPath.split('/')[1]);
     const readme=card?.readmePath;
@@ -47,16 +46,22 @@ export async function buildCatalogue({ root, outDir }) {
     const apiDescription=card?join(dirname(card.previewPath),'API.md'):null;
     const apiMarkdown=apiDescription&&existsSync(join(root,apiDescription))?renderMarkdown({root,path:apiDescription,knownRoutes}):null;
     const props=card?.layout==='component'?renderComponentProps(doc):renderProps(doc);
-    apiDetails.set(doc.name,props+(apiMarkdown?.html??''));
     const content=card?.layout==='component'?(markdown?.html??'')+props+(apiMarkdown?.html??''):props+(markdown?.html??'')+(apiMarkdown?.html??'');
     writePage(`api/components/${doc.name}.html`,documentPage({title:doc.name,html:content,back:card?`/index.html?card=${card.id}`:'/index.html'}));
   }
   const reference=renderTokenReference(readTokenModel(css.source));
   writePage('api/tokens.html',documentPage({title:'CSS-токены',html:reference.html}));
   for(const card of cards){
-    const contracts=api.filter(doc=>doc.name===card.id||doc.declarationPath.split('/')[1]===card.id);
+    const contracts=api.filter(doc=>doc.name===card.id||doc.declarationPath.split('/')[1]===card.id).sort((a,b)=>Number(b.name===card.id)-Number(a.name===card.id));
     card.apiPaths=contracts.map(doc=>({name:doc.name,path:`api/components/${doc.name}.html`}));
-    if(card.layout==='component')card.apiHtml=contracts.map(doc=>apiDetails.get(doc.name)??'').join('');
+    if(card.layout==='component'){
+      const descriptionPath=join(dirname(card.previewPath),'API.md');
+      const description=existsSync(join(root,descriptionPath))?renderMarkdown({root,path:descriptionPath,knownRoutes}).html:'';
+      card.apiHtml=contracts.map((doc,index)=>{
+        const props=renderComponentProps(doc);
+        return index===0?props:props.replace(/<h2([^>]*)>Параметры<\/h2>/,`<h3$1>${doc.name}</h3>`);
+      }).join('')+description;
+    }
     card.declarationPaths=[...new Set(contracts.map(doc=>doc.declarationPath))];
     const document=card.readmePath?renderMarkdown({root,path:card.readmePath,knownRoutes}):null;
     card.documentationPath=document?`docs/cards/${card.id}.html`:null;
