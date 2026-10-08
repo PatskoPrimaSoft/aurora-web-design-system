@@ -1,18 +1,32 @@
-<!-- @dsCard group="5 · Компоненты · обратная связь" height=280 subtitle="Пустая область: чего нет, почему, и действие, которое это исправит" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=1100 subtitle="Объясняет отсутствие содержимого и предлагает следующий шаг" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
+h3{font:var(--ds-type-label);margin:0 0 12px}
+.result{padding:16px;overflow-wrap:anywhere}
+.result p{margin:0 0 12px}
+.result:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+.narrow{width:100%;max-width:360px;margin-inline:auto}
+@media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'grid'},
-  h(S.DsEmptyState,{icon:'filter_alt',title:'Ничего не найдено',description:'Под фильтры не попал ни один объект.',action:h(S.DsButton,{tone:'secondary'},'Сбросить фильтры')}),
-  h(S.DsEmptyState,{icon:'cloud_off',tone:'danger',title:'Не удалось загрузить',description:'Сервер не ответил.',action:h(S.DsButton,{icon:'refresh'},'Повторить'),size:'sm'}));}
+function Example(props){var done=React.useState(false),result=React.useRef(null),area=React.useRef(null),resetFocus=React.useRef(false);
+ React.useEffect(function(){if(done[0])result.current.focus();else if(resetFocus.current){area.current.querySelector('button').focus();resetFocus.current=false;}},[done[0]]);
+ function reset(){resetFocus.current=true;done[1](false);}
+ return h('section',{'aria-labelledby':props.id},h('h3',{id:props.id},props.heading),
+  h('div',{ref:area,className:props.small?'narrow':undefined},done[0]?
+   h('div',{className:'result',tabIndex:-1,ref:result},h('p',null,props.result),h(S.DsButton,{tone:'ghost',size:'sm',onClick:reset},'Снова показать пустое состояние')):
+   h(S.DsEmptyState,{icon:props.icon,title:props.title,description:props.description,tone:props.tone,size:props.small?'sm':'md',
+    action:h(S.DsButton,{tone:'secondary',size:props.small?'sm':'md',onClick:function(){done[1](true);}},props.action)})));
+}
+function App(){return h('div',{className:'examples'},
+ h(Example,{id:'filtered',heading:'Ничего не найдено',icon:'filter_alt',title:'Нет объектов по заданным фильтрам',description:'Попробуйте изменить условия или сбросьте фильтры.',action:'Сбросить фильтры',result:'Фильтры сброшены. Найдено 12 объектов.'}),
+ h(Example,{id:'first',heading:'Первый объект',icon:'add_location_alt',tone:'info',title:'Объектов пока нет',description:'Добавьте первый объект, чтобы видеть его положение на карте.',action:'Добавить объект',result:'Объект «Автомобиль 01» добавлен.'}),
+ h(Example,{id:'retry',heading:'Ошибка загрузки · компактный вариант',icon:'cloud_off',tone:'danger',small:true,title:'Не удалось загрузить объекты',description:'Нет связи с сервисом. Повторите запрос.',action:'Повторить запрос',result:'Соединение восстановлено. Объекты загружены.'}),
+ h('section',{'aria-labelledby':'no-action'},h('h3',{id:'no-action'},'Без доступного действия'),
+  h(S.DsEmptyState,{icon:'lock',tone:'warning',title:'Нет доступа к отчётам',description:'Попросите администратора предоставить доступ к этому разделу.'})));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
