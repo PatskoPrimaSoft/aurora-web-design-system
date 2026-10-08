@@ -14,6 +14,12 @@ Angular app.
 
 ## 1. Scope the switch
 
+### Upcoming breaking change: selection strip
+
+`DsSelectionBar` and `DsSelectionBarProps` have been removed without compatibility aliases.
+Compose selection controls in the application using `DsCheckbox`, a count and action buttons.
+For a contextual toolbar of bulk actions, use `DsBulkActionsBar`.
+
 ### Upcoming breaking change: object row
 
 `DsObjectRow`, `DsObjectRowProps` and `dsObjectRowDescription` have been removed.

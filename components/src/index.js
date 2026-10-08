@@ -16,7 +16,6 @@ export * from './components/data/DsChip.jsx';
 export * from './components/data/DsChipGroup.jsx';
 export * from './components/data/DsListRow.jsx';
 export * from './components/data/DsPagination.jsx';
-export * from './components/data/DsSelectionBar.jsx';
 export * from './components/data/DsStateIcon.jsx';
 export * from './components/data/DsTable.jsx';
 export * from './components/data/DsTreeRow.jsx';

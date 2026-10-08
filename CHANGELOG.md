@@ -25,6 +25,8 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ### Removed
 
+- **Breaking:** удалены `DsSelectionBar`, `DsSelectionBarProps` и страница каталога без алиасов совместимости. Выбор в примере мониторинга собран из `DsCheckbox`, счётчика и кнопок действий; общая панель массовых действий — `DsBulkActionsBar`. Изменение требует MAJOR-релиза.
+
 - **Breaking:** удалены `DsObjectRow`, его типы, `dsObjectRowDescription` и страница каталога: отдельный дизайн строки объекта пока не утверждён. Примеры используют `DsListRow` и при необходимости внешний `DsCheckbox`; специфичное оформление остаётся задачей приложения.
 
 

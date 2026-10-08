@@ -15,7 +15,7 @@ assert.ok(searchCards(cards,'CHECKBOX').some(c=>c.id==='DsCheckbox'));
 assert.deepEqual(searchCards(cards,'неизвестно-12345'),[]);
 assert.equal(searchCards([{id:'New',title:'Новая карточка',searchText:'loading onClick'}],' ＬＯＡＤＩＮＧ onclick ')[0].id,'New');
 assert.equal(searchCards([{id:'New',title:'Новая карточка'}],'новая отсутствует').length,0);
-assert.equal(familyFor('DsBulkActionsBar'),null);assert.equal(familyFor('DsSelectionBar'),null);
+assert.equal(familyFor('DsBulkActionsBar'),null);
 assert.equal(new Set(families.flatMap(f=>f.cards)).size,families.flatMap(f=>f.cards).length);
 const fixture=fixtureRoot();
 try{

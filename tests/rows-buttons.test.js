@@ -97,13 +97,6 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
   ok(en.textContent.includes('All 148 objects selected'), 'DsBulkActionsBar: полный выбор локализован');
 }
 
-// Unified state transitions are covered in checkbox.test.js.
-{
-  const selectAll=spy();
-  const box=render(h(NS.DsSelectionBar,{selected:2,total:5,onSelectAll:selectAll}));
-  click(box.querySelector('input[type="checkbox"]'));
-  ok(selectAll.calls[0]?.[0]===true,'DsSelectionBar: partial selection selects all');
-}
 
 // ---------------- №3 DsTreeRow
 {
