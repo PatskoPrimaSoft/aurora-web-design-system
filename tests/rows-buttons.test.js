@@ -25,6 +25,27 @@ const key = (el, type, k) => fire(el, type, { key: k }, w.KeyboardEvent);
 const click = (el) => act(() => el.click());
 const spy = () => { const f = (...a) => { f.calls.push(a); }; f.calls = []; return f; };
 const nested = (box) => box.querySelectorAll('button button, [role="button"] button, button [role="button"]').length;
+// DsFab: подсказка соблюдает Escape-контракт, загрузка сохраняет фокус и блокирует submit.
+{
+  const host=d.createElement('div');d.body.append(host);const root=ReactDOM.createRoot(host);
+  const action=spy(),submit=spy(),outer=spy(),focus=spy();
+  const draw=(props={})=>act(()=>root.render(h('form',{onSubmit:e=>{e.preventDefault();submit();},onKeyDown:e=>{if(e.key==='Escape'&&!e.defaultPrevented)outer();}},
+    h(NS.DsFab,{label:'Добавить объект',onClick:action,onFocus:focus,...props}))));
+  draw();let button=host.querySelector('button');act(()=>button.focus());
+  ok(d.querySelector('[role="tooltip"]')?.textContent==='Добавить объект'&&!button.hasAttribute('title'),'DsFab: системная подсказка по фокусу без нативного title');
+  key(button,'keydown','Escape');ok(!d.querySelector('[role="tooltip"]')&&outer.calls.length===0,'DsFab: Escape закрывает только видимую подсказку');
+  key(button,'keydown','Escape');ok(outer.calls.length===1,'DsFab: без подсказки Escape передаётся внешнему слою');
+  ok(focus.calls.length===1,'DsFab: обработчик фокуса потребителя сохраняется');
+  draw({loading:true,type:'submit'});
+  ok(d.activeElement===button&&!button.disabled&&button.getAttribute('aria-busy')==='true'&&button.getAttribute('aria-disabled')==='true','DsFab: загрузка сохраняет фокус и объявляет недоступность');
+  const event=fire(button,'click',{},w.MouseEvent);
+  ok(event.defaultPrevented&&action.calls.length===0&&submit.calls.length===0,'DsFab: загрузка блокирует действие и submit');
+  ok(!!button.querySelector('[data-ds-fab-spinner]')&&button.style.background.includes('ds-brand'),'DsFab: загрузка сохраняет тон и показывает спиннер');
+  draw({extended:true});act(()=>button.blur());act(()=>button.focus());
+  ok(!d.querySelector('[role="tooltip"]'),'DsFab: полная видимая подпись не дублируется подсказкой');
+  draw({disabled:true,loading:true});ok(button.disabled,'DsFab: явный disabled сохраняет нативную блокировку');
+  act(()=>root.unmount());host.remove();
+}
 // DsChipGroup: композиция не перехватывает действия чипов, очистка управляется родителем.
 {
   ok(typeof NS.DsChipGroup === 'function', 'DsChipGroup: экспортируется');

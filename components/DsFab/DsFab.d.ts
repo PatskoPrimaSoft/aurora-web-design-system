@@ -1,24 +1,24 @@
-/**
- * v2 floating action button.
- *
- * The v1 FAB had `box-shadow: none` forced on it, which made it a circle with no
- * reason to be a circle. v2 gives it back the one thing a FAB is for — floating
- * over content (the map, a long table) — so it carries `--ds-shadow-md`.
- *
- * On the monitoring map this is "Add object" / "Add geofence"; anywhere a normal
- * toolbar exists, use DsButton instead.
- */
-export interface DsFabProps {
-  /** Material Symbols Outlined ligature. Default `add`. */
+import * as React from 'react';
+
+/** Плавающая кнопка действия над содержимым. */
+export interface DsFabProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Имя иконки Material Symbols Outlined. */
   icon?: string;
-  /** Required for accessibility; also the visible text when `extended`. */
-  label?: string;
-  /** Pill with an icon and the label, instead of a circle. */
+  /** Обязательное доступное название; в extended также видимая подпись. */
+  label: string;
+  /** Показывает подпись рядом с иконкой и меняет круг на пилюлю. */
   extended?: boolean;
-  /** `surface` is the white-on-map variant used by the map rail. */
+  /** Цветовое выделение; surface использует нейтральную поверхность текущей темы. */
   tone?: 'primary' | 'accent' | 'surface';
+  /** Высота: sm — 40 px, md — 48 px, lg — 56 px; не зависит от плотности. */
   size?: 'sm' | 'md' | 'lg';
+  /** Показывает спиннер, сохраняя размер, тон и фокус; блокирует повторное действие. */
+  loading?: boolean;
+  /** Блокирует действие и исключает кнопку из последовательности Tab. */
   disabled?: boolean;
+  /** Вызывается при активации доступной кнопки мышью или клавиатурой. */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  /** Тип HTML-кнопки; по умолчанию button. */
+  type?: 'button' | 'submit' | 'reset';
 }
 export declare function DsFab(props: DsFabProps): JSX.Element;

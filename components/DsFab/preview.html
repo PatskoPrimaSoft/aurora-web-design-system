@@ -1,21 +1,69 @@
-<!-- @dsCard group="5 · Компоненты · кнопки" height=140 subtitle="Парит над картой или длинной таблицей — единственная кнопка с настоящей тенью" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · кнопки" height=1300 subtitle="Плавающая кнопка для основного действия над содержимым" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:32px;min-width:0}
+section{display:flex;flex-direction:column;gap:16px;min-width:0}
+h3,p{margin:0}h3{font:var(--ds-type-body-strong)}
+.row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.sample{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+.stage{position:relative;min-height:240px;padding:16px 16px 88px;background:var(--ds-bg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md)}
+.stage-action{position:absolute;right:16px;bottom:16px}
+.items{margin:12px 0 0;padding-left:24px;overflow-wrap:anywhere}
+.object-form{display:flex;flex-direction:column;gap:16px;max-width:360px;min-width:0}
+.form-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'row'},
-  h(S.DsFab,{icon:'add',label:'Добавить объект',size:'sm'}),
-  h(S.DsFab,{icon:'add',label:'Добавить объект'}),
-  h(S.DsFab,{icon:'fence',label:'Добавить геозону',tone:'accent'}),
-  h(S.DsFab,{icon:'my_location',label:'Центрировать на парке',tone:'surface'}),
-  h(S.DsFab,{icon:'add',label:'Добавить объект',extended:true}));}
+function Placement(){
+  var objects=React.useState(['Volvo FH16','Scania R450','MAN TGX']),setObjects=objects[1];
+  var open=React.useState(false),setOpen=open[1],name=React.useState(''),setName=name[1];
+  var error=React.useState(''),setError=error[1],message=React.useState(''),setMessage=message[1];
+  var formRef=React.useRef(null),trigger=React.useRef(null),wasOpen=React.useRef(false);
+  React.useLayoutEffect(function(){
+    if(open[0])formRef.current.querySelector('input').focus();
+    else if(wasOpen.current)trigger.current.focus();
+    wasOpen.current=open[0];
+  },[open[0]]);
+  function start(e){
+    trigger.current=e.currentTarget;
+    if(open[0]){formRef.current.querySelector('input').focus();return;}
+    setName('');setError('');setMessage('');setOpen(true);
+  }
+  function cancel(){setOpen(false);setMessage('Добавление отменено.');}
+  function submit(e){
+    e.preventDefault();
+    var value=name[0].trim();
+    if(!value){setError('Введите название объекта.');formRef.current.querySelector('input').focus();return;}
+    setObjects(function(items){return items.concat(value);});setOpen(false);setMessage('Объект «'+value+'» добавлен.');
+  }
+  return h('section',{'aria-labelledby':'placement'},h('h3',{id:'placement'},'Действие над содержимым'),
+    h('div',{className:'stage'},h('p',null,'Объекты'),h('ul',{className:'items'},objects[0].map(function(item,i){return h('li',{key:i},item);})),
+      h('div',{className:'stage-action'},h(S.DsFab,{label:'Добавить объект',extended:true,'aria-expanded':open[0],'aria-controls':open[0]?'object-form':undefined,onClick:start}))),
+    open[0]?h('form',{id:'object-form',ref:formRef,className:'object-form',noValidate:true,'aria-label':'Добавление объекта',onSubmit:submit},
+      h(S.DsField,{label:'Название объекта',required:true,value:name[0],error:error[0]||undefined,onChange:function(e){setName(e.target.value);setError('');}}),
+      h('div',{className:'form-actions'},h(S.DsButton,{tone:'secondary',onClick:cancel},'Отмена'),h(S.DsButton,{type:'submit'},'Добавить'))):null,
+    h('p',{role:'status','aria-label':'Результат создания объекта'},message[0]));
+}
+function App(){
+  var message=React.useState('Нажмите кнопку, чтобы выполнить действие.'),setMessage=message[1];
+
+  var saving=React.useState(false),setSaving=saving[1],saved=React.useState('Готово к добавлению.'),setSaved=saved[1];
+  var timer=React.useRef(null);
+  React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
+  function save(){setSaving(true);setSaved('Добавляем объект…');timer.current=setTimeout(function(){setSaving(false);setSaved('Объект добавлен.');},1200);}
+  function sample(caption,props){return h('div',{className:'sample',key:caption},h('span',{className:'cap'},caption),h(S.DsFab,Object.assign({label:'Добавить объект',onClick:function(){setMessage('Действие «'+caption+'» выполнено.');}},props)));}
+  return h('div',{className:'examples'},
+    h('section',{'aria-labelledby':'sizes'},h('h3',{id:'sizes'},'Размеры'),h('div',{className:'row'},sample('sm · 40 px',{size:'sm'}),sample('md · 48 px',{}),sample('lg · 56 px',{size:'lg'}))),
+    h('section',{'aria-labelledby':'tones'},h('h3',{id:'tones'},'Тоны'),h('div',{className:'row'},sample('primary',{}),sample('accent',{tone:'accent',icon:'fence',label:'Добавить геозону'}),sample('surface',{tone:'surface',icon:'my_location',label:'Центрировать карту'}))),
+    h('section',{'aria-labelledby':'extended'},h('h3',{id:'extended'},'С подписью'),h('div',{className:'row'},sample('Круглая',{}),sample('Расширенная',{extended:true}))),
+    h('section',{'aria-labelledby':'loading'},h('h3',{id:'loading'},'Загрузка'),h('div',{className:'row'},h(S.DsFab,{label:'Добавить объект',loading:saving[0],onClick:save}),h(S.DsFab,{label:'Добавить объект',extended:true,loading:saving[0],onClick:save})),h('p',{role:'status','aria-label':'Результат добавления'},saved[0])),
+    h('section',{'aria-labelledby':'long-label'},h('h3',{id:'long-label'},'Длинная подпись'),h('div',{style:{width:220,maxWidth:'100%'}},h(S.DsFab,{label:'Добавить объект в выбранную группу',extended:true,onClick:function(){setMessage('Объект добавлен в выбранную группу.');}}))),
+    h('section',{'aria-labelledby':'disabled'},h('h3',{id:'disabled'},'Недоступное действие'),h('div',{className:'row'},sample('Круглая',{disabled:true,'aria-describedby':'disabled-reason'}),sample('Расширенная',{extended:true,disabled:true,'aria-describedby':'disabled-reason'})),h('p',{id:'disabled-reason',className:'cap'},'Добавление доступно администратору. Обратитесь к администратору проекта.')),
+    h('p',{role:'status','aria-label':'Результат действия'},message[0]),
+    h(Placement)
+  );
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
