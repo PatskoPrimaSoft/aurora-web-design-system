@@ -138,9 +138,9 @@ for(const trigger of ['title','action']){
   Object.defineProperty(title,'scrollWidth',{value:200});Object.defineProperty(title,'clientWidth',{value:100});
   const control=trigger==='title'?row.querySelector('button'):row.querySelector('[data-ds-list-actions] button');
   act(()=>control.focus());
-  ok(!!row.querySelector('[role="tooltip"]'),`DsListRow ${trigger}: подсказка открыта в диалоге`);
+  ok(d.querySelectorAll('[role="tooltip"]').length===1,`DsListRow ${trigger}: одна подсказка открыта в диалоге`);
   const first=key(control,'Escape');
-  ok(first.defaultPrevented&&!row.querySelector('[role="tooltip"]')&&closed===0,`DsListRow ${trigger}: первый Escape закрывает только подсказку`);
+  ok(first.defaultPrevented&&!d.querySelector('[role="tooltip"]')&&closed===0,`DsListRow ${trigger}: первый Escape закрывает только подсказку`);
   key(control,'Escape');
   ok(closed===1,`DsListRow ${trigger}: без подсказки Escape закрывает диалог`);
   fixture.unmount();

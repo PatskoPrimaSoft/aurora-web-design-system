@@ -25,6 +25,29 @@ const key = (el, type, k) => fire(el, type, { key: k }, w.KeyboardEvent);
 const click = (el) => act(() => el.click());
 const spy = () => { const f = (...a) => { f.calls.push(a); }; f.calls = []; return f; };
 const nested = (box) => box.querySelectorAll('button button, [role="button"] button, button [role="button"]').length;
+// DsIconButton: подсказка и загрузка согласованы с остальными кнопками.
+{
+  const host=d.createElement('div');d.body.append(host);const root=ReactDOM.createRoot(host);
+  const action=spy(),submit=spy(),outer=spy(),focus=spy();
+  const draw=(props={})=>act(()=>root.render(h('form',{onSubmit:e=>{e.preventDefault();submit();},onKeyDown:e=>{if(e.key==='Escape'&&!e.defaultPrevented)outer();}},
+    h(NS.DsIconButton,{icon:'refresh',label:'Обновить данные',tone:'primary',onClick:action,onFocus:focus,'aria-describedby':'hint',...props}))));
+  draw();const button=host.querySelector('button');act(()=>button.focus());
+  ok(!button.hasAttribute('aria-label')&&button.querySelector('[data-ds-icon-button-label]')?.textContent==='Обновить данные','DsIconButton: доступное имя задано переводимым скрытым текстом');
+  ok(d.querySelector('[role="tooltip"]')?.textContent==='Обновить данные'&&!button.hasAttribute('title'),'DsIconButton: подсказка по фокусу без title');
+  ok(button.getAttribute('aria-describedby')?.startsWith('hint ')&&focus.calls.length===1,'DsIconButton: описание и обработчик фокуса сохраняются');
+  key(button,'keydown','Escape');ok(!d.querySelector('[role="tooltip"]')&&outer.calls.length===0,'DsIconButton: Escape закрывает только подсказку');
+  key(button,'keydown','Escape');ok(outer.calls.length===1,'DsIconButton: без подсказки Escape доходит до внешнего слоя');
+  draw({loading:true,type:'submit'});
+  ok(button.querySelector('[data-ds-icon-button-label]')?.textContent==='Обновить данные','DsIconButton: скрытая подпись сохраняется при загрузке');
+  ok(d.activeElement===button&&!button.disabled&&button.getAttribute('aria-busy')==='true'&&button.getAttribute('aria-disabled')==='true','DsIconButton: загрузка сохраняет фокус и объявляет состояние');
+  const event=fire(button,'click',{},w.MouseEvent);
+  ok(event.defaultPrevented&&!action.calls.length&&!submit.calls.length,'DsIconButton: загрузка блокирует действие и submit');
+  ok(!!button.querySelector('[data-ds-icon-button-spinner]')&&button.style.background.includes('ds-brand'),'DsIconButton: спиннер сохраняет тон');
+  draw({type:'submit'});click(button);
+  ok(action.calls.length===1&&submit.calls.length===1,'DsIconButton: после загрузки действие и submit работают');
+  draw({disabled:true,loading:true});ok(button.disabled,'DsIconButton: явный disabled сохраняет нативную блокировку');
+  act(()=>root.unmount());host.remove();
+}
 // DsFab: подсказка соблюдает Escape-контракт, загрузка сохраняет фокус и блокирует submit.
 {
   const host=d.createElement('div');d.body.append(host);const root=ReactDOM.createRoot(host);
@@ -177,21 +200,23 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
 {
   const open = spy(), del = spy();
   const box = render(h(NS.DsListRow, { title: 'MAZ 5440', onClick: open, actions: h(NS.DsIconButton, { icon: 'delete', label: 'Удалить', onClick: del }) }));
-  const btn = box.querySelector('button[aria-label="Удалить"]');
+  const btn = box.querySelector('[data-ds-list-actions] button');
+  const main = box.querySelector('button');
   ok(nested(box) === 0, 'DsListRow: действия не вложены в основную кнопку');
   click(btn); ok(del.calls.length === 1 && open.calls.length === 0, 'DsListRow: действие не открывает строку');
-  click(box.querySelector('button:not([aria-label])')); ok(open.calls.length === 1, 'DsListRow: основная зона открывает');
+  click(main); ok(open.calls.length === 1, 'DsListRow: основная зона открывает');
   ok(!btn.hasAttribute('title'),'DsListRow: DsIconButton не дублирует подсказку нативным title');
-  fire(btn,'focusin');
-  ok(box.querySelector('[role="tooltip"]')?.textContent==='Удалить','DsListRow: действие показывает подпись с клавиатуры');
+  act(()=>btn.focus());
+  ok(d.querySelectorAll('[role="tooltip"]').length===1&&d.querySelector('[role="tooltip"]')?.textContent==='Удалить','DsListRow: действие показывает одну системную подсказку с клавиатуры');
+  act(()=>btn.blur());
   fire(box.querySelector('[data-ds-list-title]'),'pointerover',{pointerType:'mouse'});
   await new Promise(resolve=>w.setTimeout(resolve,0));
-  ok(!box.querySelector('[role="tooltip"]'),'DsListRow: переход к короткому названию закрывает подсказку действия');
+  ok(!d.querySelector('[role="tooltip"]'),'DsListRow: переход к короткому названию закрывает подсказку действия');
   const title=box.querySelector('[data-ds-list-title]');
   Object.defineProperty(title,'scrollWidth',{value:200});Object.defineProperty(title,'clientWidth',{value:100});
-  fire(box.querySelector('button:not([aria-label])'),'focusin');
+  fire(main,'focusin');
   ok(box.querySelector('[role="tooltip"]')?.textContent==='MAZ 5440','DsListRow: сокращённое название раскрывается при фокусе');
-  key(box.querySelector('button:not([aria-label])'),'keydown','Escape');
+  key(main,'keydown','Escape');
   ok(!box.querySelector('[role="tooltip"]'),'DsListRow: Escape закрывает подсказку');
 }
 // ---------------- №3 + №4 DsTable
