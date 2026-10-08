@@ -58,3 +58,12 @@ test('tabs page groups both contracts before a single token reference',async()=>
   expect(card.apiHtml.match(/>Токены<\/h2>/g)).toHaveLength(1);
   expect(card.apiHtml.indexOf('Параметры DsTabPanel')).toBeLessThan(card.apiHtml.indexOf('>Токены</h2>'));
 });
+
+
+test('components with separate pages do not duplicate contracts from shared declarations',async()=>{
+  const cards=await buildCatalogue({root,outDir:`${root}/site`});
+  const spinner=cards.find(card=>card.id==='DsSpinner');
+  const skeleton=cards.find(card=>card.id==='DsSkeleton');
+  expect(spinner.apiPaths.map(entry=>entry.name)).toEqual(['DsSpinner']);
+  expect(skeleton.apiPaths.map(entry=>entry.name)).toEqual(['DsSkeleton']);
+});

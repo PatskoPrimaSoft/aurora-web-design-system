@@ -52,7 +52,7 @@ export async function buildCatalogue({ root, outDir }) {
   const reference=renderTokenReference(readTokenModel(css.source));
   writePage('api/tokens.html',documentPage({title:'CSS-токены',html:reference.html}));
   for(const card of cards){
-    const contracts=api.filter(doc=>doc.name===card.id||doc.declarationPath.split('/')[1]===card.id).sort((a,b)=>Number(b.name===card.id)-Number(a.name===card.id));
+    const contracts=api.filter(doc=>doc.name===card.id||(doc.declarationPath.split('/')[1]===card.id&&!cards.some(own=>own.id===doc.name))).sort((a,b)=>Number(b.name===card.id)-Number(a.name===card.id));
     card.apiPaths=contracts.map(doc=>({name:doc.name,path:`api/components/${doc.name}.html`}));
     if(card.layout==='component'){
       const descriptionPath=join(dirname(card.previewPath),'API.md');

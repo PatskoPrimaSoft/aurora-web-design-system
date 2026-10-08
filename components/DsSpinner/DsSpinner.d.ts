@@ -1,22 +1,13 @@
-/**
- * v2 spinner and skeleton.
- *
- * v1 had no spinner component — screens used `mat-spinner` directly at Ø25px inside
- * buttons and Ø20px in the toolbar, which is why loaders were re-invented per screen.
- * v2 ships one, and adds a skeleton because a spinner inside a data table is worse
- * than a greyed row: it moves, and it tells you nothing about shape.
- *
- * Buttons do not need this — `DsButton loading` and `DsIconButton loading` draw
- * their own inline spinner.
- */
 export interface DsSpinnerProps {
-  /** px diameter. 16 in a row, 20 default, 32 for a panel, 48 for a page. */
+  /** Задержка появления в ms; место сохраняется, доступное объявление начинается после задержки. */
+  delay?: number;
+  /** Диаметр в px: 16–20 для строки, 32 для области, 48 для страницы. */
   size?: number;
-  /** px. Derived from size when omitted. */
+  /** Толщина кольца в px; без значения вычисляется из диаметра. */
   thickness?: number;
-  /** `inverse` uses currentColor — for brand or status grounds. */
+  /** Цвет кольца; inverse наследует currentColor родителя. */
   tone?: 'brand' | 'muted' | 'inverse';
-  /** aria-label. Default "Loading". */
+  /** Доступное название операции; без значения используется строка загрузки из DsStringsProvider. */
   label?: string;
 }
 export declare function DsSpinner(props: DsSpinnerProps): JSX.Element;
