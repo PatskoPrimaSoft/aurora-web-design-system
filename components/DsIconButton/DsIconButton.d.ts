@@ -6,8 +6,8 @@ export interface DsIconButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   icon: string;
   /** Визуально скрытый текст внутри кнопки задаёт доступное имя; также используется в системной подсказке. */
   label: string;
-  /** Роль действия; onHeader предназначен для поверхности шапки. */
-  tone?: 'ghost' | 'secondary' | 'primary' | 'danger' | 'onHeader';
+  /** Роль действия; onHeader — для шапки, inverse — для инверсной поверхности. */
+  tone?: 'ghost' | 'secondary' | 'primary' | 'danger' | 'onHeader' | 'inverse';
   /** Размер кнопки; фактические размеры зависят от плотности интерфейса. */
   size?: 'sm' | 'md' | 'lg';
   /** Состояние переключателя и aria-pressed. У обычного действия параметр опускайте. */

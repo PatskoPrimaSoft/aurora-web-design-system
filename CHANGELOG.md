@@ -7,6 +7,8 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ### Breaking
 
+- `DsToast`: срочность объявления теперь задаёт `announcement` (по умолчанию polite), а не `tone`; для прежнего alert у danger явно задавайте assertive.
+
 - `DsEmptyState`: announcement по умолчанию off вместо постоянного role=status; для динамических результатов задавайте polite/assertive. Заголовок по умолчанию h2, уровень задаёт headingLevel.
 
 - `DsBanner`: announcement по умолчанию off — тон больше не назначает alert/status. Для динамических сообщений явно выбирайте polite/assertive. Заголовок по умолчанию h2; headingLevel позволяет выбрать уровень или none для обычного текста.
@@ -14,6 +16,9 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 - `DsTabs`: для underline и segmented в TypeScript обязателен idBase для связи с DsTabPanel; у onHeader он остаётся необязательным. `DsTabPanel` сохраняет посещённое содержимое при скрытии; для прежнего сброса локального состояния задайте unmountOnHide.
 
 ### Added
+
+- `DsToast`: системные инверсные кнопки, `closeLabel`, вертикальное центрирование иконки и бокового действия в многострочном тосте, перенос действия на узкой поверхности, необязательное автозакрытие от 8 секунд с паузой при наведении и фокусе; warning/danger сохраняются. `DsToastStack`: адаптивные отступы с safe area, анимации входа/ухода и освобождения места, reduced motion. Живые примеры очереди, повтора, длинного текста, таймера и диалога.
+- `DsButton`, `DsIconButton`: тон `inverse` для действий на инверсной поверхности, с системными hover/pressed и фокусом.
 
 - DsToast: страница по общему стандарту, живой пример архивирования с отменой и закрытием, переключение позиции DsToastStack; правила, код, параметры и токены на основной странице.
 

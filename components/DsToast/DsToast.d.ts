@@ -1,5 +1,11 @@
 export interface DsToastProps {
-  /** Смысл сообщения и цвет иконки; danger использует alert, остальные — status. */
+  /** polite — status; assertive — alert для срочного сообщения; off — без объявления. */
+  announcement?: 'polite' | 'assertive' | 'off';
+  /** Автозакрытие в ms через onClose, 0 — выключено. Минимум 8000; warning/danger не закрываются автоматически. Таймер приостанавливается при наведении мыши и фокусе внутри. */
+  autoDismiss?: number;
+  /** Доступное имя и системная подсказка кнопки закрытия. */
+  closeLabel?: string;
+  /** Смысл сообщения и цвет иконки; срочность задаёт announcement. */
   tone?: 'neutral' | 'info' | 'success' | 'warning' | 'danger';
   /** Краткий текст результата действия. */
   children?: React.ReactNode;

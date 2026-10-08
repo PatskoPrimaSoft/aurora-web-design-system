@@ -44,6 +44,7 @@ function App(){
   function report(label){action[1]('Выполнено действие «'+label+'».');}
   function save(){saving[1](true);saved[1](false);timer.current=setTimeout(function(){saving[1](false);saved[1](true);},1200);}
   return h('div',{className:'examples'},
+    section('На инверсной поверхности',h('div',{style:{background:'var(--ds-surface-inverse)',padding:12,borderRadius:'var(--ds-radius-md)',alignSelf:'flex-start'}},h(S.DsButton,{tone:'inverse',onClick:function(){report('Отменить');}},'Отменить'))),
     section('Тоны',h('div',{className:'row'},[
       ['primary','Сохранить'],['secondary','Отмена'],['subtle','Применить'],['ghost','Подробнее'],['danger','Удалить'],['accent','Попробовать']
     ].map(function(item){return h('div',{key:item[0],className:'sample'},h(S.DsButton,{tone:item[0],onClick:function(){report(item[1]);}},item[1]),h('span',{className:'cap'},item[0]));}))),

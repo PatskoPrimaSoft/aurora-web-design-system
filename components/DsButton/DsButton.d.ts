@@ -2,8 +2,8 @@ import * as React from 'react';
 
 /** Кнопка действия. Размеры зависят от плотности интерфейса. */
 export interface DsButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Визуальная важность действия; danger — разрушительное действие. */
-  tone?: 'primary' | 'secondary' | 'subtle' | 'ghost' | 'danger' | 'accent';
+  /** Визуальная важность действия; danger — разрушительное действие; inverse — действие на инверсной поверхности. */
+  tone?: 'primary' | 'secondary' | 'subtle' | 'ghost' | 'danger' | 'accent' | 'inverse';
   /** Высота кнопки из токенов плотности. */
   size?: 'sm' | 'md' | 'lg';
   /** Имя Material Symbols Outlined, иконка перед текстом. */

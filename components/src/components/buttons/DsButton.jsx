@@ -5,6 +5,7 @@ import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
    over transparent is invisible and ghost must match the row hover. */
 const Ds_OVERLAY=(ink,depth)=>{const c='color-mix(in oklab,'+ink+' '+depth+',transparent)';return 'linear-gradient(0deg,'+c+','+c+')'};
 const DsBTN_TONES={
+  inverse:{background:'transparent',color:'var(--ds-fg-action-on-inverse)',border:'1px solid transparent',overlay:true},
   primary:{background:'var(--ds-brand)',color:'var(--ds-on-brand)',border:'1px solid transparent',overlay:true},
   accent:{background:'var(--ds-accent)',color:'var(--ds-accent-on)',border:'1px solid transparent',overlay:true},
   danger:{background:'var(--ds-danger-solid)',color:'var(--ds-on-solid)',border:'1px solid transparent',overlay:true},
@@ -38,7 +39,7 @@ export function usePress(disabled,rest={}){
   return {hover:hover&&!disabled,pressed:pressed&&!disabled,handlers,rest:own};
 }
 
-/** Button. One component, six tones, three sizes, all sized from density tokens. */
+/** Button. One component, seven tones, three sizes, all sized from density tokens. */
 export function DsButton({tone='primary',size='md',icon,iconRight,loading=false,disabled=false,fullWidth=false,children,onClick,type='button',...rest}){
   const t=DsBTN_TONES[tone]||DsBTN_TONES.primary;
   const off=disabled||loading;
@@ -55,7 +56,7 @@ export function DsButton({tone='primary',size='md',icon,iconRight,loading=false,
     if(off){e.preventDefault();e.stopPropagation();return}
     if(onClick)onClick(e);
   }
-  return <button type={type} style={style} {...own} {...handlers}
+  return <button type={type} {...own} style={{...style,...own.style}} {...handlers}
     disabled={disabled} aria-disabled={loading||own['aria-disabled']} aria-busy={loading||own['aria-busy']} onClick={activate}>
     <span data-ds-button-content="" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',gap:'var(--ds-gap-sm)',minWidth:0,maxWidth:'100%',overflow:'hidden',opacity:loading?0:1}}>
       {icon?<Icon name={icon} size={iconSize}/>:null}

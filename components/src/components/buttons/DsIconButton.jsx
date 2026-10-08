@@ -40,13 +40,14 @@ export function DsIconButton({icon,label,tone='ghost',size='md',active,loading=f
   if(tone==='secondary'){bg='var(--ds-surface)';bd='1px solid var(--ds-border-field)';fg='var(--ds-fg)'}
   if(tone==='primary'){bg='var(--ds-brand)';fg='var(--ds-on-brand)'}
   if(tone==='danger'){fg='var(--ds-danger-solid)'}
+  if(tone==='inverse'){fg='var(--ds-fg-on-inverse)'}
   if(tone==='onHeader'){fg='var(--ds-header-icon-fg)'}
   if(active){bg='var(--ds-brand-subtle)';fg='var(--ds-brand-text)'}
   /* a filled or tinted icon button answers with an overlay in its own ink; the
      unfilled tones still move their ground. */
   let ov;
   const depth=p?'var(--ds-overlay-press)':'var(--ds-overlay-hover)';
-  if((h||p)&&!off&&(tone==='primary'||active))ov=Ds_OVERLAY(fg,depth);
+  if((h||p)&&!off&&(tone==='primary'||tone==='inverse'||active))ov=Ds_OVERLAY(fg,depth);
   else if((h||p)&&!off&&tone==='onHeader'){bg='var(--ds-header-hover)';if(p)ov=Ds_OVERLAY(fg,depth)}
   else if((h||p)&&!off)bg=p?'var(--ds-surface-active)':'var(--ds-surface-hover)';
   if(disabled){fg='var(--ds-fg-disabled)';bg='transparent'}

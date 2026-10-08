@@ -20,3 +20,4 @@
 | `ds-icon-sm`, `ds-icon` | Единый размер левой и правой иконок и спиннера: sm использует ds-icon-sm, md/lg — ds-icon |
 | `ds-focus-width`, `ds-focus-color`, `ds-focus-offset` | Общее кольцо клавиатурного фокуса |
 | `ds-transition-control` | Плавность изменения оформления |
+| `ds-fg-action-on-inverse` | Содержимое inverse на инверсной поверхности; hover/pressed — оверлей в этом цвете |

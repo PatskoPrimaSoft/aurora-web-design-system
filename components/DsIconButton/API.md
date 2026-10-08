@@ -19,3 +19,4 @@
 | `ds-transition-control` | Плавность изменения оформления |
 | `ds-surface-inverse`, `ds-fg-on-inverse` | Фон и текст системной подсказки |
 | `ds-pad-tight`, `ds-pad-sm`, `ds-radius-sm`, `ds-type-caption`, `ds-shadow-sm` | Отступы, скругление, шрифт и тень подсказки |
+| `ds-fg-on-inverse` | Содержимое inverse на инверсной поверхности; hover/pressed — оверлей в этом цвете |
