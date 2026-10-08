@@ -1,41 +1,37 @@
-/**
- * v2 popover menu, and the header user menu built on it.
- *
- * v1 had no menu component: `AuthUserChip` + `HeaderMenuItem` + `HeaderDivider`
- * hand-assembled the user menu, and every row-actions menu in a table was a raw
- * `mat-menu` styled per screen. DsMenu is one anchored popover with items, so a
- * table's `more_vert`, a filter dropdown and the user menu are the same object.
- *
- * Panels are capped at 240px wide and 320px tall, matching v1's `menu panels max
- * 320px` rule.
- */
+/** Выпадающее меню действий или выбора, привязанное к кнопке. */
 export interface DsMenuItem {
   id?: string;
   label?: React.ReactNode;
   icon?: string;
-  /** Right-aligned keyboard hint, in the mono face. */
+  /** Видимая подсказка сочетания клавиш; обработчик реализует приложение. */
   shortcut?: string;
-  /** Draws a tick — for a menu used as a single-select. */
+  /** Показывает галочку; выбранное значение хранит потребитель. */
   checked?: boolean;
-  /** Red ink and a red hover ground. For "Move to archive". */
+  /** Выделение действия с существенными последствиями. */
   tone?: 'default' | 'danger';
   disabled?: boolean;
   onClick?: () => void;
-  /** Renders a 1px rule instead of an item; no other field applies. */
+  /** Разделитель вместо пункта; остальные поля не используются. */
   divider?: boolean;
 }
 export interface DsMenuProps {
-  /** Any element. DsMenu attaches the click handler itself. */
+  /** Кнопка раскрытия. Меню добавляет обработчик и атрибуты ARIA. */
   trigger?: React.ReactNode;
+  /** Пункты действий или выбора и разделители. */
   items?: DsMenuItem[];
+  /** Выбор доступного пункта; вызывается перед его onClick. */
   onSelect?: (item: DsMenuItem) => void;
-  /** Which edge the panel aligns to. Default `start`. */
+  /** Край панели, совмещённый с краем кнопки. */
   align?: 'start' | 'end';
+  /** Ширина панели в px; учитывайте доступное место на экране. */
   width?: number;
+  /** Короткий контекст над пунктами без интерактивных элементов. */
   header?: React.ReactNode;
+  /** Короткое пояснение под пунктами без интерактивных элементов. */
   footer?: React.ReactNode;
-  /** Controlled mode — pair with onOpenChange. */
+  /** Управляемое раскрытие; передавайте вместе с onOpenChange. */
   open?: boolean;
+  /** Запрос на открытие или закрытие меню. */
   onOpenChange?: (open: boolean) => void;
 }
 export declare function DsMenu(props: DsMenuProps): JSX.Element;
