@@ -31,13 +31,13 @@ function TreeExample(){
     h('p',{className:'cap'},'Выбор группы меняет выбор её объектов. Сворачивание сохраняет выбор.'));
 }
 function ActionsExample(){
-  var open=React.useState(true),message=React.useState('Группа ещё не открыта.');
+  var open=React.useState(true),view=React.useState(false),choice=React.useState('unchecked');
   return h('section',{className:'section','aria-label':'Раскрытие и открытие группы'},
     h('h3',null,'Раскрытие и открытие группы'),
-    h('div',{className:'tree'},h(S.DsTreeRow,{title:'Северный филиал',icon:'label',expanded:open[0],onToggle:open[1],onClick:function(){message[1]('Открыта группа «Северный филиал».');},total:2,selected:0}),
+    h('div',{className:'tree'},h(S.DsTreeRow,{title:'Северный филиал',icon:'label',expanded:open[0],onToggle:open[1],active:view[0],onClick:function(){view[1](!view[0]);},total:2,selected:choice[0]==='checked'?2:0,select:choice[0],onSelectChange:choice[1]}),
       open[0]?h('div',{className:'leaves'},h(S.DsListRow,{title:'MAZ 5440',subtitle:'AB 1234-7'}),h(S.DsListRow,{title:'Volvo FH16',subtitle:'AC 8871-2'})):null),
-    h('p',{className:'cap',role:'status'},message[0]),
-    h('p',{className:'cap'},'Шеврон раскрывает ветку, название открывает группу. Действия работают независимо.'));
+    h('p',{className:'cap',role:'status'},view[0]?'Открыта группа «Северный филиал».':'Группа ещё не открыта.'),
+    h('p',{className:'cap'},'Шеврон раскрывает ветку, название включает и снимает просмотр, чекбокс выбирает объекты. Действия независимы.'));
 }
 function StatesExample(){return h('section',{className:'section','aria-label':'Варианты строки'},
   h('h3',null,'Варианты строки'),
@@ -46,6 +46,15 @@ function StatesExample(){return h('section',{className:'section','aria-label':'�
     h(S.DsTreeRow,{title:'Группа без объектов',icon:'label',level:1,expanded:false,total:0,selected:0,select:'unchecked',selectDisabled:true}),
     h(S.DsTreeRow,{title:'Архив',icon:'label',level:1,expanded:false,meta:'только чтение'})),
   h('p',{className:'cap'},'Инициалы, счётчик непрочитанных 99+, недоступный выбор и дополнительная подпись.'));}
-function App(){return h('div',{className:'examples'},h(TreeExample),h(ActionsExample),h(StatesExample));}
+function LongTitleExample(){
+  var open=React.useState(false);
+  return h('section',{className:'section','aria-label':'Длинное название'},
+    h('h3',null,'Длинное название'),
+    h('div',{className:'tree',style:{maxWidth:320}},
+      h(S.DsTreeRow,{title:'Группа транспорта северо-западного подразделения',icon:'label',meta:'Северо-западное подразделение · только чтение',expanded:open[0],onToggle:open[1],total:12,selected:0,select:'unchecked',selectDisabled:true}),
+      open[0]?h('p',{className:'cap',role:'status'},'Ветка раскрыта.'):null),
+    h('p',{className:'cap'},'Наведите указатель или перейдите к строке клавишей Tab: подсказка покажет полное название. Escape закрывает её.'));
+}
+function App(){return h('div',{className:'examples'},h(TreeExample),h(ActionsExample),h(StatesExample),h(LongTitleExample));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

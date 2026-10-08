@@ -20,6 +20,7 @@ export interface DsStrings {
   clearSelection: string;
   expand: (title: string) => string;
   collapse: (title: string) => string;
+  tree: { selected: (selected: number, total: number) => string };
   unread: (count: number) => string;
   objects: (count: number) => string;
   online: string;

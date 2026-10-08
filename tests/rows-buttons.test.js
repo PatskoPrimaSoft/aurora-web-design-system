@@ -318,5 +318,42 @@ const mouse = { pointerType: 'mouse', button: 0 };
   click(button);ok(open.calls.length===1,'DsTable: подсказка не меняет действие строки');
 }
 
+
+// DsTreeRow: раскрытие только для веток, независимые действия и читаемые сокращения.
+{
+  const plain=render(h(NS.DsTreeRow,{title:'Пустая группа'}));
+  ok(!/expand_more|chevron_right/.test(plain.textContent),'DsTreeRow: без onToggle нет ложного шеврона');
+  const toggle=spy(),open=spy();
+  const box=render(h(NS.DsTreeRow,{title:'Группа',active:true,onClick:open,onToggle:toggle,selected:3,total:12,unread:120,select:'checked'}));
+  const main=box.querySelector('button:not([aria-expanded])'),chevron=box.querySelector('button[aria-expanded]');
+  ok(main?.getAttribute('aria-current')==='true'&&box.firstElementChild.style.boxShadow.includes('ds-brand'),'DsTreeRow: открытая группа объявлена и отмечена полосой');
+  const count=box.querySelector('[data-ds-tree-count]'),badge=box.querySelector('[data-ds-tree-unread]');
+  ok(count?.getAttribute('aria-label')==='Выбрано 3 из 12'&&badge?.getAttribute('aria-label')==='120 непрочитанных','DsTreeRow: полное озвучивание обоих счётчиков');
+  const single=render(h(NS.DsTreeRow,{title:'Группа',onToggle:toggle}));
+  const slot=single.querySelector('[data-ds-tree-chevron]');
+  ok(chevron?.style.width===slot?.style.width&&chevron?.style.width==='var(--ds-control-h-sm)','DsTreeRow: постоянная ширина области шеврона');
+  const idle=render(h(NS.DsTreeRow,{title:'Группа',onClick:open,select:'unchecked'}));
+  fire(idle.querySelector('label'),'pointerover',{pointerType:'mouse'});
+  ok(idle.firstElementChild.style.background==='transparent','DsTreeRow: чекбокс не подсвечивает всю строку');
+  const idleMain=idle.querySelector('button');
+  fire(idleMain,'pointerover',{pointerType:'mouse'});
+  await new Promise(resolve=>w.setTimeout(resolve,0));
+  ok(idleMain.style.background==='var(--ds-surface-hover)','DsTreeRow: hover основной области');
+  key(idleMain,'keydown',' ');
+  ok(idleMain.style.background==='var(--ds-surface-active)','DsTreeRow: нажатие основной области');
+  key(idleMain,'keyup',' ');
+  const clipped=render(h(NS.DsTreeRow,{title:'Длинное название группы',onClick:open}));
+  const title=clipped.querySelector('[data-ds-tree-title]');
+  if(title){Object.defineProperty(title,'scrollWidth',{value:200});Object.defineProperty(title,'clientWidth',{value:80});}
+  act(()=>clipped.querySelector('button').focus());
+  const tip=d.querySelector('[role="tooltip"]');
+  ok(tip?.textContent==='Длинное название группы','DsTreeRow: обрезанное название доступно по фокусу');
+  ok(tip?.id===clipped.querySelector('button').getAttribute('aria-describedby'),'DsTreeRow: подсказка связана с основной областью');
+  const escape=key(clipped.querySelector('button'),'keydown','Escape');
+  ok(escape.defaultPrevented&&!d.querySelector('[role="tooltip"]'),'DsTreeRow: Escape закрывает подсказку и защищает внешний слой');
+  ok(!key(clipped.querySelector('button'),'keydown','Escape').defaultPrevented,'DsTreeRow: без подсказки Escape проходит дальше');
+  const en=render(h(NS.DsStringsProvider,{strings:NS.dsStringsEn},h(NS.DsTreeRow,{title:'Group',selected:1,total:2})));
+  ok(en.querySelector('[data-ds-tree-count]')?.getAttribute('aria-label')==='Selected 1 of 2','DsTreeRow: счётчик локализован');
+}
 if (fails) { console.error(`${fails} FAIL`); process.exit(1); }
 console.log('все проверки прошли');

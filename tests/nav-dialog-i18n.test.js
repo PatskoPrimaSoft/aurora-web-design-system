@@ -145,6 +145,29 @@ for(const trigger of ['title','action']){
   ok(closed===1,`DsListRow ${trigger}: без подсказки Escape закрывает диалог`);
   fixture.unmount();
 }
+// Подсказка дерева закрывается раньше внешнего диалога, включая hover без фокуса строки.
+for(const trigger of ['focus','hover']){
+  let closed=0;
+  const fixture=mount(h(NS.DsDialog,{title:'Группы',onClose:()=>closed++},
+    h(NS.DsTreeRow,{title:'Длинное название группы',onClick:()=>{}}),
+    h('button',{'data-other-action':''},'Другое действие')));
+  const row=d.querySelector('[role="dialog"] [data-ds-tree-row]');
+  const title=row.querySelector('[data-ds-tree-title]');
+  Object.defineProperty(title,'scrollWidth',{value:200});Object.defineProperty(title,'clientWidth',{value:100});
+  const control=row.querySelector('button');
+  if(trigger==='focus')act(()=>control.focus());
+  else{
+    act(()=>d.querySelector('[data-other-action]').focus());
+    act(()=>control.dispatchEvent(new w.MouseEvent('mouseover',{bubbles:true})));
+    await new Promise(resolve=>w.setTimeout(resolve,0));
+  }
+  ok(!!d.querySelector('[role="tooltip"]'),`DsTreeRow ${trigger}: подсказка открыта в диалоге`);
+  const first=key(d.activeElement,'Escape');
+  ok(first.defaultPrevented&&!d.querySelector('[role="tooltip"]')&&closed===0,`DsTreeRow ${trigger}: первый Escape сохраняет диалог`);
+  key(d.activeElement,'Escape');
+  ok(closed===1,`DsTreeRow ${trigger}: второй Escape закрывает диалог`);
+  fixture.unmount();
+}
 // ---------------- строки интерфейса
 {
   const ru = mount(h(NS.DsToast, { action: () => {} }, 'x')).box;
