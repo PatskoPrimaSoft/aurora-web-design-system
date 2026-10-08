@@ -1,28 +1,28 @@
-/**
- * v2 button. Replaces the legacy three-level architecture (`.app-button` + a colour
- * class + a semantic Angular wrapper per action) with one component and a `tone`.
- * Height, padding and gap come from the density tokens, so the same button is 30px
- * in a compact table toolbar and 36px on a cozy form.
- */
+/** Кнопка действия. Размеры зависят от плотности интерфейса. */
 export interface DsButtonProps {
-  /** `primary` brand fill · `secondary` bordered surface · `subtle` brand tint · `ghost` bare · `danger` · `accent`. */
+  /** Визуальная важность действия; danger — разрушительное действие. */
   tone?: 'primary' | 'secondary' | 'subtle' | 'ghost' | 'danger' | 'accent';
+  /** Высота кнопки из токенов плотности. */
   size?: 'sm' | 'md' | 'lg';
-  /** Material Symbols Outlined ligature, leading. */
+  /** Имя Material Symbols Outlined, иконка перед текстом. */
   icon?: string;
-  /** Trailing ligature — chevrons, external-link. */
+  /** Иконка после текста. Скрывается во время загрузки. */
   iconRight?: string;
-  /** Swaps the leading icon for a spinner and disables the button. */
+  /** Спиннер вместо левой иконки; повторное нажатие недоступно. */
   loading?: boolean;
+  /** Отключает действие и исключает кнопку из последовательности Tab. */
   disabled?: boolean;
+  /** Растягивает кнопку на ширину родителя. */
   fullWidth?: boolean;
+  /** Видимая подпись действия. */
   children?: React.ReactNode;
+  /** Вызывается при активации доступной кнопки мышью или клавиатурой. */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  /** Поведение в форме; для отправки задайте submit. */
   type?: 'button' | 'submit' | 'reset';
 }
-/** Hover (mouse only) and momentary press 16% on every input — mouse, touch, pen, Space, Enter. */
 export declare function DsButton(props: DsButtonProps): JSX.Element;
-/** The shared hover / press rule of DsButton, DsIconButton and DsFab. Consumer handlers in `rest` are chained, not replaced. */
+/** Общее правило наведения и нажатия DsButton, DsIconButton и DsFab. Обработчики rest вызываются после внутренних. */
 export declare function usePress(disabled: boolean, rest?: Record<string, any>): {
   hover: boolean; pressed: boolean; handlers: Record<string, (e: any) => void>; rest: Record<string, any>;
 };

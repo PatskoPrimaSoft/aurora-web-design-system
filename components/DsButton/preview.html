@@ -1,24 +1,37 @@
-<!-- @dsCard group="5 · Компоненты · кнопки" height=150 subtitle="Один компонент, шесть тонов, три размера из токенов плотности" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · кнопки" height=780 subtitle="Кнопка действия с текстом, иконками и состоянием загрузки" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:32px}
+.section{display:flex;flex-direction:column;gap:16px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+.sample{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.form{display:flex;flex-direction:column;gap:16px;max-width:360px}
+h3{font:var(--ds-type-body-strong);margin:0}
+.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'col'},
-  h('div',{className:'row'},['primary','secondary','subtle','ghost','danger','accent'].map(function(t){
-    return h(S.DsButton,{key:t,tone:t},t==='danger'?'Переместить в архив':t==='primary'?'Сохранить':t==='accent'?'Новое':'Отмена');})),
-  h('div',{className:'row'},
-    h(S.DsButton,{size:'sm',icon:'download',tone:'secondary'},'Экспорт CSV'),
-    h(S.DsButton,{icon:'add'},'Добавить объект'),
-    h(S.DsButton,{size:'lg',iconRight:'expand_more',tone:'secondary'},'Фильтры'),
-    h(S.DsButton,{loading:true},'Сохранить'),
-    h(S.DsButton,{disabled:true},'Сохранить')));}
+function section(title,content){return h('section',{className:'section','aria-label':title},h('h3',null,title),content);}
+function App(){
+  var action=React.useState('Нажмите любую доступную кнопку.'),saving=React.useState(false),saved=React.useState(false),timer=React.useRef();
+  React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
+  function report(label){action[1]('Выполнено действие «'+label+'».');}
+  function save(){saving[1](true);saved[1](false);timer.current=setTimeout(function(){saving[1](false);saved[1](true);},1200);}
+  return h('div',{className:'examples'},
+    section('Тоны',h('div',{className:'row'},[
+      ['primary','Сохранить'],['secondary','Отмена'],['subtle','Применить'],['ghost','Подробнее'],['danger','Удалить'],['accent','Попробовать']
+    ].map(function(item){return h('div',{key:item[0],className:'sample'},h(S.DsButton,{tone:item[0],onClick:function(){report(item[1]);}},item[1]),h('span',{className:'cap'},item[0]));}))),
+    section('Размеры и иконки',h('div',{className:'row'},
+      h('div',{className:'sample'},h(S.DsButton,{size:'sm',tone:'secondary',icon:'download',onClick:function(){report('Экспорт CSV');}},'Экспорт CSV'),h('span',{className:'cap'},'sm · иконка слева')),
+      h('div',{className:'sample'},h(S.DsButton,{icon:'add',onClick:function(){report('Добавить объект');}},'Добавить объект'),h('span',{className:'cap'},'md · по умолчанию')),
+      h('div',{className:'sample'},h(S.DsButton,{size:'lg',tone:'secondary',iconRight:'arrow_forward',onClick:function(){report('Продолжить');}},'Продолжить'),h('span',{className:'cap'},'lg · иконка справа')))),
+    section('Недоступное действие',h('div',{className:'row'},['primary','secondary','subtle','ghost','danger','accent'].map(function(tone){return h('div',{className:'sample',key:tone},h(S.DsButton,{tone:tone,disabled:true},tone==='danger'?'Удалить':'Сохранить'),h('span',{className:'cap'},tone));}))),
+    h('p',{className:'cap',role:'status','aria-label':'Результат действия'},action[0]),
+    section('Сохранение с загрузкой',h('div',{className:'form'},
+      h('p',{className:'cap'},'Кнопка на всю ширину области. Во время сохранения повторное нажатие недоступно.'),
+      h(S.DsButton,{fullWidth:true,icon:'save',loading:saving[0],onClick:save},saving[0]?'Сохранение…':'Сохранить изменения'),
+      h('p',{className:'cap',role:'status','aria-label':'Результат сохранения'},saving[0]?'Сохраняем изменения…':saved[0]?'Изменения сохранены.':'Изменения ещё не сохранены.'))));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
