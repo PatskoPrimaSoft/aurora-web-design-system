@@ -45,5 +45,21 @@ ok(act.style.textDecoration.includes('underline'), 'DsToast: действие п
 box = render(h(NS.DsStateIcon, { state: 'alarm' }));
 ok(box.firstChild.getAttribute('aria-label') === 'Тревога', 'DsStateIcon по-прежнему подписан');
 
+
+// Декоративный индикатор не дублирует соседнюю текстовую подпись.
+for (const bare of [false, true]) {
+  box = render(h(NS.DsStateIcon, { state: 'moving', decorative: true, bare, label: 'Движение' }));
+  ok(box.firstChild.getAttribute('aria-hidden') === 'true' &&
+    !box.firstChild.hasAttribute('role') && !box.firstChild.hasAttribute('aria-label') &&
+    !box.firstChild.hasAttribute('title'), 'DsStateIcon decorative: скрыт и без повторной подсказки, bare=' + bare);
+}
+for (const [size, glyphSize] of [[20, 16], [28, 20], [36, 24]]) {
+  box = render(h(NS.DsStateIcon, { state: 'moving', size, course: 90 }));
+  const glyph = box.querySelector('.material-symbols-outlined');
+  ok(glyph.style.fontSize === glyphSize + 'px', 'DsStateIcon: диск ' + size + ', глиф ' + glyphSize);
+  ok(glyph.style.transform === 'rotate(90deg)', 'DsStateIcon: сохраняется курс при размере ' + size);
+}
+box = render(h(NS.DsStateIcon, { state: 'parked', course: 90 }));
+ok(!box.querySelector('.material-symbols-outlined').style.transform, 'DsStateIcon: стоянка не поворачивается');
 if (fails) { console.error(`${fails} FAIL`); process.exit(1); }
 console.log('все проверки прошли');

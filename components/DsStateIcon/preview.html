@@ -1,18 +1,52 @@
-<!-- @dsCard group="5 · Компоненты · данные" height=110 subtitle="Состояние объекта глифом в диске; движение показывает курс" -->
+<!-- @dsCard layout="component" aliases="состояние объекта|статус объекта|state icon" group="5 · Компоненты · данные" height=800 subtitle="Состояние объекта по значку и цвету; направление движения — по курсу" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:32px}
+section{display:flex;flex-direction:column;gap:12px;min-width:0}
+h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
+.row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.states{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.state{display:flex;align-items:center;gap:8px;min-height:28px}
+.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
+.control{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+select{font:var(--ds-type-ui);color:var(--ds-fg);background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-xs);height:var(--ds-control-h-sm);max-width:100%;padding:0 8px}
+select:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
 </style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'row'},
-  ['moving','parked','offline','invalid','alarm','nodata'].map(function(s){return h(S.DsStateIcon,{key:s,state:s,course:s==='moving'?45:undefined});}),
-  h('span',{className:'sep'}),h(S.DsStateIcon,{state:'moving',course:200,size:20}),h(S.DsStateIcon,{state:'alarm',bare:true}));}
+(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210,states=Object.keys(S.dsFleetState);
+function App(){
+ var state=React.useState('moving'),course=React.useState(45),active=React.useState(null);
+ return h('div',{className:'examples'},
+  h('section',{'aria-label':'Состояния объектов'},
+   h('h3',null,'Состояния объектов'),
+   h('div',{className:'states'},states.map(function(key){return h('div',{key:key,className:'state'},
+    h(S.DsStateIcon,{state:key,course:key==='moving'?45:undefined,decorative:true}),h('span',null,S.dsFleetState[key].label));}))),
+  h('section',{'aria-label':'Состояние и курс'},
+   h('h3',null,'Состояние и курс'),
+   h('div',{className:'control'},h('label',{htmlFor:'object-state'},'Состояние'),
+    h('select',{id:'object-state',value:state[0],onChange:function(e){state[1](e.target.value);}},
+     states.map(function(key){return h('option',{key:key,value:key},S.dsFleetState[key].label);}))),
+   h('div',{className:'row'},h('div',{className:'state','aria-live':'polite','aria-atomic':'true'},
+    h(S.DsStateIcon,{state:state[0],course:course[0],label:S.dsFleetState[state[0]].label+(state[0]==='moving'?', курс '+course[0]+'°':'')}),
+    h('span',null,S.dsFleetState[state[0]].label)),
+    h(S.DsButton,{size:'sm',tone:'secondary',disabled:state[0]!=='moving',onClick:function(){course[1]((course[0]+45)%360);}},'Повернуть на 45°')),
+   h('p',{className:'cap'},'Курс: '+course[0]+'°. Поворот применяется только в движении; 0° — север.')),
+  h('section',{'aria-label':'Размеры'},
+   h('h3',null,'Размеры'),
+   h('div',{className:'row'},[20,28,36].map(function(size){return h('div',{key:size,className:'state'},h(S.DsStateIcon,{state:'moving',course:45,size:size}),h('span',{className:'cap'},size+' px'));}))),
+  h('section',{'aria-label':'В списке объектов'},
+   h('h3',null,'В списке объектов'),
+   [{id:'car-1',title:'Грузовик 01',state:'moving',subtitle:'Северный проезд',value:'64 км/ч'},
+    {id:'car-2',title:'Фургон 02',state:'parked',subtitle:'Склад № 2',value:'0 км/ч'},
+    {id:'car-3',title:'Грузовик 03',state:'offline',subtitle:'Последняя связь 12 минут назад'}].map(function(item){
+     return h(S.DsListRow,{key:item.id,title:item.title,subtitle:item.subtitle,state:item.state,course:45,value:item.value,
+      active:active[0]===item.id,onClick:function(){active[1](item.id);}});
+    })),
+  h('section',{'aria-label':'Без диска'},
+   h('h3',null,'Без диска'),
+   h('div',{className:'states'},states.map(function(key){return h('div',{key:key,className:'state'},
+    h(S.DsStateIcon,{state:key,course:key==='moving'?45:undefined,bare:true,decorative:true}),h('span',null,S.dsFleetState[key].label));}))));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
