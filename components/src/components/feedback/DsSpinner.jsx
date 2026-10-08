@@ -12,7 +12,7 @@ export function DsSpinner({size=20,thickness,tone='brand',label}){
 }
 
 /** Skeleton block for a value that has not arrived yet. Preferred over a spinner inside a table. */
-export function DsSkeleton({width='100%',height=12,radius='var(--ds-radius-xs)'}){
-  return <span aria-hidden="true" style={{display:'block',width,height,borderRadius:radius,
-    background:'var(--ds-surface-active)',animation:'ds-pulse 1.4s var(--ds-ease) infinite'}}/>;
+export function DsSkeleton({width='100%',height=12,radius='var(--ds-radius-xs)',animated=true}){
+  return <span data-ds-skeleton="" data-animated={animated} aria-hidden="true" style={{display:'block',width,height,borderRadius:radius,
+    background:'var(--ds-skeleton-bg)'}}/>;
 }

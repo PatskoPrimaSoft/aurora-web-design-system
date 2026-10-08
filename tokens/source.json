@@ -330,6 +330,15 @@
         "usage": "Нажатие незаливных тонов (`secondary`, `ghost`); трек шкалы `DsScoreBar`."
       },
       {
+        "name": "ds-skeleton-bg",
+        "value": {
+          "light": "{ds-n-100}",
+          "ds-appearance-dark-ds-default": "#262c36",
+          "ds-appearance-dark-ds-red2": "#262c36"
+        },
+        "usage": "Нейтральная заливка DsSkeleton: обозначает ожидаемое содержимое во время загрузки."
+      },
+      {
         "name": "ds-surface-selected",
         "value": "{ds-brand-subtle}",
         "usage": "Выбранная строка и активный элемент списка. Алиас `ds-brand-subtle`; переобъявляется на `[data-ds-theme]`, чтобы вложенная тема его пересчитала."

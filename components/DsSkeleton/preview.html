@@ -1,17 +1,39 @@
-<!-- @dsCard group="5 · Компоненты · обратная связь" height=150 subtitle="Скелетон вместо спиннера в таблице и графике — показывает форму данных" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=680 subtitle="Показывает форму содержимого, пока загружаются данные" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
+h3{font:var(--ds-type-label);margin:0 0 12px}
+.shapes{display:flex;align-items:center;flex-wrap:wrap;gap:24px}
+.lines{display:flex;flex-direction:column;gap:10px;width:180px;max-width:100%}
+.list{display:flex;flex-direction:column;gap:16px;max-width:420px}
+.row{display:flex;align-items:center;gap:12px;min-width:0;min-height:40px}
+.row>span:first-child{flex:none}
+.text{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.name-slot{height:20px;display:flex;align-items:center;min-width:0}
+.detail-slot{height:16px;display:flex;align-items:center;min-width:0}
+.name{font:var(--ds-type-body-strong);line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.detail{font:var(--ds-type-caption);line-height:16px;color:var(--ds-fg-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.avatar{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--ds-surface-active);color:var(--ds-fg-muted);flex:none}
+.toolbar{margin-bottom:16px}
+.status{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:12px 0 0}
+@media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'col',style:{maxWidth:420}},
-  [70,92,55,80].map(function(w,i){return h('div',{key:i,className:'row',style:{flexWrap:'nowrap'}},h(S.DsSkeleton,{width:28,height:28,radius:'50%'}),h(S.DsSkeleton,{width:w+'%',height:12}));}));}
+var people=[['Анна Смирнова','Администратор','АС'],['Иван Петров','Диспетчер','ИП'],['Мария Волкова','Диспетчер','МВ']];
+function LoadingList(){return h('div',{className:'list'},people.map(function(_,i){return h('div',{className:'row',key:i},h(S.DsSkeleton,{width:40,height:40,radius:'50%'}),h('div',{className:'text'},h('div',{className:'name-slot'},h(S.DsSkeleton,{width:[70,90,55][i]+'%',height:14})),h('div',{className:'detail-slot'},h(S.DsSkeleton,{width:'45%',height:10}))));}));}
+function LiveExample(){var loading=React.useState(true),timer=React.useRef(null),pending=React.useRef(false);
+ function load(){if(pending.current)return;pending.current=true;loading[1](true);timer.current=setTimeout(function(){pending.current=false;loading[1](false);},1200);}
+ React.useEffect(function(){load();return function(){clearTimeout(timer.current);pending.current=false;};},[]);
+ return h('section',{'aria-labelledby':'live'},h('h3',{id:'live'},'Переход к загруженным данным'),
+ h('div',{className:'toolbar'},h(S.DsButton,{tone:'secondary',onClick:load,'aria-disabled':loading[0]},'Повторить загрузку')),
+ h('div',{'aria-busy':loading[0],'aria-label':'Пользователи',role:'region'},loading[0]?h(LoadingList):h('div',{className:'list'},people.map(function(person,i){return h('div',{className:'row',key:i},h('span',{className:'avatar','aria-hidden':true},person[2]),h('div',{className:'text'},h('div',{className:'name-slot'},h('span',{className:'name'},person[0])),h('div',{className:'detail-slot'},h('span',{className:'detail'},person[1]))));}))),
+ h('p',{className:'status',role:'status'},loading[0]?'Загрузка пользователей…':'Загружено 3 пользователя.'));}
+function App(){return h('div',{className:'examples'},
+ h('section',{'aria-labelledby':'shapes'},h('h3',{id:'shapes'},'Формы и размеры'),h('div',{className:'shapes'},h('div',{className:'lines'},h(S.DsSkeleton,{height:16}),h(S.DsSkeleton,{width:'75%'}),h(S.DsSkeleton,{width:'50%',height:10})),h(S.DsSkeleton,{width:40,height:40,radius:'50%'}),h(S.DsSkeleton,{width:96,height:64,radius:'var(--ds-radius-md)'}))),
+ h('section',{'aria-labelledby':'static'},h('h3',{id:'static'},'Без анимации'),h(S.DsSkeleton,{animated:false,width:180,height:16})),
+ h('section',{'aria-labelledby':'list'},h('h3',{id:'list'},'Список во время загрузки'),h('div',{'aria-busy':true,role:'region','aria-label':'Загружаемый список'},h(LoadingList)),h('p',{className:'status'},'Загрузка пользователей…')),
+ h(LiveExample));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

@@ -9,3 +9,8 @@
 @keyframes ds-spin{to{transform:rotate(360deg)}}
 
 @keyframes ds-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+[data-ds-skeleton][data-animated="true"]{animation:ds-pulse 1.4s var(--ds-ease) infinite}
+@media (prefers-reduced-motion:reduce){
+[data-ds-skeleton][data-animated="true"]{animation:none}
+}

@@ -21,8 +21,13 @@ export interface DsSpinnerProps {
 }
 export declare function DsSpinner(props: DsSpinnerProps): JSX.Element;
 export interface DsSkeletonProps {
+  /** Пульсация блока; отключается при prefers-reduced-motion независимо от этого параметра. */
+  animated?: boolean;
+  /** Ширина блока: число в px или CSS-значение, например 70%. */
   width?: number | string;
+  /** Высота блока: число в px или CSS-значение. */
   height?: number | string;
+  /** Скругление блока; 50% для круга при равных ширине и высоте. */
   radius?: string;
 }
 export declare function DsSkeleton(props: DsSkeletonProps): JSX.Element;
