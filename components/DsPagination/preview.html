@@ -1,19 +1,32 @@
-<!-- @dsCard group="5 · Компоненты · данные" height=110 subtitle="Пагинатор как подвал таблицы или панели; compact — для узкой панели" -->
+<!-- @dsCard layout="component" aliases="пагинация|pagination|страницы" group="5 · Компоненты · данные" height=700 subtitle="Переключение страниц и количества строк в подвале таблицы или панели" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:32px}
+section{display:flex;flex-direction:column;gap:12px;min-width:0}
+h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
+.list{list-style:none;padding:0;margin:0}
+.list li{padding:8px 0;border-bottom:1px solid var(--ds-divider)}
+.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
+.narrow{width:100%;max-width:280px}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var p=React.useState(0),s=React.useState(25);
-  return h('div',{className:'col'},
-    h(S.DsPagination,{page:p[0],pageSize:s[0],length:148,pageSizeOptions:[25,50,100],onPageChange:p[1],onPageSizeChange:s[1]}),
-    h(S.DsPagination,{page:p[0],pageSize:s[0],length:148,onPageChange:p[1],compact:true}));}
+var objects=Array.from({length:148},function(_,i){return {id:i+1,name:'Объект '+String(i+1).padStart(2,'0')};});
+function Example(props){
+ var page=React.useState(0),size=React.useState(5),data=props.empty?[]:objects;
+ var visible=data.slice(page[0]*size[0],(page[0]+1)*size[0]);
+ return h('section',{'aria-label':props.title,className:props.compact?'narrow':undefined},
+  h('h3',null,props.title),
+  h('div',{'aria-live':'polite','aria-atomic':'true'},
+   visible.length?h('ul',{className:'list'},visible.map(function(item){return h('li',{key:item.id},item.name);})):h('p',{className:'cap'},'Ничего не найдено')),
+  h(S.DsPagination,{page:page[0],pageSize:size[0],length:data.length,compact:props.compact,
+   pageSizeOptions:[5,10,25],onPageChange:page[1],ariaLabel:props.title,
+   onPageSizeChange:props.compact?undefined:function(next){size[1](next);page[1](0);}}));
+}
+function App(){return h('div',{className:'examples'},
+ h(Example,{title:'Страницы и количество строк'}),
+ h(Example,{title:'Компактный вариант',compact:true}),
+ h(Example,{title:'Пустой результат',empty:true}));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

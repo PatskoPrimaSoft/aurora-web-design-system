@@ -42,6 +42,8 @@ export interface DsStrings {
     selectAll: (count: number) => string;
   };
   pagination: {
+    label: string;
+    page: (page: number) => string;
     rows: string;
     range: (from: number, to: number, total: number) => string;
     first: string;

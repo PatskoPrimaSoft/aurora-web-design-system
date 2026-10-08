@@ -259,5 +259,23 @@ const mouse = { pointerType: 'mouse', button: 0 };
   const fd = render(h(NS.DsFab, { label: 'X', disabled: true })).querySelector('button');
   fire(fd, 'pointerdown', mouse); ok(!img(fd), 'DsFab disabled: не реагирует');
 }
+// DsPagination: прямые переходы, текущая страница и доступная навигация.
+{
+  const change=spy();
+  const box=render(h(NS.DsPagination,{page:9,pageSize:10,length:200,onPageChange:change,ariaLabel:'Страницы объектов'}));
+  ok(box.firstElementChild.tagName==='NAV'&&box.firstElementChild.getAttribute('aria-label')==='Страницы объектов','DsPagination: именованная навигация');
+  const current=box.querySelector('[aria-current="page"]');
+  ok(current?.textContent==='10'&&!current?.hasAttribute('aria-pressed'),'DsPagination: текущая страница объявлена как page');
+  const last=Array.from(box.querySelectorAll('button')).find(b=>b.textContent==='20');
+  if(last)click(last);
+  ok(change.calls[0]?.[0]===19,'DsPagination: прямой переход сохраняет индекс с нуля');
+  ok(!box.querySelector('button')?.textContent.includes('…')&&box.textContent.includes('…'),'DsPagination: пропуски страниц не кнопки');
+  const compact=render(h(NS.DsPagination,{page:1,pageSize:10,length:200,compact:true,onPageChange:change,onPageSizeChange:spy()}));
+  ok(compact.querySelectorAll('button').length===2&&!compact.querySelector('select')&&!compact.querySelector('[aria-current]'),'DsPagination: компактный вариант сохраняет две стрелки');
+  const empty=render(h(NS.DsPagination,{length:0,onPageChange:change}));
+  ok(empty.querySelectorAll('button').length===2&&Array.from(empty.querySelectorAll('button')).every(b=>b.disabled),'DsPagination: пустая выборка без фиктивной страницы');
+  const en=render(h(NS.DsStringsProvider,{strings:NS.dsStringsEn},h(NS.DsPagination,{length:30,pageSize:10,onPageChange:change})));
+  ok(en.querySelector('nav')?.getAttribute('aria-label')==='Pagination'&&en.querySelector('[aria-current]')?.getAttribute('aria-label')==='Page 1','DsPagination: локализация навигации и номеров страниц');
+}
 if (fails) { console.error(`${fails} FAIL`); process.exit(1); }
 console.log('все проверки прошли');

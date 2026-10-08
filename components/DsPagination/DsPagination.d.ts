@@ -1,22 +1,20 @@
-/**
- * v2 paginator — replaces `Paginator` (`mat-paginator`).
- *
- * v1's was 56px tall, right-aligned and sat *below* the table as its own band, which
- * is where the extra 2px primary rule came from. v2's is a plain inline cluster meant
- * to be passed as `DsTable footer` or `DsPanel footer`, so the table owns its own
- * bottom edge and there is nothing to separate.
- */
+/** Переключение страниц в подвале таблицы или панели. Состоянием управляет родитель. */
 export interface DsPaginationProps {
-  /** Zero-based. */
+  /** Индекс текущей страницы с нуля; должен оставаться в пределах выборки. */
   page?: number;
+  /** Количество записей на странице; положительное число. */
   pageSize?: number;
-  /** Total row count, not page count. */
+  /** Общее количество записей, а не страниц. */
   length?: number;
+  /** Варианты количества строк. Включите текущее значение pageSize. */
   pageSizeOptions?: number[];
+  /** Запрошенный индекс страницы с нуля. Родитель обновляет данные и page. */
   onPageChange?: (page: number) => void;
-  /** Omit to hide the page-size select entirely. */
+  /** Запрошенный размер страницы. Без обработчика селект скрыт; сброс page выполняет родитель. */
   onPageSizeChange?: (size: number) => void;
-  /** Drops the page-size select and the first/last buttons — for narrow panels. */
+  /** Только диапазон и соседние страницы: без селекта и номеров страниц. */
   compact?: boolean;
+  /** Доступное название навигации. Различайте списки, если пагинаций несколько. */
+  ariaLabel?: string;
 }
 export declare function DsPagination(props: DsPaginationProps): JSX.Element;
