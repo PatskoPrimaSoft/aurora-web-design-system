@@ -21,6 +21,20 @@ const mount = (el) => { const box = d.createElement('div'); d.body.appendChild(b
 const key = (el, k, extra = {}) => { const e = new w.KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true, ...extra }); act(() => el.dispatchEvent(e)); return e; };
 const click = (el) => act(() => el.click());
 
+// EmptyState: semantic heading, optional icon and explicit announcement.
+{
+ const view=mount(h(NS.DsEmptyState,{title:'Нет объектов'}));
+ ok(view.box.querySelector('h2')?.textContent==='Нет объектов','DsEmptyState: заголовок по умолчанию h2');
+ ok(!view.box.querySelector('[role="status"],[role="alert"],[aria-live]'),'DsEmptyState: статичное состояние не объявляется автоматически');
+ ok(view.box.querySelector('.material-symbols-outlined')?.textContent==='inbox','DsEmptyState: стандартная иконка сохранена');
+ view.rerender(h(NS.DsEmptyState,{title:'Нет результатов',icon:null,headingLevel:'h4',announcement:'polite',tone:'danger'}));
+ ok(view.box.querySelector('h4')&&view.box.querySelector('[role="status"][aria-atomic="true"]'),'DsEmptyState: заголовок h4 и polite независимы от тона');
+ ok(!view.box.querySelector('.material-symbols-outlined'),'DsEmptyState: icon null убирает символ');
+ view.rerender(h(NS.DsEmptyState,{title:'Ошибка',headingLevel:'none',announcement:'assertive'}));
+ ok(view.box.querySelector('[role="alert"][aria-atomic="true"]')&&!view.box.querySelector('h1,h2,h3,h4,h5,h6'),'DsEmptyState: assertive и обычный текст заголовка');
+ view.unmount();
+}
+
 // Banner: announcement urgency is explicit and independent of visual tone.
 {
   let closed=0;

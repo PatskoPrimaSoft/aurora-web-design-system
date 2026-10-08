@@ -8,6 +8,10 @@ h3{font:var(--ds-type-label);margin:0 0 12px}
 .result{padding:16px;overflow-wrap:anywhere}
 .result p{margin:0 0 12px}
 .result:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+.text-link{color:var(--ds-brand-text);text-underline-offset:3px;overflow-wrap:anywhere}
+.text-link:hover{text-decoration-thickness:2px}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted);text-align:center;margin:8px 0 0}
+.caption:empty{display:none}
 .narrow{width:100%;max-width:360px;margin-inline:auto}
 @media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
@@ -18,15 +22,40 @@ function Example(props){var done=React.useState(false),result=React.useRef(null)
  return h('section',{'aria-labelledby':props.id},h('h3',{id:props.id},props.heading),
   h('div',{ref:area,className:props.small?'narrow':undefined},done[0]?
    h('div',{className:'result',tabIndex:-1,ref:result},h('p',null,props.result),h(S.DsButton,{tone:'ghost',size:'sm',onClick:reset},'Снова показать пустое состояние')):
-   h(S.DsEmptyState,{icon:props.icon,title:props.title,description:props.description,tone:props.tone,size:props.small?'sm':'md',
-    action:h(S.DsButton,{tone:'secondary',size:props.small?'sm':'md',onClick:function(){done[1](true);}},props.action)})));
+   h(S.DsEmptyState,{icon:props.icon,headingLevel:'h4',title:props.title,description:props.description,tone:props.tone,size:props.small?'sm':'md',
+    action:h(S.DsButton,{tone:props.primary?'primary':'secondary',size:props.small?'sm':'md',onClick:function(){done[1](true);}},props.action)})));
+}
+function RetryExample(){var phase=React.useState('error'),attempts=React.useState(0),timer=React.useRef(null),area=React.useRef(null),result=React.useRef(null),restore=React.useRef(false);
+ React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
+ React.useEffect(function(){if(phase[0]==='ready')result.current.focus();else if(restore.current){area.current.querySelector('button').focus();restore.current=false;}},[phase[0]]);
+ function retry(){if(phase[0]!=='error')return;phase[1]('loading');attempts[1](function(n){return n+1;});timer.current=setTimeout(function(){phase[1]('ready');},1200);}
+ function reset(){restore.current=true;phase[1]('error');attempts[1](0);}
+ return h('section',{'aria-labelledby':'retry'},h('h3',{id:'retry'},'Ошибка загрузки · компактный вариант'),
+  h('div',{className:'narrow',ref:area},phase[0]==='ready'?
+   h('div',{className:'result',tabIndex:-1,ref:result},h('p',null,'Соединение восстановлено. Объекты загружены.'),h(S.DsButton,{tone:'ghost',size:'sm',onClick:reset},'Снова показать пустое состояние')):
+   h(S.DsEmptyState,{headingLevel:'h4',icon:'cloud_off',tone:'danger',size:'sm',title:'Не удалось загрузить объекты',description:'Нет связи с сервисом. Повторите запрос.',
+    action:h(S.DsButton,{tone:'secondary',size:'sm',loading:phase[0]==='loading',onClick:retry},'Повторить запрос')}),
+   h('p',{className:'caption',role:'status'},phase[0]==='loading'?'Повторный запрос выполняется. Дождитесь ответа.':''),
+   h('p',{className:'caption'},'Попыток: '+attempts[0])));
+}
+function TwoActions(){var help=React.useState(false),result=React.useState(false),area=React.useRef(null),link=React.useRef(null);
+ React.useEffect(function(){if(help[0])area.current.focus();},[help[0]]);
+ return h('section',{'aria-labelledby':'two-actions'},h('h3',{id:'two-actions'},'Без иконки · два действия'),
+  h('div',{className:'narrow'},h(S.DsEmptyState,{icon:null,headingLevel:'h4',announcement:'polite',title:result[0]?'Период изменён':'За выбранный период нет маршрутов',
+   description:result[0]?'Выбраны последние 7 дней. Найдено 3 маршрута.':'Маршруты хранятся 90 дней. Выберите более короткий период или прочитайте, как работает хранение данных.',
+   action:h(S.DsButton,{tone:'primary',onClick:function(){result[1](!result[0]);}},result[0]?'Вернуть исходный период':'Выбрать последние 7 дней'),
+   secondary:h('a',{ref:link,href:'#retention-help',className:'text-link',onClick:function(e){e.preventDefault();help[1](true);}},'О хранении маршрутов')})),
+  h('div',{id:'retention-help',ref:area,tabIndex:-1,className:'result',hidden:!help[0]&&!result[0]},
+   h('p',null,help[0]?'Маршруты старше 90 дней удаляются. Экспортируйте нужные данные до окончания срока хранения.':'Три маршрута доступны для просмотра.'),
+   help[0]?h(S.DsButton,{tone:'ghost',size:'sm',onClick:function(){help[1](false);link.current.focus();}},'Закрыть пояснение'):null));
 }
 function App(){return h('div',{className:'examples'},
  h(Example,{id:'filtered',heading:'Ничего не найдено',icon:'filter_alt',title:'Нет объектов по заданным фильтрам',description:'Попробуйте изменить условия или сбросьте фильтры.',action:'Сбросить фильтры',result:'Фильтры сброшены. Найдено 12 объектов.'}),
- h(Example,{id:'first',heading:'Первый объект',icon:'add_location_alt',tone:'info',title:'Объектов пока нет',description:'Добавьте первый объект, чтобы видеть его положение на карте.',action:'Добавить объект',result:'Объект «Автомобиль 01» добавлен.'}),
- h(Example,{id:'retry',heading:'Ошибка загрузки · компактный вариант',icon:'cloud_off',tone:'danger',small:true,title:'Не удалось загрузить объекты',description:'Нет связи с сервисом. Повторите запрос.',action:'Повторить запрос',result:'Соединение восстановлено. Объекты загружены.'}),
+ h(Example,{id:'first',heading:'Первый объект',primary:true,icon:'add_location_alt',tone:'info',title:'Объектов пока нет',description:'Добавьте первый объект, чтобы видеть его положение на карте.',action:'Добавить объект',result:'Объект «Автомобиль 01» добавлен.'}),
+ h(RetryExample),
+ h(TwoActions),
  h('section',{'aria-labelledby':'no-action'},h('h3',{id:'no-action'},'Без доступного действия'),
-  h(S.DsEmptyState,{icon:'lock',tone:'warning',title:'Нет доступа к отчётам',description:'Попросите администратора предоставить доступ к этому разделу.'})));
+  h(S.DsEmptyState,{headingLevel:'h4',icon:'lock',tone:'warning',title:'Нет доступа к отчётам',description:'Попросите администратора предоставить доступ к этому разделу.'})));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
