@@ -1,19 +1,27 @@
-<!-- @dsCard group="5 · Компоненты · обратная связь" height=200 subtitle="Позиционирует тосты на уровне страницы — внизу по центру или справа" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=520 subtitle="Размещает очередь уведомлений внизу страницы по центру или справа" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
+h3{font:var(--ds-type-label);margin:0 0 12px}
+.toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.description{margin:12px 0 0;color:var(--ds-fg-muted)}
+.demo{position:relative;transform:translateZ(0);overflow-wrap:anywhere}
+@media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var n=React.useState([1]);
-  return h('div',null,
-    h(S.DsButton,{tone:'secondary',onClick:function(){n[1](n[0].concat(n[0].length+1));}},'Показать ещё тост'),
-    h(S.DsToastStack,{position:'bottom-right'},n[0].map(function(i){return h(S.DsToast,{key:i,tone:'info',onClose:function(){n[1](n[0].filter(function(x){return x!==i;}));}},'Экспорт '+i+' готов.');})));}
+function QueueExample(){var items=React.useState([1,2]),serial=React.useRef(2),position=React.useState('bottom-center'),trigger=React.useRef(null);
+ function dismiss(id){items[1](function(list){return list.filter(function(item){return item!==id;});});requestAnimationFrame(function(){trigger.current.querySelector("button").focus();});}
+ return h('section',{'aria-label':'Очередь и позиция'},h('h3',null,'Очередь и позиция'),
+  h('div',{className:'toolbar',ref:trigger},
+   h(S.DsButton,{tone:'secondary',disabled:items[0].length>=3,onClick:function(){serial.current++;var id=serial.current;items[1](function(list){return list.concat(id);});}},'Добавить уведомление'),
+   h(S.DsButton,{tone:'subtle',onClick:function(){position[1](position[0]==='bottom-center'?'bottom-right':'bottom-center');}},position[0]==='bottom-center'?'Разместить справа':'Разместить по центру')),
+  h('p',{className:'description'},'Закройте любое сообщение: остальные займут освободившееся место. В примере — до трёх уведомлений.'),
+  h('div',{className:'demo',style:{minHeight:items[0].length?items[0].length*112+56:0}},h(S.DsToastStack,{position:position[0]},items[0].map(function(id){return h(S.DsToast,{key:id,tone:id%2?'success':'info',announcement:id<=2?'off':'polite',closeLabel:'Закрыть уведомление '+id,onClose:function(){dismiss(id);}},id%2?'Изменение '+id+' сохранено.':'Экспорт '+id+' готов к скачиванию.');}))),
+  !items[0].length?h('p',{className:'description'},'Нет уведомлений. Добавьте новое, чтобы снова увидеть стек.'):null);}
+function DialogExample(){var open=React.useState(false),show=React.useState(false),saveButton=React.useRef(null);return h('section',{'aria-label':'Уведомление поверх диалога'},h('h3',null,'Уведомление поверх диалога'),h(S.DsButton,{tone:'secondary',onClick:function(){open[1](true);}},'Открыть диалог'),
+ h('div',{className:'demo',style:{minHeight:open[0]?420:0}},open[0]?h(S.DsDialog,{title:'Настройки отчёта',size:'sm',onClose:function(){open[1](false);show[1](false);}},h('p',null,'Уведомление остаётся внутри доступной области диалога.'),h(S.DsButton,{onClick:function(e){saveButton.current=e.currentTarget;show[1](true);}},'Сохранить в диалоге'),h(S.DsToastStack,null,show[0]?h(S.DsToast,{tone:'success',onClose:function(){show[1](false);saveButton.current.focus();}},'Настройки отчёта сохранены.'):null)):null));}
+function App(){return h('div',{className:'examples'},h(QueueExample),h(DialogExample));}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
