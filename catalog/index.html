@@ -1,12 +1,8 @@
 <!doctype html>
 <html lang="ru" data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aurora · дизайн-система</title><link rel="stylesheet" href="dist/styles.css"><link rel="stylesheet" href="styles.css"><script src="runtime.js"></script><script src="components.js"></script><script type="module" src="app.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Aurora Design</title><link rel="stylesheet" href="dist/styles.css"><link rel="stylesheet" href="styles.css"><script src="runtime.js"></script><script src="components.js"></script><script type="module" src="app.js"></script></head>
 <body>
-<header><strong>Aurora · дизайн-система</strong><span id="count"></span><a href="api/tokens.html">Токены</a>
-<label>Бренд <select id="theme" tabindex="0"><option>DEFAULT</option><option>RED2</option></select></label>
-<label>Оформление <select id="appearance" tabindex="0"><option value="light">Светлое</option><option value="dark">Тёмное</option></select></label>
-<label>Плотность <select id="density" tabindex="0"><option value="cozy">Обычная</option><option value="compact">Компактная</option></select></label>
-<button id="compare" type="button" aria-pressed="false">Сравнить 4 режима</button></header>
+<header class="catalog-header" aria-label="Каталог дизайн-системы"><div id="catalog-header-content"></div></header>
 <div class="layout"><aside><label for="search">Найти компонент или prop</label><input id="search" type="search" tabindex="0" placeholder="DsButton, выбор, loading"><p id="search-empty" role="status" hidden>Ничего не найдено. Попробуйте другое название или prop.</p><nav aria-label="Карточки" id="cards"></nav></aside>
 <main><div class="card-heading"><h1 id="title"></h1><span id="card-status" hidden></span></div><p id="subtitle"></p><p id="reference-links"></p><p id="local-note" hidden>В примере сохранены собственные локальные настройки темы.</p><div id="card-error" role="alert" hidden><p>Неизвестный ID: <code id="missing-id"></code></p><button id="return-catalogue" type="button">Вернуться в каталог</button></div><div id="viewports"></div><article id="card-description" class="reference card-description" aria-label="Правила применения" hidden></article></main></div>
 <div id="build-error" role="alert" hidden></div></body></html>

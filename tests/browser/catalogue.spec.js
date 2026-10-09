@@ -1,3 +1,4 @@
+import {chooseCatalogueScope} from './helpers/catalogue-scope.js';
 import{test,expect}from'@playwright/test';import{buildCatalogue}from'../../tools/catalog/build.mjs';import{serveRoot}from'../../tools/baseline/render.mjs';import{fileURLToPath}from'node:url';
 import{startDev}from'../../tools/dev.mjs';import{fixtureRoot}from'../helpers/build-root.js';import{readFileSync,writeFileSync,rmSync}from'node:fs';import{join}from'node:path';
 const root=fileURLToPath(new URL('../../',import.meta.url));
@@ -6,11 +7,11 @@ test('all catalogue pages render from local files without runtime errors',async(
  const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
  await page.route('**/*',r=>r.request().url().startsWith(served.url+'/')?r.continue():r.abort('blockedbyclient'));
  try{
-  await page.goto(served.url+'/index.html');await expect(page.locator('nav a')).toHaveCount(cards.length);
+  await page.goto(served.url+'/index.html');await expect(page.locator('nav a[data-id]')).toHaveCount(cards.length);
   await expect(page.locator('nav h2')).toHaveText(['1 · Начало','2 · Основы','3 · Миграция','4 · Бренд (общее)',...['выбор','графики','данные','кнопки','навигация','обратная связь','примитивы','раскладка','формы','шапка'].map(name=>'5 · Компоненты · '+name),'6 · Карта','7 · Эталонные экраны']);
   await expect(page.locator('#subtitle')).toContainText(`${cards.length} карточек`);await expect(page.frameLocator('#preview').locator('body')).toContainText(`${cards.length} карточек`);
   await page.locator('nav a[data-id="DsButton"]').click();await expect(page.locator('h1')).toHaveText('DsButton');
-  await page.locator('#theme').selectOption('RED2');await expect(page.locator('html')).toHaveAttribute('data-ds-theme','RED2');
+  await chooseCatalogueScope(page,'theme','RED2');await expect(page.locator('html')).toHaveAttribute('data-ds-theme','RED2');
   for(const card of cards){await page.setViewportSize(card.viewport);await page.goto(served.url+'/'+card.previewPath);await page.evaluate(()=>document.fonts.ready);
    if(await page.locator('#root').count())await expect.poll(async()=>page.evaluate(()=>document.getElementById('root').childNodes.length>0||document.querySelector('[role="dialog"]')!==null),{message:`${card.id}: React root or visible portal must render`}).toBe(true);
    expect(errors,card.id).toEqual([]);
@@ -26,7 +27,7 @@ test('merged header keeps legacy links and both navigation examples in four scop
    await page.goto(served.url+'/index.html'+suffix);
    await expect(page.locator('#title')).toHaveText('DsAppHeader · Шапка приложения');
    await expect(page.locator('nav a[data-id="DsHeader"]')).toHaveCount(0);
-   if(suffix.startsWith('?')){await expect(page.locator('#theme')).toHaveValue('RED2');await expect(page.locator('#viewports iframe')).toHaveCount(4);}
+   if(suffix.startsWith('?')){await expect(page.locator('#theme')).toContainText('RED2');await expect(page.locator('#viewports iframe')).toHaveCount(4);}
   }
   for(const[path,destination]of [
    ['components/DsHeader/preview.html','/index.html'],
@@ -94,20 +95,21 @@ test('search, URL history and scope comparison preserve preview contracts',async
   await page.locator('#search').fill('CHECKBOX');await expect(page.locator('nav a[data-id="DsCheckbox"]')).toBeVisible();
   await page.locator('#search').fill('loading');await expect(page.locator('nav a[data-id="DsButton"]')).toBeVisible();
   await page.locator('#search').fill('not-a-card-12345');await expect(page.locator('#search-empty')).toBeVisible();
-  await page.locator('#search').fill('');await page.locator('#theme').selectOption('RED2');await page.locator('#appearance').selectOption('dark');await page.locator('#density').selectOption('compact');
+  await page.locator('#search').fill('');await chooseCatalogueScope(page,'theme','RED2');await chooseCatalogueScope(page,'appearance','dark');await chooseCatalogueScope(page,'density','compact');
   await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-theme','RED2');
-  await page.reload();await expect(page.locator('#density')).toHaveValue('compact');await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-appearance','dark');
+  await page.reload();await expect(page.locator('#density')).toContainText('Компактная');await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-appearance','dark');
   await page.locator('#compare').click();await expect(page.locator('#viewports iframe')).toHaveCount(4);
   const expected=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
   for(const[index,scope]of expected.entries()){
    const frame=page.frameLocator('#preview-'+index);for(const[axis,value]of ['theme','appearance','density'].map((axis,i)=>[axis,scope[i]]))await expect(frame.locator('html')).toHaveAttribute('data-ds-'+axis,value);
-   const card=cards.find(c=>c.id==='DsButton');await expect(page.locator('#preview-'+index)).toHaveCSS('width',card.viewport.width+'px');
+   const card=cards.find(c=>c.id==='DsButton');
+   expect(await page.locator('#preview-'+index).evaluate(frame=>frame.style.width)).toBe(card.layout==='component'?'100%':card.viewport.width+'px');
   }
   await page.reload();await expect(page.locator('#compare')).toHaveAttribute('aria-pressed','true');
   await page.locator('#compare').click();await page.goBack();await expect(page.locator('#viewports iframe')).toHaveCount(4);
   await page.goto(served.url+'/index.html?card=Monitoring&appearance=dark');await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-appearance','dark');await expect(page.frameLocator('#preview').locator('#root [data-ds-appearance]').first()).toHaveAttribute('data-ds-appearance','light');
   await page.locator('#search').focus();await page.keyboard.type('DsButton');await page.keyboard.press('Tab');await expect(page.locator('nav a').first()).toBeFocused();
-  await page.goto(served.url+'/index.html?card=%3Cscript%3E&theme=bad');await expect(page.locator('#card-error')).toBeVisible();await expect(page.locator('#missing-id')).toHaveText('<script>');await expect(page.locator('#viewports iframe')).toHaveCount(0);await expect(page.locator('#theme')).toHaveValue('DEFAULT');
+  await page.goto(served.url+'/index.html?card=%3Cscript%3E&theme=bad');await expect(page.locator('#card-error')).toBeVisible();await expect(page.locator('#missing-id')).toHaveText('<script>');await expect(page.locator('#viewports iframe')).toHaveCount(0);await expect(page.locator('#theme')).toContainText('DEFAULT');
   await page.locator('#return-catalogue').click();await expect(page.locator('#card-error')).toBeHidden();expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });

@@ -3,7 +3,25 @@ import {familyFor} from './families.js';
 import {parseState,stateUrl,comparisonScopes} from './state.js';
 const cards=await(await fetch('cards.json')).json();
 let state=parseState(new URL(location.href),cards),renderedKey=null,frames=[];
-const nav=document.getElementById('cards'),viewports=document.getElementById('viewports'),search=document.getElementById('search'),compare=document.getElementById('compare');
+const nav=document.getElementById('cards'),viewports=document.getElementById('viewports'),search=document.getElementById('search');
+const headerRoot=window.ReactDOM.createRoot(document.getElementById('catalog-header-content'));
+const {DsSelect,DsButton}=window.AuroraWebDesignSystem_96e210;
+const h=window.React.createElement;
+const scopeFields=[
+ {id:'theme',label:'Бренд',options:['DEFAULT','RED2']},
+ {id:'appearance',label:'Оформление',options:[{value:'light',label:'Светлое'},{value:'dark',label:'Тёмное'}]},
+ {id:'density',label:'Плотность',options:[{value:'cozy',label:'Обычная'},{value:'compact',label:'Компактная'}]},
+];
+function renderHeader(){
+ window.ReactDOM.flushSync(()=>headerRoot.render(h(window.React.Fragment,null,
+  h('div',{className:'catalog-identity'},
+   h('span',{className:'catalog-logo'},h('img',{src:'components/assets/logo/AuroraWhite.png',alt:''})),
+   h('strong',{className:'catalog-product'},'Aurora Design')),
+  h('div',{className:'catalog-controls'},
+   ...scopeFields.map(field=>h('div',{key:field.id,className:'catalog-scope'},h(DsSelect,{...field,value:state.scope[field.id],onChange:value=>{state.scope[field.id]=value;save(true);render();}}))),
+   h(DsButton,{id:'compare',tone:state.compare?'subtle':'secondary','aria-pressed':state.compare,disabled:state.unknown,onClick:()=>{state.compare=!state.compare;save(true);render();}},'Сравнить 4 режима'))
+ )));
+}
 const titleStatus=document.getElementById('card-status'),titleStatusRoot=window.ReactDOM.createRoot(titleStatus);
 let navigationStatusRoots=[];
 function renderStatus(root,card){window.ReactDOM.flushSync(()=>root.render(card?.status==='deprecated'?window.React.createElement(window.AuroraWebDesignSystem_96e210.DsLozenge,{tone:'warning',size:'sm'},'Устарело'):null));}
@@ -12,7 +30,10 @@ function save(push=false){history[push?'pushState':'replaceState'](null,'',state
 function drawNavigation(){
  const found=searchCards(cards,state.query),groups=new Map();
  for(const root of navigationStatusRoots)root.unmount();navigationStatusRoots=[];nav.replaceChildren();
- document.getElementById('count').textContent=`${found.length} из ${cards.length} карточек`;
+ renderHeader();
+ const tokens=document.createElement('a'),tokensUrl=new URL('api/tokens.html',location.href);
+ for(const[name,value]of Object.entries(state.scope))tokensUrl.searchParams.set(name,value);
+ tokens.href=tokensUrl;tokens.textContent='Токены';tokens.className='catalog-tokens-link';nav.append(tokens);
  document.getElementById('search-empty').hidden=found.length>0;
  for(const card of found){
   const family=card.group==='2 · Основы'?null:familyFor(card.id);
@@ -61,8 +82,8 @@ function describeCard(card){
  }
 }
 function render(){
- for(const[name,value]of Object.entries(state.scope)){document.documentElement.setAttribute('data-ds-'+name,value);document.getElementById(name).value=value;}
- search.value=state.query;compare.setAttribute('aria-pressed',String(state.compare));compare.disabled=state.unknown;drawNavigation();
+ for(const[name,value]of Object.entries(state.scope))document.documentElement.setAttribute('data-ds-'+name,value);
+ search.value=state.query;drawNavigation();
  const card=cards.find(card=>card.id===state.cardId),error=document.getElementById('card-error');error.hidden=!!card;
  document.querySelector('main').classList.toggle('component-page',card?.layout==='component');
  examplesHeading.hidden=card?.layout!=='component';
@@ -105,8 +126,6 @@ function render(){
  for(const record of frames)scopeFrame(record);
 }
 search.addEventListener('input',()=>{state.query=search.value;save();drawNavigation();});
-for(const name of ['theme','appearance','density'])document.getElementById(name).addEventListener('change',event=>{state.scope[name]=event.target.value;save(true);render();});
-compare.addEventListener('click',()=>{state.compare=!state.compare;save(true);render();});
 document.getElementById('return-catalogue').addEventListener('click',()=>{state={...state,cardId:cards[0].id,query:'',unknown:false};save(true);render();});
 for(const event of ['popstate','hashchange'])window.addEventListener(event,()=>{state=parseState(new URL(location.href),cards);render();});
 render();
