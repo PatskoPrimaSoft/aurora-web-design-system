@@ -1,24 +1,35 @@
-<!-- @dsCard group="5 · Компоненты · примитивы" height=120 subtitle="Material Symbols Outlined как шрифт; размер — токен --ds-icon-*, поворот несёт смысл" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · примитивы" height=540 subtitle="Иконка Material Symbols Outlined; размер, направление и доступное имя" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:32px}
+section{display:flex;flex-direction:column;gap:12px;min-width:0}
+h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
+.row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.sample{display:flex;align-items:center;gap:8px}
+.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
+.brand{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--ds-radius-sm);background:var(--ds-brand);color:var(--ds-on-brand)}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'row'},
-  h(S.DsIcon,{name:'local_shipping',size:'var(--ds-icon-xs)'}),
-  h(S.DsIcon,{name:'local_shipping',size:'var(--ds-icon-sm)'}),
-  h(S.DsIcon,{name:'local_shipping'}),
-  h(S.DsIcon,{name:'local_shipping',size:'var(--ds-icon-lg)'}),
-  h('span',{className:'sep'}),
-  h(S.DsIcon,{name:'navigation',rotate:135,label:'Курс 135°'}),
-  h(S.DsIcon,{name:'straighten',rotate:-45}),
-  h(S.DsIcon,{name:'priority_high',rotate:180}));}
+function App(){
+ var course=React.useState(45);
+ return h('div',{className:'examples'},
+  h('section',{'aria-label':'Размеры'},h('h3',null,'Размеры'),
+   h('div',{className:'row'},['xs','sm','','lg'].map(function(size){var token='ds-icon'+(size?'-'+size:'');return h('div',{key:token,className:'sample'},
+    h(S.DsIcon,{name:'local_shipping',size:'var(--'+token+')'}),h('span',{className:'cap'},token));})),
+   h('p',{className:'cap'},'Размеры автоматически меняются вместе с плотностью интерфейса.')),
+  h('section',{'aria-label':'Направление'},h('h3',null,'Направление'),
+   h('div',{className:'row'},h('div',{className:'sample'},
+    h(S.DsIcon,{name:'navigation',rotate:course[0],label:'Курс '+course[0]+'°'}),
+    h('span',null,'Курс: '+course[0]+'°')),
+    h(S.DsButton,{size:'sm',tone:'secondary',onClick:function(){course[1]((course[0]+45)%360);}},'Повернуть на 45°')),
+   h('p',{className:'cap'},'0° — север. Поворот передаёт направление движения.')),
+  h('section',{'aria-label':'Цвет и доступное имя'},h('h3',null,'Цвет и доступное имя'),
+   h('div',{className:'row'},h('span',{className:'sample'},h(S.DsIcon,{name:'local_shipping'}),'Транспорт'),
+    h('span',{className:'brand'},h(S.DsIcon,{name:'done'}),'Сохранено'),
+    h(S.DsIcon,{name:'lock',label:'Доступ ограничен'})),
+   h('p',{className:'cap'},'Рядом с текстом иконка декоративная. Отдельный замок имеет доступное имя «Доступ ограничен». Цвет наследуется от родителя.')));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

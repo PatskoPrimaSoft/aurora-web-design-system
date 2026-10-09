@@ -56,6 +56,7 @@ export interface DsStrings {
   duration: Record<'days' | 'hours' | 'minutes' | 'd' | 'h' | 'm', string>;
   chart: Record<'zoom' | 'data' | 'invalid' | 'settings' | 'reset' | 'download', string>;
   score: Record<'label' | 'bad' | 'norm' | 'good' | 'best', string>;
+  toast: {label: string};
   tabs: {nav: string};
   stepper: {label: string; position: (n: number, total: number) => string; current: string; completed: string; upcoming: string; disabled: string};
 }

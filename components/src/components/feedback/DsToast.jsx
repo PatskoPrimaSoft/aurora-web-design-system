@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
 import { DsButton } from '../buttons/DsButton.jsx';
 import { DsIconButton } from '../buttons/DsIconButton.jsx';
@@ -42,17 +43,26 @@ export function DsToast({tone='neutral',children,action,actionLabel,onClose,icon
   </div>;
 }
 
-/** Retain keyed children during exit, then collapse the space between neighbours. */
-export function DsToastStack({children,position='bottom-center'}){
-  const current=React.Children.toArray(children);
-  const [items,setItems]=React.useState(()=>current.map(child=>({key:child.key,child})));
+const DsTOAST_FOCUSABLE='button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+/** Only admitted children mount: queued notifications neither announce nor run timers. */
+export function DsToastStack({children,position='bottom-center',label,maxVisible=3,order='oldest-first',portal=false,container,returnFocusRef}){
+  const S=useDsStrings(),uid=React.useId(),root=React.useRef(null),focused=React.useRef(null),origin=React.useRef(null);
+  const current=React.useMemo(()=>React.Children.toArray(children).filter(React.isValidElement),[children]);
+  const limit=Number.isFinite(maxVisible)&&maxVisible>=1?Math.floor(maxVisible):3;
+  const [items,setItems]=React.useState(()=>current.slice(0,limit).map(child=>({key:child.key,child})));
   React.useLayoutEffect(()=>{
     setItems(previous=>{
-      const next=current.map(child=>({key:child.key,child}));
-      for(const old of previous)if(!next.some(item=>item.key===old.key))next.splice(Math.min(previous.indexOf(old),next.length),0,{...old,exiting:old.exiting||Date.now()});
-      return next;
+      const eligible=current.slice(0,limit);
+      const next=previous.map(old=>{
+        const child=eligible.find(child=>child.key===old.key);
+        return child?{key:old.key,child}:{...old,exiting:old.exiting||Date.now()};
+      });
+      // Exiting entries reserve their slots until their animations finish.
+      for(const child of eligible){if(next.length>=limit)break;if(!next.some(item=>item.key===child.key))next.push({key:child.key,child});}
+      return next.length===previous.length&&next.every((item,i)=>item.key===previous[i].key&&item.child===previous[i].child&&item.exiting===previous[i].exiting)?previous:next;
     });
-  },[children]);
+  },[current,limit,items]);
   React.useEffect(()=>{
     const leaving=items.filter(item=>item.exiting);
     if(!leaving.length)return;
@@ -60,10 +70,41 @@ export function DsToastStack({children,position='bottom-center'}){
     const timer=setTimeout(()=>setItems(previous=>previous.filter(item=>!item.exiting||Date.now()-item.exiting<duration)),Math.max(0,Math.min(...leaving.map(item=>duration-(Date.now()-item.exiting)))));
     return()=>clearTimeout(timer);
   },[items]);
-  return <div data-ds-toast-stack="" data-position={position}>
-    {items.map(item=><div key={item.key} data-ds-toast-item="" data-exiting={item.exiting?'true':undefined}
-      aria-hidden={item.exiting?true:undefined} inert={item.exiting?'':undefined}>
+  const displayed=order==='newest-first'?[...items].reverse():items;
+  React.useLayoutEffect(()=>{
+    const node=root.current;
+    if(!node)return;
+    const doc=node.ownerDocument;
+    if(!items.length&&!current.length){origin.current=null;focused.current=null;return;}
+    if(!origin.current&&items.length)origin.current=doc.activeElement;
+    const last=focused.current;
+    if(!last)return;
+    if(items.some(item=>item.key===last.key&&!item.exiting)){last.index=displayed.findIndex(item=>item.key===last.key);return;}
+    const active=doc.activeElement;
+    if(active!==last.node&&active!==doc.body&&!active?.closest('[data-ds-toast-item][data-exiting="true"]')){focused.current=null;return;}
+    const neighbours=Array.from(node.querySelectorAll('[data-ds-toast-item]:not([data-exiting="true"])'));
+    const neighbour=neighbours[Math.min(last.index,neighbours.length-1)];
+    if(neighbour){
+      const target=Array.from(neighbour.querySelectorAll(DsTOAST_FOCUSABLE)).find(el=>el.getClientRects().length&&!el.closest('[inert]'))||neighbour;
+      target.focus({preventScroll:true});
+    }else if(!current.length){
+      focused.current=null;
+      const target=returnFocusRef?.current||origin.current;
+      if(target?.isConnected&&!target.closest('[inert]'))target.focus({preventScroll:true});
+      origin.current=null;
+    }
+  },[items,current,order,returnFocusRef]);
+  // Keep the empty root through exit/focus restoration; expose no empty landmark.
+  const content=<div ref={root} data-ds-toast-stack="" data-position={position}
+    role={items.length?'region':undefined} aria-labelledby={items.length?uid:undefined}
+    onBlurCapture={e=>{if(e.relatedTarget&&!e.currentTarget.contains(e.relatedTarget)&&!e.target.closest('[data-ds-toast-item][data-exiting="true"]'))focused.current=null;}}>
+    {items.length?<h2 id={uid} data-ds-toast-label="">{label||S.toast.label}</h2>:null}
+    {displayed.map((item,index)=><div key={item.key} data-ds-toast-item="" data-exiting={item.exiting?'true':undefined}
+      tabIndex={-1} aria-hidden={item.exiting?true:undefined} inert={item.exiting?'':undefined}
+      onFocusCapture={e=>{focused.current={key:item.key,node:e.target,index};}}>
       <div data-ds-toast-clip=""><DsToastExiting.Provider value={!!item.exiting}>{item.child}</DsToastExiting.Provider></div>
     </div>)}
   </div>;
+  const target=container||(portal&&typeof document!=='undefined'?document.body:null);
+  return target?createPortal(content,target):content;
 }
