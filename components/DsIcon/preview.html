@@ -1,4 +1,4 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · примитивы" height=540 subtitle="Иконка Material Symbols Outlined; размер, направление и доступное имя" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · примитивы" height=1000 subtitle="Иконка Material Symbols Outlined; размер, направление и доступное имя" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
@@ -9,19 +9,24 @@ h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
 .row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
 .sample{display:flex;align-items:center;gap:8px}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
+.surface{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:12px;border-radius:var(--ds-radius-sm)}
+.inverse{background:var(--ds-surface-inverse);color:var(--ds-fg-on-inverse)}
 .brand{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--ds-radius-sm);background:var(--ds-brand);color:var(--ds-on-brand)}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
 function App(){
- var course=React.useState(45);
+ var course=React.useState(45),chosen=React.useState('search'),saved=React.useState(false);
+ var icons=[['search','Поиск'],['delete','Удаление'],['local_shipping','Транспорт'],['navigation','Направление'],['lock','Ограниченный доступ'],['straighten','Измерение']];
  return h('div',{className:'examples'},
   h('section',{'aria-label':'Размеры'},h('h3',null,'Размеры'),
-   h('div',{className:'row'},['xs','sm','','lg'].map(function(size){var token='ds-icon'+(size?'-'+size:'');return h('div',{key:token,className:'sample'},
-    h(S.DsIcon,{name:'local_shipping',size:'var(--'+token+')'}),h('span',{className:'cap'},token));})),
-   h('p',{className:'cap'},'Размеры автоматически меняются вместе с плотностью интерфейса.')),
+   h('div',{className:'row'},['xs','sm','md','lg'].map(function(size){return h('div',{key:size,className:'sample'},
+    h(S.DsIcon,{name:'local_shipping',size:size}),h('span',{className:'cap'},size));})),
+   h('div',{className:'row'},['expand_more','search','local_shipping'].map(function(name){return h('span',{key:name,className:'sample'},h(S.DsIcon,{name:name,size:'xs'}),h(S.DsIcon,{name:name,size:'md'}),h('span',{className:'cap'},name));})),
+   h('p',{className:'cap'},'xs — для шевронов и вспомогательных символов. Для значимых подробных иконок предпочитайте md.')),
+
   h('section',{'aria-label':'Направление'},h('h3',null,'Направление'),
    h('div',{className:'row'},h('div',{className:'sample'},
-    h(S.DsIcon,{name:'navigation',rotate:course[0],label:'Курс '+course[0]+'°'}),
+    h(S.DsIcon,{name:'navigation',rotate:course[0]}),
     h('span',null,'Курс: '+course[0]+'°')),
     h(S.DsButton,{size:'sm',tone:'secondary',onClick:function(){course[1]((course[0]+45)%360);}},'Повернуть на 45°')),
    h('p',{className:'cap'},'0° — север. Поворот передаёт направление движения.')),
@@ -29,7 +34,25 @@ function App(){
    h('div',{className:'row'},h('span',{className:'sample'},h(S.DsIcon,{name:'local_shipping'}),'Транспорт'),
     h('span',{className:'brand'},h(S.DsIcon,{name:'done'}),'Сохранено'),
     h(S.DsIcon,{name:'lock',label:'Доступ ограничен'})),
-   h('p',{className:'cap'},'Рядом с текстом иконка декоративная. Отдельный замок имеет доступное имя «Доступ ограничен». Цвет наследуется от родителя.')));
+   h('p',{className:'cap'},'Рядом с текстом иконка декоративная. Отдельный замок имеет доступное имя «Доступ ограничен». Цвет наследуется от родителя.')),
+  h('section',{'aria-label':'Статус на разных поверхностях'},h('h3',null,'Статус на разных поверхностях'),
+   [false,true].map(function(inverse){return h('div',{key:String(inverse),className:'surface'+(inverse?' inverse':''),'data-icon-surface':inverse?'inverse':'normal'},
+    h('span',{className:'cap',style:{color:'inherit'}},inverse?'Инверсная':'Обычная'),
+    [['info','info','Информация'],['success','check_circle','Успешно'],['warning','warning','Предупреждение'],['danger','error','Ошибка']].map(function(item){return h('span',{key:item[0],className:'sample',style:{color:'var(--ds-'+item[0]+'-fg'+(inverse?'-on-inverse':'')+')'}},h(S.DsIcon,{name:item[1]}),h('span',null,item[2]));}));})),
+  h('section',{'aria-label':'Иконка в кнопке'},h('h3',null,'Иконка в кнопке'),
+   h('div',{className:'row'},h(S.DsIcon,{name:'bookmark',label:'Закладка',size:'sm'}),
+    h(S.DsIconButton,{icon:'bookmark',label:'Сохранить в избранное',active:saved[0],onClick:function(){saved[1](!saved[0]);}}),
+    h('span',{role:'status'},saved[0]?'Сохранено в избранном':'Не сохранено')),
+   h('p',{className:'cap'},'Символ и область нажатия имеют разные размеры. Tab переводит фокус на кнопку; Enter и пробел переключают выбор.')),
+  h('section',{'aria-label':'Выбор иконки'},h('h3',null,'Выбор иконки'),
+   h('div',{className:'row'},icons.map(function(item){return h(S.DsButton,{key:item[0],tone:chosen[0]===item[0]?'primary':'secondary',size:'sm',icon:item[0],'aria-pressed':chosen[0]===item[0],onClick:function(){chosen[1](item[0]);}},item[1]);})),
+   h('div',{className:'sample'},h(S.DsIcon,{name:chosen[0],size:'lg'}),h('code',null,chosen[0])),
+   h('p',{className:'cap'},'Один смысл — один узнаваемый символ. Не добавляйте иконку, если она не помогает понять действие.')),
+  h('section',{'aria-label':'Выравнивание'},h('h3',null,'Выравнивание'),
+   h('div',{className:'row'},icons.map(function(item){return h('span',{key:item[0],className:'sample'},h(S.DsIcon,{name:item[0]}),item[1]);})),
+   h('div',{className:'row'},[0,90,180,270].map(function(angle){return h('span',{key:angle,className:'sample'},h(S.DsIcon,{name:'navigation',rotate:angle}),angle+'°');})),
+   h('p',{className:'cap'},'Иконки центрируются в области своего размера; расстояние до текста задаёт родитель.')));
+
 }
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

@@ -25,6 +25,15 @@ const key = (el, type, k) => fire(el, type, { key: k }, w.KeyboardEvent);
 const click = (el) => act(() => el.click());
 const spy = () => { const f = (...a) => { f.calls.push(a); }; f.calls = []; return f; };
 const nested = (box) => box.querySelectorAll('button button, [role="button"] button, button [role="button"]').length;
+// DsIcon: именованные размеры и существующие CSS-значения совместимы.
+{
+  for(const [size,expected] of [['xs','var(--ds-icon-xs)'],['sm','var(--ds-icon-sm)'],['md','var(--ds-icon)'],['lg','var(--ds-icon-lg)'],[28,'28px'],['var(--ds-icon-sm)','var(--ds-icon-sm)']]){
+    const box=render(h(NS.DsIcon,{name:'search',size})),icon=box.querySelector('span');
+    ok(icon.style.fontSize===expected&&icon.style.width===expected&&icon.style.height===expected,'DsIcon: размер '+size+' задаёт глиф и его область');
+  }
+  const box=render(h(NS.DsIcon,{name:'search'}));
+  ok(box.querySelector('span').style.fontSize==='var(--ds-icon)','DsIcon: размер по умолчанию остаётся системным');
+}
 // DsIconButton: подсказка и загрузка согласованы с остальными кнопками.
 {
   const host=d.createElement('div');d.body.append(host);const root=ReactDOM.createRoot(host);
