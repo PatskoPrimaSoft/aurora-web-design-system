@@ -1,0 +1,19 @@
+<!-- @dsCard layout="component" group="5 · Компоненты · формы" height=970 subtitle="Выбор одного значения из раскрытого списка с системным оформлением" -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:24px}.example{display:flex;flex-direction:column;gap:12px;min-width:0}
+h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.stage{min-height:300px;max-width:420px}.form{display:flex;flex-direction:column;gap:12px;max-width:420px;min-height:220px}.dialog-stage{min-height:380px;position:relative;transform:translateZ(0);border:1px solid var(--ds-border);border-radius:var(--ds-radius-container);padding:16px}
+</style></head><body><div id="root"></div><script>
+(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
+var choices=[{value:'trucks',label:'Грузовики'},{value:'vans',label:'Фургоны'},{value:'cars',label:'Легковые'},{value:'special',label:'Спецтехника'},{value:'archive',label:'Архивные объекты',disabled:true}];
+function App(){var value=React.useState('trucks'),disabled=React.useState(false),saved=React.useState(''),dialog=React.useState(false),dialogValue=React.useState('cars');
+return h('div',{className:'examples'},
+ h('section',{className:'example'},h('h3',null,'Выбор группы'),h('div',{className:'row'},h(S.DsButton,{tone:disabled[0]?'primary':'secondary','aria-pressed':disabled[0],onClick:function(){disabled[1](!disabled[0])}},'Недоступно')),h('div',{className:'stage'},h(S.DsSelect,{id:'select-group',label:'Группа объектов',options:choices,value:value[0],onChange:value[1],disabled:disabled[0],hint:'Архивные объекты недоступны для выбора.'}),h('p',{className:'cap'},'Значение: '+value[0]))),
+ h('section',{className:'example'},h('h3',null,'Обязательный выбор в форме'),h('form',{className:'form',onSubmit:function(e){e.preventDefault();saved[1]('Сохранено: '+new FormData(e.currentTarget).get('reportGroup'))},onReset:function(){saved[1]('')}},h(S.DsSelect,{id:'select-required',name:'reportGroup',label:'Группа для отчёта',options:choices,required:true,hint:'Выберите группу перед сохранением.'}),h('div',{className:'row'},h(S.DsButton,{type:'submit'},'Сохранить'),h(S.DsButton,{type:'reset',tone:'secondary'},'Сбросить')),h('p',{className:'cap',role:'status'},saved[0]))),
+ h('section',{className:'example'},h('h3',null,'Выбор внутри диалога'),h('div',{className:'dialog-stage'},h(S.DsButton,{onClick:function(){dialog[1](true)}},'Открыть настройки'),h(S.DsDialog,{open:dialog[0],title:'Настройки отчёта',size:'sm',onClose:function(){dialog[1](false)},actions:h(S.DsButton,{onClick:function(){dialog[1](false)}},'Готово')},h(S.DsSelect,{label:'Группа в настройках',options:choices,value:dialogValue[0],onChange:dialogValue[1]}))),h('p',{className:'cap'},'Список не обрезается границами диалога. Escape сначала закрывает список, затем диалог.')));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</script></body></html>

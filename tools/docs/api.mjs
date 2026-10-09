@@ -29,7 +29,10 @@ function implementations(root){
    }
    if(ts.isFunctionDeclaration(statement)&&statement.name)register(statement.name.text,statement,exported(statement));
    if(ts.isVariableStatement(statement))for(const declaration of statement.declarationList.declarations){
-    if(ts.isIdentifier(declaration.name)&&declaration.initializer&&(ts.isArrowFunction(declaration.initializer)||ts.isFunctionExpression(declaration.initializer)))register(declaration.name.text,declaration.initializer,exported(statement));
+    const init=declaration.initializer;
+    const wrapped=init&&ts.isCallExpression(init)&&ts.isPropertyAccessExpression(init.expression)&&init.expression.expression.getText(source)==='React'&&init.expression.name.text==='forwardRef'?init.arguments[0]:null;
+    const implementation=wrapped??init;
+    if(ts.isIdentifier(declaration.name)&&implementation&&(ts.isArrowFunction(implementation)||ts.isFunctionExpression(implementation)))register(declaration.name.text,implementation,exported(statement));
    }
   }
  };
@@ -117,6 +120,8 @@ export function extractApi({root}){
   const parameter=implementation.node.parameters[0];
   if(!parameter||!ts.isObjectBindingPattern(parameter.name)||!contract.parameterType)throw Error(`${name}: unsupported props signature`);
   const bindings=new Map(parameter.name.elements.filter(e=>!e.dotDotDotToken).map(e=>[e.propertyName?.text??e.name.text,e]));
+  const refParameter=implementation.node.parameters[1];
+  if(refParameter&&ts.isIdentifier(refParameter.name)&&refParameter.name.text==='ref')bindings.set('ref',refParameter);
   const properties=checker.getPropertiesOfType(contract.parameterType);
   const declared=new Set(properties.map(p=>p.name));
   for(const nameOfProp of bindings.keys())if(!declared.has(nameOfProp))throw Error(`${slash(relative(root,contract.path))}: ${name}.${nameOfProp}: missing prop declaration`);
@@ -134,7 +139,10 @@ export function extractApi({root}){
     if(annotation&&literal(annotation)&&annotation.getText().replaceAll('"',"'")!==defaultValue.replaceAll('"',"'"))throw Error(`${name}.${symbol.name}: @default differs from implementation`);
    }
    if(binding?.initializer&&literal(binding.initializer))defaults.push({name,prop:symbol.name,value:defaultValue,path:contract.path});
-   return{name:symbol.name,type:declaration?.type?ts.createPrinter().printNode(ts.EmitHint.Unspecified,declaration.type,declaration.getSourceFile()):checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol,contract.node),undefined,ts.TypeFormatFlags.NoTruncation),required:!(symbol.flags&ts.SymbolFlags.Optional),description:ts.displayPartsToString(symbol.getDocumentationComment(checker)),defaultValue,defaultDescription,forwarded:!binding};
+   const resolved=checker.getTypeOfSymbolAtLocation(symbol,contract.node),nonNullable=checker.getNonNullableType(resolved);
+   const constraint=nonNullable.isTypeParameter()?checker.getBaseConstraintOfType(nonNullable):null;
+   const type=constraint?checker.typeToString(constraint,undefined,ts.TypeFormatFlags.NoTruncation|ts.TypeFormatFlags.InTypeAlias):native&&binding?checker.typeToString(resolved,undefined,ts.TypeFormatFlags.NoTruncation):declaration?.type?ts.createPrinter().printNode(ts.EmitHint.Unspecified,declaration.type,declaration.getSourceFile()):checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol,contract.node),undefined,ts.TypeFormatFlags.NoTruncation);
+   return{name:symbol.name,type,required:!(symbol.flags&ts.SymbolFlags.Optional),description:ts.displayPartsToString(symbol.getDocumentationComment(checker)),defaultValue,defaultDescription,forwarded:!binding};
   });
   docs.push({name,sourcePath:slash(relative(root,implementation.path)),declarationPath:slash(relative(root,contract.path)),description:ts.displayPartsToString(checker.getSymbolAtLocation(contract.node.name).getDocumentationComment(checker)),props,forwardsNativeAttributes:forwarding});
  }

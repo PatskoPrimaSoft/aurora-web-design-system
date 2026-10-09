@@ -26,6 +26,7 @@ export * from './components/feedback/DsToast.jsx';
 export * from './components/forms/DsCheckbox.jsx';
 export * from './components/forms/DsDuration.jsx';
 export * from './components/forms/DsField.jsx';
+export * from './components/forms/DsSelect.jsx';
 export * from './components/forms/DsFilterMenu.jsx';
 export * from './components/forms/DsSwitch.jsx';
 export * from './components/layout/DsDialog.jsx';

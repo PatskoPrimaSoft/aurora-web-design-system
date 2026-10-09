@@ -1,5 +1,7 @@
+import * as React from 'react';
+
 /** Поле с подписью для текста, числа, выбора и многострочного ввода. */
-export interface DsFieldProps {
+export interface DsFieldOwnProps {
   /** Подпись, связанная с нативным полем ввода. */
   label?: string;
   /** Постоянная подсказка под полем; заменяется сообщением error. */
@@ -18,8 +20,6 @@ export interface DsFieldProps {
   value?: string | number;
   /** Начальное значение неуправляемого поля; не передавайте вместе с value. */
   defaultValue?: string | number;
-  /** Событие изменения нативного поля; новое значение находится в event.target. */
-  onChange?: (e: React.ChangeEvent<HTMLElement>) => void;
   /** Подсказка внутри пустого поля; не заменяет label. */
   placeholder?: string;
   /** Варианты для select: строки или пары value/label. */
@@ -36,7 +36,19 @@ export interface DsFieldProps {
   rows?: number;
   /** Ширина внешнего контейнера; число в px, строка — CSS-размер. */
   width?: number | string;
+  /** Разрешить фокус и копирование без редактирования input или textarea; у select не применяется. */
+  readOnly?: boolean;
+  /** Автоматически увеличивать и уменьшать textarea по содержимому; rows задаёт начальную высоту. */
+  autoResize?: boolean;
+  /** Максимальная высота textarea: число в px или CSS-размер. */
+  maxHeight?: number | string;
+  /** Показать счётчик символов textarea; maxLength задаёт лимит. Счётчик не является live region. */
+  showCount?: boolean;
   /** Стабильный ID нативного поля; без него генерируется автоматически. */
   id?: string;
 }
-export declare function DsField(props: DsFieldProps): JSX.Element;
+export type DsFieldAs = 'input' | 'select' | 'textarea';
+export type DsFieldElement<T extends DsFieldAs> = T extends 'select' ? HTMLSelectElement : T extends 'textarea' ? HTMLTextAreaElement : HTMLInputElement;
+type NativeFieldProps<T extends DsFieldAs> = T extends 'select' ? React.SelectHTMLAttributes<HTMLSelectElement> : T extends 'textarea' ? React.TextareaHTMLAttributes<HTMLTextAreaElement> : React.InputHTMLAttributes<HTMLInputElement>;
+export type DsFieldProps<T extends DsFieldAs = 'input'> = Omit<DsFieldOwnProps, 'as'> & { as?: T; /** Ссылка на нативный input, select или textarea; позволяет перевести фокус из формы. */ ref?: React.Ref<DsFieldElement<T>> } & Omit<NativeFieldProps<T>, keyof DsFieldOwnProps | 'size'>;
+export declare function DsField<T extends DsFieldAs = 'input'>(props: DsFieldProps<T>): JSX.Element;

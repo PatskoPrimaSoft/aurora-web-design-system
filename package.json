@@ -51,7 +51,7 @@
     "check:angular": "node tools/check-angular.mjs",
     "test": "npm run test:lint && npm run test:ui",
     "test:lint": "node lint/test/run.js",
-    "test:ui": "node tests/DsFilterMenu.test.js && node tests/a11y-tokens.test.js && node tests/checkbox.test.js && node tests/rows-buttons.test.js && node tests/nav-dialog-i18n.test.js && node tests/page-layout.test.js && node tests/guard-command.test.js && node tests/package.test.js && node tests/fonts.test.js && node tests/changelog-section.test.js",
+    "test:ui": "node tests/DsFilterMenu.test.js && node tests/a11y-tokens.test.js && node tests/checkbox.test.js && node tests/rows-buttons.test.js && node tests/nav-dialog-i18n.test.js && node tests/page-layout.test.js && node tests/field.test.js && node tests/select.test.js && node tests/guard-command.test.js && node tests/package.test.js && node tests/fonts.test.js && node tests/changelog-section.test.js",
     "check:names": "node lint/scripts/check-names.js",
     "check:delivery": "node lint/scripts/check-delivery.js",
     "build:allowlist": "node lint/scripts/build-allowlist.js",

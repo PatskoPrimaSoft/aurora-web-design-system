@@ -1,4 +1,4 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · формы" height=950 subtitle="Поле с подписью для текста, числа, выбора и многострочного ввода" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · формы" height=1150 subtitle="Поле с подписью для текста, числа, выбора и многострочного ввода" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
@@ -9,23 +9,27 @@ h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}.form{display:flex;flex-direction:column;gap:12px;max-width:420px}.legacy{padding-top:8px;max-width:420px}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var imei=React.useState('356938035643809'),error=React.useState(''),saved=React.useState(''),disabled=React.useState(true),mode=React.useState('top'),name=React.useState('');
-function submit(e){e.preventDefault();if(!/^[0-9]{15}$/.test(imei[0])){error[1]('Введите IMEI из 15 цифр.');saved[1]('');return}error[1]('');saved[1]('IMEI сохранён: '+imei[0])}
+function App(){var imei=React.useState('356938035643809'),error=React.useState(''),saved=React.useState(''),mode=React.useState('top'),name=React.useState(''),access=React.useState('disabled'),note=React.useState('Проверить датчик топлива перед следующим рейсом.'),grow=React.useState(true),touched=React.useRef(false),imeiRef=React.useRef(null);
+function validate(v){return /^[0-9]{15}$/.test(v)?'':'Введите IMEI из 15 цифр.'}
+function submit(e){e.preventDefault();touched.current=true;var message=validate(imei[0]);if(message){error[1](message);saved[1]('');imeiRef.current.focus();return}error[1]('');saved[1]('IMEI сохранён: '+imei[0])}
 return h('div',{className:'examples'},
  h('section',{className:'example'},h('h3',null,'Варианты ввода'),h('div',{className:'grid'},
   h(S.DsField,{id:'field-name',label:'Название объекта',defaultValue:'MAZ 5440',placeholder:'Введите название'}),
   h(S.DsField,{id:'field-speed',label:'Максимальная скорость',type:'number',defaultValue:'90',suffix:'км/ч',mono:true,min:0}),
-  h(S.DsField,{id:'field-group',label:'Группа',as:'select',options:[{value:'trucks',label:'Грузовики'},{value:'vans',label:'Фургоны'},{value:'cars',label:'Легковые'}],defaultValue:'trucks'}),
-  h(S.DsField,{id:'field-note',label:'Примечание',as:'textarea',defaultValue:'Проверить датчик топлива перед следующим рейсом.',rows:3}))),
+  h(S.DsSelect,{id:'field-group',label:'Группа',options:[{value:'trucks',label:'Грузовики'},{value:'vans',label:'Фургоны'},{value:'cars',label:'Легковые'}],defaultValue:'trucks'}),
+  h(S.DsField,{id:'field-date',label:'Дата проверки',type:'date',defaultValue:'2026-10-09'}))),
  h('section',{className:'example'},h('h3',null,'Подсказка и проверка'),
-  h('form',{className:'form',onSubmit:submit,noValidate:true},h(S.DsField,{id:'field-imei',label:'IMEI устройства',value:imei[0],onChange:function(e){imei[1](e.target.value);error[1]('');saved[1]('')},icon:'sensors',mono:true,required:true,hint:'С шильдика устройства, 15 цифр.',error:error[0]}),h('div',{className:'row'},h(S.DsButton,{type:'submit'},'Сохранить IMEI'),h(S.DsButton,{tone:'secondary',onClick:function(){imei[1]('');error[1]('');saved[1]('')}},'Очистить')),h('p',{className:'cap',role:'status'},error[0]||saved[0])),
-  h('p',{className:'cap'},'Измените значение и сохраните его. Ошибка заменяет подсказку; проверку выполняет форма.')),
- h('section',{className:'example'},h('h3',null,'Недоступное поле'),
-  h('div',{className:'row'},h(S.DsButton,{tone:disabled[0]?'primary':'secondary','aria-pressed':disabled[0],onClick:function(){disabled[1](!disabled[0])}},'Недоступно')),
-  h('div',{className:'form'},h(S.DsField,{id:'field-owner',label:'Владелец',defaultValue:'TransBel',disabled:disabled[0],hint:'Доступность редактирования зависит от прав пользователя.'}))),
+  h('form',{className:'form',onSubmit:submit,noValidate:true},h(S.DsField,{id:'field-imei',ref:imeiRef,name:'imei',inputMode:'numeric',autoComplete:'off',label:'IMEI устройства',value:imei[0],onChange:function(e){imei[1](e.target.value);if(touched.current)error[1](validate(e.target.value));saved[1]('')},onBlur:function(){if(imei[0]){touched.current=true;error[1](validate(imei[0]))}},icon:'sensors',mono:true,required:true,hint:'С шильдика устройства, 15 цифр.',error:error[0]}),h('div',{className:'row'},h(S.DsButton,{type:'submit'},'Сохранить IMEI'),h(S.DsButton,{tone:'secondary',onClick:function(){imei[1]('');error[1]('');saved[1]('');touched.current=false;imeiRef.current.focus()}},'Очистить')),h('p',{className:'cap',role:'status'},error[0]||saved[0])),
+  h('p',{className:'cap'},'Проверка выполняется после выхода из заполненного поля и при сохранении. Исправляйте значение без повторной отправки; при ошибке сохранение возвращает фокус к полю.')),
+ h('section',{className:'example'},h('h3',null,'Редактирование, чтение и недоступность'),
+  h('div',{className:'row',role:'group','aria-label':'Доступность поля'},[['edit','Редактирование'],['read','Только чтение'],['disabled','Недоступно']].map(function(item){return h(S.DsButton,{key:item[0],tone:access[0]===item[0]?'primary':'secondary','aria-pressed':access[0]===item[0],onClick:function(){access[1](item[0])}},item[1])})),
+  h('div',{className:'form'},h(S.DsField,{id:'field-owner',label:'Владелец',defaultValue:'TransBel',disabled:access[0]==='disabled',readOnly:access[0]==='read',hint:access[0]==='disabled'?'Редактирование недоступно: нужны права администратора.':access[0]==='read'?'Значение можно выделить и скопировать.':'Измените владельца.'}))),
+ h('section',{className:'example'},h('h3',null,'Многострочный текст'),
+  h('div',{className:'row'},h(S.DsButton,{tone:grow[0]?'primary':'secondary','aria-pressed':grow[0],onClick:function(){grow[1](!grow[0])}},'Автоматическая высота')),
+  h(S.DsField,{id:'field-note',name:'note',label:'Примечание',as:'textarea',value:note[0],onChange:function(e){note[1](e.target.value)},rows:3,autoResize:grow[0],maxHeight:180,maxLength:300,showCount:true,hint:'До 300 символов. Поле растёт до 180 px, затем прокручивается.'})),
  h('section',{className:'example'},h('h3',null,'Расположение подписи'),
   h('div',{className:'row',role:'group','aria-label':'Расположение подписи'},[['top','Над полем'],['notch','В рамке']].map(function(item){return h(S.DsButton,{key:item[0],tone:mode[0]===item[0]?'primary':'secondary','aria-pressed':mode[0]===item[0],onClick:function(){mode[1](item[0])}},item[1])})),
-  h('div',{className:'legacy'},h(S.DsField,{id:'field-label-mode',label:'Название группы',value:name[0],onChange:function(e){name[1](e.target.value)},labelMode:mode[0]})),
+  h('div',{className:'legacy'},h(S.DsField,{id:'field-label-mode',label:'Название группы',value:name[0],onChange:function(e){name[1](e.target.value)},required:true,labelMode:mode[0]})),
   h('p',{className:'cap'},'Для новых форм используйте подпись над полем. Вариант в рамке предназначен для соседства с ещё не перенесёнными формами.')));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();

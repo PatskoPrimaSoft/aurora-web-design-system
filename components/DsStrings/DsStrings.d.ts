@@ -53,6 +53,8 @@ export interface DsStrings {
     next: string;
     last: string;
   };
+  selectField: {placeholder: string; empty: string; required: string};
+  field: {count: (used: number, max?: number) => string};
   duration: Record<'days' | 'hours' | 'minutes' | 'd' | 'h' | 'm', string>;
   chart: Record<'zoom' | 'data' | 'invalid' | 'settings' | 'reset' | 'download', string>;
   score: Record<'label' | 'bad' | 'norm' | 'good' | 'best', string>;

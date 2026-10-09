@@ -36,6 +36,7 @@ assert.equal(actual.find(c=>c.name==='DsCheckbox').declarationPath,'components/D
 assert.ok(!actual.some(c=>['DsCheck','DsCheckButton','DsSelectBox'].includes(c.name)));
 assert.ok(actual.find(c=>c.name==='DsTabPanel').props.some(p=>p.name==='idBase'));
 assert.equal(actual.find(c=>c.name==='DsField').forwardsNativeAttributes,true);
+assert.match(actual.find(c=>c.name==='DsField').props.find(p=>p.name==='as').type,/input.*select.*textarea/);
 assert.equal(actual.find(c=>c.name==='DsButton').forwardsNativeAttributes,true);
 assert.match(renderProps({...demo,description:'<script>alert(1)</script>'}),/&lt;script&gt;/);
 const buttonApi=actual.find(c=>c.name==='DsButton');

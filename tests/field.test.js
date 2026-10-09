@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import ts from 'typescript';import {fileURLToPath} from 'node:url';
+import {loadRuntime} from './helpers/runtime.js';
+const path=fileURLToPath(new URL('./fixtures/field-types.tsx',import.meta.url));
+const program=ts.createProgram([path],{noEmit:true,strict:true,jsx:ts.JsxEmit.React,moduleResolution:ts.ModuleResolutionKind.Bundler,module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022});
+const diagnostics=ts.getPreEmitDiagnostics(program);assert.equal(diagnostics.length,0,diagnostics.map(d=>ts.flattenDiagnosticMessageText(d.messageText,' ')).join('\n'));
+const {dom,window:w,React,ReactDOM,NS}=loadRuntime();const box=w.document.createElement('div');w.document.body.append(box);const root=ReactDOM.createRoot(box);let element;
+ReactDOM.flushSync(()=>root.render(React.createElement(NS.DsStringsProvider,{strings:NS.dsStringsEn},React.createElement(NS.DsField,{as:'textarea',label:'Note',defaultValue:'Hello',showCount:true,maxLength:20,ref:node=>element=node}))));
+assert.equal(element.tagName,'TEXTAREA');assert.equal(element.maxLength,20);assert.ok(box.textContent.includes('5 of 20 characters'));assert.equal(box.querySelector('[aria-live]'),null);
+ReactDOM.flushSync(()=>root.unmount());assert.equal(element,null);dom.window.close();console.log('DsField: native types, refs and counter localization passed');
