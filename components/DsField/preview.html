@@ -1,22 +1,32 @@
-<!-- @dsCard group="5 · Компоненты · формы" height=260 subtitle="Статичная подпись над полем 40px; единицы — suffix, не часть подписи" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · формы" height=950 subtitle="Поле с подписью для текста, числа, выбора и многострочного ввода" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+.examples{display:flex;flex-direction:column;gap:24px}.example{display:flex;flex-direction:column;gap:12px;min-width:0}
+h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;align-items:start}
+.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}.form{display:flex;flex-direction:column;gap:12px;max-width:420px}.legacy{padding-top:8px;max-width:420px}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'grid'},
-  h(S.DsField,{label:'Название объекта',defaultValue:'MAZ 5440'}),
-  h(S.DsField,{label:'IMEI',defaultValue:'356938035643809',mono:true,icon:'sensors',hint:'С шильдика устройства, 15 цифр'}),
-  h(S.DsField,{label:'Макс. скорость',defaultValue:'90',suffix:'км/ч',mono:true}),
-  h(S.DsField,{label:'Норма расхода',placeholder:'0',suffix:'л/100км',error:'Не может быть пустым'}),
-  h(S.DsField,{label:'Группа',as:'select',options:['Грузовики','Фургоны'],defaultValue:'Грузовики'}),
-  h(S.DsField,{label:'Владелец',defaultValue:'TransBel',disabled:true}));}
+function App(){var imei=React.useState('356938035643809'),error=React.useState(''),saved=React.useState(''),disabled=React.useState(true),mode=React.useState('top'),name=React.useState('');
+function submit(e){e.preventDefault();if(!/^[0-9]{15}$/.test(imei[0])){error[1]('Введите IMEI из 15 цифр.');saved[1]('');return}error[1]('');saved[1]('IMEI сохранён: '+imei[0])}
+return h('div',{className:'examples'},
+ h('section',{className:'example'},h('h3',null,'Варианты ввода'),h('div',{className:'grid'},
+  h(S.DsField,{id:'field-name',label:'Название объекта',defaultValue:'MAZ 5440',placeholder:'Введите название'}),
+  h(S.DsField,{id:'field-speed',label:'Максимальная скорость',type:'number',defaultValue:'90',suffix:'км/ч',mono:true,min:0}),
+  h(S.DsField,{id:'field-group',label:'Группа',as:'select',options:[{value:'trucks',label:'Грузовики'},{value:'vans',label:'Фургоны'},{value:'cars',label:'Легковые'}],defaultValue:'trucks'}),
+  h(S.DsField,{id:'field-note',label:'Примечание',as:'textarea',defaultValue:'Проверить датчик топлива перед следующим рейсом.',rows:3}))),
+ h('section',{className:'example'},h('h3',null,'Подсказка и проверка'),
+  h('form',{className:'form',onSubmit:submit,noValidate:true},h(S.DsField,{id:'field-imei',label:'IMEI устройства',value:imei[0],onChange:function(e){imei[1](e.target.value);error[1]('');saved[1]('')},icon:'sensors',mono:true,required:true,hint:'С шильдика устройства, 15 цифр.',error:error[0]}),h('div',{className:'row'},h(S.DsButton,{type:'submit'},'Сохранить IMEI'),h(S.DsButton,{tone:'secondary',onClick:function(){imei[1]('');error[1]('');saved[1]('')}},'Очистить')),h('p',{className:'cap',role:'status'},error[0]||saved[0])),
+  h('p',{className:'cap'},'Измените значение и сохраните его. Ошибка заменяет подсказку; проверку выполняет форма.')),
+ h('section',{className:'example'},h('h3',null,'Недоступное поле'),
+  h('div',{className:'row'},h(S.DsButton,{tone:disabled[0]?'primary':'secondary','aria-pressed':disabled[0],onClick:function(){disabled[1](!disabled[0])}},'Недоступно')),
+  h('div',{className:'form'},h(S.DsField,{id:'field-owner',label:'Владелец',defaultValue:'TransBel',disabled:disabled[0],hint:'Доступность редактирования зависит от прав пользователя.'}))),
+ h('section',{className:'example'},h('h3',null,'Расположение подписи'),
+  h('div',{className:'row',role:'group','aria-label':'Расположение подписи'},[['top','Над полем'],['notch','В рамке']].map(function(item){return h(S.DsButton,{key:item[0],tone:mode[0]===item[0]?'primary':'secondary','aria-pressed':mode[0]===item[0],onClick:function(){mode[1](item[0])}},item[1])})),
+  h('div',{className:'legacy'},h(S.DsField,{id:'field-label-mode',label:'Название группы',value:name[0],onChange:function(e){name[1](e.target.value)},labelMode:mode[0]})),
+  h('p',{className:'cap'},'Для новых форм используйте подпись над полем. Вариант в рамке предназначен для соседства с ещё не перенесёнными формами.')));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
