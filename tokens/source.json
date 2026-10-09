@@ -1251,6 +1251,11 @@
         "usage": "Высота панели инструментов и шапки таблицы."
       },
       {
+        "name": "ds-panel-right-w",
+        "value": "360px",
+        "usage": "Ширина правого вспомогательного региона DsPageLayout, если не задан rightWidth."
+      },
+      {
         "name": "ds-panel-w",
         "value": {
           "light": "340px",

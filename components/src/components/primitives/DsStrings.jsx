@@ -36,6 +36,7 @@ export const dsStringsRu={
   chart:{zoom:'Зум',data:'Данные',invalid:'Показать / скрыть некорректные данные',settings:'Настройки',reset:'Сбросить',download:'Скачать'},
   score:{label:'Оценка',bad:'Плохо',norm:'Норма',good:'Хорошо',best:'ЛУЧШИЙ'},
   toast:{label:'Уведомления'},
+  layout:{skip:'К содержимому',left:'Левая панель',right:'Правая панель'},
   tabs:{nav:'Разделы'},
   stepper:{label:'Этапы задачи',position:(n,total)=>'Шаг '+n+' из '+total,current:'текущий',completed:'завершён',upcoming:'предстоит',disabled:'недоступен'},
 };
@@ -64,6 +65,7 @@ export const dsStringsEn={
   chart:{zoom:'Zoom',data:'Data',invalid:'Show / hide invalid data',settings:'Settings',reset:'Reset',download:'Download'},
   score:{label:'Score',bad:'Poor',norm:'Fair',good:'Good',best:'THE BEST'},
   toast:{label:'Notifications'},
+  layout:{skip:'Skip to content',left:'Left panel',right:'Right panel'},
   tabs:{nav:'Sections'},
   stepper:{label:'Task steps',position:(n,total)=>'Step '+n+' of '+total,current:'current',completed:'completed',upcoming:'upcoming',disabled:'unavailable'},
 };

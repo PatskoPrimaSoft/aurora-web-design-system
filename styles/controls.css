@@ -34,3 +34,6 @@
 :where([data-ds-tab="header"]:active){--tab-feedback:color-mix(in srgb,var(--ds-header-fg) var(--ds-overlay-press),var(--ds-header-bg))}
 
 :where([data-ds-animated-tabs] > [data-ds-selected="true"] [data-ds-tab-indicator]){visibility:hidden}
+
+[data-ds-page-skip]{position:absolute;z-index:1;top:var(--ds-pad-sm);left:var(--ds-pad-sm);padding:var(--ds-pad-sm) var(--ds-pad-md);background:var(--ds-surface);color:var(--ds-brand-text);border-radius:var(--ds-radius-control);font:var(--ds-type-ui);clip-path:inset(50%);width:1px;height:1px;overflow:hidden;white-space:nowrap}
+[data-ds-page-skip]:focus{clip-path:none;width:auto;height:auto;overflow:visible}
