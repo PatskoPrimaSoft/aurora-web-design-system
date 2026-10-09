@@ -3,7 +3,7 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Policy: [Versions and publishing](docs/release.md#versioning).
 
-## [Unreleased]
+## [4.0.0] — 2026-10-09
 
 - Поля: наведение больше не перекрывает брендовый цвет рамки клавиатурного фокуса. Отдельные страницы превью получают заголовок документа из названия карточки.
 
