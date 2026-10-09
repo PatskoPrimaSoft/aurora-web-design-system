@@ -4,10 +4,14 @@ import {parseState,stateUrl,comparisonScopes} from './state.js';
 const cards=await(await fetch('cards.json')).json();
 let state=parseState(new URL(location.href),cards),renderedKey=null,frames=[];
 const nav=document.getElementById('cards'),viewports=document.getElementById('viewports'),search=document.getElementById('search'),compare=document.getElementById('compare');
+const titleStatus=document.getElementById('card-status'),titleStatusRoot=window.ReactDOM.createRoot(titleStatus);
+let navigationStatusRoots=[];
+function renderStatus(root,card){window.ReactDOM.flushSync(()=>root.render(card?.status==='deprecated'?window.React.createElement(window.AuroraWebDesignSystem_96e210.DsLozenge,{tone:'warning',size:'sm'},'Устарело'):null));}
 const examplesHeading=document.createElement('h2');examplesHeading.id='examples-heading';examplesHeading.textContent='Живые примеры';examplesHeading.hidden=true;viewports.before(examplesHeading);
 function save(push=false){history[push?'pushState':'replaceState'](null,'',stateUrl(location.href,state));}
 function drawNavigation(){
- const found=searchCards(cards,state.query),groups=new Map();nav.replaceChildren();
+ const found=searchCards(cards,state.query),groups=new Map();
+ for(const root of navigationStatusRoots)root.unmount();navigationStatusRoots=[];nav.replaceChildren();
  document.getElementById('count').textContent=`${found.length} из ${cards.length} карточек`;
  document.getElementById('search-empty').hidden=found.length>0;
  for(const card of found){
@@ -18,6 +22,7 @@ function drawNavigation(){
  const orderedGroups=[...groups].sort(([nameA],[nameB])=>nameA.localeCompare(nameB,'ru',{numeric:true}));
  for(const[name,items]of orderedGroups){const h=document.createElement('h2');h.textContent=name;nav.append(h);
   for(const card of items){const link=document.createElement('a');link.href=stateUrl(location.href,{...state,cardId:card.id});link.dataset.id=card.id;link.textContent=card.title;
+   if(card.status==='deprecated'){const status=document.createElement('span');status.className='nav-card-status';link.append(status);const root=window.ReactDOM.createRoot(status);navigationStatusRoots.push(root);renderStatus(root,card);}
    if(card.id===state.cardId)link.setAttribute('aria-current','page');
    link.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;event.preventDefault();state={...state,cardId:card.id,unknown:false};save(true);render();});nav.append(link);}
  }
@@ -62,6 +67,7 @@ function render(){
  document.querySelector('main').classList.toggle('component-page',card?.layout==='component');
  examplesHeading.hidden=card?.layout!=='component';
  if(card?.layout==='component')viewports.setAttribute('aria-labelledby',examplesHeading.id);else viewports.removeAttribute('aria-labelledby');
+ titleStatus.hidden=card?.status!=='deprecated';renderStatus(titleStatusRoot,card);
  describeCard(card);
  if(!card){document.getElementById('title').textContent='Карточка не найдена';document.getElementById('subtitle').textContent='Выберите карточку в навигации или вернитесь к началу.';document.getElementById('missing-id').textContent=state.cardId;for(const record of frames)record.resizeObserver?.disconnect();viewports.replaceChildren();document.getElementById('reference-links').replaceChildren();frames=[];renderedKey=null;document.getElementById('local-note').hidden=true;return;}
  document.getElementById('title').textContent=card.title;document.getElementById('subtitle').textContent=card.subtitle;document.getElementById('local-note').hidden=card.scopeMode!=='local';referenceLinks(card);

@@ -1,28 +1,24 @@
-/**
- * v2 duration field — replaces `TimePicker`, the one non-Material control in v1.
- *
- * v1's was 32px tall with the mask `дд d чч : мм` hard-coded in Russian, a
- * `1px #cbd5e1` border (a literal hex that matched no token) and a bespoke
- * `0 0 0 1px --color-primary` focus ring. v2 rebuilds it on the shared field
- * tokens — same height, border and focus ring as DsField — and takes the unit
- * labels out of the mask so they can be translated.
- *
- * This is a **duration**, not a clock time: it is what "parking longer than", "trip
- * shorter than" and report intervals use. For a wall-clock time use
- * `DsField type="time"`.
- */
+/** Части длительности в строковом виде; пустая строка — незаполненный сегмент. */
 export interface DsDurationValue { d?: string; h?: string; m?: string }
+/** Ввод длительности в днях, часах и минутах. */
 export interface DsDurationProps {
+  /** Подпись над полем. */
   label?: string;
+  /** Значения сегментов; компонент не нормализует диапазоны. */
   value?: DsDurationValue;
+  /** Новое значение после ввода цифр; дни ограничены тремя цифрами, часы и минуты — двумя. */
   onChange?: (value: DsDurationValue) => void;
+  /** Пояснение под полем, если нет ошибки или предупреждения. */
   hint?: string;
+  /** Сообщение об ошибке; имеет приоритет над warning и hint. */
   error?: string;
-  /** Amber border + amber description — "longer than the report interval". */
+  /** Предупреждение с выделенной рамкой и пояснением; имеет приоритет над hint. */
   warning?: string;
-  /** false drops the days segment. */
+  /** Показать сегмент дней; скрытие не удаляет d из value. */
   showDays?: boolean;
+  /** Заблокировать ввод во всех сегментах и исключить их из последовательности Tab. */
   disabled?: boolean;
+  /** Ширина внешнего контейнера; число в px, строка — CSS-размер. */
   width?: number | string;
 }
 export declare function DsDuration(props: DsDurationProps): JSX.Element;
