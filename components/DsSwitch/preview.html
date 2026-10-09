@@ -1,20 +1,34 @@
-<!-- @dsCard group="5 · Компоненты · формы" height=130 subtitle="Переключатель с подписью и пояснением; замена SlideToggle" -->
+<!-- @dsCard layout="component" group="5 · Компоненты · формы" height=480 subtitle="Переключение настройки, которая применяется сразу" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.col{display:flex;flex-direction:column;gap:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
-.sep{width:1px;height:24px;background:var(--ds-divider)}
-.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
+section+section{margin-top:24px}
+h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0 0 12px}
+.stack{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.hint{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:12px 0 0}
+.result{margin:12px 0 0;color:var(--ds-fg-subtle)}
+@media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var st=React.useState(true);
-  return h('div',{className:'col'},
-    h(S.DsSwitch,{label:'Показывать треки',checked:st[0],onChange:function(e){st[1](e.target.checked);}}),
-    h(S.DsSwitch,{label:'Кластеризация объектов',description:'Группирует близкие метки при отдалении',checked:false,onChange:function(){}}),
-    h(S.DsSwitch,{label:'Недоступно',checked:true,disabled:true,onChange:function(){}}));}
+function App(){var off=React.useState(false),on=React.useState(true),clusters=React.useState(false),tracks=React.useState(true);
+function change(state){return function(event){state[1](event.target.checked);};}
+return h('div',null,
+ h('section',{'aria-label':'Варианты и состояния'},
+  h('h3',null,'Варианты и состояния'),
+  h('div',{className:'stack'},
+   h(S.DsSwitch,{label:'Уведомления о событиях',checked:off[0],onChange:change(off)}),
+   h(S.DsSwitch,{label:'Звуковые уведомления',checked:on[0],onChange:change(on)}),
+   h(S.DsSwitch,{label:'Автоматическое обновление',disabled:true,checked:false}),
+   h(S.DsSwitch,{label:'Системные уведомления',disabled:true,checked:true})),
+  h('p',{className:'hint'},'Переключайте доступные настройки нажатием на подпись или клавишей Space.')),
+ h('section',{'aria-label':'С пояснением'},
+  h('h3',null,'С пояснением'),
+  h(S.DsSwitch,{label:'Кластеризация объектов',description:'Группирует близкие метки при отдалении карты',checked:clusters[0],onChange:change(clusters)})),
+ h('section',{'aria-label':'Немедленное применение'},
+  h('h3',null,'Немедленное применение'),
+  h(S.DsSwitch,{label:'Показывать треки',checked:tracks[0],onChange:change(tracks)}),
+  h('p',{className:'result',role:'status'},tracks[0]?'Треки отображаются на карте.':'Треки скрыты.')));
+}
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>
