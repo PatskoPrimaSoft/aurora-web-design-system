@@ -11,7 +11,9 @@ h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0 0 12px}
 @media(max-width:400px){body{padding:12px}}
 </style></head><body><div id="root"></div><script>
 (function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var off=React.useState(false),on=React.useState(true),clusters=React.useState(false),tracks=React.useState(true);
+function App(){var off=React.useState(false),on=React.useState(true),clusters=React.useState(false),tracks=React.useState(true),saved=React.useState(false),busy=React.useState(false),fail=React.useState(false),message=React.useState(''),timer=React.useRef(null);
+React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
+function save(event){var previous=saved[0];saved[1](event.target.checked);busy[1](true);message[1]('');timer.current=setTimeout(function(){busy[1](false);if(fail[0]){saved[1](previous);message[1]('Не удалось сохранить настройку. Попробуйте ещё раз.');}else message[1]('Настройка сохранена.');},1800);}
 function change(state){return function(event){state[1](event.target.checked);};}
 return h('div',null,
  h('section',{'aria-label':'Варианты и состояния'},
@@ -19,8 +21,8 @@ return h('div',null,
   h('div',{className:'stack'},
    h(S.DsSwitch,{label:'Уведомления о событиях',checked:off[0],onChange:change(off)}),
    h(S.DsSwitch,{label:'Звуковые уведомления',checked:on[0],onChange:change(on)}),
-   h(S.DsSwitch,{label:'Автоматическое обновление',disabled:true,checked:false}),
-   h(S.DsSwitch,{label:'Системные уведомления',disabled:true,checked:true})),
+   h(S.DsSwitch,{label:'Автоматическое обновление',description:'Недоступно без подключения к серверу',disabled:true,checked:false}),
+   h(S.DsSwitch,{label:'Системные уведомления',description:'Управляется администратором',disabled:true,checked:true})),
   h('p',{className:'hint'},'Переключайте доступные настройки нажатием на подпись или клавишей Space.')),
  h('section',{'aria-label':'С пояснением'},
   h('h3',null,'С пояснением'),
@@ -28,7 +30,12 @@ return h('div',null,
  h('section',{'aria-label':'Немедленное применение'},
   h('h3',null,'Немедленное применение'),
   h(S.DsSwitch,{label:'Показывать треки',checked:tracks[0],onChange:change(tracks)}),
-  h('p',{className:'result',role:'status'},tracks[0]?'Треки отображаются на карте.':'Треки скрыты.')));
+  h('p',{className:'result',role:'status'},tracks[0]?'Треки отображаются на карте.':'Треки скрыты.')),
+ h('section',{'aria-label':'Сохранение настройки'},
+  h('h3',null,'Сохранение настройки'),
+  h('div',{className:'stack'},h(S.DsSwitch,{label:'Автоматическое обновление карты',description:'Настройка сохраняется на сервере',checked:saved[0],loading:busy[0],onChange:save}),
+   h(S.DsCheckbox,{label:'Имитировать ошибку сохранения',state:fail[0]?'checked':'unchecked',disabled:busy[0],onChange:function(value){fail[1](value==='checked');}})),
+  h('p',{className:'result',role:'status'},message[0])));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
 </script></body></html>

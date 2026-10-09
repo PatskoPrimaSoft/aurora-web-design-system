@@ -1,14 +1,16 @@
-/**
- * v2 slide toggle. 36x20 track, brand fill when on.
- * Use for a setting that takes effect immediately (map layer, invalid-data
- * visibility); use DsCheckbox inside a form that has a Save button.
- */
-export interface DsSwitchProps {
+/** Управляемая настройка с немедленным применением. Дорожка — 36 × 20 px. */
+export interface DsSwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'checked' | 'defaultChecked' | 'children' | 'onChange' | 'disabled' | 'readOnly' | 'style'> {
+  /** Постоянная видимая подпись. Без неё задайте aria-label или aria-labelledby. */
   label?: React.ReactNode;
+  /** Пояснение, связанное с input через aria-describedby. */
   description?: string;
+  /** Текущее значение настройки; обновляйте через onChange. */
   checked?: boolean;
+  /** Запрещает изменение и исключает input из порядка Tab. */
   disabled?: boolean;
-  /** Omit only in a static specimen — without it the input is marked read-only. */
+  /** Показывает спиннер, блокирует изменение и сохраняет фокус. */
+  loading?: boolean;
+  /** Нативное событие изменения. Без обработчика — только статичный образец. */
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-export declare function DsSwitch(props: DsSwitchProps): JSX.Element;
+export declare const DsSwitch: React.ForwardRefExoticComponent<DsSwitchProps & React.RefAttributes<HTMLInputElement>>;
