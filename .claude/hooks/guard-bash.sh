@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # PreToolUse-хук Claude Code для инструмента Bash.
 # Не даёт агенту публиковать пакет и выпускать версии: релиз — push в master, пакет и тег v<version> публикует CI
-# (.github/workflows/ci.yml), push делает человек (см. CLAUDE.md).
+# (.github/workflows/ci.yml), push делает человек (см. AGENTS.md).
 #
 # Вход: JSON от Claude Code на stdin, команда лежит в .tool_input.command.
 # Выход: exit 2 + текст в stderr — вызов заблокирован; exit 0 — разрешён.
@@ -26,7 +26,7 @@ if [ -n "$blocked" ]; then
     cat >&2 <<EOF
 Заблокировано хуком .claude/hooks/guard-bash.sh: «$blocked».
 Релиз — push в master, пакет и тег v<version> публикует CI (.github/workflows/ci.yml). Push делает человек,
-версию переводит /aurora-release (npm version <X.Y.Z> --no-git-tag-version). См. CLAUDE.md.
+версию переводит /aurora-release (npm version <X.Y.Z> --no-git-tag-version). См. AGENTS.md.
 Если это нужно прямо сейчас, пользователь может выполнить команду сам: «! <команда>».
 EOF
     exit 2

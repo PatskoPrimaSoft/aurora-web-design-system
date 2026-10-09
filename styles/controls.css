@@ -6,7 +6,7 @@
 
 [data-ds-field]{border:var(--ds-border-width) solid var(--ds-border-field);border-radius:var(--ds-radius-field)}
 
-[data-ds-field]:not([data-ds-field-disabled],[data-ds-field-readonly]):hover{border-color:var(--ds-border-field-hover)}
+[data-ds-field]:where(:not([data-ds-field-disabled],[data-ds-field-readonly])):hover{border-color:var(--ds-border-field-hover)}
 
 [data-ds-field="error"]{border-color:var(--ds-danger-solid)}
 

@@ -6,8 +6,10 @@ const source = JSON.parse(readFileSync(new URL('../tokens/source.json', import.m
 const model = readTokenModel(source);
 assert.equal(model.density.cozy['--ds-control-h'], '36px');
 assert.equal(model.density.compact['--ds-control-h'], '30px');
-const original = JSON.parse(readFileSync(new URL('../.tmp/migration/original/tokens.json', import.meta.url)));
-assert.deepEqual(JSON.parse(serializePublicTokens(source)), original);
+const delivered = JSON.parse(readFileSync(new URL('../tokens.json', import.meta.url)));
+assert.deepEqual(JSON.parse(serializePublicTokens(source)), delivered);
+assert.equal(delivered.runtime,undefined,'internal runtime must not leak into public tokens');
+assert.equal(new Set(model.names).size,model.names.length);
 const duplicate = structuredClone(source);
 duplicate.color.tokens.push(structuredClone(duplicate.color.tokens[0]));
 assert.throws(() => readTokenModel(duplicate), /source.json.*ds-n-0.*duplicate/i);

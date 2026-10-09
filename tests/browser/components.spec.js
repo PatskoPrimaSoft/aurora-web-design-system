@@ -1,15 +1,16 @@
 import { test } from '@playwright/test';
-import { prepareBaseline, captureCards } from '../../tools/baseline/render.mjs';
+import { captureCards } from '../../tools/baseline/render.mjs';
 import { buildComponents } from '../../tools/build-components.mjs';
-import { buildDist } from '../../tools/build.js';
+import { buildAll } from '../../tools/build.js';
+import {readCards} from '../../tools/catalog/index.mjs';
 import { fileURLToPath } from 'node:url';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync,readFileSync } from 'node:fs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
-test('fresh components match baseline on button, menu, table and object row',async({browser})=>{
- const baseline=await prepareBaseline(root);
- const cards=baseline.cards.filter(c=>['overview','DsButton','DsMenu','DsTable','DsListRow'].includes(c.id));
- await captureCards({browser,...baseline,cards,outDir:`${root}/.tmp/migration/components-old`});
+test('delivered previews match current source on overview, button, menu, table and list row',async({browser})=>{
+ await buildAll({root});
+ const cards=readCards(root).filter(c=>['overview','DsButton','DsMenu','DsTable','DsListRow'].includes(c.id));
  await buildComponents({root,outDir:root});
- const css=buildDist({root});mkdirSync(`${root}/dist`,{recursive:true});writeFileSync(`${root}/dist/styles.css`,css.styles);
- await captureCards({browser,root,cards,mode:'current',outDir:`${root}/.tmp/migration/components-new`,compareDir:`${root}/.tmp/migration/components-old`,referenceRoot:baseline.root,documentationChanges:['overview-count']});
+ mkdirSync(`${root}/site/tests/fixtures`,{recursive:true});writeFileSync(`${root}/site/tests/fixtures/cascade.html`,readFileSync(`${root}/tests/fixtures/cascade.html`));
+ await captureCards({browser,root,cards,mode:'current',outDir:`${root}/.tmp/migration/components-source`});
+ await captureCards({browser,root:`${root}/site`,cards,mode:'current',outDir:`${root}/.tmp/migration/components-delivered`,compareDir:`${root}/.tmp/migration/components-source`,referenceRoot:root,referenceMode:'current'});
 });

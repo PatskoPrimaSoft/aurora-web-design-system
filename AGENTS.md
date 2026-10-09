@@ -29,11 +29,20 @@
 
 ## Релиз
 
-- Ветки: `master` (релизы), `develop`, фичи от develop. Коммиты на английском.
+- Ветки: `master` (релизы), `develop`, фичи `feature/*` от develop. Коммиты на английском.
 - Версия в `package.json` — разрабатываемая. Релиз — `/aurora-release`: CHANGELOG
   `## [Unreleased]` → `## [X.Y.Z] — YYYY-MM-DD`, fast-forward master, затем develop
   переводится на следующую версию (`npm version <next> --no-git-tag-version`)
   с новым `## [Unreleased]`. Push делает человек.
+- Перед релизом: чистый `develop`, fetch origin, нет отставания от origin/develop,
+  origin/master — предок develop; версия согласована с package-lock.json, тег версии
+  отсутствует локально и на origin, `mise exec -- npm run verify` проходит полностью.
+- Коммиты: `chore: release X.Y.Z` закрывает CHANGELOG; после fast-forward master
+  `chore: start <next>` меняет package.json, package-lock.json и открывает `[Unreleased]`.
+  Версию повышать после релиза; legacy-исключение описано в docs/release.md.
+- Перед передачей ручного push показать выпускаемую и следующую версии, release notes,
+  состав коммитов и результат проверок. Не обходить защиту веток, не применять force
+  или merge-коммит вместо fast-forward. Подготовка стандарта не означает запуск релиза.
 - Push в master публикует пакет, ставит тег `v<version>` и GitHub Release через
   `.github/workflows/ci.yml`. Агент не выполняет `npm publish`, релизный `git push`,
   `git tag v*` или `npm version` с созданием тега.

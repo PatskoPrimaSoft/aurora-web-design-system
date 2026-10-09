@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {releaseVersion,registryState} from '../tools/release-check.mjs';
+const pkg={version:'4.0.0'},lock={version:'4.0.0',packages:{'':{version:'4.0.0'}}};
+const notes='## [4.0.0] — 2026-10-09\n\n- Changes.\n';
+assert.equal(releaseVersion(pkg,lock,notes),'4.0.0');
+assert.throws(()=>releaseVersion(pkg,{...lock,version:'3.0.1'},notes),/package-lock/);
+assert.throws(()=>releaseVersion(pkg,{...lock,packages:{'':{version:'3.0.1'}}},notes),/package-lock/);
+assert.throws(()=>releaseVersion(pkg,lock,'## [Unreleased]\n\n- Changes.'),/CHANGELOG/);
+assert.throws(()=>releaseVersion(pkg,lock,'## [4.0.0] — 2026-10-09\n'),/CHANGELOG/);
+assert.equal(registryState({status:0,stdout:'"4.0.0"'},'4.0.0'),'present');
+assert.equal(registryState({status:1,stdout:JSON.stringify({error:{code:'E404'}})},'4.0.0'),'missing');
+for(const code of ['E401','E403','EAI_AGAIN','ECONNRESET'])assert.throws(()=>registryState({status:1,stdout:JSON.stringify({error:{code}})},'4.0.0'),/registry/);
+assert.throws(()=>registryState({status:0,stdout:'"3.0.1"'},'4.0.0'),/registry/);
+assert.throws(()=>registryState({status:1,stdout:'not JSON'},'4.0.0'),/registry/);
+console.log('release-check: synchronized versions, release notes and registry failures passed');

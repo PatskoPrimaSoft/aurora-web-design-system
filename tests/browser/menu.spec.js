@@ -17,14 +17,14 @@ test('DsMenu supports selection, names, keyboard search and responsive placement
    await expect(f.getByRole('menuitemradio',{name:'За неделю'})).toBeFocused();
    await page.keyboard.press('Enter');await expect(period).toBeFocused();
    await expect(f.getByRole('status',{name:'Выбранный период'})).toContainText('За неделю');
-   const layers=f.getByRole('button',{name:'Слои',exact:true});await layers.click();
+   const layers=f.getByRole('button',{name:'Слои',exact:true});await layers.evaluate(el=>el.scrollIntoView({block:'center'}));await layers.click();
    const tracks=f.getByRole('menuitemcheckbox',{name:'Треки',exact:true});await tracks.click();
    await expect(tracks).toHaveAttribute('aria-checked','true');await expect(tracks).toBeFocused();
    await expect(f.getByRole('menu',{name:'Слои карты'})).toBeVisible();
    await expect(f.getByRole('status',{name:'Видимые слои'})).toContainText('Объекты, Треки');
    await expect(tracks).not.toHaveCSS('background-color','rgba(0, 0, 0, 0)');
    await page.keyboard.press('Escape');await expect(layers).toBeFocused();
-   const actions=f.getByRole('button',{name:'Действия с Volvo FH16'});await actions.click();
+   const actions=f.getByRole('button',{name:'Действия с Volvo FH16'});await actions.evaluate(el=>el.scrollIntoView({block:'center'}));await actions.click();
    const slots=f.locator('[data-ds-menu-icon-slot]');await expect(slots).toHaveCount(4);
    const xs=await slots.evaluateAll(els=>els.map(el=>el.getBoundingClientRect().left));expect(new Set(xs).size).toBe(1);
    const bounds=await f.getByRole('menu').evaluate(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,view:innerWidth,top:r.top,bottom:r.bottom,height:innerHeight,popover:el.matches(':popover-open')};});

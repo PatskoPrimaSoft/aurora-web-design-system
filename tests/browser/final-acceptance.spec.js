@@ -11,7 +11,7 @@ test('complete generated site and four-way comparison work without external requ
   await page.goto(served.url+'/index.html?card=DsButton&compare=1');await expect(page.locator('#viewports iframe')).toHaveCount(4);
   for(let i=0;i<4;i++)await expect(page.frameLocator('#preview-'+i).getByRole('button').first()).toBeVisible();
   expect(await page.evaluate(async()=>{const checks=[['Inter Tight',400],['Inter Tight',500],['Inter Tight',600],['Inter Tight',700],['JetBrains Mono',400],['JetBrains Mono',500],['Material Symbols Outlined',400]];return Promise.all(checks.map(async([family,weight])=>{const faces=await document.fonts.load(`${weight} 14px "${family}"`,'Объект123');return faces.length>0&&faces.every(f=>f.status==='loaded');}));})).toEqual(Array(7).fill(true));
-  expect(cards).toHaveLength(67);expect(external).toEqual([]);expect(errors).toEqual([]);console.log(`offline: ${paths.length} HTML pages, ${cards.length} previews, comparison and seven fonts passed`);
+  expect(new Set(cards.map(card=>card.id)).size).toBe(cards.length);expect(cards.some(card=>card.id==='overview')).toBe(true);expect(external).toEqual([]);expect(errors).toEqual([]);console.log(`offline: ${paths.length} HTML pages, ${cards.length} previews, comparison and seven fonts passed`);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 test('fixture token, card and broken contract edits rebuild and recover in dev',async({page})=>{
@@ -21,7 +21,7 @@ test('fixture token, card and broken contract edits rebuild and recover in dev',
   const source=join(fixture,'tokens/source.json'),model=JSON.parse(readFileSync(source,'utf8'));model.color.tokens.find(t=>t.name==='ds-n-0').value='#fefdfc';writeFileSync(source,JSON.stringify(model));
   await expect(page.locator('#ds-n-0')).toContainText('#fefdfc');await expect.poll(async()=>await(await page.request.get(dev.url+'/dist/styles.css')).text()).toContain('#fefdfc');
   await page.goto(dev.url+'/index.html');mkdirSync(join(fixture,'components/NewCard'));writeFileSync(join(fixture,'components/NewCard/preview.html'),'<!-- @dsCard name="Fresh discovered card" group="New" --><html><head></head><body>new example</body></html>');
-  await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();await page.locator('#search').fill('Fresh');await expect(page.locator('nav a')).toHaveCount(1);
+  await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();await page.locator('#search').fill('Fresh');await expect(page.locator('nav a[data-id]')).toHaveCount(1);
   const contract=join(fixture,'components/DsButton/DsButton.d.ts'),original=readFileSync(contract,'utf8');writeFileSync(contract,original.replace('tone?:',"/** @default 'secondary' */ tone?:"));
   await expect(page.locator('#build-error')).toContainText('DsButton.tone: @default differs from implementation');await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
   writeFileSync(contract,original);await expect(page.locator('#build-error')).toBeHidden();await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();

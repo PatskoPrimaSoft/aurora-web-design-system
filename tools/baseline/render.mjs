@@ -39,7 +39,7 @@ export async function serveRoot(root, pages = new Map()) {
   return { server, url: `http://127.0.0.1:${server.address().port}` };
 }
 
-export async function captureCards({ browser, root, cards, mode = 'legacy', outDir, compareDir, referenceRoot,documentationChanges=[] }) {
+export async function captureCards({ browser, root, cards, mode = 'legacy', outDir, compareDir, referenceRoot,referenceMode='legacy',documentationChanges=[] }) {
   assert.ok(documentationChanges.every(change=>change==='overview-count'),'Only the approved overview count update may differ from original pixels');
   if (compareDir && mode === 'current' && !referenceRoot) throw new Error('Current comparison requires the pinned original referenceRoot');
   mkdirSync(outDir, { recursive: true });
@@ -54,7 +54,7 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
     const originals = new Map();
     for (const card of cards) for (const scope of ACCEPTANCE_SCOPES) {
       const key = `${card.id}-${scope.theme}-${scope.appearance}-${scope.density}`;
-      originals.set(`/frames/${key}.html`, await renderPreview({root: referenceRoot, card, mode: 'legacy', scope}));
+      originals.set(`/frames/${key}.html`, await renderPreview({root: referenceRoot, card, mode: referenceMode, scope}));
     }
     reference = await serveRoot(referenceRoot, originals);
   }

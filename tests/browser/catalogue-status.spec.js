@@ -8,9 +8,10 @@ const errors=[];page.on('pageerror',e=>errors.push(e.message));
 for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]){
 for(const width of [390,1280]){
 await page.setViewportSize({width,height:900});await page.goto(`${served.url}/index.html?card=DsDuration&theme=${theme}&appearance=${appearance}&density=${density}`);
+if(width===390)await page.getByRole('button',{name:'Навигация',exact:true}).click();
 const link=page.locator('nav a[data-id="DsDuration"]');await expect(link).toContainText('Устарело');await expect(page.locator('#title')).toHaveText('DsDuration');await expect(page.locator('#card-status')).toHaveText('Устарело');
 await link.focus();await page.keyboard.press('Enter');await expect(page.locator('#card-status')).toHaveText('Устарело');
-await page.locator('#search').fill('DsDuration');await expect(page.locator('nav a')).toHaveCount(1);await expect(page.locator('nav')).toContainText('Устарело');await page.locator('#search').fill('');
+await page.locator('#search').fill('DsDuration');await expect(page.locator('nav a[data-id]')).toHaveCount(1);await expect(page.locator('nav')).toContainText('Устарело');await page.locator('#search').fill('');
 await page.locator('nav a[data-id="DsPanel"]').click();await expect(page.locator('#card-status')).toBeHidden();await expect(page.locator('#title')).toHaveText('DsPanel');
 await page.goBack();await expect(page.locator('#card-status')).toHaveText('Устарело');
 expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

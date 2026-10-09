@@ -1,8 +1,13 @@
 import assert from'node:assert/strict';import{readFileSync,writeFileSync,rmSync,mkdirSync}from'node:fs';import{join}from'node:path';import{fileURLToPath}from'node:url';
 import{buildCatalogue}from'../tools/catalog/build.mjs';import{readCards}from'../tools/catalog/index.mjs';import{renderPreview}from'../tools/catalog/preview.mjs';import{fixtureRoot}from'./helpers/build-root.js';
-const root=fileURLToPath(new URL('../',import.meta.url));assert.equal(readCards(root).length,67);
+const root=fileURLToPath(new URL('../',import.meta.url));
+const discovered=readCards(root);
+assert.equal(discovered.filter(card=>card.id==='overview').length,1);
+assert.equal(new Set(discovered.map(card=>card.id)).size,discovered.length);
+assert.deepEqual(JSON.parse(readFileSync(join(root,'site/cards.json'),'utf8')).map(card=>card.id),discovered.map(card=>card.id));
 const fixture=fixtureRoot();try{
  const cards=await buildCatalogue({root:fixture,outDir:join(fixture,'site')});assert.equal(cards.length,2);
+ assert.match(readFileSync(join(fixture,'site/components/Example/preview.html'),'utf8'),/<title>Example<\/title>/);
  assert.match(readFileSync(join(fixture,'site/overview.html'),'utf8'),/window\.__DS_CARD_COUNT__=2/);
  mkdirSync(join(fixture,'components/DsAppHeader'),{recursive:true});
  writeFileSync(join(fixture,'components/DsAppHeader/preview.html'),'<!-- @dsCard group="Navigation" --><html><head></head><body>header</body></html>');

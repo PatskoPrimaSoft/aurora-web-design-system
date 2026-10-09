@@ -55,6 +55,11 @@ export async function renderPreview({ root, card, mode = 'legacy', scope, standa
   };
   walk(doc);
   await Promise.all(tasks);
+  if(mode==='current'){
+    let title=head.childNodes.find(node=>node.tagName==='title');
+    if(!title){title=parseFragment('<title></title>').childNodes[0];title.parentNode=head;head.childNodes.push(title);}
+    if(!title.childNodes.some(node=>node.value?.trim()))title.childNodes=[{nodeName:'#text',value:card.title,parentNode:title}];
+  }
   if (scope) for (const [name, value] of Object.entries(scope)) setAttr(html, `data-ds-${name}`, value);
   const scripts = mode === 'legacy'
     ? ['/components/lib/react.production.min.js', '/components/lib/react-dom.production.min.js', '/components/bundle.js']
@@ -62,7 +67,7 @@ export async function renderPreview({ root, card, mode = 'legacy', scope, standa
   const base = posix.dirname(card.previewPath);
   const local = file => posix.relative(base, file.replace(/^\//, ''));
   const baseHref = standalone ? './' : '/' + (base === '.' ? '' : base + '/');
-  const count=mode==='current'&&card.id==='overview'?`<script>window.__DS_CARD_COUNT__=${readCards(root).length};</script>`:'';
+  const count=mode==='current'&&card.id==='overview'?`<script>window.__DS_CARD_COUNT__=${existsSync(join(root,'cards.json'))?JSON.parse(readFileSync(join(root,'cards.json'),'utf8')).length:readCards(root).length};</script>`:'';
   const injected = parseFragment(`<base href="${baseHref}">${count}<script>(${applyQueryScope.toString()})(${JSON.stringify(scopeOptions)})</script><link rel="stylesheet" href="${local('dist/styles.css')}">${scripts.map(src => `<script src="${local(src)}"></script>`).join('')}`).childNodes;
   for (const n of injected) n.parentNode = head;
   head.childNodes.unshift(...injected);

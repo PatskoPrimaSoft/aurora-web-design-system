@@ -30,7 +30,7 @@ test('density comparison keeps local sizes and synchronized controls in four sco
       await page.keyboard.press('Enter');
       await expect(frame.locator('tbody tr')).toHaveCount(8);
       await expect(frame.getByRole('textbox').first()).toHaveValue('');
-      await frame.getByRole('button', { name: 'Объект', exact: true }).first().focus();
+      await frame.getByRole('button', { name: 'Объект: сортировать по убыванию', exact: true }).first().focus();
       await page.keyboard.press('Enter');
       for (const table of await frame.getByRole('table').all()) {
         await expect(table.locator('th').first()).toHaveAttribute('aria-sort', 'descending');

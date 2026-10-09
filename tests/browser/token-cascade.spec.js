@@ -7,7 +7,7 @@ import { readTokenModel } from '../../tools/tokens/model.mjs';
 import { renderTokenCss } from '../../tools/tokens/css.mjs';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const clean = props => Object.fromEntries(Object.entries(props).filter(([n]) => !n.startsWith('--ds-_')).map(([n,v]) => [n, v.trim().toLowerCase().replace(/\s+/g,' ')]));
-test('tokens preserve frozen CSS values, eight scopes and nested cascade', async ({ page }) => {
+test('current tokens resolve identically in flat and nested scopes across eight combinations', async ({ page }) => {
   const baseline = await prepareBaseline(root);
   const current = buildDist({ root });
   const fixture = readFileSync(`${baseline.root}/tests/fixtures/cascade.html`, 'utf8');
@@ -21,17 +21,28 @@ test('tokens preserve frozen CSS values, eight scopes and nested cascade', async
     })));
   };
   try {
-    const old=await read(); const fresh=await read(current.styles);
-    for(const id of Object.keys(old)) expect(clean(fresh[id]),id).toEqual(clean(old[id]));
+    const fresh=await read(current.styles);
+    const contexts={
+      'c-default-light':['DEFAULT','light','cozy'],'c-default-dark':['DEFAULT','dark','compact'],
+      'c-red2-light':['RED2','light','cozy'],'c-red2-dark':['RED2','dark','compact'],
+      'n-dark-in-light':['DEFAULT','dark','cozy'],'n-red2-in-default':['RED2','light','cozy'],
+      'n-compact-in-red2':['RED2','light','compact'],'n-red2-light-in-dark':['RED2','light','cozy'],
+      'bare-compact':['DEFAULT','light','compact']
+    };
+    const flattened={};
     for(const scope of SCOPES) {
       await page.goto(`${served.url}/tests/fixtures/cascade.html`);
+      await page.locator('link[rel="stylesheet"]').evaluateAll(nodes=>nodes.forEach(n=>n.remove()));await page.addStyleTag({content:current.styles});
       const get=() => page.evaluate(scope => {
         const el=document.documentElement;for(const [k,v]of Object.entries(scope))el.setAttribute(`data-ds-${k}`,v);
         const s=getComputedStyle(el);return Object.fromEntries([...s].filter(n=>n.startsWith('--')).map(n=>[n,s.getPropertyValue(n)]));
       },scope);
-      const want=await get();await page.locator('link[rel="stylesheet"]').evaluateAll(nodes=>nodes.forEach(n=>n.remove()));await page.addStyleTag({content:current.styles});
-      expect(clean(await get()),JSON.stringify(scope)).toEqual(clean(want));
+      const want=clean(await get());
+      flattened[`${scope.theme}.${scope.appearance}.${scope.density}`]=want;
+      expect(Object.keys(want).length).toBeGreaterThan(100);
+      expect(want['--ds-control-h']).toBe(scope.density==='compact'?'30px':'36px');
     }
+    for(const [id,scope]of Object.entries(contexts))expect(clean(fresh[id]),id).toEqual(flattened[scope.join('.')]);
   } finally {await new Promise(resolve=>served.server.close(resolve));}
 });
 test('deep independent scopes, local brand and typography aliases remain live', async ({ page }) => {

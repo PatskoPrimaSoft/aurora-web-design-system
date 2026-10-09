@@ -30,7 +30,7 @@ table.diff td.k{font:var(--ds-type-body-strong);white-space:nowrap}
 <script src="components/bundle.js"></script></head><body><div id="root"></div>
 <script type="text/babel">
 const NSX = window.AuroraWebDesignSystem_96e210;
-const { DsAppHeader, DsTabs, DsIconButton, DsButton, DsField, DsTable, DsBadge, DsBanner, DsChip, DsFilterBar, DsPanel } = NSX;
+const { DsAppHeader, DsTabs, DsIconButton, DsButton, DsField, DsTable, DsLozenge, DsBanner, DsChip, DsChipGroup, DsPanel } = NSX;
 const ROWS=[
 {id:1,name:'MAZ 5440',plate:'AB 1234-7',speed:'62',state:'moving',last:'14:32:07'},
 {id:2,name:'Volvo FH16',plate:'AC 8871-2',speed:'0',state:'parked',last:'14:31:55'},
@@ -46,7 +46,7 @@ function Stage({theme,appearance,density}){
   const cols=[{key:'name',label:'Объект',sortable:true,strong:true,width:150},
     {key:'plate',label:'Номер',mono:true,width:110},
     {key:'speed',label:'Скорость',mono:true,align:'right',sortable:true,width:90,render:r=>r.speed+' км/ч'},
-    {key:'state',label:'Состояние',width:130,render:r=><DsBadge tone={TONE[r.state]} dot>{LABEL[r.state]}</DsBadge>},
+    {key:'state',label:'Состояние',width:130,render:r=><DsLozenge tone={TONE[r.state]} dot>{LABEL[r.state]}</DsLozenge>},
     {key:'last',label:'Последнее сообщение',mono:true,muted:true,align:'right',width:120}];
   const rows=ROWS.filter(r=>!q||r.name.toLowerCase().includes(q.toLowerCase())||r.plate.toLowerCase().includes(q.toLowerCase()));
   return <div data-ds-theme={theme} data-ds-appearance={appearance} data-ds-density={density} style={{background:'var(--ds-bg)',color:'var(--ds-fg)'}}>
@@ -56,17 +56,19 @@ function Stage({theme,appearance,density}){
         {id:'rep',label:'Отчёты',icon:'assessment'},{id:'not',label:'Уведомления',icon:'notifications',badge:3}]}/>
     </DsAppHeader>
     <div style={{padding:'var(--ds-pad-md)',display:'flex',flexDirection:'column',gap:'var(--ds-gap-md)'}}>
-      <DsFilterBar search={q} onSearch={setQ} searchPlaceholder="Поиск объекта или номера"
-        filters={chips} onRemoveFilter={id=>setChips(chips.filter(c=>c.id!==id))} onClearAll={()=>setChips([])}
-        resultCount={rows.length+' из 148'}>
-        <DsButton tone="secondary" icon="filter_alt" iconRight="expand_more">Фильтры</DsButton>
-        <DsButton tone="primary" icon="add">Добавить объект</DsButton></DsFilterBar>
-      <DsTable columns={cols} rows={rows} activeId={2} sortKey={sort.key} sortDir={sort.dir} onSort={(k,d)=>setSort({key:k,dir:d})} onRowClick={()=>{}}
+      <div style={{display:'flex',flexWrap:'wrap',alignItems:'flex-end',gap:'var(--ds-gap-md)'}}>
+        <div style={{flex:'1 1 220px',minWidth:0}}><DsField label="Поиск объекта или номера" type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Название или номер"/></div>
+        <span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>{rows.length} из {ROWS.length}</span>
+      </div>
+      <DsChipGroup ariaLabel="Применённые фильтры" onClearAll={()=>setChips([])}>
+        {chips.map(chip=><DsChip key={chip.id} removable onRemove={()=>setChips(current=>current.filter(c=>c.id!==chip.id))}>{chip.label}: {chip.value}</DsChip>)}
+      </DsChipGroup>
+      <DsTable ariaLabel="Объекты" columns={cols} rows={rows} activeId={2} sortKey={sort.key} sortDir={sort.dir} onSort={(k,d)=>setSort({key:k,dir:d})} onRowClick={()=>{}}
         footer={<><span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>1–4 из 148</span>
           <span style={{marginLeft:'auto',display:'flex',gap:'var(--ds-gap-sm)'}}>
             <DsIconButton icon="chevron_left" label="Назад" size="sm" disabled/><DsIconButton icon="chevron_right" label="Вперёд" size="sm"/></span></>}/>
       <DsPanel eyebrow="Объект" title="Volvo FH16 · AC 8871-2"
-        actions={<><DsBadge tone="neutral" dot>Стоянка</DsBadge><DsIconButton icon="more_vert" label="Ещё"/></>}
+        actions={<><DsLozenge tone="neutral" dot>Стоянка</DsLozenge><DsIconButton icon="more_vert" label="Ещё"/></>}
         footer={<span style={{marginLeft:'auto',display:'flex',gap:'var(--ds-gap-sm)'}}>
           <DsButton size="sm" tone="secondary">Отмена</DsButton><DsButton size="sm" icon="save">Сохранить</DsButton></span>}>
         <div style={{display:'flex',flexDirection:'column',gap:'var(--ds-gap-md)'}}>
@@ -153,7 +155,7 @@ const RULES=[
    <Cap>40px cozy · 32px compact</Cap></>],
  ['Фильтры','применённое видно и снимается одним кликом — а не прячется в контрол в ячейке заголовка',
   <><DsChip removable onRemove={()=>{}}>Группа: Грузовики</DsChip><DsChip removable onRemove={()=>{}}>Состояние: Движение</DsChip>
-   <Cap>в DsFilterBar над таблицей</Cap></>],
+   <Cap>в DsChipGroup над таблицей</Cap></>],
  ['Иконки','Material Symbols Outlined, размер из --ds-icon*; других иконочных шрифтов в системе нет',
   <><Gl n="map"/><Gl n="local_shipping"/><Gl n="notifications"/><Gl n="filter_alt"/><Gl n="more_vert"/>
    <Cap>16 · 20 · 24px</Cap></>],
@@ -180,7 +182,7 @@ const DOCS=[
   ['Светлый и тёмный режим','index.html?card=DsAppearance'],
   ['Плотность интерфейса','index.html?card=DsDensity'],
   ['Форма и глубина','index.html?card=DsShape'],
-  ['Хром шапки','components/DsHeader/preview.html'],
+  ['Хром шапки','index.html?card=DsAppHeader'],
   ['Наведение и нажатие','index.html?card=DsHover'],
   ['Фокус','index.html?card=DsFocus'],
   ['Адаптивность и брейкпоинты','index.html?card=DsBreakpoints'],
@@ -199,7 +201,7 @@ const DOCS=[
   ['Редакторы фильтров и длительность','components/DsFilterMenu/preview.html'],
   ['Таблица, фильтры, чипы и бейджи','components/DsTable/preview.html'],
   ['Список объектов','components/DsListRow/preview.html'],
-  ['Массовые действия','components/DsBulkBar/preview.html'],
+  ['Массовые действия','index.html?card=DsBulkActionsBar'],
   ['Баннеры','components/DsBanner/preview.html'],
   ['Загрузка, пустые состояния, тосты','components/DsEmptyState/preview.html'],
   ['Графики','components/DsChart/preview.html'],

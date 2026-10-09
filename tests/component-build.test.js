@@ -12,15 +12,19 @@ const dom=load(actual);const api=dom.window.AuroraWebDesignSystem_96e210;
 assert.equal(typeof api.DsButton,'function');assert.equal(typeof api.DsStringsProvider,'function');assert.equal(api.__errors,undefined);
 const baseline=new JSDOM('',{runScripts:'outside-only'});
 for(const f of ['components/lib/react.production.min.js','components/lib/react-dom.production.min.js','components/bundle.js'])baseline.window.eval(readFileSync(join(root,'.tmp/migration/original',f),'utf8'));
-for(const name of Object.keys(baseline.window.AuroraWebDesignSystem_96e210).filter(n=>!n.startsWith('__')))assert.ok(name in api,`preserved export: ${name}`);
+const approvedRemovals=['DsBadge','DsBulkBar','DsFilterBar','DsObjectRow','DsSelectionBar','DsSelectBox','DsHeaderChip','DsPageHeader','DsCheck','DsCheckButton'];
+const oldExports=Object.keys(baseline.window.AuroraWebDesignSystem_96e210).filter(n=>!n.startsWith('__'));
+assert.deepEqual(oldExports.filter(name=>!(name in api)).sort(),approvedRemovals.sort(),'only approved MAJOR removals may differ from migration exports');
+for(const name of ['DsLozenge','DsBulkActionsBar','DsChipGroup','DsListRow','DsCheckbox','DsUserMenu','DsPageLayout'])assert.ok(name in api,`replacement export: ${name}`);
 dom.window.close();baseline.window.close();
 const fixture=mkdtempSync(join(tmpdir(),'aurora components пробел '));
 try {
  mkdirSync(join(fixture,'components/src'),{recursive:true});
  const src=join(fixture,'components/src/index.js');
- writeFileSync(src,'import React from "react"; export const sameReact=React; export const label="before";');
+ writeFileSync(src,'import React from "react"; import {createPortal} from "react-dom"; export const sameReact=React; export const samePortal=createPortal; export const label="before";');
  const first=load(await buildComponents({root:fixture,outDir:join(fixture,'out')}));
  assert.equal(first.window.AuroraWebDesignSystem_96e210.sameReact,first.window.React);
+ assert.equal(first.window.AuroraWebDesignSystem_96e210.samePortal,first.window.ReactDOM.createPortal);
  assert.equal(first.window.AuroraWebDesignSystem_96e210.label,'before');first.window.close();
  writeFileSync(src,'import React from "react"; export const sameReact=React; export const label="after";');
  const second=load(await buildComponents({root:fixture,outDir:join(fixture,'out')}));
@@ -28,4 +32,4 @@ try {
  writeFileSync(src,'export const broken = ;');
  await assert.rejects(buildComponents({root:fixture,outDir:join(fixture,'out')}));
 }finally{rmSync(fixture,{recursive:true,force:true});}
-console.log('component-build: source changes, shared React, all legacy exports and build errors passed');
+console.log('component-build: source changes, shared React/portals, approved MAJOR exports and build errors passed');

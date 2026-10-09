@@ -8,8 +8,8 @@ export async function buildComponents({ root, outDir }) {
   const r = await build({ ...common, entryPoints: [fileURLToPath(new URL('../catalog/runtime.jsx', import.meta.url))], outfile: runtime });
   const c = await build({ ...common, entryPoints: [join(root, 'components/src/index.js')], outfile: components,
     globalName: 'AuroraWebDesignSystem_96e210', plugins: [{ name: 'shared-react', setup(builder) {
-      builder.onResolve({ filter: /^react$/ }, () => ({ path: 'react', namespace: 'shared-react' }));
-      builder.onLoad({ filter: /.*/, namespace: 'shared-react' }, () => ({ contents: 'module.exports = window.React;', loader: 'js' }));
+      builder.onResolve({ filter: /^react(?:-dom)?$/ }, args => ({ path: args.path, namespace: 'shared-react' }));
+      builder.onLoad({ filter: /.*/, namespace: 'shared-react' }, args => ({ contents: `module.exports = window.${args.path==='react-dom'?'ReactDOM':'React'};`, loader: 'js' }));
     } }] });
   mkdirSync(outDir, { recursive: true });
   writeFileSync(runtime, r.outputFiles[0].contents);

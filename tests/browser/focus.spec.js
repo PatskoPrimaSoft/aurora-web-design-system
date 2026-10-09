@@ -57,7 +57,8 @@ test('focus foundation demonstrates real controls in every theme and density', a
           if (!el || !document.querySelector('main').contains(el)) return null;
           const shell = el.closest('[data-ds-field]');
           const hiddenSelection = el.matches('input[type=checkbox],input[type=radio]') && getComputedStyle(el).opacity === '0';
-          const target = shell || (hiddenSelection ? el.nextElementSibling : el);
+          const switchTrack=el.matches('[data-ds-switch] input')?el.closest('[data-ds-switch]').querySelector('[data-ds-switch-track]'):null;
+          const target = shell || switchTrack || (hiddenSelection ? el.nextElementSibling : el);
           const css = getComputedStyle(target);
           return { kind: el.getAttribute('role') || el.type || el.tagName.toLowerCase(), style: css.outlineStyle, width: css.outlineWidth, offset: css.outlineOffset, disabled: el.disabled, inner: shell ? getComputedStyle(el).outlineStyle : null };
         });

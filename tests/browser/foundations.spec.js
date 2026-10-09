@@ -115,8 +115,9 @@ test('foundation and map descriptions stay with examples through navigation, com
     await expect(page.locator('#theme')).toContainText('RED2');
     await expect(page.locator('#appearance')).toContainText('Тёмное');
     await page.locator('nav a[data-id="DsButton"]').click();
-    await expect(description).toBeHidden();
-    await expect(page.locator('#reference-links').getByRole('link', { name: 'Описание', exact: true })).toBeVisible();
+    await expect(description).toBeVisible();
+    await expect(description.getByRole('heading', { name: 'Параметры', exact: true })).toBeVisible();
+    await expect(page.locator('#reference-links')).toBeHidden();
     await page.goto(served.url + '/index.html?card=missing');
     await expect(description).toBeHidden();
     await page.goto(served.url + '/index.html?card=DsDensity');

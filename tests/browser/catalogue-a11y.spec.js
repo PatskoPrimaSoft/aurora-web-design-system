@@ -12,7 +12,7 @@ test('catalogue shell has no AXE violations and keyboard focus remains visible',
   }
   await page.locator('#search').focus();await page.keyboard.type('DsButton');await page.keyboard.press('Tab');await expect(page.locator('nav a').first()).toBeFocused();
   expect(await page.locator('nav a').first().evaluate(el=>{const s=getComputedStyle(el);return s.outlineStyle!=='none'&&parseFloat(s.outlineWidth)>0;})).toBe(true);
-  for(const id of ['theme','appearance','density','compare']){await page.locator('#'+id).focus();await expect(page.locator('#'+id)).toBeFocused();expect(await page.locator('#'+id).evaluate(el=>getComputedStyle(el).outlineStyle)).not.toBe('none');}
+  for(const id of ['theme','appearance','density','compare']){await page.locator('#'+id).focus();await expect(page.locator('#'+id)).toBeFocused();expect(await page.locator('#'+id).evaluate(el=>getComputedStyle(el.closest('[data-ds-field]')||el).outlineStyle)).not.toBe('none');}
   await page.locator('#compare').press('Enter');await expect(page.locator('#viewports iframe')).toHaveCount(4);
   for(let i=0;i<4;i++){const frame=page.frameLocator('#preview-'+i);await expect(frame.getByRole('button').first()).toBeVisible();await frame.locator('html').evaluate(()=>document.fonts.ready);}
   await page.screenshot({path:root+'/.tmp/catalogue-review.png',fullPage:true});
@@ -27,9 +27,9 @@ test('six interactive examples introduce no AXE violations beyond the original',
  const original=await serveRoot(baseline.root,pages),current=await serveRoot(root+'/site'),classified=[];
  try{
   for(const card of selected){const results=[];for(const url of [original.url+'/'+card.id+'.html',current.url+'/'+card.previewPath]){
-   await page.goto(url);if(await page.locator('#root').count())await expect.poll(()=>page.locator('#root').evaluate(el=>el.childNodes.length)).toBeGreaterThan(0);await page.evaluate(()=>document.fonts.ready);results.push(signature(await new AxeBuilder({page}).analyze()));
+   await page.goto(url);if(await page.locator('#root').count())await expect.poll(()=>page.locator('#root').evaluate(el=>el.childNodes.length)).toBeGreaterThan(0);await page.evaluate(()=>document.fonts.ready);results.push(signature(await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()));
   }
-  expect(results[1],card.id+': introduced accessibility violations').toEqual(results[0]);classified.push({card:card.id,existingViolations:results[0]});
+  expect(results[1],card.id+': current WCAG accessibility violations').toEqual([]);classified.push({card:card.id,existingViolations:results[0]});
   console.log(card.id+': '+results[0].length+' existing AXE node violations; no introduced violations');
   }
   await testInfo.attach('existing-example-accessibility',{body:JSON.stringify(classified,null,2),contentType:'application/json'});

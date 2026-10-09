@@ -55,11 +55,17 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null; then
+          tag_status=0
+          git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null || tag_status=$?
+          if [ "$tag_status" -eq 0 ]; then
             echo "::error::Version $VERSION is already released (tag v$VERSION exists). Bump the version on develop first (chore: start ...)."
             exit 1
           fi
-          node tools/changelog-section.js "$VERSION" > /dev/null
+          if [ "$tag_status" -ne 2 ]; then
+            echo "::error::Cannot check release tag (git exit $tag_status). Publication stopped."
+            exit 1
+          fi
+          node tools/release-check.mjs > /dev/null
 
       - run: npm ci
 
@@ -91,7 +97,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
-          if npm view "@primasoftllc/design-system@$VERSION" version >/dev/null 2>&1; then
+          registry_state=$(node tools/release-check.mjs registry "$VERSION")
+          if [ "$registry_state" = present ]; then
             echo "::notice::@primasoftllc/design-system@$VERSION is already in GitHub Packages — resuming a partial release, skipping npm publish."
           else
             npm publish

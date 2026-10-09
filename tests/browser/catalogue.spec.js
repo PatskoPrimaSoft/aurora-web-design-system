@@ -79,7 +79,7 @@ test('API references use real declarations, defaults and token source',async({pa
   for(const name of ['DsButton','DsCheckbox','DsChartLegend','DsChartTooltip','DsTabPanel']){
    await page.goto(`${served.url}/api/components/${name}.html`);
    await expect(page.getByRole('heading',{level:1}).first()).toHaveText(name);
-   await expect(page.getByRole('table',{name:(name==='DsCheckbox'?'Параметры ':'Props ')+name})).toBeVisible();
+   await expect(page.getByRole('table',{name:new RegExp('^(?:Параметры|Props) '+name+'$')})).toBeVisible();
   }
   await page.goto(served.url+'/api/components/DsCheckbox.html');await expect(page.getByRole('heading',{name:'Параметры',exact:true})).toBeVisible();
   await page.goto(served.url+'/api/components/DsButton.html');await expect(page.getByRole('row').filter({has:page.getByRole('rowheader',{name:'tone',exact:true})})).toContainText("'primary'");
