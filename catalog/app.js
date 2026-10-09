@@ -3,10 +3,25 @@ import {familyFor} from './families.js';
 import {parseState,stateUrl,comparisonScopes} from './state.js';
 const cards=await(await fetch('cards.json')).json();
 let state=parseState(new URL(location.href),cards),renderedKey=null,frames=[];
+const {DsSelect,DsButton,DsPageLayout}=window.AuroraWebDesignSystem_96e210;
+const h=window.React.createElement;
+const shell=document.getElementById('catalog-shell');
+const header=shell.querySelector('header'),navigation=shell.querySelector('aside'),content=shell.querySelector('main');
+// These regions retain the catalogue's DOM-managed content and event handlers.
+function CatalogueRegion({source,className,as='div'}){
+ const ref=window.React.useRef(null);
+ window.React.useLayoutEffect(()=>{ref.current.append(...source.childNodes);},[source]);
+ return h(as,{ref,className});
+}
+const layoutRoot=window.ReactDOM.createRoot(shell);
+window.ReactDOM.flushSync(()=>layoutRoot.render(h(DsPageLayout,{
+ header:h(CatalogueRegion,{source:header,className:'catalog-header',as:'header'}),
+ left:h(CatalogueRegion,{source:navigation,className:'catalog-navigation'}),
+ leftWidth:280,leftLabel:'Навигация',mainId:'catalog-main',skipLinkLabel:'К содержимому',
+ responsive:true,scroll:'regions',gap:false,padding:false,
+},h(CatalogueRegion,{source:content,className:'catalog-content'}))));
 const nav=document.getElementById('cards'),viewports=document.getElementById('viewports'),search=document.getElementById('search');
 const headerRoot=window.ReactDOM.createRoot(document.getElementById('catalog-header-content'));
-const {DsSelect,DsButton}=window.AuroraWebDesignSystem_96e210;
-const h=window.React.createElement;
 const scopeFields=[
  {id:'theme',label:'Бренд',options:['DEFAULT','RED2']},
  {id:'appearance',label:'Оформление',options:[{value:'light',label:'Светлое'},{value:'dark',label:'Тёмное'}]},
@@ -85,7 +100,7 @@ function render(){
  for(const[name,value]of Object.entries(state.scope))document.documentElement.setAttribute('data-ds-'+name,value);
  search.value=state.query;drawNavigation();
  const card=cards.find(card=>card.id===state.cardId),error=document.getElementById('card-error');error.hidden=!!card;
- document.querySelector('main').classList.toggle('component-page',card?.layout==='component');
+ document.querySelector('.catalog-content').classList.toggle('component-page',card?.layout==='component');
  examplesHeading.hidden=card?.layout!=='component';
  if(card?.layout==='component')viewports.setAttribute('aria-labelledby',examplesHeading.id);else viewports.removeAttribute('aria-labelledby');
  titleStatus.hidden=card?.status!=='deprecated';renderStatus(titleStatusRoot,card);
