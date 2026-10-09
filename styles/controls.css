@@ -54,3 +54,11 @@
 [data-ds-switch] input:focus-visible+[data-ds-switch-hit] [data-ds-switch-track]{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
 [data-ds-switch][data-disabled="false"][data-loading="false"]:hover [data-ds-switch-track]{background-image:linear-gradient(0deg,color-mix(in oklab,var(--ds-fg) var(--ds-overlay-hover),transparent),color-mix(in oklab,var(--ds-fg) var(--ds-overlay-hover),transparent))}
 [data-ds-switch][data-disabled="false"][data-loading="false"][data-checked="true"]:hover [data-ds-switch-track]{background-image:linear-gradient(0deg,color-mix(in oklab,var(--ds-on-brand) var(--ds-overlay-hover),transparent),color-mix(in oklab,var(--ds-on-brand) var(--ds-overlay-hover),transparent))}
+
+[data-ds-filter-option]{background:transparent;color:var(--ds-fg)}
+[data-ds-filter-option][data-selected="true"]{background:var(--ds-surface-selected)}
+[data-ds-filter-option][data-disabled="false"]:hover{background:var(--ds-surface-hover)}
+[data-ds-filter-option][data-disabled="false"][data-selected="true"]:hover{background:color-mix(in oklab,var(--ds-surface-selected) 75%,var(--ds-surface-hover))}
+[data-ds-filter-option][data-disabled="true"]{color:var(--ds-fg-subtle)}
+[data-ds-filter-option]:has(input:focus-visible){outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:calc(-1 * var(--ds-focus-width))}
+[data-ds-filter-option] input:focus-visible,[data-ds-filter-option] input:focus-visible+span{outline:none}
