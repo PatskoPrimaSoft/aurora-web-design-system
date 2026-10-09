@@ -3,7 +3,6 @@
 | Токен | За что отвечает |
 | --- | --- |
 | `ds-info-bg`, `ds-success-bg`, `ds-warning-bg`, `ds-danger-bg`, `ds-neutral-bg` | Подложка сообщения соответствующего тона |
-| `ds-info-line`, `ds-success-line`, `ds-warning-line`, `ds-danger-line`, `ds-neutral-line` | Тонкая граница сообщения |
 | `ds-info-fg`, `ds-success-fg`, `ds-warning-fg`, `ds-danger-fg`, `ds-neutral-fg` | Заголовок сообщения |
 | `ds-info-solid`, `ds-success-solid`, `ds-warning-solid`, `ds-danger-solid`, `ds-neutral-solid` | Статусная иконка |
 | `ds-fg` | Основной текст пояснения |

@@ -4,7 +4,7 @@ import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
 const DsBANNER_ICON={info:'info',success:'check_circle',warning:'warning',danger:'error',neutral:'info'};
 import { dsSlots } from '../layout/DsPageLayout.jsx';
 import { useDsStrings } from '../primitives/DsStrings.jsx';
-/** Permanent in-page message. Tinted ground, 1px line, no left accent bar. */
+/** Permanent in-page message on a tinted ground. */
 export function DsBanner({tone='info',title,children,actions,onClose,compact=false,announcement='off',headingLevel='h2',closeLabel}){
   const S=useDsStrings();
   const [s,body]=dsSlots(children,['actions'],{actions});
@@ -13,7 +13,7 @@ export function DsBanner({tone='info',title,children,actions,onClose,compact=fal
   const Heading=headingLevel==='none'?'div':headingLevel;
   return <div data-ds-banner="" role={role} aria-atomic={role?true:undefined} style={{display:'flex',gap:'var(--ds-gap-sm-plus)',alignItems:'flex-start',
     padding:compact?'var(--ds-pad-tight) var(--ds-pad-sm)':'var(--ds-pad-sm) var(--ds-pad-md)',
-    background:'var(--ds-'+tone+'-bg)',border:'1px solid var(--ds-'+tone+'-line)',
+    background:'var(--ds-'+tone+'-bg)',
     borderRadius:'var(--ds-radius-container)',color:'var(--ds-'+tone+'-fg)',minWidth:0,overflowWrap:'anywhere'}}>
     <Icon name={DsBANNER_ICON[tone]} size="var(--ds-icon)" style={{flexShrink:0,height:'calc(var(--ds-text-14) * var(--ds-lh-normal))',color:'var(--ds-'+tone+'-solid)'}}/>
     <div style={{flex:1,minWidth:0,display:'flex',flexDirection:'column',gap:4}}>
