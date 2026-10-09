@@ -1,17 +1,20 @@
 import * as React from 'react';
 export interface DsSelectOption { value: string; label: string; disabled?: boolean }
-/** Выбор одного значения из списка, оформленного токенами системы. */
-export interface DsSelectProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value' | 'defaultValue' | 'onChange' | 'name' | 'form' | 'type'> {
+export interface DsSelectGroup { label: string; options: Array<string | DsSelectOption> }
+/** Выбор одного или нескольких значений из списка, оформленного токенами системы. */
+export interface DsSelectProps<Multiple extends boolean = false> extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'value' | 'defaultValue' | 'onChange' | 'name' | 'form' | 'type'> {
+  /** Несколько значений: массивы value/defaultValue и onChange, удаляемые чипы и чекбоксы в списке. */
+  multiple?: Multiple;
   /** Видимая подпись. Без неё задайте aria-label или aria-labelledby. */
   label?: string;
-  /** Строки или пары value/label с необязательным disabled; значения должны быть уникальными и непустыми. */
-  options?: Array<string | DsSelectOption>;
-  /** Текущее значение управляемого выбора; пустая строка означает отсутствие выбора. */
-  value?: string;
-  /** Начальное значение неуправляемого выбора; восстанавливается при сбросе формы. */
-  defaultValue?: string;
-  /** Новое значение и вариант после подтверждения выбора. */
-  onChange?: (value: string, option: DsSelectOption) => void;
+  /** Строки, варианты value/label или группы label/options; значения уникальные и непустые. */
+  options?: Array<string | DsSelectOption | DsSelectGroup>;
+  /** Текущее значение: строка для одного выбора, массив строк при multiple; пустое состояние — пустая строка или []. */
+  value?: Multiple extends true ? string[] : string;
+  /** Начальное значение или массив при multiple; сброс формы восстанавливает его. В multiple по умолчанию []. */
+  defaultValue?: Multiple extends true ? string[] : string;
+  /** В одиночном режиме — значение и вариант (очистка: пустая строка/null); при multiple — массивы значений и вариантов (очистка: []/[]). */
+  onChange?: (value: Multiple extends true ? string[] : string, option: Multiple extends true ? DsSelectOption[] : DsSelectOption | null) => void;
   /** Текст, когда значение не выбрано; без него используется строка из DsStringsProvider. */
   placeholder?: string;
   /** Подсказка, связанная с полем. */
@@ -22,7 +25,7 @@ export interface DsSelectProps extends Omit<React.ButtonHTMLAttributes<HTMLButto
   disabled?: boolean;
   /** Обязательный выбор с нативной проверкой формы и фокусом на контроле при ошибке. */
   required?: boolean;
-  /** Имя значения в данных формы. */
+  /** Имя значения в данных формы; при multiple читайте FormData.getAll(name). */
   name?: string;
   /** ID связанной формы, если контрол расположен вне неё. */
   form?: string;
@@ -32,6 +35,12 @@ export interface DsSelectProps extends Omit<React.ButtonHTMLAttributes<HTMLButto
   width?: number | string;
   /** Максимальная высота раскрытого списка в px; дополнительно ограничивается доступным экраном. */
   maxHeight?: number;
+  /** Ввод поиска внутри раскрытого списка; фильтрует варианты по вхождению текста. */
+  searchable?: boolean;
+  /** Очистка кнопкой или Delete на закрытом поле; в multiple передаёт []/[], Backspace удаляет последнее значение. */
+  clearable?: boolean;
+  /** Загрузка вариантов: показывает индикатор, сохраняет значение и временно запрещает выбор. */
+  loading?: boolean;
   /** Фокус на контроле. */
   onFocus?: React.FocusEventHandler<HTMLButtonElement>;
   /** Выход фокуса из контрола. */
@@ -47,4 +56,4 @@ export interface DsSelectProps extends Omit<React.ButtonHTMLAttributes<HTMLButto
   /** Ссылка на кнопку combobox для перевода фокуса. */
   ref?: React.Ref<HTMLButtonElement>;
 }
-export declare function DsSelect(props: DsSelectProps): JSX.Element;
+export declare function DsSelect<Multiple extends boolean = false>(props: DsSelectProps<Multiple>): JSX.Element;

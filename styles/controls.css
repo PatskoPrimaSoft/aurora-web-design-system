@@ -41,5 +41,10 @@
 [data-ds-panel-body]:focus-visible{outline-offset:calc(-1 * var(--ds-focus-width))}
 
 [data-ds-select-option][data-ds-selected]{background:var(--ds-surface-selected)}
-[data-ds-select-option][data-ds-active]{background:var(--ds-surface-hover);outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:calc(-1 * var(--ds-focus-width))}
+[data-ds-select-option][data-ds-active]{background:var(--ds-surface-hover)}
+[data-ds-select-option][data-ds-active][data-ds-keyboard]{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:calc(-1 * var(--ds-focus-width))}
 [data-ds-select-option][aria-disabled="true"]{background:transparent}
+
+[data-ds-select-clear]:hover{background:var(--ds-surface-hover)}
+
+[data-ds-select-option][data-ds-selected][data-ds-active]{background:color-mix(in srgb,var(--ds-surface-selected) 75%,var(--ds-surface-hover))}
