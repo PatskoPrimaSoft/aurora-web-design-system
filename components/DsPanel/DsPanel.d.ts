@@ -1,33 +1,26 @@
-/**
- * v2 panel — the v2 replacement for `Card`.
- *
- * Legacy cards were `border-radius: 0` blocks separated by a 2px solid
- * `--color-primary` rule, which was the system's real dividing device and the
- * reason every screen read as a 2015 Material dashboard. A v2 panel is a 12px
- * rounded, 1px bordered surface that needs no separator at all: adjacent panels
- * are separated by the page ground showing through the gap.
- * `actions` and `footer` also accept a child carrying `slot="actions"` /
- * `slot="footer"`, for composition from static markup.
- */
+/** Панель содержимого с шапкой, телом и необязательным подвалом. */
 export interface DsPanelProps {
+  /** Заголовок панели уровня h2. */
   title?: React.ReactNode;
-  /** 11px uppercase line above the title — the region's category. */
+  /** Короткая категория над заголовком. */
   eyebrow?: React.ReactNode;
-  /** Right-aligned header controls. */
+  /** Действия в правой части шапки; также принимаются через slot="actions". */
   actions?: React.ReactNode;
+  /** Содержимое тела панели. */
   children?: React.ReactNode;
+  /** Содержимое подвала; также принимается через slot="footer". */
   footer?: React.ReactNode;
-  /** Set false when the body is a table or a map that must reach the edges. */
+  /** Внутренние отступы тела; отключите для таблицы или карты до краёв. */
   padding?: boolean;
-  /** Make the body the scroll container instead of the page. */
+  /** Прокрутка тела при ограниченной высоте панели. */
   scroll?: boolean;
+  /** Высота панели; число задаёт px, строка — CSS-размер. */
   height?: number | string;
-  /** No border, no radius — for a panel that fills a region of the app shell. */
+  /** Убрать внешнюю рамку и скругление; внутренние разделители сохраняются. */
   flush?: boolean;
-  /** Overrides on the body wrapper. The body is a flex column with overflow-x hidden,
-   *  so a `flex:1` child (a map, a table) fills it and a fixed-width panel cannot be
-   *  forced wider than itself. Pass `{display:'block'}` for plain document flow. */
+  /** Стили тела, например display: 'block' для обычного потока вместо flex-колонки. */
   bodyStyle?: React.CSSProperties;
+  /** Стили внешнего контейнера панели. */
   style?: React.CSSProperties;
 }
 export declare function DsPanel(props: DsPanelProps): JSX.Element;
