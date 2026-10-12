@@ -7,9 +7,7 @@
  * chrome is **neutral**: brand appears as the logo plate and the active-tab
  * indicator, not as a filled band.
  *
- * Every colour resolves through `--ds-header-*`, so the direction is a token
- * decision, not a component fork: a tenant that needs a coloured band overrides
- * those aliases in its own theme block.
+ * Colours use the shared surface, text, border and brand tokens.
  *
  * The tenant logo and title stay runtime-swappable, so never design the lockup as
  * a fixed-width block.
@@ -22,9 +20,9 @@ export interface DsAppHeaderProps {
   /** Current area, shown after a hairline divider. */
   section?: string;
   /**
-   * Tenant mark. Sits on a `--ds-header-plate` square so the stock white-on-
-   * transparent mark stays legible on neutral chrome. When a tenant supplies a
-   * dark mark, set `--ds-header-plate: transparent` for that tenant.
+   * Tenant mark. Sits on a `--ds-brand` square so the stock white-on-
+   * transparent mark stays legible on neutral chrome. Choose a mark that reads
+   * on the brand surface in both appearances.
    */
   logoSrc?: string;
   /** Environment tag — `DEV`, `LOCAL`. */

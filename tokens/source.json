@@ -669,61 +669,6 @@
         "usage": "Ошибка, офлайн, необратимое действие. Слот `solid` — плотная заливка: сплошной бейдж, серия на карте, глиф состояния; подпись на ней — `ds-on-solid`. Статус темонезависим: офлайн читается как офлайн в любом бренде и в dark."
       },
       {
-        "name": "ds-header-bg",
-        "value": "{ds-surface}",
-        "usage": "Фон шапки приложения. Шапка нейтральна: бренд в ней — только плашка логотипа и индикатор активного таба. Тенант, которому нужна цветная полоса, переопределяет `ds-header-*` в своём блоке темы."
-      },
-      {
-        "name": "ds-header-fg",
-        "value": "{ds-fg-strong}",
-        "usage": "Заголовок продукта и подписи в шапке. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-bg` ≥ 17,17:1."
-      },
-      {
-        "name": "ds-header-fg-muted",
-        "value": "{ds-fg-muted}",
-        "usage": "Второстепенный текст в шапке: раздел после разделителя. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-bg` ≥ 5,77:1."
-      },
-      {
-        "name": "ds-header-icon-fg",
-        "value": "{ds-fg}",
-        "usage": "Иконки в шапке (`DsIconButton tone=\"onHeader\"`) — почти полная непрозрачность, не приглушённое значение подписи. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-bg` ≥ 15,46:1."
-      },
-      {
-        "name": "ds-header-border",
-        "value": "{ds-border}",
-        "usage": "Нижняя граница шапки в покое; при прокрутке шапка поднимает `ds-shadow-sm`."
-      },
-      {
-        "name": "ds-header-hover",
-        "value": "{ds-surface-hover}",
-        "usage": "Ховер кнопок и табов в шапке."
-      },
-      {
-        "name": "ds-header-indicator",
-        "value": "{ds-brand}",
-        "usage": "Индикатор активного таба в шапке, 3px. Брендовый алиас: переобъявляется на `[data-ds-theme]`. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-bg` ≥ 5,46:1."
-      },
-      {
-        "name": "ds-header-tab-fg-active",
-        "value": "{ds-brand-text}",
-        "usage": "Глиф и подпись выбранного таба в шапке — брендовые чернила, чтобы выбор читался раньше индикатора. В RED2 почти нейтрален: там выбор несут индикатор и ховер. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-bg` ≥ 8,28:1."
-      },
-      {
-        "name": "ds-header-plate",
-        "value": "{ds-brand}",
-        "usage": "Квадрат 34px под логотипом: штатный знак белый на прозрачном и без плашки на нейтральном хроме не виден. Тенант с тёмным знаком ставит `transparent`."
-      },
-      {
-        "name": "ds-header-env-bg",
-        "value": "{ds-brand-subtle}",
-        "usage": "Фон метки среды (`DEV`, `LOCAL`) в шапке."
-      },
-      {
-        "name": "ds-header-env-fg",
-        "value": "{ds-brand-text}",
-        "usage": "Текст метки среды в шапке. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-env-bg` ≥ 7,43:1."
-      },
-      {
         "name": "ds-state-moving",
         "value": "{ds-success-solid}",
         "usage": "Состояние объекта «в движении» — глиф `DsStateIcon`. Алиас статуса success."
@@ -1383,22 +1328,17 @@
       {
         "name": "ds-radius-md",
         "value": "8px",
-        "usage": "Скругление строки объекта, подсказки графика, плашки логотипа."
+        "usage": "Скругление 8px: кнопки, поля ввода, строки объектов, подсказки и плашка логотипа."
       },
       {
         "name": "ds-radius-lg",
         "value": "12px",
-        "usage": "Ступень 12px лестницы скруглений: блоки внутри карточек-разъяснений. Компоненты берут 12px через роль `ds-radius-container`."
+        "usage": "Скругление 12px: карточки, панели, таблицы и контейнеры."
       },
       {
         "name": "ds-radius-xl",
         "value": "16px",
-        "usage": "Ступень 16px лестницы скруглений; диалог берёт её через `ds-radius-dialog`."
-      },
-      {
-        "name": "ds-radius-2xl",
-        "value": "20px",
-        "usage": "Ступень 20px лестницы скруглений. Компоненты на неё сейчас не ссылаются."
+        "usage": "Скругление 16px: модальные окна."
       },
       {
         "name": "ds-radius-pill",
@@ -1409,51 +1349,6 @@
         "name": "ds-radius-circle",
         "value": "50%",
         "usage": "Круг: FAB без подписи, диск состояния."
-      },
-      {
-        "name": "ds-radius-control",
-        "value": "8px",
-        "usage": "Скругление контрола: кнопка, 8px."
-      },
-      {
-        "name": "ds-radius-field",
-        "value": "8px",
-        "usage": "Скругление поля ввода."
-      },
-      {
-        "name": "ds-radius-container",
-        "value": "12px",
-        "usage": "Скругление контейнера: карточка, bulk-бар, рамка графика, 12px."
-      },
-      {
-        "name": "ds-radius-panel",
-        "value": "12px",
-        "usage": "Скругление панели."
-      },
-      {
-        "name": "ds-radius-dialog",
-        "value": "16px",
-        "usage": "Скругление модального окна, 16px."
-      },
-      {
-        "name": "ds-radius-chip",
-        "value": "999px",
-        "usage": "Скругление чипа — пилюля."
-      },
-      {
-        "name": "ds-radius-badge",
-        "value": "999px",
-        "usage": "Скругление бейджа — пилюля."
-      },
-      {
-        "name": "ds-radius-icon-button",
-        "value": "8px",
-        "usage": "Скругление квадратной иконки-кнопки."
-      },
-      {
-        "name": "ds-chart-bar-radius",
-        "value": "4px",
-        "usage": "Скругление столбика в столбчатом графике."
       }
     ]
   },
@@ -1503,25 +1398,6 @@
           "ds-appearance-dark-ds-red2": "0 2px 8px rgba(0,0,0,0.6)"
         },
         "usage": "Тень элементов, лежащих поверх карты: рейка карты, карточка объекта на экране мониторинга."
-      },
-      {
-        "name": "ds-focus-ring",
-        "value": {
-          "light": "0 0 0 3px #2b5f9e52",
-          "ds-appearance-light-ds-red2": "0 0 0 3px #55535452",
-          "ds-appearance-dark-ds-default": "0 0 0 3px #5b92d452",
-          "ds-appearance-dark-ds-red2": "0 0 0 3px #b9b6b752"
-        },
-        "usage": "Кольцо фокуса оболочки поля (`:focus-within` на `[data-ds-field]`): 3px цвета `ds-focus-color` (бренд) с прозрачностью 32%. Значение задано на каждую тему; новый арендатор добавляет своё вместе с палитрой."
-      },
-      {
-        "name": "ds-focus-ring-danger",
-        "value": {
-          "light": "0 0 0 3px #c1291f52",
-          "ds-appearance-dark-ds-default": "0 0 0 3px #e7625652",
-          "ds-appearance-dark-ds-red2": "0 0 0 3px #e7625652"
-        },
-        "usage": "Кольцо фокуса поля с ошибкой (`[data-ds-field=\"error\"]`): 3px цвета `ds-danger-solid` с прозрачностью 32%."
       }
     ]
   },
@@ -1577,11 +1453,6 @@
   "other": {
     "tokens": [
       {
-        "name": "ds-dur-instant",
-        "value": "80ms",
-        "usage": "Длительность 80ms. Компоненты на неё сейчас не ссылаются. Движения почти нет, намеренно: экран оператора перерисовывается на каждом сообщении. Под `prefers-reduced-motion` — 0ms (правило в `bundle.css`)."
-      },
-      {
         "name": "ds-dur-fast",
         "value": "120ms",
         "usage": "Длительность 120ms — все переходы контролов: фон, граница, цвет, прозрачность, бегунок переключателя; на ней же `ds-transition-control`. Движения почти нет, намеренно: экран оператора перерисовывается на каждом сообщении. Под `prefers-reduced-motion` — 0ms (правило в `bundle.css`)."
@@ -1592,19 +1463,9 @@
         "usage": "Длительность 180ms — тень шапки при прокрутке (`scrolled`). Движения почти нет, намеренно: экран оператора перерисовывается на каждом сообщении. Под `prefers-reduced-motion` — 0ms (правило в `bundle.css`)."
       },
       {
-        "name": "ds-dur-slow",
-        "value": "240ms",
-        "usage": "Длительность 240ms. Компоненты на неё сейчас не ссылаются. Движения почти нет, намеренно: экран оператора перерисовывается на каждом сообщении. Под `prefers-reduced-motion` — 0ms (правило в `bundle.css`)."
-      },
-      {
         "name": "ds-ease",
         "value": "cubic-bezier(0.2,0,0.2,1)",
         "usage": "Кривая для переходов фона, границы и цвета контролов."
-      },
-      {
-        "name": "ds-ease-out",
-        "value": "cubic-bezier(0.16,1,0.3,1)",
-        "usage": "Кривая замедления на выходе. Компоненты на неё сейчас не ссылаются."
       },
       {
         "name": "ds-lh-tight",

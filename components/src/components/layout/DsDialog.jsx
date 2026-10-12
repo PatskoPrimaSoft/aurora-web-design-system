@@ -67,7 +67,7 @@ export function DsDialog({open=true,title,description,children,actions,onClose,s
       aria-labelledby={hasTitle?titleId:undefined} aria-label={hasTitle?undefined:ariaLabel}
       aria-describedby={description?descId:undefined}
       style={{display:'flex',flexDirection:'column',minHeight:0,width:'100%',maxWidth:DsDLG_W[size],maxHeight:'min(90vh,760px)',
-        background:'var(--ds-surface)',border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-dialog)',
+        background:'var(--ds-surface)',border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-xl)',
         boxShadow:'var(--ds-shadow-lg)',overflow:'hidden'}}>
       <header style={{flex:'none',display:'flex',alignItems:'flex-start',gap:'var(--ds-gap-sm-plus)',
         padding:'var(--ds-pad-md) var(--ds-pad-lg)',borderBottom:'1px solid var(--ds-border)'}}>

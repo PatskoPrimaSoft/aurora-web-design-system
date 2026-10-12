@@ -37,7 +37,7 @@ export function DsStepper({steps=[],active=0,onSelect,completed,isComplete=false
         <Step data-ds-stepper-step="" type={onSelect?'button':undefined} disabled={onSelect?!clickable:undefined}
           onClick={clickable?()=>onSelect(i):undefined} aria-current={cur?'step':undefined}
           style={{position:'relative',display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',padding:4,border:'none',
-            borderRadius:'var(--ds-radius-control)',cursor:clickable?'pointer':'default',minWidth:0,textAlign:'left'}}>
+            borderRadius:'var(--ds-radius-md)',cursor:clickable?'pointer':'default',minWidth:0,textAlign:'left'}}>
           <span aria-hidden="true" style={{flex:'none',display:'inline-flex',alignItems:'center',justifyContent:'center',width:24,height:24,
             borderRadius:'50%',border:'var(--ds-border-width-strong) solid '+ring,
             background:cur?'var(--ds-brand)':fin?'var(--ds-success-solid)':'transparent',

@@ -53,7 +53,7 @@ export function DsTable({columns=[],rows=[],rowKey='id',selectable=false,selecte
     color:'var(--ds-fg-muted)',textAlign:'left',padding:'var(--ds-cell-pad-y) var(--ds-cell-pad-x)',
     background:'var(--ds-bg)',borderBottom:'1px solid var(--ds-border)',whiteSpace:'nowrap',
     position:stickyHeader?'sticky':undefined,top:stickyHeader?0:undefined,zIndex:1};
-  return <div style={{border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-container)',
+  return <div style={{border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-lg)',
     background:'var(--ds-surface)',overflow:'auto',minWidth:0}}>
     <table aria-label={ariaLabel} style={{width:'100%',tableLayout:fixedLayout?'fixed':'auto',borderCollapse:'collapse',font:'var(--ds-type-body)',color:'var(--ds-fg)'}}>
       {caption?<caption style={{textAlign:'left',padding:'var(--ds-pad-sm) var(--ds-cell-pad-x)',font:'var(--ds-type-body-strong)',color:'var(--ds-fg)',background:'var(--ds-surface)'}}>{caption}</caption>:null}

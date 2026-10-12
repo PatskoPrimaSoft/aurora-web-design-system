@@ -14,7 +14,7 @@
 | `ds-icon-xs` | Размер галочки |
 | `ds-type-eyebrow`, `ds-type-ui`, `ds-type-caption` | Типографика номера, подписи и пояснения |
 | `ds-surface-hover`, `ds-surface-active` | Подложка доступного шага при наведении / клавиатурном фокусе и нажатии |
-| `ds-radius-control` | Скругление подложки шага |
+| `ds-radius-md` | Скругление подложки шага |
 | `ds-focus-width`, `ds-focus-color`, `ds-focus-offset` | Кольцо клавиатурного фокуса и запас места вокруг него |
 | `ds-transition-control` | Плавность изменения подложки |
 | `ds-border-strong`, `ds-surface` | Ползунок и дорожка горизонтальной полосы прокрутки |

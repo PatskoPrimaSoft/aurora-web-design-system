@@ -83,7 +83,7 @@ export function DsTreeRow({title,meta,icon,avatarSrc,avatar=false,level=0,expand
         <span ref={titleRef} data-ds-tree-title="" style={{font:'var(--ds-type-body-strong)',color:'var(--ds-fg)',
           minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{title}</span>
         {badge?<span data-ds-tree-unread="" role="img" aria-label={S.unread(unread)} style={{flex:'none',minWidth:16,height:16,padding:'0 5px',
-          borderRadius:'var(--ds-radius-badge)',background:'var(--ds-accent-mark)',color:'var(--ds-accent-mark-on)',
+          borderRadius:'var(--ds-radius-pill)',background:'var(--ds-accent-mark)',color:'var(--ds-accent-mark-on)',
           font:'var(--ds-type-eyebrow)',display:'flex',alignItems:'center',justifyContent:'center'}}>{badge}</span>:null}
         {meta?<span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-subtle)',flex:'0 1000 auto',minWidth:0,maxWidth:'40%',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{meta}</span>:null}
       </span>

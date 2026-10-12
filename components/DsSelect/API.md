@@ -5,7 +5,7 @@
 | `ds-field-h` | Минимальная высота закрытого поля |
 | `ds-surface`, `ds-fg`, `ds-fg-muted` | Поверхность, выбранное значение и placeholder |
 | `ds-surface-disabled`, `ds-fg-disabled` | Недоступное поле и текст недоступных вариантов |
-| `ds-border-width`, `ds-border-field`, `ds-radius-field` | Рамка и скругление поля |
+| `ds-border-width`, `ds-border-field`, `ds-radius-md` | Рамка и скругление поля |
 | `ds-border-field-hover`, `ds-brand` | Рамка при наведении и фокусе |
 | `ds-focus-width`, `ds-focus-color`, `ds-focus-offset` | Фокус поля и выделение активного варианта |
 | `ds-surface-raised`, `ds-border`, `ds-radius-md`, `ds-shadow-md` | Поверхность, рамка, скругление и тень списка |

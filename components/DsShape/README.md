@@ -1,16 +1,16 @@
 # Форма и глубина
 
-## Роли скруглений
+## Шкала скруглений
 
-Образцы показывают шкалу и уровни глубины. В компонентах выбирайте
-ролевые токены: `--ds-radius-control`, `--ds-radius-field`,
-`--ds-radius-container`, `--ds-radius-panel`.
+Выбирайте ступень по размеру элемента: `--ds-radius-md` — кнопки и поля,
+`--ds-radius-lg` — карточки и панели, `--ds-radius-xl` — диалоги,
+`--ds-radius-pill` — чипы и бейджи. Отдельных компонентных алиасов нет.
 
 ```css
 .region {
   background: var(--ds-surface);
   border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-panel);
+  border-radius: var(--ds-radius-lg);
 }
 ```
 

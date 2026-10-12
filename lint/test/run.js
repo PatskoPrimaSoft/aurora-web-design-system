@@ -66,7 +66,7 @@ const cases = [
   { rule: 'aurora/no-rem', code: '.a { letter-spacing: -0.015em; }', expect: 0 },
 
   // --- focus-from-tokens -------------------------------------------------
-  { rule: 'aurora/focus-from-tokens', code: '.a:focus-visible { outline: var(--ds-focus-ring); }', expect: 0 },
+  { rule: 'aurora/focus-from-tokens', code: '.a:focus-visible { outline: var(--ds-focus-width) solid var(--ds-focus-color); }', expect: 0 },
   { rule: 'aurora/focus-from-tokens', code: '.a:hover { box-shadow: 0 0 0 2px; }', expect: 0 },
   { rule: 'aurora/focus-from-tokens', code: '.a:focus { outline: 2px solid; }', expect: 1 },
   { rule: 'aurora/focus-from-tokens', code: '.a:focus-visible { box-shadow: 0 0 0 3px; }', expect: 1 },

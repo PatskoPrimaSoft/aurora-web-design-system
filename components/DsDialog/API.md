@@ -6,7 +6,7 @@
 | ds-surface | Поверхность окна |
 | ds-bg | Фон области действий |
 | ds-border | Граница окна и разделители заголовка и действий |
-| ds-radius-dialog | Скругление окна |
+| ds-radius-xl | Скругление окна |
 | ds-shadow-lg | Тень над затемнением |
 | ds-fg-strong, ds-type-section, ds-tracking-tight | Цвет, шрифт и межбуквенный интервал заголовка |
 | ds-fg-muted, ds-type-body | Описание и цвет кнопки закрытия |

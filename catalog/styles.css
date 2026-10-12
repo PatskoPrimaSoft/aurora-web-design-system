@@ -12,11 +12,11 @@ body{margin:0;background:var(--ds-surface);color:var(--ds-fg);font:var(--ds-type
 
 .catalog-navigation{padding:24px 16px;min-width:0}
 .catalog-navigation>label{display:block;margin-bottom:8px;color:var(--ds-fg-muted)}
-#search{width:100%;font:inherit;color:inherit;background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-field);padding:10px 12px}
+#search{width:100%;font:inherit;color:inherit;background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);padding:10px 12px}
 #search:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
 nav{padding:12px 0}
 nav h2{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:24px 10px 8px}
-nav a{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 10px;color:var(--ds-fg);text-decoration:none;border-radius:var(--ds-radius-control)}
+nav a{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 10px;color:var(--ds-fg);text-decoration:none;border-radius:var(--ds-radius-md)}
 nav a:hover{background:var(--ds-surface-hover)}
 nav a[aria-current=page]{background:var(--ds-brand-subtle);color:var(--ds-brand-text);font-weight:var(--ds-weight-semibold)}
 nav a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
@@ -29,7 +29,7 @@ h1{font:var(--ds-type-title);margin:0;color:var(--ds-fg-strong)}
 #subtitle{color:var(--ds-fg-muted);margin:12px 0 0;line-height:1.6}
 #reference-links a,.reference a{color:var(--ds-brand-text)}
 #local-note{color:var(--ds-fg-muted)}
-#card-error button{font:inherit;color:inherit;background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-control);padding:6px 10px}
+#card-error button{font:inherit;color:inherit;background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);padding:6px 10px}
 #build-error{position:fixed;bottom:0;left:0;right:0;padding:16px;background:var(--ds-danger-solid);color:var(--ds-on-solid);white-space:pre-wrap;z-index:100}
 
 .catalog-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:0;margin-left:auto}
@@ -37,7 +37,7 @@ h1{font:var(--ds-type-title);margin:0;color:var(--ds-fg-strong)}
 .preview-panel{margin:0;min-width:0}
 .preview-panel figcaption{font:var(--ds-type-caption);padding:0 0 10px;color:var(--ds-fg-muted)}
 .preview-scroll{overflow:auto}
-iframe{border:1px solid var(--ds-border);border-radius:var(--ds-radius-container);background:var(--ds-surface);width:100%;min-height:180px}
+iframe{border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);background:var(--ds-surface);width:100%;min-height:180px}
 .preview-panel iframe{display:block;min-height:0;max-width:none}
 .preview-matrix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
 .document-preview .preview-scroll,.component-preview .preview-scroll{overflow:visible}
@@ -61,7 +61,7 @@ iframe{border:1px solid var(--ds-border);border-radius:var(--ds-radius-container
 .card-description>:first-child{margin-top:0}
 .card-description p,.card-description ul,.card-description ol{max-width:720px;margin:0 0 20px;line-height:1.65}
 .card-description li+li{margin-top:8px}
-.card-description pre{border:1px solid var(--ds-border);border-radius:var(--ds-radius-container);margin:20px 0}
+.card-description pre{border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);margin:20px 0}
 .card-description code{font:var(--ds-type-mono)}
 
 .component-page{--component-page-width:920px;font-size:16px;line-height:1.6}
@@ -78,7 +78,7 @@ iframe{border:1px solid var(--ds-border);border-radius:var(--ds-radius-container
 .component-page .table-scroll{margin:0 0 24px}
 
 .page-contents{margin:24px 0 0;font:var(--ds-type-body);color:var(--ds-fg-muted)}
-.page-contents details{border:1px solid var(--ds-border);border-radius:var(--ds-radius-container);padding:12px 16px}
+.page-contents details{border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);padding:12px 16px}
 .page-contents summary{cursor:pointer;color:var(--ds-fg);font-weight:var(--ds-weight-semibold)}
 .page-contents nav{padding:12px 0 0}
 .page-contents ul{list-style:none;margin:0;padding:0}

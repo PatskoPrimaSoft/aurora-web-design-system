@@ -12,7 +12,7 @@
 | `ds-brand-subtle`, `ds-brand-text`, `ds-type-ui` | Подложка, цвет и типографика инициалов аватара |
 | `ds-accent-mark`, `ds-accent-mark-on`, `ds-type-eyebrow` | Фон и текст счётчика непрочитанных |
 | `ds-icon`, `ds-icon-sm` | Размер шеврона и иконки группы |
-| `ds-radius-sm`, `ds-radius-circle`, `ds-radius-badge` | Скругление кнопок, аватара и счётчика непрочитанных |
+| `ds-radius-sm`, `ds-radius-circle`, `ds-radius-pill` | Скругление кнопок, аватара и счётчика непрочитанных |
 | `ds-transition-control` | Плавность изменения подложки |
 | `ds-control-h-sm` | Одинаковая ширина области шеврона в обоих вариантах; минимальная высота кнопки раскрытия |
 | `ds-radius-md` | Скругление общей подложки открытой группы |

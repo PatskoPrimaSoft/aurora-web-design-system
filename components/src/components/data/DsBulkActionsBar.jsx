@@ -15,7 +15,7 @@ export function DsBulkActionsBar({count=0,total,noun,onSelectAll,onClear,actions
     style={{display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',flex:'none',minWidth:0,maxWidth:'100%',
       padding:'var(--ds-pad-tight) var(--ds-pad-sm)',background:floating?'var(--ds-surface-raised)':'var(--ds-surface)',
       border:'1px solid '+(floating?'var(--ds-border-strong)':'var(--ds-border)'),
-      borderRadius:'var(--ds-radius-container)',boxShadow:floating?'var(--ds-shadow-lg)':'none',...style}}>
+      borderRadius:'var(--ds-radius-lg)',boxShadow:floating?'var(--ds-shadow-lg)':'none',...style}}>
     <span style={{display:'inline-flex',alignItems:'center',minHeight:'var(--ds-control-h-sm)',font:'var(--ds-type-ui)',fontWeight:400,color:'var(--ds-fg)',whiteSpace:'nowrap',flex:'none'}}>
       <span>{all?S.bulk.allSelected(selected):<>{S.bulk.selected} <strong style={{fontWeight:'var(--ds-weight-medium)',fontVariantNumeric:'tabular-nums'}}>{count}</strong>{noun!=null?' '+noun:' '+S.objects(count).slice(String(count).length+1)}</>}</span>
     </span>

@@ -48,7 +48,7 @@ export function DsButton({tone='primary',size='md',icon,iconRight,loading=false,
   const style={boxSizing:'border-box',position:'relative',display:'inline-flex',alignItems:'center',justifyContent:'center',
     minWidth:0,maxWidth:'100%',height:DsBTN_H[size],padding:size==='sm'?'0 10px':'0 var(--ds-control-pad-x)',width:fullWidth?'100%':'auto',
     font:size==='lg'?'var(--ds-type-body-strong)':'var(--ds-type-ui)',whiteSpace:'nowrap',
-    borderRadius:'var(--ds-radius-control)',border:t.border,background:disabled?'var(--ds-surface-disabled)':(t.overlay?t.background:(a?t.active:h?t.hover:t.background)),
+    borderRadius:'var(--ds-radius-md)',border:t.border,background:disabled?'var(--ds-surface-disabled)':(t.overlay?t.background:(a?t.active:h?t.hover:t.background)),
     backgroundImage:!off&&t.overlay&&(a||h)?Ds_OVERLAY(t.color,a?'var(--ds-overlay-press)':'var(--ds-overlay-hover)'):undefined,
     color:disabled?'var(--ds-fg-disabled)':t.color,cursor:disabled?'not-allowed':loading?'progress':'pointer',transition:'var(--ds-transition-control)'};
   if(disabled&&(tone==='secondary'||tone==='ghost')){style.background='transparent';style.border='1px solid var(--ds-border)'}

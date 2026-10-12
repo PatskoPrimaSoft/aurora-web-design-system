@@ -8,7 +8,7 @@ export function DsLozenge({tone='neutral',solid=false,dot=false,icon,children,si
     height:size==='sm'?20:24,padding:size==='sm'?'0 8px':'0 10px',
     font:'var(--ds-type-caption)',fontWeight:'var(--ds-weight-medium)',whiteSpace:'nowrap',
     background:bg,color:fg,border:solid?'1px solid transparent':'1px solid var(--ds-'+tone+'-line)',
-    borderRadius:'var(--ds-radius-badge)'}}>
+    borderRadius:'var(--ds-radius-pill)'}}>
     {dot?<span aria-hidden="true" style={{width:6,height:6,borderRadius:'50%',background:solid?'var(--ds-on-solid)':'var(--ds-'+tone+'-solid)',flex:'none'}}/>:null}
     {icon?<Icon name={icon} size="var(--ds-icon-xs)"/>:null}{children}</span>;
 }

@@ -1,34 +1,14 @@
-import {searchCards} from './search.js';
-import {familyFor} from './families.js';
+import {mountCatalogueShell} from './shell.js';
+import {createCatalogueNavigation} from './navigation.js';
 import {parseState,stateUrl,comparisonScopes} from './state.js';
 import {enhanceCodeBlocks,createPageContents} from './documentation.js';
 const cards=await(await fetch('cards.json')).json();
 let state=parseState(new URL(location.href),cards),renderedKey=null,frames=[];
 let disposeContents=()=>{};
-const {DsMenu,DsButton,DsPageLayout}=window.AuroraWebDesignSystem_96e210;
+const {DsMenu,DsButton}=window.AuroraWebDesignSystem_96e210;
 const h=window.React.createElement;
-const shell=document.getElementById('catalog-shell');
-const header=shell.querySelector('header'),navigation=shell.querySelector('aside'),content=shell.querySelector('main');
-// These regions retain the catalogue's DOM-managed content and event handlers.
-function CatalogueRegion({source,className,as='div'}){
- const ref=window.React.useRef(null);
- window.React.useLayoutEffect(()=>{ref.current.append(...source.childNodes);},[source]);
- return h(as,{ref,className});
-}
-const layoutRoot=window.ReactDOM.createRoot(shell);
-window.ReactDOM.flushSync(()=>layoutRoot.render(h(DsPageLayout,{
- header:h(CatalogueRegion,{source:header,className:'catalog-header',as:'header'}),
- left:h(CatalogueRegion,{source:navigation,className:'catalog-navigation'}),
- leftWidth:280,leftLabel:'Навигация',mainId:'catalog-main',skipLinkLabel:'К содержимому',
- responsive:true,scroll:'regions',gap:false,padding:false,
-},h(CatalogueRegion,{source:content,className:'catalog-content'}))));
+mountCatalogueShell();
 const nav=document.getElementById('cards'),viewports=document.getElementById('viewports'),search=document.getElementById('search');
-const headerRoot=window.ReactDOM.createRoot(document.getElementById('catalog-header-content'));
-window.ReactDOM.flushSync(()=>headerRoot.render(
- h('div',{className:'catalog-identity'},
-  h('span',{className:'catalog-logo'},h('img',{src:'components/assets/logo/AuroraWhite.png',alt:''})),
-  h('strong',{className:'catalog-product'},'Aurora Design'))
-));
 const previewControls=document.createElement('div');
 previewControls.className='catalog-controls';previewControls.setAttribute('role','group');previewControls.setAttribute('aria-label','Настройки примера');
 document.querySelector('.catalog-header').append(previewControls);
@@ -53,7 +33,6 @@ function renderControls(){
  )));
 }
 const titleStatus=document.getElementById('card-status'),titleStatusRoot=window.ReactDOM.createRoot(titleStatus);
-let navigationStatusRoots=[];
 function renderStatus(root,card){window.ReactDOM.flushSync(()=>root.render(card?.status==='deprecated'?window.React.createElement(window.AuroraWebDesignSystem_96e210.DsLozenge,{tone:'warning',size:'sm'},'Устарело'):null));}
 const examplesHeading=document.createElement('h2');examplesHeading.id='examples-heading';examplesHeading.textContent='Живые примеры';examplesHeading.hidden=true;viewports.before(examplesHeading);
 function save(push=false){
@@ -61,26 +40,8 @@ function save(push=false){
  if(new URL(location.href).searchParams.get('card')===state.cardId)url.hash=location.hash;
  history[push?'pushState':'replaceState'](null,'',url);
 }
-function drawNavigation(){
- const found=searchCards(cards,state.query),groups=new Map();
- for(const root of navigationStatusRoots)root.unmount();navigationStatusRoots=[];nav.replaceChildren();
- const tokens=document.createElement('a'),tokensUrl=new URL('api/tokens.html',location.href);
- for(const[name,value]of Object.entries(state.scope))tokensUrl.searchParams.set(name,value);
- tokens.href=tokensUrl;tokens.textContent='Токены';tokens.className='catalog-tokens-link';nav.append(tokens);
- document.getElementById('search-empty').hidden=found.length>0;
- for(const card of found){
-  const family=card.group==='2 · Основы'?null:familyFor(card.id);
-  const name=family?card.group.split(' · ').slice(0,2).join(' · ')+' · '+family.title.toLocaleLowerCase('ru'):card.group;
-  if(!groups.has(name))groups.set(name,[]);groups.get(name).push(card);
- }
- const orderedGroups=[...groups].sort(([nameA],[nameB])=>nameA.localeCompare(nameB,'ru',{numeric:true}));
- for(const[name,items]of orderedGroups){const h=document.createElement('h2');h.textContent=name;nav.append(h);
-  for(const card of items){const link=document.createElement('a');link.href=stateUrl(location.href,{...state,cardId:card.id});link.dataset.id=card.id;link.textContent=card.title;
-   if(card.status==='deprecated'){const status=document.createElement('span');status.className='nav-card-status';link.append(status);const root=window.ReactDOM.createRoot(status);navigationStatusRoots.push(root);renderStatus(root,card);}
-   if(card.id===state.cardId)link.setAttribute('aria-current','page');
-   link.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;event.preventDefault();state={...state,cardId:card.id,unknown:false};save(true);render();});nav.append(link);}
- }
-}
+const drawCatalogueNavigation=createCatalogueNavigation(cards,{onSelect:card=>{state={...state,cardId:card.id,unknown:false};save(true);render();}});
+function drawNavigation(){drawCatalogueNavigation(state);}
 function scopeFrame(record){
  const scope=state.compare?record.fixed:state.scope;
  for(const[name,value]of Object.entries(scope))record.element.contentDocument?.documentElement?.setAttribute('data-ds-'+name,value);

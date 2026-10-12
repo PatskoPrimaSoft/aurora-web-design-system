@@ -3,7 +3,7 @@
 | Токен | За что отвечает |
 | --- | --- |
 | `ds-gap-sm` | Единый интервал между чипами и строками, а также перед кнопкой очистки |
-| `ds-control-h-sm`, `ds-radius-control`, `ds-type-ui` | Высота, скругление и типографика кнопки очистки DsButton |
+| `ds-control-h-sm`, `ds-radius-md`, `ds-type-ui` | Высота, скругление и типографика кнопки очистки DsButton |
 | `ds-fg-muted`, `ds-surface-hover`, `ds-surface-active` | Текст, наведение и нажатие кнопки очистки с тоном ghost |
 | `ds-focus-width`, `ds-focus-color`, `ds-focus-offset` | Кольцо клавиатурного фокуса кнопки очистки |
 | `ds-transition-control` | Плавность оформления кнопки очистки |

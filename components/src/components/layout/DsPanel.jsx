@@ -8,7 +8,7 @@ export function DsPanel({title,eyebrow,actions,children,footer,padding=true,scro
   const labelledBy=ariaLabelledBy||(!ariaLabel&&title?titleId:undefined);
   return <section id={id} aria-label={ariaLabel} aria-labelledby={labelledBy} style={{display:'flex',flexDirection:'column',minWidth:0,minHeight:0,height,
     background:'var(--ds-surface)',border:flush?'none':'1px solid var(--ds-border)',
-    borderRadius:flush?0:'var(--ds-radius-panel)',overflow:'hidden',...style}}>
+    borderRadius:flush?0:'var(--ds-radius-lg)',overflow:'hidden',...style}}>
     {title||s.actions||eyebrow?<header style={{display:'flex',alignItems:'center',flexWrap:'wrap',gap:'var(--ds-gap-sm)',flex:'none',
       minHeight:'var(--ds-toolbar-h)',padding:'var(--ds-pad-sm) var(--ds-pad-md)',borderBottom:'1px solid var(--ds-border)'}}>
       <div style={{minWidth:0,flex:'1 1 200px',display:'flex',flexDirection:'column',gap:1}}>

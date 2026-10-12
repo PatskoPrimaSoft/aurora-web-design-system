@@ -4,12 +4,12 @@
 | --- | --- |
 | `ds-control-h-sm`, `ds-control-h`, `ds-control-h-lg` | Ширина и высота кнопки sm, md и lg с учётом плотности |
 | `ds-icon-sm`, `ds-icon` | Размер иконки: уменьшенный для sm, обычный для md и lg |
-| `ds-radius-icon-button` | Скругление кнопки |
+| `ds-radius-md` | Скругление кнопки |
 | `ds-fg-muted` | Иконка ghost |
 | `ds-surface`, `ds-fg`, `ds-border-field` | Фон, иконка и граница secondary; ds-surface также отделяет индикатор от прозрачного фона |
 | `ds-brand`, `ds-on-brand` | Фон и иконка primary |
 | `ds-danger-solid` | Иконка danger |
-| `ds-header-icon-fg`, `ds-header-hover` | Иконка и фон взаимодействия onHeader |
+| `ds-fg`, `ds-surface-hover` | Иконка и фон взаимодействия onHeader |
 | `ds-brand-subtle`, `ds-brand-text` | Фон и иконка включённого переключателя |
 | `ds-surface-hover`, `ds-surface-active` | Фон незалитых кнопок при наведении и нажатии |
 | `ds-overlay-hover`, `ds-overlay-press` | Оверлей цвета иконки для primary и active; у onHeader также при нажатии |

@@ -2,7 +2,7 @@ import {escapeHtml} from './markdown.mjs';
 
 const categories = [
  ['text','Текст'],['surface','Поверхности'],['action','Действия'],['border','Границы'],
- ['status','Статусы'],['palette','Базовая палитра'],['spacing','Отступы'],
+ ['status','Статусы'],['chart','Графики'],['map','Карта'],['state','Состояния и свежесть'],['palette','Базовая палитра'],['spacing','Отступы'],
  ['density','Размеры и плотность'],['radius','Скругления'],['shadow','Тени'],
  ['type','Типографические роли'],['fontSize','Размер шрифта'],['fontWeight','Начертание'],
  ['tracking','Межбуквенный интервал'],['lineHeight','Межстрочный интервал'],
@@ -11,7 +11,13 @@ const categories = [
 const densityCategories = new Set(['spacing','density']);
 const singleCategories = new Set(['radius','type','fontSize','fontWeight','tracking','lineHeight','motion','layout','content']);
 
-function category(name, section) {
+const groups = [['main','Основные'],['chart','Графики'],['map','Карта'],['base','Палитра и шкалы'],['all','Все токены']];
+const groupFor = category => ['chart','map'].includes(category)?category:['palette','fontSize','fontWeight','tracking','lineHeight'].includes(category)?'base':'main';
+function category(name, section, specialized=true) {
+ if(specialized&&name.startsWith('ds-chart-'))return 'chart';
+ if(specialized&&name.startsWith('ds-series-'))return 'chart';
+ if(specialized&&(name.startsWith('ds-map-')||name==='ds-shadow-map'))return 'map';
+ if(specialized&&/^(ds-state-|ds-fresh-)/.test(name))return 'state';
  if(section==='type')return 'type';
  if(section==='fontSize')return 'fontSize';
  if(section==='fontWeight')return 'fontWeight';
@@ -31,7 +37,7 @@ function category(name, section) {
   return 'layout';
  }
  if(/^(?:ds-n-|ds-w-|ds-series-|ds-map-|ds-chart-(?:plot|axis|grid|label|crosshair|marker|zoom|mark|threshold|nodata))/.test(name))return 'palette';
- if(/^(?:ds-fg|ds-on-|ds-header-fg|ds-header-icon|ds-chart-tooltip-(?:fg|muted))/.test(name))return 'text';
+ if(/^(?:ds-fg|ds-on-|ds-fg-strong|ds-header-icon|ds-chart-tooltip-(?:fg|muted))/.test(name))return 'text';
  if(/^(?:ds-bg|ds-surface|ds-skeleton|ds-header-(?:bg|hover|plate|chip-bg|env-bg|badge-bg)|ds-chart-tooltip-bg)/.test(name))return 'surface';
  if(/(?:border|divider|line$)/.test(name))return 'border';
  if(/^(?:ds-brand|ds-accent|ds-focus-color|ds-header-(?:indicator|tab)|ds-fg-action)/.test(name))return 'action';
@@ -60,8 +66,8 @@ function breakpointSample(entry,value) {
 }
 
 function sample(entry,value,dark=false,red2=false) {
- const safe=escapeHtml(value), kind=entry.category;
- const context=entry.name.includes('on-inverse')||entry.name.startsWith('--ds-chart-tooltip-')?'--ds-surface-inverse':entry.name==='--ds-on-brand'?'--ds-brand':entry.name==='--ds-on-solid'?'--ds-danger-solid':entry.name==='--ds-accent-on'?'--ds-accent':entry.name==='--ds-accent-mark-on'?'--ds-accent-mark':/^--ds-(neutral|info|success|warning|danger)-fg$/.test(entry.name)?entry.name.replace(/-fg$/,'-bg'):null;
+ const safe=escapeHtml(value), kind=category(entry.name.slice(2),entry.section,false);
+ const context=entry.name.includes('on-inverse')||/^--ds-chart-tooltip-(fg|muted)$/.test(entry.name)?'--ds-surface-inverse':entry.name==='--ds-on-brand'?'--ds-brand':entry.name==='--ds-on-solid'?'--ds-danger-solid':entry.name==='--ds-accent-on'?'--ds-accent':entry.name==='--ds-accent-mark-on'?'--ds-accent-mark':/^--ds-(neutral|info|success|warning|danger)-fg$/.test(entry.name)?entry.name.replace(/-fg$/,'-bg'):null;
  const stage=`<span class="token-sample${dark?' token-sample-dark':''}" data-ds-theme="${red2?'RED2':'DEFAULT'}" data-ds-appearance="${dark?'dark':'light'}"${context?` style="background:var(${context})"`:''}>`;
  if(kind==='text'||entry.name==='--ds-brand-text'||kind==='status'&&entry.name.includes('-fg')||context)return `${stage}<span class="token-sample-text" style="color:${safe}">Aa Пример текста</span></span>`;
  if(kind==='border'||kind==='status'&&entry.name.endsWith('-line'))return `${stage}<span class="token-sample-border" style="${/^[\d.]+px$/.test(value)?'border-width':'border-color'}:${safe}"></span></span>`;
@@ -108,7 +114,7 @@ export function renderTokenReference(model){
  for(const name of Object.keys(model.source.type.families))sourceEntries.set('--'+name,{section:'type',usage:'Семейство шрифта для типографических ролей.'});
  const entries=model.names.map(name=>{
   const source=sourceEntries.get(name)??{section:'type',usage:'Типографическая роль.'};
-  return{name,usage:source.usage,category:category(name.slice(2),source.section),sample:source.sample,
+  return{name,section:source.section,usage:source.usage,category:category(name.slice(2),source.section),sample:source.sample,
    values:Object.fromEntries(Object.entries(model.sets).map(([scope,values])=>[scope,values[name]])),
    sets:model.sets,aliases:model.aliases[name],density:{cozy:model.density.cozy[name]??null,compact:model.density.compact[name]??null}};
  });
@@ -116,9 +122,9 @@ export function renderTokenReference(model){
   const list=entries.filter(entry=>entry.category===id);
   const headers=densityCategories.has(id)?['Cozy','Compact']:singleCategories.has(id)?['Пример и значение']:['Light','Dark'];
   const guide=id==='layout'?`<div class="token-breakpoint-scale" aria-label="Диапазоны ширины окна">${breakpointRanges(model.sets['DEFAULT.light']).map(([range,width])=>`<div><strong>${range}</strong><span>${width}</span></div>`).join('')}</div><p class="token-range-note">Ширина окна в px. Миниатюры показывают границу диапазонов; адаптивное поведение задаёт приложение.</p>`:'';
-  return `<section class="token-section" id="token-${id}" data-category="${id}"><h2>${label}</h2>${guide}<div class="token-table-scroll"><table aria-label="${label}"><thead><tr><th scope="col">Токен и назначение</th>${headers.map(h=>`<th scope="col"${headers.length===1?' colspan="2"':''}>${h}</th>`).join('')}</tr></thead><tbody>${list.map(row).join('')}</tbody></table></div></section>`;
+  return `<section class="token-section" id="token-${id}" data-category="${id}" data-group="${groupFor(id)}"><h2>${label}</h2>${guide}<div class="token-table-scroll"><table aria-label="${label}"><thead><tr><th scope="col">Токен и назначение</th>${headers.map(h=>`<th scope="col"${headers.length===1?' colspan="2"':''}>${h}</th>`).join('')}</tr></thead><tbody>${list.map(row).join('')}</tbody></table></div></section>`;
  }).join('');
- const options=categories.map(([id,label])=>`<option value="${id}">${label}</option>`).join('');
+ const options=groups.filter(([id])=>id!=='all').map(([group,label])=>`<optgroup label="${label}">${categories.filter(([id])=>groupFor(id)===group).map(([id,label])=>`<option value="${id}">${label}</option>`).join('')}</optgroup>`).join('');
  const contents=categories.map(([id,label])=>`<a href="#token-${id}" data-category-link="${id}">${label}</a>`).join('');
- return{entries,html:`<link rel="stylesheet" href="/token-reference.css"><div class="token-reference"><p class="token-intro">Выбирайте токен по назначению. Значения и образцы показывают, как он работает в разных оформлениях и плотностях.</p><div class="token-tab" aria-current="page">Все токены</div><div class="token-columns"><div class="token-catalog"><h2>Все категории</h2><label class="token-search"><span class="sr-only">Поиск токенов</span><input type="search" aria-label="Поиск токенов" placeholder="Найти по имени или назначению"></label><div class="token-filters"><select aria-label="Категория"><option value="all">Все категории</option>${options}</select><select aria-label="Бренд"><option value="DEFAULT">DEFAULT</option><option value="RED2">RED2</option></select></div><p class="token-count" role="status"></p><div class="token-sections">${sections}</div><p class="token-empty" hidden>Ничего не найдено. Попробуйте другое название.</p><p class="token-copy-status" role="status">Нажмите на имя токена, чтобы скопировать CSS-переменную.</p></div><aside class="token-contents" aria-label="На этой странице"><strong>На этой странице</strong>${contents}</aside></div></div><script type="module" src="/token-reference.js"></script>`};
+ return{entries,html:`<link rel="stylesheet" href="/token-reference.css"><div class="token-reference"><p class="token-intro">Выбирайте токен по назначению. Значения и образцы показывают, как он работает в разных оформлениях и плотностях.</p><nav class="token-groups" aria-label="Группы токенов">${groups.map(([id,label])=>`<button type="button" data-token-group="${id}" aria-pressed="${id==='main'}">${label}</button>`).join('')}</nav><p class="token-group-description"></p><div class="token-columns"><div class="token-catalog"><h2>Выберите по назначению</h2><label class="token-search"><span class="sr-only">Поиск токенов</span><input type="search" aria-label="Поиск токенов" placeholder="Найти по имени или назначению"></label><div class="token-filters"><select aria-label="Категория"><option value="all">Все категории</option>${options}</select><select aria-label="Бренд"><option value="DEFAULT">DEFAULT</option><option value="RED2">RED2</option></select></div><p class="token-count" role="status"></p><div class="token-sections">${sections}</div><p class="token-empty" hidden>Ничего не найдено. Попробуйте другое название.</p><p class="token-copy-status" role="status">Нажмите на имя токена, чтобы скопировать CSS-переменную.</p></div><aside class="token-contents" aria-label="На этой странице"><strong>На этой странице</strong>${contents}</aside></div></div><script type="module" src="/token-reference.js"></script>`};
 }

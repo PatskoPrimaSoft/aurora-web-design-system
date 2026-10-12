@@ -9,7 +9,7 @@
 | ds-gap-sm-plus | Интервалы при gap=true, внутренние отступы при padding=true и отступы кнопок раскрытия |
 | ds-surface, ds-brand-text | Фон и текст ссылки перехода к содержимому |
 | ds-pad-sm, ds-pad-md | Положение и внутренние отступы ссылки перехода |
-| ds-radius-control, ds-type-ui | Скругление и типографика ссылки перехода |
+| ds-radius-md, ds-type-ui | Скругление и типографика ссылки перехода |
 | ds-focus-width, ds-focus-color, ds-focus-offset | Кольцо клавиатурного фокуса ссылки и основного региона |
 
 Кнопки раскрытия панелей используют оформление и токены DsButton с tone="secondary".

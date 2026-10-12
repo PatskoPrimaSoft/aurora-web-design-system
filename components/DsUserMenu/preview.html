@@ -15,7 +15,7 @@ function App() {
     return <LiveExamples>
     <LiveExample id={"user-actions"} title={"Действия пользователя"} description={"Откройте меню пользователя и выберите действие. Escape закрывает меню и возвращает фокус к кнопке."}>
     <div className="demo-stack">
-    <div style={{ minHeight: 260, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end', padding: 8, background: 'var(--ds-header-bg)' }}>
+    <div style={{ minHeight: 260, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end', padding: 8, background: 'var(--ds-surface)' }}>
     <S.DsUserMenu name={'Анна Иванова'} email={'a.ivanova@example.com'} items={[{ id: 'p', label: 'Профиль' }, { id: 'l', label: 'Язык' }, { divider: true }, { id: 'x', label: 'Выйти', icon: 'exit_to_app' }]} onSelect={item => setMessage('Выбрано: ' + item.label)}/>
     </div>
     <p role="status" aria-label="Результат выбора">{message}</p>

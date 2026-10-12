@@ -135,7 +135,7 @@ export function DsUserMenu({name,email,avatarSrc,items=[],onSelect}){
       style={{display:'inline-flex',alignItems:'center',gap:'var(--ds-gap-sm)',height:'var(--ds-control-h-sm)',
         padding:avatarSrc?'0 6px 0 2px':'0 4px 0 10px',background:'var(--ds-surface-hover)',
         border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-pill)',
-        font:'var(--ds-type-ui)',color:'var(--ds-header-fg)',cursor:'pointer',whiteSpace:'nowrap',
+        font:'var(--ds-type-ui)',color:'var(--ds-fg-strong)',cursor:'pointer',whiteSpace:'nowrap',
         margin:0,appearance:'none',textAlign:'left'}}>
       {avatarSrc?<img src={avatarSrc} alt="" style={{width:'var(--ds-icon-lg)',height:'var(--ds-icon-lg)',borderRadius:'var(--ds-radius-circle)',objectFit:'cover'}}/>:null}
       {name}<Icon name="expand_more" size="var(--ds-icon-sm)"/>

@@ -50,7 +50,12 @@ export async function buildCatalogue({ root, outDir }) {
     writePage(`api/components/${doc.name}.html`,documentPage({title:doc.name,html:content,back:card?`/index.html?card=${card.id}`:'/index.html'}));
   }
   const reference=renderTokenReference(readTokenModel(css.source));
-  writePage('api/tokens.html',documentPage({title:'Дизайн-токены',html:reference.html,fixedScope:true,tokenHeader:true}));
+  const tokenPage=readFileSync(new URL('../../catalog/index.html',import.meta.url),'utf8')
+    .replace('<title>Aurora Design</title>','<title>Дизайн-токены · Aurora</title>')
+    .replace('src="app.js"','src="token-page.js"')
+    .replace(/(href|src)="(?![a-z]+:|\/|#)([^"]+)"/g,'$1="/$2"')
+    .replace(/<main>[\s\S]*?<\/main>/,'<main><h1>Дизайн-токены</h1>'+reference.html.replace('<script type="module" src="/token-reference.js"></script>','')+'</main>');
+  writePage('api/tokens.html',tokenPage);
   for(const card of cards){
     const contracts=api.filter(doc=>doc.name===card.id||(doc.declarationPath.split('/')[1]===card.id&&!cards.some(own=>own.id===doc.name))).sort((a,b)=>Number(b.name===card.id)-Number(a.name===card.id));
     card.apiPaths=contracts.map(doc=>({name:doc.name,path:`api/components/${doc.name}.html`}));
@@ -92,7 +97,7 @@ export async function buildCatalogue({ root, outDir }) {
   }
   for (const path of assets) if (path && !['dist/styles.css', 'components/bundle.js', 'components/lib/react.production.min.js', 'components/lib/react-dom.production.min.js'].includes(path.replaceAll('\\','/'))) copyAsset({ root, outDir, path });
   writeFileSync(join(outDir, 'cards.json'), JSON.stringify(cards, null, 2) + '\n');
-  for (const file of ['index.html', 'app.js', 'styles.css','code-blocks.css','search.js','families.js','state.js','documentation.js','token-reference.css','token-reference.js']) writeFileSync(join(outDir, file), readFileSync(new URL(`../../catalog/${file}`, import.meta.url)));
+  for (const file of ['index.html', 'app.js', 'styles.css','code-blocks.css','search.js','families.js','state.js','documentation.js','token-reference.css','token-reference.js','token-page.js','shell.js','navigation.js']) writeFileSync(join(outDir, file), readFileSync(new URL(`../../catalog/${file}`, import.meta.url)));
   const problems=validateLinks({root,siteRoot:outDir});
   if(problems.length)throw Error(problems.map(p=>`${p.source}: ${p.target}: ${p.reason}`).join('\n'));
   return cards;

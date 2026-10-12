@@ -14,7 +14,7 @@ export function DsBanner({tone='info',title,children,actions,onClose,compact=fal
   return <div data-ds-banner="" role={role} aria-atomic={role?true:undefined} style={{display:'flex',gap:'var(--ds-gap-sm-plus)',alignItems:'flex-start',
     padding:compact?'var(--ds-pad-tight) var(--ds-pad-sm)':'var(--ds-pad-sm) var(--ds-pad-md)',
     background:'var(--ds-'+tone+'-bg)',
-    borderRadius:'var(--ds-radius-container)',color:'var(--ds-'+tone+'-fg)',minWidth:0,overflowWrap:'anywhere'}}>
+    borderRadius:'var(--ds-radius-lg)',color:'var(--ds-'+tone+'-fg)',minWidth:0,overflowWrap:'anywhere'}}>
     <Icon name={DsBANNER_ICON[tone]} size="var(--ds-icon)" style={{flexShrink:0,height:'calc(var(--ds-text-14) * var(--ds-lh-normal))',color:'var(--ds-'+tone+'-solid)'}}/>
     <div style={{flex:1,minWidth:0,display:'flex',flexDirection:'column',gap:4}}>
       {title!=null&&title!==false&&title!==''?<Heading style={{margin:0,font:'var(--ds-type-body-strong)',color:'var(--ds-'+tone+'-fg)'}}>{title}</Heading>:null}

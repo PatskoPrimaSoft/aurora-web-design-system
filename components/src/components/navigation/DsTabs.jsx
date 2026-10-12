@@ -76,12 +76,12 @@ export function DsTabs({items=[],active,onChange,tone='underline',stack=true,idB
   const wrap=content=><div ref={viewportRef} data-ds-tabs-viewport="" style={viewportStyle}
     onFocusCapture={event=>{if(event.target.matches('button'))reveal(event.target);}}>{content}</div>;
   if(tone==='segmented')return wrap(<div ref={listRef} role="tablist" aria-label={ariaLabel} onKeyDown={onKey} style={{display:'inline-flex',gap:2,padding:2,
-    background:'var(--ds-bg-sunken)',border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-control)'}}>
+    background:'var(--ds-bg-sunken)',border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-md)'}}>
     {items.map(it=><Tab key={it.id} it={it} on={it.id===active} segmented onChange={onChange} a11y={tabProps(it)}/>)}
   </div>);
   const movingIndicator=indicator?<span data-ds-tabs-indicator="" aria-hidden="true" style={{
     position:'absolute',pointerEvents:'none',bottom:0,left:indicator.left,width:indicator.width,height:tone==='onHeader'?3:2,
-    borderRadius:'var(--ds-radius-pill)',background:tone==='onHeader'?'var(--ds-header-indicator)':'var(--ds-brand)',
+    borderRadius:'var(--ds-radius-pill)',background:tone==='onHeader'?'var(--ds-brand)':'var(--ds-brand)',
     transition:indicator.animate?'left var(--ds-dur-fast) var(--ds-ease), width var(--ds-dur-fast) var(--ds-ease)':'none',
   }}/>:null;
   const stacked=onHeader&&stack;
@@ -100,19 +100,19 @@ export function DsTabs({items=[],active,onChange,tone='underline',stack=true,idB
   </div>);
 }
 function Tab({it,on,onHeader=false,stacked=false,segmented=false,onChange,a11y}){
-  const fg=onHeader?(on?'var(--ds-header-tab-fg-active)':'var(--ds-header-fg-muted)'):(on?(segmented?'var(--ds-fg-strong)':'var(--ds-brand-text)'):'var(--ds-fg-muted)');
+  const fg=onHeader?(on?'var(--ds-brand-text)':'var(--ds-fg-muted)'):(on?(segmented?'var(--ds-fg-strong)':'var(--ds-brand-text)'):'var(--ds-fg-muted)');
   const badgeBg=onHeader?'var(--ds-accent)':'var(--ds-surface-active)';
   const badgeFg=onHeader?'var(--ds-accent-on)':'var(--ds-fg)';
   /* icon-only ink rule from the header band: a glyph carries no text mass, so an
-     unselected tab's glyph gets --ds-header-icon-fg, not the muted label value. */
-  const iconFg=onHeader&&!on?'var(--ds-header-icon-fg)':undefined;
+     unselected tab's glyph gets --ds-fg, not the muted label value. */
+  const iconFg=onHeader&&!on?'var(--ds-fg)':undefined;
   const icon=it.icon?<Icon name={it.icon} size={segmented?"var(--ds-icon-sm)":"var(--ds-icon)"} style={{color:iconFg}}/>:null;
   return <button type="button" {...a11y} data-ds-tab={onHeader?'header':segmented?'segmented':'underline'} data-ds-selected={on?'true':'false'} onClick={()=>onChange&&onChange(it.id)}
     style={{position:'relative',display:'inline-flex',flexDirection:stacked?'column':'row',
       alignItems:'center',justifyContent:'center',gap:stacked?2:'var(--ds-gap-sm)',flex:'none',
       padding:stacked?'0 10px':(onHeader?'0 14px':segmented?'0 12px':'6px 0 10px'),height:onHeader?'100%':segmented?'var(--ds-control-h-sm)':undefined,
-      border:'none',borderRadius:segmented?'calc(var(--ds-radius-control) - 2px)':undefined,
-      '--tab-background':onHeader&&on?'var(--ds-header-hover)':segmented&&on?'var(--ds-surface)':'transparent',
+      border:'none',borderRadius:segmented?'calc(var(--ds-radius-md) - 2px)':undefined,
+      '--tab-background':onHeader&&on?'var(--ds-surface-hover)':segmented&&on?'var(--ds-surface)':'transparent',
       background:'var(--tab-feedback, var(--tab-background))',boxShadow:segmented&&on?'var(--ds-shadow-xs)':'none',
       font:stacked?'var(--ds-type-caption)':'var(--ds-type-ui)',lineHeight:stacked?1.1:undefined,
       color:'var(--tab-feedback-fg, '+fg+')',cursor:'pointer',whiteSpace:'nowrap',transition:'var(--ds-transition-control)'}}>
@@ -125,6 +125,6 @@ function Tab({it,on,onHeader=false,stacked=false,segmented=false,onChange,a11y})
       borderRadius:'var(--ds-radius-pill)',background:badgeBg,color:badgeFg}}>{it.badge}</span>:null}
     <span data-ds-tab-indicator="" aria-hidden="true" style={{position:'absolute',left:onHeader?10:0,right:onHeader?10:0,bottom:0,height:onHeader?3:2,
       borderRadius:onHeader?'var(--ds-radius-pill) var(--ds-radius-pill) 0 0':'var(--ds-radius-pill)',
-      background:'var(--tab-preview-indicator, '+(on?(onHeader?'var(--ds-header-indicator)':'var(--ds-brand)'):'transparent')+')',display:segmented?'none':undefined}}/>
+      background:'var(--tab-preview-indicator, '+(on?(onHeader?'var(--ds-brand)':'var(--ds-brand)'):'transparent')+')',display:segmented?'none':undefined}}/>
   </button>;
 }

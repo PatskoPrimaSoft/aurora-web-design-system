@@ -90,4 +90,17 @@ for(const [name,before,after,selected] of [
 }
 assert.match(tokenDocument.querySelector('#token-layout .token-breakpoint-scale').textContent,/S.*719.*M.*720.*959.*L.*960.*1139.*XL.*1140/s);
 assert.ok(tokenDocument.querySelector('#token-content #ds-content-max'),'content width has its own category');
-console.log('docs-api: unions, callbacks, ReactNode, shared files and invalid contracts passed');
+
+
+assert.equal(model.names.length,215);
+for(const name of ['--ds-focus-ring','--ds-focus-ring-danger','--ds-dur-instant','--ds-dur-slow','--ds-ease-out','--ds-radius-2xl','--ds-radius-control','--ds-header-bg'])assert.ok(!model.names.includes(name),name);
+for(const group of ['main','chart','map','base','all'])assert.ok(tokenDocument.querySelector('[data-token-group="'+group+'"]'));
+assert.equal(tokenDocument.querySelector('#token-palette').dataset.group,'base');
+assert.equal(tokenDocument.querySelector('#token-chart').dataset.group,'chart');
+
+assert.deepEqual(model.names.filter(n=>n.startsWith('--ds-header-')),['--ds-header-h']);
+assert.deepEqual(model.names.filter(n=>n.startsWith('--ds-radius-')),['--ds-radius-xs','--ds-radius-sm','--ds-radius-md','--ds-radius-lg','--ds-radius-xl','--ds-radius-pill','--ds-radius-circle']);
+console.log('docs-api: API contracts, token groups and removed tokens passed');
+
+assert.equal(tokenDocument.querySelector('#token-state').dataset.group,'main');
+assert.ok(tokenDocument.querySelector('#token-map #ds-shadow-map'));

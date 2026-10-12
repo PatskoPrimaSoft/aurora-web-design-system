@@ -211,3 +211,32 @@ These aliases have been removed from the token inventory. Replace them when upgr
 
 Mechanical replace is safe — values are identical in every theme and density:
 `sed -i 's/var(--ds-gap)/var(--ds-gap-sm-plus)/g; s/var(--ds-pad)/var(--ds-pad-sm)/g; s/var(--ds-fresh-on)/var(--ds-fresh-fg)/g'`.
+
+### Упрощение токенов
+
+Удалены компонентные алиасы цветов шапки и скруглений. Независимые переопределения этих ролей больше не поддерживаются; используйте общие токены. Высота шапки `--ds-header-h` сохранена: это отдельный размер, зависящий от плотности.
+
+| Удалённый токен | Использовать |
+| --- | --- |
+| `--ds-header-bg` | `--ds-surface` |
+| `--ds-header-fg` | `--ds-fg-strong` |
+| `--ds-header-fg-muted` | `--ds-fg-muted` |
+| `--ds-header-icon-fg` | `--ds-fg` |
+| `--ds-header-border` | `--ds-border` |
+| `--ds-header-hover` | `--ds-surface-hover` |
+| `--ds-header-indicator` | `--ds-brand` |
+| `--ds-header-tab-fg-active` | `--ds-brand-text` |
+| `--ds-header-plate` | `--ds-brand` |
+| `--ds-header-env-bg` | `--ds-brand-subtle` |
+| `--ds-header-env-fg` | `--ds-brand-text` |
+| `--ds-radius-control` | `--ds-radius-md` |
+| `--ds-radius-field` | `--ds-radius-md` |
+| `--ds-radius-icon-button` | `--ds-radius-md` |
+| `--ds-radius-container` | `--ds-radius-lg` |
+| `--ds-radius-panel` | `--ds-radius-lg` |
+| `--ds-radius-dialog` | `--ds-radius-xl` |
+| `--ds-radius-chip` | `--ds-radius-pill` |
+| `--ds-radius-badge` | `--ds-radius-pill` |
+| `--ds-chart-bar-radius` | `--ds-radius-xs` |
+
+Удалены неиспользуемые `--ds-dur-instant`, `--ds-dur-slow`, `--ds-ease-out`, `--ds-radius-2xl`. Для движения выбирайте `--ds-dur-fast`, `--ds-dur`, `--ds-ease`; скругление — по оставшейся шкале. Старые `--ds-focus-ring` и `--ds-focus-ring-danger` заменены единым outline через `--ds-focus-color`, `--ds-focus-width`, `--ds-focus-offset`; цвет границы поля сохраняет статус ошибки.

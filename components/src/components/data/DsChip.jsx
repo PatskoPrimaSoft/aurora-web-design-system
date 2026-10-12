@@ -21,7 +21,7 @@ export function DsChip({children,icon,selected=false,removable=false,onRemove,on
       backgroundImage:selected&&h&&interactive?Ds_OVERLAY('var(--ds-brand-text)','var(--ds-overlay-hover)'):undefined,
       color:disabled?'var(--ds-fg-disabled)':selected?'var(--ds-brand-text)':'var(--ds-fg)',
       border:'1px solid '+(disabled?'var(--ds-border)':selected?'var(--ds-brand-border)':'var(--ds-border)'),
-      borderRadius:'var(--ds-radius-chip)',cursor:interactive?'pointer':'default',transition:'var(--ds-transition-control)'}}>
+      borderRadius:'var(--ds-radius-pill)',cursor:interactive?'pointer':'default',transition:'var(--ds-transition-control)'}}>
     {leading?<Icon name={leading} size="var(--ds-icon-sm)"/>:null}
     <span title={label} style={{minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{children}</span>
     {count!=null?<span style={{font:'var(--ds-type-ui)',fontVariantNumeric:'tabular-nums',flex:'none',background:disabled?'var(--ds-surface-disabled)':'var(--ds-neutral-bg)',color:disabled?'var(--ds-fg-disabled)':'var(--ds-neutral-fg)',borderRadius:'var(--ds-radius-pill)',padding:'1px 6px'}}>{count}</span>:null}

@@ -9,16 +9,16 @@ h2{margin:0;font:var(--ds-type-section);color:var(--ds-fg-strong)}
 p{margin:0;max-width:96ch;text-wrap:pretty}
 .muted{color:var(--ds-fg-muted)}
 .eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-container);flex:none;max-width:420px}
+.strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);flex:none;max-width:420px}
 .top{display:flex;gap:24px;align-items:flex-end}
-.strip select{height:var(--ds-control-h);padding:0 8px;font:var(--ds-type-ui);color:var(--ds-fg);background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-control)}
-.card{display:flex;flex-direction:column;gap:12px;padding:18px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-container)}
+.strip select{height:var(--ds-control-h);padding:0 8px;font:var(--ds-type-ui);color:var(--ds-fg);background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md)}
+.card{display:flex;flex-direction:column;gap:12px;padding:18px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg)}
 .grid{display:grid;grid-template-columns:118px repeat(3,minmax(0,150px));gap:10px 16px;align-items:center}
 .row2{display:grid;grid-template-columns:658px minmax(0,1fr);gap:24px;align-items:start}
 .blist{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center}
 .grid .hd{font:var(--ds-type-body-strong);color:var(--ds-fg-muted)}
 .tone{font:var(--ds-type-mono);font-size:14px;color:var(--ds-fg-muted)}
-.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 20px;font:var(--ds-type-ui);font-size:16px;white-space:nowrap;border:1px solid transparent;border-radius:var(--ds-radius-control);background:var(--fill);color:var(--ink);cursor:default}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 20px;font:var(--ds-type-ui);font-size:16px;white-space:nowrap;border:1px solid transparent;border-radius:var(--ds-radius-md);background:var(--fill);color:var(--ink);cursor:default}
 .btn.line{border-color:var(--ds-border-field)}
 .ov10{background-image:linear-gradient(0deg,color-mix(in oklab,var(--ink) 10%,transparent),color-mix(in oklab,var(--ink) 10%,transparent))}
 .ov16{background-image:linear-gradient(0deg,color-mix(in oklab,var(--ink) 16%,transparent),color-mix(in oklab,var(--ink) 16%,transparent))}
@@ -80,7 +80,7 @@ p{margin:0;max-width:96ch;text-wrap:pretty}
 </div>
 </div>
 
-<div class="note"><strong>Инвариант:</strong> оверлей собственными чернилами — единственный вариант, который в light и в dark меняет заливку в одну и ту же сторону и не упирается в предел шкалы, на какой бы светлоте ни оказался бренд. Принят вариант <strong>A</strong> и распространён на всю залитую хрому: <code>DsButton</code>, <code>DsIconButton</code>, <code>DsFab</code>, <code>DsChip</code>, коробка <code>DsCheckbox</code>, трек <code>DsSwitch</code>. <code>DsTabs</code> с <code>tone="onBrand"</code> не менялся: он берёт <code>--ds-header-hover</code>, а тот на brand-бэндах сам собран из <code>--ds-overlay-hover</code> — та же доктрина в скоупе шапки.</div>
+<div class="note"><strong>Инвариант:</strong> оверлей собственными чернилами — единственный вариант, который в light и в dark меняет заливку в одну и ту же сторону и не упирается в предел шкалы, на какой бы светлоте ни оказался бренд. Принят вариант <strong>A</strong> и распространён на всю залитую хрому: <code>DsButton</code>, <code>DsIconButton</code>, <code>DsFab</code>, <code>DsChip</code>, коробка <code>DsCheckbox</code>, трек <code>DsSwitch</code>. <code>DsTabs</code> с <code>tone="onBrand"</code> не менялся: он берёт <code>--ds-surface-hover</code>, а тот на brand-бэндах сам собран из <code>--ds-overlay-hover</code> — та же доктрина в скоупе шапки.</div>
 </div>
 
 </body></html>

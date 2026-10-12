@@ -114,8 +114,28 @@ test('token reference filters categories and switches paired theme values',async
   await page.goto(served.url+'/api/tokens.html?appearance=dark&density=compact');
   await expect(page.locator('html')).toHaveAttribute('data-ds-appearance','light');
   await expect(page.locator('html')).toHaveAttribute('data-ds-density','cozy');
-  await expect(page.locator('.token-page-header a')).toHaveText('Aurora Design System');
+  await expect(page.locator('.catalog-header')).toContainText('Aurora Design');
+  await expect(page.locator('#cards .catalog-tokens-link')).toHaveAttribute('aria-current','page');
+  await expect(page.locator('#cards a[data-id=DsButton]')).toBeVisible();
+  await page.locator('#search').fill('DsButton');
+  await page.locator('#cards a[data-id=DsButton]').click();
+  await expect(page.locator('#title')).toHaveText('DsButton');
+  await page.goBack();
+  await expect(page.locator('#cards .catalog-tokens-link')).toHaveAttribute('aria-current','page');
   await expect(page.locator('[data-token-row]')).toHaveCount(tokenCount);
+  await expect(page.locator('#ds-n-0')).toBeHidden();
+  await page.getByRole('button',{name:'Графики',exact:true}).click();
+  await expect(page.locator('#ds-chart-axis')).toBeVisible();
+  await expect(page.locator('#ds-brand')).toBeHidden();
+  await page.getByRole('button',{name:'Карта',exact:true}).click();
+  await expect(page.locator('#ds-map-ground')).toBeVisible();
+  await expect(page.locator('#ds-shadow-map')).toBeVisible();
+  await expect(page.locator('#ds-chart-axis')).toBeHidden();
+  await page.reload();
+  await expect(page.getByRole('button',{name:'Карта',exact:true})).toHaveAttribute('aria-pressed','true');
+  await page.getByRole('searchbox',{name:'Поиск токенов'}).fill('--ds-n-0');
+  await expect(page.locator('#ds-n-0')).toBeVisible();
+  await page.getByRole('button',{name:'Все токены',exact:true}).click();
   await expect(page.locator('.token-count')).toHaveText(`${tokenCount} из ${tokenCount} токенов`);
   await expect(page.locator('#ds-brand [data-theme-value="DEFAULT.light"]')).toBeVisible();
   await expect(page.locator('#ds-brand [data-theme-value="DEFAULT.dark"]')).toBeVisible();
@@ -143,6 +163,17 @@ test('token reference filters categories and switches paired theme values',async
   await page.getByRole('combobox',{name:'Категория'}).selectOption('content');
   await expect(page.locator('#ds-content-max .token-content-example')).toBeVisible();
   await expect(page.locator('#token-layout')).toBeHidden();
+  await page.goto(served.url+'/api/tokens.html#ds-n-0');
+  await expect(page.locator('#ds-n-0')).toBeVisible();
+  await expect(page.getByRole('button',{name:'Палитра и шкалы',exact:true})).toHaveAttribute('aria-pressed','true');
+  await page.getByRole('button',{name:'Основные',exact:true}).press('Enter');
+  await page.reload();
+  await expect(page.locator('#ds-n-0')).toBeHidden();
+  await expect(page.getByRole('button',{name:'Основные',exact:true})).toHaveAttribute('aria-pressed','true');
+  await page.setViewportSize({width:390,height:844});
+  await page.getByRole('button',{name:'Графики',exact:true}).click();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+
   expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });

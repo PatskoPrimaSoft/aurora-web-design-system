@@ -9,15 +9,19 @@ if(root){
  const empty=root.querySelector('.token-empty');
  const status=root.querySelector('.token-copy-status');
  const params=new URLSearchParams(location.search);
+ const groupButtons=[...root.querySelectorAll('[data-token-group]')];
+ const descriptions={main:'Повседневные задачи: текст, поверхности, действия, размеры, отступы, состояния и свежесть данных.',chart:'Цвета серий, осей, сетки и подсказок, размеры графиков.',map:'Цвета карты и тень элементов поверх неё.',base:'Исходные цвета и числовые шкалы. Для обычных задач используйте готовые токены из раздела «Основные».',all:'Полный набор публичных токенов.'};
+ if(params.get('group')==='special')params.set('group','all');
+ let group=Object.hasOwn(descriptions,params.get('group'))?params.get('group'):'main';
  if(['DEFAULT','RED2'].includes(params.get('theme')))brand.value=params.get('theme');
  if(sections.some(section=>section.dataset.category===params.get('category')))category.value=params.get('category');
  if(params.has('q'))search.value=params.get('q');
- function update(){
+ function update(resetHash=false){
   const query=search.value.trim().toLocaleLowerCase('ru');
   let visible=0;
   for(const section of sections){
    let sectionVisible=0;
-   const selected=category.value==='all'||category.value===section.dataset.category;
+   const selected=(category.value==='all'||category.value===section.dataset.category)&&(query||category.value!=='all'||group==='all'||section.dataset.group===group);
    for(const row of section.querySelectorAll('[data-token-row]')){
     row.hidden=!selected||!row.dataset.search.includes(query);
     if(!row.hidden){visible++;sectionVisible++;}
@@ -27,18 +31,30 @@ if(root){
    if(link)link.hidden=section.hidden;
   }
   root.dataset.brand=brand.value;
+  for(const button of groupButtons)button.setAttribute('aria-pressed',String(button.dataset.tokenGroup===group));
+  root.querySelector('.token-group-description').textContent=query?'Поиск по всем группам токенов.':descriptions[group];
   count.textContent=`${visible} из ${rows.length} токенов`;
   empty.hidden=visible!==0;
   const url=new URL(location.href);
-  for(const key of ['theme','appearance','density','category','q'])url.searchParams.delete(key);
+  if(resetHash)url.hash='';
+  for(const key of ['theme','appearance','density','category','q','group'])url.searchParams.delete(key);
+  if(group!=='main')url.searchParams.set('group',group);
   if(brand.value!=='DEFAULT')url.searchParams.set('theme',brand.value);
   if(category.value!=='all')url.searchParams.set('category',category.value);
   if(search.value)url.searchParams.set('q',search.value);
   history.replaceState(null,'',url);
  }
- search.addEventListener('input',update);
- category.addEventListener('change',update);
- brand.addEventListener('change',update);
+ for(const button of groupButtons)button.addEventListener('click',()=>{group=button.dataset.tokenGroup;category.value='all';search.value='';update(true);});
+ function revealHash(){
+  let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}
+  const target=document.getElementById(id);
+  const section=target?.closest('.token-section');
+  if(section){group=section.dataset.group;category.value='all';search.value='';update();target.scrollIntoView();}
+ }
+ window.addEventListener('hashchange',revealHash);
+ search.addEventListener('input',()=>update(true));
+ category.addEventListener('change',()=>{const section=sections.find(s=>s.dataset.category===category.value);if(section)group=section.dataset.group;update(true);});
+ brand.addEventListener('change',()=>update(true));
  root.addEventListener('click',async event=>{
   const copy=event.target.closest('[data-copy]');
   if(copy){
@@ -54,4 +70,5 @@ if(root){
   }
  });
  update();
+ revealHash();
 }

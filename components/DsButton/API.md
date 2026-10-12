@@ -15,7 +15,7 @@
 | `ds-control-h-sm`, `ds-control-h`, `ds-control-h-lg` | Высота размеров sm, md и lg с учётом плотности |
 | `ds-control-pad-x` | Горизонтальные отступы md и lg; у sm — 10 px |
 | `ds-gap-sm` | Интервал между текстом и иконкой |
-| `ds-radius-control` | Скругление кнопки |
+| `ds-radius-md` | Скругление кнопки |
 | `ds-type-ui`, `ds-type-body-strong` | Текст sm и md; усиленный текст lg |
 | `ds-icon-sm`, `ds-icon` | Единый размер левой и правой иконок и спиннера: sm использует ds-icon-sm, md/lg — ds-icon |
 | `ds-focus-width`, `ds-focus-color`, `ds-focus-offset` | Общее кольцо клавиатурного фокуса |

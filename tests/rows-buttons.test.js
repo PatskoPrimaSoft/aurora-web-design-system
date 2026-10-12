@@ -136,7 +136,7 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
   ok(partial.textContent.includes('Выбрано: 12 объектов'), 'DsBulkActionsBar: единая подпись частичного выбора');
   const buttons = [...partial.querySelectorAll('button')];
   ok(buttons.map(b => b.textContent).join('|') === 'Выбрать все 148|Экспорт|Снять выбор', 'DsBulkActionsBar: порядок и единственная кнопка сброса');
-  ok(buttons[2].style.height === 'var(--ds-control-h-sm)' && buttons[2].style.borderRadius === 'var(--ds-radius-control)', 'DsBulkActionsBar: выравнивание сброса не заменяет оформление DsButton');
+  ok(buttons[2].style.height === 'var(--ds-control-h-sm)' && buttons[2].style.borderRadius === 'var(--ds-radius-md)', 'DsBulkActionsBar: выравнивание сброса не заменяет оформление DsButton');
   click(buttons[0]); click(buttons[2]);
   ok(select.calls[0]?.[0] === true && clear.calls.length === 1, 'DsBulkActionsBar: выбрать все и очистить используют свои обработчики');
   const full = bulk({count: 148});

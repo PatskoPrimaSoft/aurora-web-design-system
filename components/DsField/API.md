@@ -6,7 +6,7 @@
 | `ds-surface`, `ds-fg` | Заливка и значение доступного поля |
 | `ds-bg` | Заливка поля только для чтения |
 | `ds-surface-disabled`, `ds-fg-disabled` | Заливка и значение недоступного поля |
-| `ds-border-width`, `ds-border-field`, `ds-radius-field` | Толщина, цвет границы и скругление оболочки |
+| `ds-border-width`, `ds-border-field`, `ds-radius-md` | Толщина, цвет границы и скругление оболочки |
 | `ds-border-field-hover` | Граница при наведении |
 | `ds-brand` | Граница оболочки при фокусе внутри |
 | `ds-focus-width`, `ds-focus-color`, `ds-focus-offset` | Кольцо фокуса общей оболочки |

@@ -1,8 +1,6 @@
 @media (prefers-reduced-motion:reduce){:root{
---ds-dur-instant:0ms; /* @kind other */
 --ds-dur-fast:0ms; /* @kind other */
 --ds-dur:0ms; /* @kind other */
---ds-dur-slow:0ms; /* @kind other */
 --ds-transition-control:none; /* @kind other */
 }}
 
