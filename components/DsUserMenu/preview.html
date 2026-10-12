@@ -1,17 +1,27 @@
-<!-- @dsCard aliases="меню пользователя|user menu" group="5 · Компоненты · навигация" height=300 subtitle="Меню пользователя в шапке — тот же DsMenu, что и меню строки" -->
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="меню пользователя|user menu" group="5 · Компоненты · навигация" height=300 subtitle="Меню пользователя в шапке — тот же DsMenu, что и меню строки" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
 .sep{width:1px;height:24px;background:var(--ds-divider)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{style:{height:260,display:'flex',alignItems:'flex-start',justifyContent:'flex-end',padding:8,background:'var(--ds-header-bg)'}},
-  h(S.DsUserMenu,{name:'Анна Иванова',email:'a.ivanova@example.com',items:[{id:'p',label:'Профиль'},{id:'l',label:'Язык'},{divider:true},{id:'x',label:'Выйти',icon:'exit_to_app'}]}));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    const [message,setMessage] = React.useState('Выберите действие в меню пользователя.');
+    return <LiveExamples>
+    <LiveExample id={"user-actions"} title={"Действия пользователя"} description={"Откройте меню пользователя и выберите действие. Escape закрывает меню и возвращает фокус к кнопке."}>
+    <div className="demo-stack">
+    <div style={{ minHeight: 260, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end', padding: 8, background: 'var(--ds-header-bg)' }}>
+    <S.DsUserMenu name={'Анна Иванова'} email={'a.ivanova@example.com'} items={[{ id: 'p', label: 'Профиль' }, { id: 'l', label: 'Язык' }, { divider: true }, { id: 'x', label: 'Выйти', icon: 'exit_to_app' }]} onSelect={item => setMessage('Выбрано: ' + item.label)}/>
+    </div>
+    <p role="status" aria-label="Результат выбора">{message}</p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

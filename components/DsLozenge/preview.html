@@ -1,42 +1,64 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=440 subtitle="Компактная метка статуса или значимого атрибута объекта" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · данные" height=440 subtitle="Компактная метка статуса или значимого атрибута объекта" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
 .grid>*{min-width:0}
-h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
-.section{display:flex;flex-direction:column;gap:16px}
-.examples{display:flex;flex-direction:column;gap:32px}
 .result{min-height:56px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-container)}
 .sep{width:1px;height:24px;background:var(--ds-divider)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var T=[['neutral','Стоянка'],['info','Некорректные'],['success','Движение'],['warning','Тревога'],['danger','Нет связи']],
-  tone=React.useState('success'),size=React.useState('md'),solid=React.useState(false),dot=React.useState(true),icon=React.useState(false),text=React.useState('Движение');
-  return h('div',{className:'examples'},
-    h('section',{className:'section','aria-label':'Настройка метки'},
-      h('h3',null,'Настройте метку'),
-      h('div',{className:'grid'},
-        h(S.DsField,{id:'lozenge-text',label:'Текст',value:text[0],onChange:function(e){text[1](e.target.value);},width:'100%'}),
-        h(S.DsField,{id:'lozenge-tone',label:'Тон',as:'select',value:tone[0],options:[{value:'neutral',label:'Нейтральный'},{value:'info',label:'Информация'},{value:'success',label:'Успех'},{value:'warning',label:'Предупреждение'},{value:'danger',label:'Ошибка'}],onChange:function(e){tone[1](e.target.value);},width:'100%'}),
-        h(S.DsField,{id:'lozenge-size',label:'Размер',as:'select',value:size[0],options:[{value:'sm',label:'Маленький — sm'},{value:'md',label:'Обычный — md'}],onChange:function(e){size[1](e.target.value);},width:'100%'})),
-      h('div',{className:'row'},
-        h(S.DsSwitch,{label:'Сплошная заливка',checked:solid[0],onChange:function(e){solid[1](e.target.checked);}}),
-        h(S.DsSwitch,{label:'Точка',checked:dot[0],onChange:function(e){dot[1](e.target.checked);}}),
-        h(S.DsSwitch,{label:'Иконка',checked:icon[0],onChange:function(e){icon[1](e.target.checked);}})),
-      h('div',{className:'result'},h('span',{className:'cap'},'Результат'),
-        h('div',{'aria-live':'polite','aria-atomic':'true','data-demo':'lozenge-result'},h(S.DsLozenge,{tone:tone[0],size:size[0],solid:solid[0],dot:dot[0],icon:icon[0]?'info':undefined},text[0])))),
-    h('section',{className:'section','aria-label':'Сравнение вариантов'},
-      h('h3',null,'Варианты'),
-      h('div',{className:'col'},
-        h('div',{className:'row'},T.map(function(t){return h(S.DsLozenge,{key:t[0],tone:t[0],dot:true},t[1]);})),
-        h('div',{className:'row'},T.map(function(t){return h(S.DsLozenge,{key:t[0],tone:t[0],solid:true,size:'sm'},t[1]);}),
-          h(S.DsLozenge,{tone:'info',icon:'info',size:'sm'},'Pro')))));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    var T = [['neutral', 'Стоянка'], ['info', 'Некорректные'], ['success', 'Движение'], ['warning', 'Тревога'], ['danger', 'Нет связи']], tone = React.useState('success'), size = React.useState('md'), solid = React.useState(false), dot = React.useState(true), icon = React.useState(false), text = React.useState('Движение');
+    return <LiveExamples>
+    <LiveExample id={"nastroyte-metku"} title={"Настройте метку"} description={"Изменяйте подпись, тон и размер метки, чтобы подобрать оформление статуса."}>
+    <div className={"demo-stack"}>
+    <div className={'grid'}>
+    <S.DsField id={'lozenge-text'} label={'Текст'} value={text[0]} onChange={function (e) { text[1](e.target.value); }} width={'100%'}/>
+    <S.DsField id={'lozenge-tone'} label={'Тон'} as={'select'} value={tone[0]} options={[{ value: 'neutral', label: 'Нейтральный' }, { value: 'info', label: 'Информация' }, { value: 'success', label: 'Успех' }, { value: 'warning', label: 'Предупреждение' }, { value: 'danger', label: 'Ошибка' }]} onChange={function (e) { tone[1](e.target.value); }} width={'100%'}/>
+    <S.DsField id={'lozenge-size'} label={'Размер'} as={'select'} value={size[0]} options={[{ value: 'sm', label: 'Маленький — sm' }, { value: 'md', label: 'Обычный — md' }]} onChange={function (e) { size[1](e.target.value); }} width={'100%'}/>
+    </div>
+    <div className={'row'}>
+    <S.DsSwitch label={'Сплошная заливка'} checked={solid[0]} onChange={function (e) { solid[1](e.target.checked); }}/>
+    <S.DsSwitch label={'Точка'} checked={dot[0]} onChange={function (e) { dot[1](e.target.checked); }}/>
+    <S.DsSwitch label={'Иконка'} checked={icon[0]} onChange={function (e) { icon[1](e.target.checked); }}/>
+    </div>
+    <div className={'result'}>
+    <span className={'cap'}>
+    {'Результат'}
+    </span>
+    <div aria-live={'polite'} aria-atomic={'true'} data-demo={'lozenge-result'}>
+    <S.DsLozenge tone={tone[0]} size={size[0]} solid={solid[0]} dot={dot[0]} icon={icon[0] ? 'info' : undefined}>
+    {text[0]}
+    </S.DsLozenge>
+    </div>
+    </div>
+    </div>
+    </LiveExample>
+    <LiveExample id={"varianty"} title={"Варианты"} description={"Сравните доступные варианты метки; тон передаёт смысл, а текст объясняет статус."}>
+    <div className={"demo-stack"}>
+    <div className={'col'}>
+    <div className={'row'}>
+    {T.map(function (t) { return <S.DsLozenge key={t[0]} tone={t[0]} dot={true}>
+    {t[1]}
+    </S.DsLozenge>; })}
+    </div>
+    <div className={'row'}>
+    {T.map(function (t) { return <S.DsLozenge key={t[0]} tone={t[0]} solid={true} size={'sm'}>
+    {t[1]}
+    </S.DsLozenge>; })}
+    <S.DsLozenge tone={'info'} icon={'info'} size={'sm'}>
+    {'Pro'}
+    </S.DsLozenge>
+    </div>
+    </div>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

@@ -1,56 +1,93 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · навигация" height=1550 subtitle="Выпадающее меню действий или выбора, привязанное к кнопке" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · навигация" height=1550 subtitle="Выпадающее меню действий или выбора, привязанное к кнопке" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:32px;min-width:0}
-section{display:flex;flex-direction:column;gap:16px;min-width:0}
-h3,p{margin:0}h3{font:var(--ds-type-body-strong)}
 .stage{padding-bottom:240px;display:flex;align-items:flex-start}
 .end{justify-content:flex-end;padding-bottom:184px}
 .controlled{padding-bottom:144px}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){
-  var archived=React.useState(false),setArchived=archived[1];
-  var favorite=React.useState(false),setFavorite=favorite[1];
-  var message=React.useState('Объект доступен для работы.'),setMessage=message[1];
-  var period=React.useState('day'),setPeriod=period[1];
-  var open=React.useState(false),setOpen=open[1];
-  var format=React.useState(''),setFormat=format[1];
-  var layers=React.useState(['objects']),setLayers=layers[1];
-  var layerOptions=[{id:'objects',label:'Объекты'},{id:'tracks',label:'Треки'},{id:'zones',label:'Геозоны'}];
-  var periods=[{id:'day',label:'Сегодня'},{id:'week',label:'За неделю'},{id:'month',label:'За месяц'}];
-  return h('div',{className:'examples'},
-    h('section',{'aria-labelledby':'actions'},h('h3',{id:'actions'},'Действия объекта'),
-      h('p',null,'Volvo FH16'+(favorite[0]?' · В избранном':'')+(archived[0]?' · В архиве':'')),
-      h('div',{className:'stage'},h(S.DsMenu,{width:'auto',trigger:h(S.DsIconButton,{icon:'more_vert',label:'Действия с Volvo FH16'}),items:[
-        {id:'favorite',icon:favorite[0]?'star':'star_border',label:favorite[0]?'Убрать из избранного':'Добавить в избранное',onClick:function(){setFavorite(!favorite[0]);setMessage(favorite[0]?'Объект убран из избранного.':'Объект добавлен в избранное.');}},
-        {id:'refresh',icon:'refresh',label:'Обновить данные',onClick:function(){setMessage('Данные объекта обновлены.');}},
-        {id:'report',icon:'description',label:'Создать отчёт',disabled:true},
-        {divider:true},
-        {id:'archive',icon:archived[0]?'unarchive':'archive',label:archived[0]?'Вернуть из архива':'В архив',tone:archived[0]?'default':'danger',onClick:function(){setArchived(!archived[0]);setMessage(archived[0]?'Объект возвращён из архива.':'Объект перемещён в архив.');}}
-      ]})),
-      h('p',{role:'status','aria-label':'Результат действия'},message[0]),
-      h('p',{className:'cap'},'Создание отчёта недоступно: у объекта пока нет истории поездок.')),
-    h('section',{'aria-labelledby':'choice'},h('h3',{id:'choice'},'Выбор периода'),
-      h('div',{className:'stage end'},h(S.DsMenu,{align:'end',width:220,trigger:h(S.DsButton,{tone:'secondary',icon:'expand_more'},'Период'),
-        header:h('span',null,'Период отчёта'),footer:h('span',{className:'cap'},'Время местное'),
-        items:periods.map(function(item){return Object.assign({},item,{type:'radio',checked:item.id===period[0]});}),onSelect:function(item){setPeriod(item.id);}})),
-      h('p',{role:'status','aria-label':'Выбранный период'},'Период: '+periods.find(function(item){return item.id===period[0];}).label+'.')),
-    h('section',{'aria-labelledby':'multiple'},h('h3',{id:'multiple'},'Выбор нескольких слоёв'),
-      h('div',{className:'stage controlled'},h(S.DsMenu,{menuLabel:'Слои карты',width:220,trigger:h(S.DsButton,{tone:'secondary',icon:'layers'},'Слои'),
-        items:layerOptions.map(function(item){return Object.assign({},item,{type:'checkbox',checked:layers[0].includes(item.id)});}),
-        onSelect:function(item){setLayers(function(value){return value.includes(item.id)?value.filter(function(id){return id!==item.id;}):value.concat(item.id);});}})),
-      h('p',{role:'status','aria-label':'Видимые слои'},'Показаны: '+(layerOptions.filter(function(item){return layers[0].includes(item.id);}).map(function(item){return item.label;}).join(', ')||'нет слоёв')+'.'),
-      h('p',{className:'cap'},'Можно выбрать несколько пунктов. Escape закрывает меню.')),
-    h('section',{'aria-labelledby':'controlled'},h('h3',{id:'controlled'},'Управляемое меню'),
-      h('div',{className:'stage controlled'},h(S.DsMenu,{open:open[0],onOpenChange:setOpen,width:220,trigger:h(S.DsButton,{tone:'secondary',icon:'download'},'Экспорт'),
-        items:[{id:'csv',label:'Скачать CSV'},{id:'xlsx',label:'Скачать XLSX'}],onSelect:function(item){setFormat(item.id.toUpperCase());}})),
-      h('p',{className:'cap'},open[0]?'Меню открыто.':'Меню закрыто.'),
-      h('p',{role:'status','aria-label':'Результат экспорта'},format[0]?'Выбран формат '+format[0]+'. В примере файл не создаётся.':'Выберите формат экспорта.'))
-  );
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    var archived = React.useState(false), setArchived = archived[1];
+    var favorite = React.useState(false), setFavorite = favorite[1];
+    var message = React.useState('Объект доступен для работы.'), setMessage = message[1];
+    var period = React.useState('day'), setPeriod = period[1];
+    var open = React.useState(false), setOpen = open[1];
+    var format = React.useState(''), setFormat = format[1];
+    var layers = React.useState(['objects']), setLayers = layers[1];
+    var layerOptions = [{ id: 'objects', label: 'Объекты' }, { id: 'tracks', label: 'Треки' }, { id: 'zones', label: 'Геозоны' }];
+    var periods = [{ id: 'day', label: 'Сегодня' }, { id: 'week', label: 'За неделю' }, { id: 'month', label: 'За месяц' }];
+    return <LiveExamples>
+    <LiveExample id={"actions"} title={"Действия объекта"} description={"Нажмите действие объекта и проверьте результат; доступное имя объясняет назначение кнопки."}>
+    <div className={"demo-stack"}>
+    <p>
+    {'Volvo FH16' + (favorite[0] ? ' · В избранном' : '') + (archived[0] ? ' · В архиве' : '')}
+    </p>
+    <div className={'stage'}>
+    <S.DsMenu width={'auto'} trigger={<S.DsIconButton icon={'more_vert'} label={'Действия с Volvo FH16'}/>} items={[
+        { id: 'favorite', icon: favorite[0] ? 'star' : 'star_border', label: favorite[0] ? 'Убрать из избранного' : 'Добавить в избранное', onClick: function () { setFavorite(!favorite[0]); setMessage(favorite[0] ? 'Объект убран из избранного.' : 'Объект добавлен в избранное.'); } },
+        { id: 'refresh', icon: 'refresh', label: 'Обновить данные', onClick: function () { setMessage('Данные объекта обновлены.'); } },
+        { id: 'report', icon: 'description', label: 'Создать отчёт', disabled: true },
+        { divider: true },
+        { id: 'archive', icon: archived[0] ? 'unarchive' : 'archive', label: archived[0] ? 'Вернуть из архива' : 'В архив', tone: archived[0] ? 'default' : 'danger', onClick: function () { setArchived(!archived[0]); setMessage(archived[0] ? 'Объект возвращён из архива.' : 'Объект перемещён в архив.'); } }
+    ]}/>
+    </div>
+    <p role={'status'} aria-label={'Результат действия'}>
+    {message[0]}
+    </p>
+    <p className={'cap'}>
+    {'Создание отчёта недоступно: у объекта пока нет истории поездок.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"choice"} title={"Выбор периода"} description={"Радиопункты позволяют выбрать ровно один период отчёта."}>
+    <div className={"demo-stack"}>
+    <div className={'stage end'}>
+    <S.DsMenu align={'end'} width={220} trigger={<S.DsButton tone={'secondary'} icon={'expand_more'}>
+    {'Период'}
+    </S.DsButton>} header={<span>
+    {'Период отчёта'}
+    </span>} footer={<span className={'cap'}>
+    {'Время местное'}
+    </span>} items={periods.map(function (item) { return Object.assign({}, item, { type: 'radio', checked: item.id === period[0] }); })} onSelect={function (item) { setPeriod(item.id); }}/>
+    </div>
+    <p role={'status'} aria-label={'Выбранный период'}>
+    {'Период: ' + periods.find(function (item) { return item.id === period[0]; }).label + '.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"multiple"} title={"Выбор нескольких слоёв"} description={"Выбирайте несколько слоёв независимо; Escape закрывает меню и возвращает фокус к кнопке."}>
+    <div className={"demo-stack"}>
+    <div className={'stage controlled'}>
+    <S.DsMenu menuLabel={'Слои карты'} width={220} trigger={<S.DsButton tone={'secondary'} icon={'layers'}>
+    {'Слои'}
+    </S.DsButton>} items={layerOptions.map(function (item) { return Object.assign({}, item, { type: 'checkbox', checked: layers[0].includes(item.id) }); })} onSelect={function (item) { setLayers(function (value) { return value.includes(item.id) ? value.filter(function (id) { return id !== item.id; }) : value.concat(item.id); }); }}/>
+    </div>
+    <p role={'status'} aria-label={'Видимые слои'}>
+    {'Показаны: ' + (layerOptions.filter(function (item) { return layers[0].includes(item.id); }).map(function (item) { return item.label; }).join(', ') || 'нет слоёв') + '.'}
+    </p>
+    <p className={'cap'}>
+    {'Можно выбрать несколько пунктов. Escape закрывает меню.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"controlled"} title={"Управляемое меню"} description={"Родитель управляет открытием меню и получает выбранный формат экспорта."}>
+    <div className={"demo-stack"}>
+    <div className={'stage controlled'}>
+    <S.DsMenu open={open[0]} onOpenChange={setOpen} width={220} trigger={<S.DsButton tone={'secondary'} icon={'download'}>
+    {'Экспорт'}
+    </S.DsButton>} items={[{ id: 'csv', label: 'Скачать CSV' }, { id: 'xlsx', label: 'Скачать XLSX' }]} onSelect={function (item) { setFormat(item.id.toUpperCase()); }}/>
+    </div>
+    <p className={'cap'}>
+    {open[0] ? 'Меню открыто.' : 'Меню закрыто.'}
+    </p>
+    <p role={'status'} aria-label={'Результат экспорта'}>
+    {format[0] ? 'Выбран формат ' + format[0] + '. В примере файл не создаётся.' : 'Выберите формат экспорта.'}
+    </p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

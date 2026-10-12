@@ -1,45 +1,79 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · навигация" height=800 subtitle="Шаги короткой задачи с возвратом к пройденным этапам" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · навигация" height=800 subtitle="Шаги короткой задачи с возвратом к пройденным этапам" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
-h3{font:var(--ds-type-label);margin:0 0 12px}
-p{margin:12px 0;color:var(--ds-fg-muted)}
 .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-@media(max-width:400px){body{padding:12px}}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var steps=[{id:'file',label:'Файл'},{id:'fields',label:'Поля',hint:'Сопоставление'},{id:'check',label:'Проверка'}];
-var longSteps=['Подготовка','Файл','Сопоставление','Проверка','Подтверждение','Результат'].map(function(label){return {label:label};});
-var content=['Выберите файл для импорта.','Сопоставьте столбцы файла с полями.','Проверьте данные перед импортом.'];
-function App(){var a=React.useState(1),finished=React.useState(false),revisited=React.useState(2),narrow=React.useState(3);
- function select(index){a[1](index);finished[1](false);}
- return h('div',{className:'examples'},
-  h('section',{'aria-labelledby':'flow-title'},
-   h('h3',{id:'flow-title'},'Прохождение задачи'),
-   h(S.DsStepper,{steps:steps,active:a[0],onSelect:finished[0]?undefined:select,isComplete:finished[0],ariaLabel:'Импорт объектов'}),
-   h('p',{role:'status'},finished[0]?'Импорт завершён.':content[a[0]]),
-   h('div',{className:'actions'},
-    h(S.DsButton,{tone:'secondary',disabled:a[0]===0||finished[0],onClick:function(){select(a[0]-1);}},'Назад'),
-    h(S.DsButton,{disabled:finished[0],onClick:function(){if(a[0]<steps.length-1)select(a[0]+1);else finished[1](true);}},a[0]===steps.length-1?'Импортировать':'Далее'),
-    h(S.DsButton,{tone:'ghost',onClick:function(){select(0);}},'Начать заново'))),
-  h('section',{'aria-labelledby':'return-title'},
-   h('h3',{id:'return-title'},'Возврат к завершённым шагам'),
-   h(S.DsStepper,{steps:[{id:'file',label:'Файл',disabled:true},steps[1],steps[2]],active:revisited[0],completed:[0,1],onSelect:revisited[1],ariaLabel:'Настройка импорта'}),
-   h('p',null,'Файл уже подтверждён, вернуться к нему нельзя. Шаг «Поля» можно открыть повторно; завершённость сохраняется.'),
-   h(S.DsButton,{tone:'secondary',disabled:revisited[0]===2,onClick:function(){revisited[1](2);}},'К проверке')),
-  h('section',{'aria-labelledby':'narrow-title'},
-   h('h3',{id:'narrow-title'},'На узком экране'),
-   h('div',{style:{maxWidth:360}},h(S.DsStepper,{steps:longSteps,active:narrow[0],onSelect:narrow[1],ariaLabel:'Подготовка набора'})),
-   h('p',null,'Переключайте этапы: текущий шаг остаётся видимым, цепочку можно прокручивать вручную.'),
-   h('div',{className:'actions'},
-    h(S.DsButton,{tone:'secondary',disabled:narrow[0]===0,onClick:function(){narrow[1](narrow[0]-1);}},'Предыдущий шаг'),
-    h(S.DsButton,{tone:'secondary',disabled:narrow[0]===longSteps.length-1,onClick:function(){narrow[1](narrow[0]+1);}},'Следующий шаг'))),
-  h('section',{'aria-labelledby':'readonly-title'},
-   h('h3',{id:'readonly-title'},'Только для чтения'),
-   h(S.DsStepper,{steps:steps,active:2,ariaLabel:'Подготовка экспорта'}),
-   h('p',null,'Без onSelect шаги показывают прогресс и не переключаются.')));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var steps = [{ id: 'file', label: 'Файл' }, { id: 'fields', label: 'Поля', hint: 'Сопоставление' }, { id: 'check', label: 'Проверка' }];
+var longSteps = ['Подготовка', 'Файл', 'Сопоставление', 'Проверка', 'Подтверждение', 'Результат'].map(function (label) { return { label: label }; });
+var content = ['Выберите файл для импорта.', 'Сопоставьте столбцы файла с полями.', 'Проверьте данные перед импортом.'];
+function App() {
+    var a = React.useState(1), finished = React.useState(false), revisited = React.useState(2), narrow = React.useState(3);
+    function select(index) { a[1](index); finished[1](false); }
+    return <LiveExamples>
+    <LiveExample id={"flow-title"} title={"Прохождение задачи"} description={"Заполните шаги по порядку: текущий этап и доступные переходы следуют состоянию задачи."}>
+    <div className={"demo-stack"}>
+    <S.DsStepper steps={steps} active={a[0]} onSelect={finished[0] ? undefined : select} isComplete={finished[0]} ariaLabel={'Импорт объектов'}/>
+    <p role={'status'}>
+    {finished[0] ? 'Импорт завершён.' : content[a[0]]}
+    </p>
+    <div className={'actions'}>
+    <S.DsButton tone={'secondary'} disabled={a[0] === 0 || finished[0]} onClick={function () { select(a[0] - 1); }}>
+    {'Назад'}
+    </S.DsButton>
+    <S.DsButton disabled={finished[0]} onClick={function () {
+        if (a[0] < steps.length - 1)
+            select(a[0] + 1);
+        else
+            finished[1](true);
+    }}>
+    {a[0] === steps.length - 1 ? 'Импортировать' : 'Далее'}
+    </S.DsButton>
+    <S.DsButton tone={'ghost'} onClick={function () { select(0); }}>
+    {'Начать заново'}
+    </S.DsButton>
+    </div>
+    </div>
+    </LiveExample>
+    <LiveExample id={"return-title"} title={"Возврат к завершённым шагам"} description={"Вернитесь к уже пройденному этапу, чтобы проверить или изменить данные."}>
+    <div className={"demo-stack"}>
+    <S.DsStepper steps={[{ id: 'file', label: 'Файл', disabled: true }, steps[1], steps[2]]} active={revisited[0]} completed={[0, 1]} onSelect={revisited[1]} ariaLabel={'Настройка импорта'}/>
+    <p>
+    {'Файл уже подтверждён, вернуться к нему нельзя. Шаг «Поля» можно открыть повторно; завершённость сохраняется.'}
+    </p>
+    <S.DsButton tone={'secondary'} disabled={revisited[0] === 2} onClick={function () { revisited[1](2); }}>
+    {'К проверке'}
+    </S.DsButton>
+    </div>
+    </LiveExample>
+    <LiveExample id={"narrow-title"} title={"На узком экране"} description={"Посмотрите, как шаги располагаются при ограниченной ширине."}>
+    <div className={"demo-stack"}>
+    <div style={{ maxWidth: 360 }}>
+    <S.DsStepper steps={longSteps} active={narrow[0]} onSelect={narrow[1]} ariaLabel={'Подготовка набора'}/>
+    </div>
+    <p>
+    {'Переключайте этапы: текущий шаг остаётся видимым, цепочку можно прокручивать вручную.'}
+    </p>
+    <div className={'actions'}>
+    <S.DsButton tone={'secondary'} disabled={narrow[0] === 0} onClick={function () { narrow[1](narrow[0] - 1); }}>
+    {'Предыдущий шаг'}
+    </S.DsButton>
+    <S.DsButton tone={'secondary'} disabled={narrow[0] === longSteps.length - 1} onClick={function () { narrow[1](narrow[0] + 1); }}>
+    {'Следующий шаг'}
+    </S.DsButton>
+    </div>
+    </div>
+    </LiveExample>
+    <LiveExample id={"readonly-title"} title={"Только для чтения"} description={"Индикатор показывает прогресс без предложения перейти к другому этапу."}>
+    <div className={"demo-stack"}>
+    <S.DsStepper steps={steps} active={2} ariaLabel={'Подготовка экспорта'}/>
+    <p>
+    {'Без onSelect шаги показывают прогресс и не переключаются.'}
+    </p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

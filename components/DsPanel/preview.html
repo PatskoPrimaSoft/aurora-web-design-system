@@ -1,36 +1,102 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · раскладка" height=1400 subtitle="Панель содержимого с заголовком, действиями и необязательным подвалом" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · раскладка" height=1400 subtitle="Панель содержимого с заголовком, действиями и необязательным подвалом" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:24px}.example{display:flex;flex-direction:column;gap:12px;min-width:0}
-h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .content{display:flex;flex-direction:column;gap:12px}.entry{padding:12px 0;border-bottom:1px solid var(--ds-border)}
 .state{min-height:180px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:12px}.edge{padding:16px;background:var(--ds-bg-sunken)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var value=React.useState('AB 3390-6'),saved=React.useState('AB 3390-6'),padding=React.useState(true),flush=React.useState(false),scroll=React.useState(true),saving=React.useState(false),scenario=React.useState('ready'),state=React.useState('ready'),timer=React.useRef(null),saveTimer=React.useRef(null);
-React.useEffect(function(){return function(){clearTimeout(timer.current);clearTimeout(saveTimer.current)}},[]);
-function load(){clearTimeout(timer.current);state[1]('loading');timer.current=setTimeout(function(){state[1](scenario[0]==='error'?'ready':scenario[0])},900)}
-function save(){saving[1](true);var plate=value[0];saveTimer.current=setTimeout(function(){saved[1](plate);saving[1](false)},900)}
-return h('div',{className:'examples'},
- h('section',{className:'example'},h('h3',null,'Заголовок, действия и подвал'),
-  h(S.DsPanel,{eyebrow:'Транспорт',title:'Scania R450',headingLevel:'h4',actions:h(S.DsButton,{tone:'ghost',size:'sm',disabled:saving[0],onClick:function(){value[1](saved[0])}},'Сбросить'),footer:h(React.Fragment,null,h(S.DsButton,{tone:'secondary',size:'sm',disabled:saving[0],onClick:function(){value[1](saved[0])}},'Отменить'),h(S.DsButton,{size:'sm',loading:saving[0],onClick:save},'Сохранить'))},
-   h('div',{className:'content'},h(S.DsField,{label:'Госномер',value:value[0],disabled:saving[0],onChange:function(e){value[1](e.target.value)},mono:true}),h('p',{className:'cap',role:'status'},saving[0]?'Сохранение…':value[0]===saved[0]?'Сохранено: '+saved[0]:'Есть несохранённые изменения.')))),
- h('section',{className:'example'},h('h3',null,'Отступы и рамка'),
-  h('div',{className:'row'},h(S.DsButton,{tone:!padding[0]?'primary':'secondary','aria-pressed':!padding[0],onClick:function(){padding[1](!padding[0])}},'Без отступов'),h(S.DsButton,{tone:flush[0]?'primary':'secondary','aria-pressed':flush[0],onClick:function(){flush[1](!flush[0])}},'Без рамки')),
-  h(S.DsPanel,{title:'Содержимое панели',headingLevel:'h4',padding:padding[0],flush:flush[0]},h('div',{className:'edge'},'Эта область показывает границы тела. Отключите отступы, чтобы содержимое доходило до краёв панели.')),
-  h('p',{className:'cap'},'padding управляет только телом. flush убирает внешнюю рамку и скругление, сохраняя разделители шапки и подвала.')),
- h('section',{className:'example'},h('h3',null,'Длинное содержимое'),
-  h('div',{className:'row'},h(S.DsButton,{tone:scroll[0]?'primary':'secondary','aria-pressed':scroll[0],onClick:function(){scroll[1](!scroll[0])}},'Прокрутка тела')),
-  h(S.DsPanel,{title:'История изменений',headingLevel:'h4',scroll:scroll[0],height:scroll[0]?280:undefined,footer:h('span',{className:'cap'},'12 записей')},h('div',{className:'content'},Array.from({length:12},function(_,i){return h('p',{className:'entry',key:i},'Запись '+(i+1)+' · обновлены сведения о транспортном средстве.')}))),
-  h('p',{className:'cap'},'При ограниченной высоте прокручивается тело, шапка и подвал остаются видимыми. Отключите прокрутку, чтобы панель росла вместе со страницей. Arrow Down и Page Down прокручивают тело после перехода к нему через Tab.')),
- h('section',{className:'example'},h('h3',null,'Загрузка и результат'),
-  h('div',{className:'row',role:'group','aria-label':'Результат загрузки'},[['ready','С данными'],['empty','Пусто'],['error','Ошибка']].map(function(item){return h(S.DsButton,{key:item[0],tone:scenario[0]===item[0]?'primary':'secondary','aria-pressed':scenario[0]===item[0],onClick:function(){clearTimeout(timer.current);scenario[1](item[0]);state[1](item[0])}},item[1])})),
-  h(S.DsPanel,{title:'Уведомления о событиях и изменениях транспортных средств',headingLevel:'h4',actions:h(S.DsButton,{tone:'secondary',size:'sm',loading:state[0]==='loading',onClick:load},state[0]==='error'?'Повторить':'Обновить')},
-   h('div',{className:'state'},state[0]==='loading'?h(S.DsSpinner,{label:'Загрузка уведомлений',size:32}):state[0]==='empty'?h(S.DsEmptyState,{size:'sm',headingLevel:'h5',title:'Уведомлений пока нет',description:'Новые события появятся здесь.',announcement:'polite'}):state[0]==='error'?h(S.DsEmptyState,{size:'sm',headingLevel:'h5',tone:'danger',icon:'error',title:'Не удалось загрузить уведомления',description:'Нажмите «Повторить» в шапке панели.',announcement:'polite'}):h('p',{role:'status'},'Данные обновлены. Новых событий: 3.'))),
-  h('p',{className:'cap'},'Выберите результат и запустите обновление. После ошибки повторная попытка завершится успешно; кнопка в шапке сохраняет фокус.')));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    var value = React.useState('AB 3390-6'), saved = React.useState('AB 3390-6'), padding = React.useState(true), flush = React.useState(false), scroll = React.useState(true), saving = React.useState(false), scenario = React.useState('ready'), state = React.useState('ready'), timer = React.useRef(null), saveTimer = React.useRef(null);
+    React.useEffect(function () { return function () { clearTimeout(timer.current); clearTimeout(saveTimer.current); }; }, []);
+    function load() { clearTimeout(timer.current); state[1]('loading'); timer.current = setTimeout(function () { state[1](scenario[0] === 'error' ? 'ready' : scenario[0]); }, 900); }
+    function save() { saving[1](true); var plate = value[0]; saveTimer.current = setTimeout(function () { saved[1](plate); saving[1](false); }, 900); }
+    return <LiveExamples>
+    <LiveExample id={"zagolovok-deystviya-i-podval"} title={"Заголовок, действия и подвал"} description={"Панель объединяет название области, её действия, содержимое и нижнюю часть."}>
+    <div className={"demo-stack"}>
+    <S.DsPanel eyebrow={'Транспорт'} title={'Scania R450'} headingLevel={'h4'} actions={<S.DsButton tone={'ghost'} size={'sm'} disabled={saving[0]} onClick={function () { value[1](saved[0]); }}>
+    {'Сбросить'}
+    </S.DsButton>} footer={<React.Fragment>
+    <S.DsButton tone={'secondary'} size={'sm'} disabled={saving[0]} onClick={function () { value[1](saved[0]); }}>
+    {'Отменить'}
+    </S.DsButton>
+    <S.DsButton size={'sm'} loading={saving[0]} onClick={save}>
+    {'Сохранить'}
+    </S.DsButton>
+    </React.Fragment>}>
+    <div className={'content'}>
+    <S.DsField label={'Госномер'} value={value[0]} disabled={saving[0]} onChange={function (e) { value[1](e.target.value); }} mono={true}/>
+    <p className={'cap'} role={'status'}>
+    {saving[0] ? 'Сохранение…' : value[0] === saved[0] ? 'Сохранено: ' + saved[0] : 'Есть несохранённые изменения.'}
+    </p>
+    </div>
+    </S.DsPanel>
+    </div>
+    </LiveExample>
+    <LiveExample id={"otstupy-i-ramka"} title={"Отступы и рамка"} description={"Сравните варианты оформления панели; внешнее расположение задаёт её родитель."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    <S.DsButton tone={!padding[0] ? 'primary' : 'secondary'} aria-pressed={!padding[0]} onClick={function () { padding[1](!padding[0]); }}>
+    {'Без отступов'}
+    </S.DsButton>
+    <S.DsButton tone={flush[0] ? 'primary' : 'secondary'} aria-pressed={flush[0]} onClick={function () { flush[1](!flush[0]); }}>
+    {'Без рамки'}
+    </S.DsButton>
+    </div>
+    <S.DsPanel title={'Содержимое панели'} headingLevel={'h4'} padding={padding[0]} flush={flush[0]}>
+    <div className={'edge'}>
+    {'Эта область показывает границы тела. Отключите отступы, чтобы содержимое доходило до краёв панели.'}
+    </div>
+    </S.DsPanel>
+    <p className={'cap'}>
+    {'padding управляет только телом. flush убирает внешнюю рамку и скругление, сохраняя разделители шапки и подвала.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"dlinnoe-soderzhimoe"} title={"Длинное содержимое"} description={"Проверьте поведение панели при большом количестве записей."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    <S.DsButton tone={scroll[0] ? 'primary' : 'secondary'} aria-pressed={scroll[0]} onClick={function () { scroll[1](!scroll[0]); }}>
+    {'Прокрутка тела'}
+    </S.DsButton>
+    </div>
+    <S.DsPanel title={'История изменений'} headingLevel={'h4'} scroll={scroll[0]} height={scroll[0] ? 280 : undefined} footer={<span className={'cap'}>
+    {'12 записей'}
+    </span>}>
+    <div className={'content'}>
+    {Array.from({ length: 12 }, function (_, i) { return <p className={'entry'} key={i}>
+    {'Запись ' + (i + 1) + ' · обновлены сведения о транспортном средстве.'}
+    </p>; })}
+    </div>
+    </S.DsPanel>
+    <p className={'cap'}>
+    {'При ограниченной высоте прокручивается тело, шапка и подвал остаются видимыми. Отключите прокрутку, чтобы панель росла вместе со страницей. Arrow Down и Page Down прокручивают тело после перехода к нему через Tab.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"zagruzka-i-rezultat"} title={"Загрузка и результат"} description={"Запустите загрузку и проследите переход от ожидания к содержимому."}>
+    <div className={"demo-stack"}>
+    <div className={'row'} role={'group'} aria-label={'Результат загрузки'}>
+    {[['ready', 'С данными'], ['empty', 'Пусто'], ['error', 'Ошибка']].map(function (item) { return <S.DsButton key={item[0]} tone={scenario[0] === item[0] ? 'primary' : 'secondary'} aria-pressed={scenario[0] === item[0]} onClick={function () { clearTimeout(timer.current); scenario[1](item[0]); state[1](item[0]); }}>
+    {item[1]}
+    </S.DsButton>; })}
+    </div>
+    <S.DsPanel title={'Уведомления о событиях и изменениях транспортных средств'} headingLevel={'h4'} actions={<S.DsButton tone={'secondary'} size={'sm'} loading={state[0] === 'loading'} onClick={load}>
+    {state[0] === 'error' ? 'Повторить' : 'Обновить'}
+    </S.DsButton>}>
+    <div className={'state'}>
+    {state[0] === 'loading' ? <S.DsSpinner label={'Загрузка уведомлений'} size={32}/> : state[0] === 'empty' ? <S.DsEmptyState size={'sm'} headingLevel={'h5'} title={'Уведомлений пока нет'} description={'Новые события появятся здесь.'} announcement={'polite'}/> : state[0] === 'error' ? <S.DsEmptyState size={'sm'} headingLevel={'h5'} tone={'danger'} icon={'error'} title={'Не удалось загрузить уведомления'} description={'Нажмите «Повторить» в шапке панели.'} announcement={'polite'}/> : <p role={'status'}>
+    {'Данные обновлены. Новых событий: 3.'}
+    </p>}
+    </div>
+    </S.DsPanel>
+    <p className={'cap'}>
+    {'Выберите результат и запустите обновление. После ошибки повторная попытка завершится успешно; кнопка в шапке сохраняет фокус.'}
+    </p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

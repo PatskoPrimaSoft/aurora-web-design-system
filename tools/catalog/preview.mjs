@@ -1,9 +1,11 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join, resolve, relative, posix } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse, parseFragment, serialize } from 'parse5';
-import { transform } from 'esbuild';
+import { transform,build } from 'esbuild';
 import {scopeOptions,applyQueryScope} from '../../catalog/state.js';
 import {readCards} from './index.mjs';
+import hljs from 'highlight.js/lib/common';
 
 const attr = (node, name) => node.attrs?.find(a => a.name === name)?.value;
 function setAttr(node, name, value) {
@@ -13,13 +15,15 @@ function setAttr(node, name, value) {
 export async function renderPreview({ root, card, mode = 'legacy', scope, standalone = false }) {
   if (!['legacy', 'current'].includes(mode)) throw new Error(`Unknown preview mode: ${mode}`);
   const doc = parse(readFileSync(join(root, card.previewPath), 'utf8'));
-  let head, html;
+  let head, html, examplesBody, exampleSources;
   const tasks = [];
   const walk = node => {
     if (node.tagName === 'head') head = node;
     if (node.tagName === 'html') html = node;
+    if (node.tagName === 'body'&&attr(node,'data-ds-examples')!==undefined) examplesBody=node;
     if (node.tagName === 'base') node._remove = true;
     if (node.tagName === 'script') {
+      if(attr(node,'id')==='example-code-sources')exampleSources=node;
       const src = attr(node, 'src');
       if (src && /(?:react(?:-dom)?\.production|bundle\.js|babel(?:\.min)?\.js|(?:^|\/)(?:runtime|components)\.js(?:[?#]|$))/.test(src)) { node._remove = true; return; }
       const type = attr(node, 'type') ?? '';
@@ -55,6 +59,22 @@ export async function renderPreview({ root, card, mode = 'legacy', scope, standa
   };
   walk(doc);
   await Promise.all(tasks);
+  if(exampleSources&&attr(exampleSources,'data-ds-example-sources')!==undefined){
+    const sourcePath=resolve(root,posix.dirname(card.previewPath),attr(exampleSources,'data-ds-example-sources'));
+    if(relative(root,sourcePath).startsWith('..'))throw new Error(`${card.previewPath}: example sources outside repository`);
+    const sources=JSON.parse(readFileSync(sourcePath,'utf8'));
+    const highlighted=Object.fromEntries(Object.entries(sources).map(([id,source])=>[id,{source,html:hljs.highlight(source,{language:'jsx',ignoreIllegals:true}).value}]));
+    exampleSources.childNodes=[{nodeName:'#text',value:JSON.stringify(highlighted).replaceAll('<','\\u003c'),parentNode:exampleSources}];
+    exampleSources.attrs=exampleSources.attrs.filter(a=>a.name!=='data-ds-example-sources');
+  }
+  if(examplesBody){
+    for(const [name,value]of Object.entries({theme:'DEFAULT',appearance:'light',density:'cozy'}))setAttr(examplesBody,'data-ds-'+name,value);
+    const template=await build({entryPoints:[fileURLToPath(new URL('../../catalog/live-examples.jsx',import.meta.url))],bundle:true,write:false,format:'iife',globalName:'DsLiveExamples',target:'es2020',logLevel:'silent'});
+    const styles=['live-examples.css','code-blocks.css'].map(file=>readFileSync(new URL('../../catalog/'+file,import.meta.url),'utf8')).join('\n');
+    const shared=parseFragment(`<style>${styles}</style><script>${template.outputFiles[0].text.replace(/<\/script/gi,'<\\/script')}</script>`).childNodes;
+    for(const node of shared)node.parentNode=head;
+    head.childNodes.push(...shared);
+  }
   if(mode==='current'){
     let title=head.childNodes.find(node=>node.tagName==='title');
     if(!title){title=parseFragment('<title></title>').childNodes[0];title.parentNode=head;head.childNodes.push(title);}
@@ -66,6 +86,7 @@ export async function renderPreview({ root, card, mode = 'legacy', scope, standa
     : ['/runtime.js', '/components.js'];
   const base = posix.dirname(card.previewPath);
   const local = file => posix.relative(base, file.replace(/^\//, ''));
+  if(examplesBody)setAttr(html,'data-ds-example-card-url',local('index.html')+'?card='+encodeURIComponent(card.id));
   const baseHref = standalone ? './' : '/' + (base === '.' ? '' : base + '/');
   const count=mode==='current'&&card.id==='overview'?`<script>window.__DS_CARD_COUNT__=${existsSync(join(root,'cards.json'))?JSON.parse(readFileSync(join(root,'cards.json'),'utf8')).length:readCards(root).length};</script>`:'';
   const injected = parseFragment(`<base href="${baseHref}">${count}<script>(${applyQueryScope.toString()})(${JSON.stringify(scopeOptions)})</script><link rel="stylesheet" href="${local('dist/styles.css')}">${scripts.map(src => `<script src="${local(src)}"></script>`).join('')}`).childNodes;

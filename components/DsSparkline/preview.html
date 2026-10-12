@@ -1,18 +1,31 @@
-<!-- @dsCard group="5 · Компоненты · графики" height=110 subtitle="Микротренд в ячейке или строке: только форма, без осей и подписей" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · графики" height=110 subtitle="Микротренд в ячейке или строке: только форма, без осей и подписей" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
 .sep{width:1px;height:24px;background:var(--ds-divider)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var D=[12,14,13,17,16,19,18,22,21];
-  return h('div',{className:'row'},h(S.DsSparkline,{data:D,dot:true}),h(S.DsSparkline,{data:[40,38,35,null,30,26,24],tone:'danger',label:'Уровень топлива падает'}),
-    h(S.DsSparkline,{data:D,tone:'brand',area:false,width:120}),h(S.DsSparkline,{data:D,tone:'muted'}));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    var D = [12, 14, 13, 17, 16, 19, 18, 22, 21];
+    return <LiveExamples>
+    <LiveExample id={"trend-line"} title={"Краткий тренд"} description={"Линия передаёт изменение значения без осей; последняя точка выделена."}>
+    <S.DsSparkline data={D} dot={true}/>
+    </LiveExample>
+    <LiveExample id={"trend-gap"} title={"Разрыв данных"} description={"Отсутствующее измерение не соединяется линией; тон подчёркивает значимость тренда."}>
+    <S.DsSparkline data={[40, 38, 35, null, 30, 26, 24]} tone={'danger'} label={'Уровень топлива падает'}/>
+    </LiveExample>
+    <LiveExample id={"trend-no-area"} title={"Без заливки"} description={"Линия без области подходит для компактного размещения рядом с числом."}>
+    <S.DsSparkline data={D} tone={'brand'} area={false} width={120}/>
+    </LiveExample>
+    <LiveExample id={"trend-muted"} title={"Нейтральный тренд"} description={"Нейтральный тон оставляет акцент на основном значении."}>
+    <S.DsSparkline data={D} tone={'muted'}/>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

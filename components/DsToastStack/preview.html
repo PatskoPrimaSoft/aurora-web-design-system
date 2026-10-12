@@ -1,37 +1,100 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=520 subtitle="Размещает очередь уведомлений внизу страницы по центру или справа" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · обратная связь" height=520 subtitle="Размещает очередь уведомлений внизу страницы по центру или справа" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
-h3{font:var(--ds-type-label);margin:0 0 12px}
 .toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .description{margin:12px 0 0;color:var(--ds-fg-muted)}
 .demo{position:relative;transform:translateZ(0);overflow-wrap:anywhere}
-@media(max-width:400px){body{padding:12px}}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function QueueExample(){var items=React.useState([1,2,3,4,5]),serial=React.useRef(5),position=React.useState('bottom-center'),order=React.useState('oldest-first'),toolbar=React.useRef(null),trigger=React.useRef(null);
- React.useLayoutEffect(function(){trigger.current=toolbar.current.querySelector('button');},[]);
- function dismiss(id){items[1](function(list){return list.filter(function(item){return item!==id;});});}
- return h('section',{'aria-label':'Очередь и позиция'},h('h3',null,'Очередь, порядок и позиция'),
-  h('div',{className:'toolbar',ref:toolbar},
-   h(S.DsButton,{tone:'secondary',disabled:items[0].length>=8,onClick:function(){serial.current++;var id=serial.current;items[1](function(list){return list.concat(id);});}},'Добавить уведомление'),
-   h(S.DsButton,{tone:'subtle',onClick:function(){position[1](position[0]==='bottom-center'?'bottom-right':'bottom-center');}},position[0]==='bottom-center'?'Разместить справа':'Разместить по центру'),
-   h(S.DsButton,{tone:'subtle',onClick:function(){order[1](order[0]==='oldest-first'?'newest-first':'oldest-first');}},order[0]==='oldest-first'?'Новые сверху':'Старые сверху')),
-  h('p',{className:'description'},'Видно: '+Math.min(3,items[0].length)+'. Ожидают: '+Math.max(0,items[0].length-3)+'. Закройте сообщение — появится следующее. В примере можно добавить до восьми.'),
-  h('p',{className:'description'},'Перейдите к кнопке закрытия клавишей Tab и нажмите Enter. Фокус перейдёт к соседнему сообщению, после последнего — к кнопке добавления.'),
-  h('div',{className:'demo',style:{minHeight:items[0].length?Math.min(items[0].length,3)*112+56:0}},h(S.DsToastStack,{position:position[0],order:order[0],label:'Результаты операций',returnFocusRef:trigger},items[0].map(function(id){return h(S.DsToast,{key:id,tone:id%2?'success':'info',announcement:id<=3?'off':'polite',closeLabel:'Закрыть уведомление '+id,onClose:function(){dismiss(id);}},id===5?'Экспорт 5 готов. Отчёт включает объекты всех подразделений и данные за последний месяц. Файл доступен в разделе отчётов.':id%2?'Изменение '+id+' сохранено.':'Экспорт '+id+' готов к скачиванию.');}))),
-  !items[0].length?h('p',{className:'description'},'Нет уведомлений. Добавьте новое, чтобы снова увидеть стек.'):null);}
-function PortalExample(){var host=React.useState(null),show=React.useState(false),trigger=React.useRef(null);
- return h('section',{'aria-label':'Portal и обрезающий контейнер'},h('h3',null,'Portal за пределами обрезающего контейнера'),
-  h('p',{className:'description'},'У кнопки — родитель с transform и overflow: hidden. Уведомление выводится через portal в соседний контейнер и остаётся видимым целиком.'),
-  h('div',{className:'demo',ref:host[1],style:{minHeight:show[0]?200:56}},
-   h('div',{style:{transform:'translateZ(0)',overflow:'hidden',height:48}},h(S.DsButton,{tone:'secondary',onClick:function(e){trigger.current=e.currentTarget;show[1](true);}},'Показать через portal'),
-    host[0]?h(S.DsToastStack,{container:host[0],label:'Результат сохранения',returnFocusRef:trigger},show[0]?h(S.DsToast,{key:'portal',tone:'success',onClose:function(){show[1](false);}},'Настройки сохранены. Тост не обрезается родителем кнопки.'):null):null)));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function QueueExample() {
+    var items = React.useState([1, 2, 3, 4, 5]), serial = React.useRef(5), position = React.useState('bottom-center'), order = React.useState('oldest-first'), toolbar = React.useRef(null), trigger = React.useRef(null);
+    React.useLayoutEffect(function () { trigger.current = toolbar.current.querySelector('button'); }, []);
+    function dismiss(id) { items[1](function (list) { return list.filter(function (item) { return item !== id; }); }); }
+    return <div className={"demo-stack"}>
+    <div className={'toolbar'} ref={toolbar}>
+    <S.DsButton tone={'secondary'} disabled={items[0].length >= 8} onClick={function () { serial.current++; var id = serial.current; items[1](function (list) { return list.concat(id); }); }}>
+    {'Добавить уведомление'}
+    </S.DsButton>
+    <S.DsButton tone={'subtle'} onClick={function () { position[1](position[0] === 'bottom-center' ? 'bottom-right' : 'bottom-center'); }}>
+    {position[0] === 'bottom-center' ? 'Разместить справа' : 'Разместить по центру'}
+    </S.DsButton>
+    <S.DsButton tone={'subtle'} onClick={function () { order[1](order[0] === 'oldest-first' ? 'newest-first' : 'oldest-first'); }}>
+    {order[0] === 'oldest-first' ? 'Новые сверху' : 'Старые сверху'}
+    </S.DsButton>
+    </div>
+    <p className={'description'}>
+    {'Видно: ' + Math.min(3, items[0].length) + '. Ожидают: ' + Math.max(0, items[0].length - 3) + '. Закройте сообщение — появится следующее. В примере можно добавить до восьми.'}
+    </p>
+    <p className={'description'}>
+    {'Перейдите к кнопке закрытия клавишей Tab и нажмите Enter. Фокус перейдёт к соседнему сообщению, после последнего — к кнопке добавления.'}
+    </p>
+    <div className={'demo'} style={{ minHeight: items[0].length ? Math.min(items[0].length, 3) * 112 + 56 : 0 }}>
+    <S.DsToastStack position={position[0]} order={order[0]} label={'Результаты операций'} returnFocusRef={trigger}>
+    {items[0].map(function (id) { return <S.DsToast key={id} tone={id % 2 ? 'success' : 'info'} announcement={id <= 3 ? 'off' : 'polite'} closeLabel={'Закрыть уведомление ' + id} onClose={function () { dismiss(id); }}>
+    {id === 5 ? 'Экспорт 5 готов. Отчёт включает объекты всех подразделений и данные за последний месяц. Файл доступен в разделе отчётов.' : id % 2 ? 'Изменение ' + id + ' сохранено.' : 'Экспорт ' + id + ' готов к скачиванию.'}
+    </S.DsToast>; })}
+    </S.DsToastStack>
+    </div>
+    {!items[0].length ? <p className={'description'}>
+    {'Нет уведомлений. Добавьте новое, чтобы снова увидеть стек.'}
+    </p> : null}
+    </div>;
 }
-function DialogExample(){var open=React.useState(false),show=React.useState(false),saveButton=React.useRef(null),host=React.useState(null);return h('section',{'aria-label':'Уведомление поверх диалога'},h('h3',null,'Уведомление поверх диалога'),h(S.DsButton,{tone:'secondary',onClick:function(){open[1](true);}},'Открыть диалог'),
- h('div',{className:'demo',style:{minHeight:open[0]?420:0}},open[0]?h(S.DsDialog,{title:'Настройки отчёта',size:'sm',onClose:function(){open[1](false);show[1](false);}},h('p',null,'Уведомление остаётся внутри доступной области диалога.'),h(S.DsButton,{onClick:function(e){saveButton.current=e.currentTarget;show[1](true);}},'Сохранить в диалоге'),h('div',{ref:host[1]}),host[0]?h(S.DsToastStack,{container:host[0],returnFocusRef:saveButton},show[0]?h(S.DsToast,{key:'saved',tone:'success',onClose:function(){show[1](false);}},'Настройки отчёта сохранены.'):null):null):null));}
-function App(){return h('div',{className:'examples'},h(QueueExample),h(PortalExample),h(DialogExample));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+function PortalExample() {
+    var host = React.useState(null), show = React.useState(false), trigger = React.useRef(null);
+    return <div className={"demo-stack"}>
+    <p className={'description'}>
+    {'У кнопки — родитель с transform и overflow: hidden. Уведомление выводится через portal в соседний контейнер и остаётся видимым целиком.'}
+    </p>
+    <div className={'demo'} ref={host[1]} style={{ minHeight: show[0] ? 200 : 56 }}>
+    <div style={{ transform: 'translateZ(0)', overflow: 'hidden', height: 48 }}>
+    <S.DsButton tone={'secondary'} onClick={function (e) { trigger.current = e.currentTarget; show[1](true); }}>
+    {'Показать через portal'}
+    </S.DsButton>
+    {host[0] ? <S.DsToastStack container={host[0]} label={'Результат сохранения'} returnFocusRef={trigger}>
+    {show[0] ? <S.DsToast key={'portal'} tone={'success'} onClose={function () { show[1](false); }}>
+    {'Настройки сохранены. Тост не обрезается родителем кнопки.'}
+    </S.DsToast> : null}
+    </S.DsToastStack> : null}
+    </div>
+    </div>
+    </div>;
+}
+function DialogExample() {
+    var open = React.useState(false), show = React.useState(false), saveButton = React.useRef(null), host = React.useState(null);
+    return <div className={"demo-stack"}>
+    <S.DsButton tone={'secondary'} onClick={function () { open[1](true); }}>
+    {'Открыть диалог'}
+    </S.DsButton>
+    <div className={'demo'} style={{ minHeight: open[0] ? 420 : 0 }}>
+    {open[0] ? <S.DsDialog title={'Настройки отчёта'} size={'sm'} onClose={function () { open[1](false); show[1](false); }}>
+    <p>
+    {'Уведомление остаётся внутри доступной области диалога.'}
+    </p>
+    <S.DsButton onClick={function (e) { saveButton.current = e.currentTarget; show[1](true); }}>
+    {'Сохранить в диалоге'}
+    </S.DsButton>
+    <div ref={host[1]}/>
+    {host[0] ? <S.DsToastStack container={host[0]} returnFocusRef={saveButton}>
+    {show[0] ? <S.DsToast key={'saved'} tone={'success'} onClose={function () { show[1](false); }}>
+    {'Настройки отчёта сохранены.'}
+    </S.DsToast> : null}
+    </S.DsToastStack> : null}
+    </S.DsDialog> : null}
+    </div>
+    </div>;
+}
+function App() { return <LiveExamples>
+<LiveExample id={"ochered-poryadok-i-pozitsiya"} title={"Очередь, порядок и позиция"} description={"Добавляйте уведомления, меняйте размещение и проверяйте порядок очереди."}>
+<QueueExample />
+</LiveExample>
+<LiveExample id={"portal-za-predelami-obrezayuschego-konteynera"} title={"Portal за пределами обрезающего контейнера"} description={"Уведомления выходят из обрезающей области через portal и остаются доступными."}>
+<PortalExample />
+</LiveExample>
+<LiveExample id={"uvedomlenie-poverh-dialoga"} title={"Уведомление поверх диалога"} description={"Откройте диалог и выполните действие: уведомление остаётся видимым поверх модального слоя."}>
+<DialogExample />
+</LiveExample>
+</LiveExamples>; }
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

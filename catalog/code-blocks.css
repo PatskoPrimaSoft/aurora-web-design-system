@@ -1,0 +1,25 @@
+.code-block{border:1px solid var(--ds-border);border-radius:var(--ds-radius-container);margin:20px 0;min-width:0;background:var(--ds-bg)}
+.code-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 16px;border-bottom:1px solid var(--ds-border);background:var(--ds-surface);border-radius:var(--ds-radius-container) var(--ds-radius-container) 0 0}
+.code-language{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.code-copy{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-control);padding:6px 12px;cursor:pointer}
+.code-copy:hover{background:var(--ds-surface-hover)}
+.code-copy:disabled{cursor:wait;color:var(--ds-fg-muted)}
+.reference .code-block pre,.example-code .code-block pre{margin:0;border:0;border-radius:0;background:transparent;max-width:100%;padding:20px;overflow:auto}
+.code-block pre code{display:block;font:var(--ds-type-mono);line-height:1.7;tab-size:2;color:var(--ds-fg)}
+.code-copy-status{display:block;padding:0 16px 12px;font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.code-copy-status:empty{padding:0}
+/* Semantic foreground tokens keep highlighted code readable in both appearances. */
+.code-block .hljs-keyword,.code-block .hljs-selector-tag,.code-block .hljs-name{color:var(--ds-brand-text);font-weight:var(--ds-weight-semibold)}
+.code-block .hljs-string,.code-block .hljs-attr,.code-block .hljs-selector-class{color:var(--ds-success-fg)}
+.code-block .hljs-number,.code-block .hljs-literal,.code-block .hljs-built_in{color:var(--ds-warning-fg)}
+.code-block .hljs-title,.code-block .hljs-type{color:var(--ds-brand-text)}
+.code-block .hljs-comment,.code-block .hljs-meta{color:var(--ds-fg-muted)}
+.code-copy:focus-visible,.code-block pre:focus-visible,.example-code summary:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+.example-code{margin-top:12px;min-width:0}
+.example-code summary{cursor:pointer;color:var(--ds-brand-text);font:var(--ds-type-body);padding:8px 0;list-style:none}
+.example-code summary::-webkit-details-marker{display:none}
+.example-code summary::before{content:'＋';display:inline-block;width:24px}
+.example-code[open] summary::before{content:'−'}
+.example-code .code-hide,.example-code[open] .code-show{display:none}
+.example-code[open] .code-hide{display:inline}
+.example-code .code-block{margin:8px 0 0}

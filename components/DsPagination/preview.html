@@ -1,32 +1,42 @@
-<!-- @dsCard layout="component" aliases="пагинация|pagination|страницы" group="5 · Компоненты · данные" height=700 subtitle="Переключение страниц и количества строк в подвале таблицы или панели" -->
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="пагинация|pagination|страницы" group="5 · Компоненты · данные" height=700 subtitle="Переключение страниц и количества строк в подвале таблицы или панели" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:32px}
-section{display:flex;flex-direction:column;gap:12px;min-width:0}
-h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
 .list{list-style:none;padding:0;margin:0}
 .list li{padding:8px 0;border-bottom:1px solid var(--ds-divider)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
 .narrow{width:100%;max-width:280px}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var objects=Array.from({length:148},function(_,i){return {id:i+1,name:'Объект '+String(i+1).padStart(2,'0')};});
-function Example(props){
- var page=React.useState(0),size=React.useState(5),data=props.empty?[]:objects;
- var visible=data.slice(page[0]*size[0],(page[0]+1)*size[0]);
- return h('section',{'aria-label':props.title,className:props.compact?'narrow':undefined},
-  h('h3',null,props.title),
-  h('div',{'aria-live':'polite','aria-atomic':'true'},
-   visible.length?h('ul',{className:'list'},visible.map(function(item){return h('li',{key:item.id},item.name);})):h('p',{className:'cap'},'Ничего не найдено')),
-  h(S.DsPagination,{page:page[0],pageSize:size[0],length:data.length,compact:props.compact,
-   pageSizeOptions:[5,10,25],onPageChange:page[1],ariaLabel:props.title,
-   onPageSizeChange:props.compact?undefined:function(next){size[1](next);page[1](0);}}));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var objects = Array.from({ length: 148 }, function (_, i) { return { id: i + 1, name: 'Объект ' + String(i + 1).padStart(2, '0') }; });
+function Example(props) {
+    var page = React.useState(0), size = React.useState(5), data = props.empty ? [] : objects;
+    var visible = data.slice(page[0] * size[0], (page[0] + 1) * size[0]);
+    return <div className={props.compact ? 'demo-stack narrow' : 'demo-stack'}>
+    <div aria-live={'polite'} aria-atomic={'true'}>
+    {visible.length ? <ul className={'list'}>
+    {visible.map(function (item) { return <li key={item.id}>
+    {item.name}
+    </li>; })}
+    </ul> : <p className={'cap'}>
+    {'Ничего не найдено'}
+    </p>}
+    </div>
+    <S.DsPagination page={page[0]} pageSize={size[0]} length={data.length} compact={props.compact} pageSizeOptions={[5, 10, 25]} onPageChange={page[1]} ariaLabel={props.title} onPageSizeChange={props.compact ? undefined : function (next) { size[1](next); page[1](0); }}/>
+    </div>;
 }
-function App(){return h('div',{className:'examples'},
- h(Example,{title:'Страницы и количество строк'}),
- h(Example,{title:'Компактный вариант',compact:true}),
- h(Example,{title:'Пустой результат',empty:true}));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+function App() {
+    return <LiveExamples>
+    <LiveExample id={"stranitsy-i-kolichestvo-strok"} title={"Страницы и количество строк"} description={"Переключайте страницы и количество строк; видимый список следует выбранным настройкам."}>
+    <Example title={'Страницы и количество строк'}/>
+    </LiveExample>
+    <LiveExample id={"kompaktnyy-variant"} title={"Компактный вариант"} description={"Компактная пагинация занимает меньше места в узкой панели."}>
+    <Example title={'Компактный вариант'} compact={true}/>
+    </LiveExample>
+    <LiveExample id={"pustoy-rezultat"} title={"Пустой результат"} description={"При отсутствии записей покажите понятное сообщение и сохраните контекст области."}>
+    <Example title={'Пустой результат'} empty={true}/>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

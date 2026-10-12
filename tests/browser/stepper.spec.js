@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
@@ -9,7 +10,7 @@ test('DsStepper exposes step states, completion and keyboard/pointer feedback in
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
    await page.setViewportSize({width,height:900});
    await page.goto(served.url+`/index.html?card=DsStepper&theme=${theme}&appearance=${appearance}&density=${density}`);
-   const f=page.frameLocator('#preview'),flow=f.getByRole('region',{name:'Прохождение задачи'});
+   const f=page.frameLocator('#preview'),flow=exampleDemo(f,'Прохождение задачи');
    const list=flow.getByRole('list',{name:'Импорт объектов'});
    const file=list.getByRole('button',{name:/Файл.*Шаг 1 из 3/});
    await file.hover();await expect(file).not.toHaveCSS('background-color','rgba(0, 0, 0, 0)');
@@ -24,12 +25,12 @@ test('DsStepper exposes step states, completion and keyboard/pointer feedback in
    await expect(flow.getByRole('status')).toHaveText('Импорт завершён.');
    await expect(list.locator('[aria-current]')).toHaveCount(0);await expect(list.locator('.material-symbols-outlined')).toHaveCount(3);await expect(list.getByRole('button')).toHaveCount(0);
    await flow.getByRole('button',{name:'Начать заново'}).click();await expect(list.locator('[aria-current="step"]')).toHaveCount(1);
-   const revisit=f.getByRole('region',{name:'Возврат к завершённым шагам'});
+   const revisit=exampleDemo(f,'Возврат к завершённым шагам');
    await expect(revisit.getByRole('button',{name:/Файл.*завершён, недоступен/})).toBeDisabled();
    const fields=revisit.getByRole('button',{name:/Поля/});await fields.focus();await page.keyboard.press('Space');
    await expect(fields).toHaveAttribute('aria-current','step');await expect(fields.locator('[aria-hidden="true"]').first()).toHaveText('2');
    await revisit.getByRole('button',{name:'К проверке'}).click();await expect(fields.locator('.material-symbols-outlined')).toHaveText('check');
-   await expect(f.getByRole('region',{name:'Только для чтения'}).getByRole('button')).toHaveCount(0);
+   await expect(exampleDemo(f,'Только для чтения').getByRole('button')).toHaveCount(0);
    expect(await f.locator('body').evaluate(el=>el.scrollWidth<=innerWidth)).toBe(true);
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   }

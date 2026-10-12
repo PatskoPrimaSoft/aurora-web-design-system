@@ -1,90 +1,118 @@
-<!-- @dsCard layout="component" aliases="таблица|table|строки" group="5 · Компоненты · данные" height=2000 subtitle="Табличные данные с сортировкой, выбором строк и просмотром объекта" -->
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="таблица|table|строки" group="5 · Компоненты · данные" height=2000 subtitle="Табличные данные с сортировкой, выбором строк и просмотром объекта" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:32px}
 .footer{display:flex;flex-wrap:wrap;align-items:center;gap:12px}.footer nav{flex:1;min-width:0}
 .fixed-example{max-width:640px}
-section{display:flex;flex-direction:column;gap:12px;min-width:0}
-h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var ROWS=[
- {id:1,name:'MAZ 5440',plate:'AB 1234-7',group:'Грузовики',state:'moving',speed:62},
- {id:2,name:'Volvo FH16',plate:'AC 8871-2',group:'Грузовики',state:'parked',speed:0},
- {id:3,name:'GAZ Next',plate:'AH 4402-1',group:'Фургоны',state:'offline',speed:null},
- {id:4,name:'Scania R450',plate:'AB 3390-6',group:'Грузовики',state:'alarm',speed:91}];
-var TONE={moving:'success',parked:'neutral',offline:'danger',alarm:'warning'},LABEL={moving:'Движение',parked:'Стоянка',offline:'Нет связи',alarm:'Тревога'};
-var columns=[{key:'name',label:'Объект',sortable:true,strong:true},{key:'plate',label:'Номер',mono:true},
- {key:'group',label:'Группа',sortable:true},{key:'state',label:'Состояние',render:function(r){return h(S.DsLozenge,{tone:TONE[r.state],dot:true},LABEL[r.state]);}},
- {key:'speed',label:'Скорость, км/ч',mono:true,align:'right',render:function(r){return r.speed===null?'—':r.speed;}}];
-function SortedTable(){
- var sort=React.useState({key:'name',dir:'asc'});
- var rows=ROWS.slice().sort(function(a,b){return a[sort[0].key].localeCompare(b[sort[0].key],'ru')*(sort[0].dir==='asc'?1:-1);});
- return h('section',{'aria-label':'Сортировка'},h('h3',null,'Сортировка'),
-  h(S.DsTable,{columns:columns,rows:rows,ariaLabel:'Объекты с сортировкой',sortKey:sort[0].key,sortDir:sort[0].dir,
-   onSort:function(key,dir){sort[1]({key:key,dir:dir});}}));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var ROWS = [
+    { id: 1, name: 'MAZ 5440', plate: 'AB 1234-7', group: 'Грузовики', state: 'moving', speed: 62 },
+    { id: 2, name: 'Volvo FH16', plate: 'AC 8871-2', group: 'Грузовики', state: 'parked', speed: 0 },
+    { id: 3, name: 'GAZ Next', plate: 'AH 4402-1', group: 'Фургоны', state: 'offline', speed: null },
+    { id: 4, name: 'Scania R450', plate: 'AB 3390-6', group: 'Грузовики', state: 'alarm', speed: 91 }
+];
+var TONE = { moving: 'success', parked: 'neutral', offline: 'danger', alarm: 'warning' }, LABEL = { moving: 'Движение', parked: 'Стоянка', offline: 'Нет связи', alarm: 'Тревога' };
+var columns = [{ key: 'name', label: 'Объект', sortable: true, strong: true }, { key: 'plate', label: 'Номер', mono: true },
+    { key: 'group', label: 'Группа', sortable: true }, { key: 'state', label: 'Состояние', render: function (r) { return <S.DsLozenge tone={TONE[r.state]} dot={true}>
+        {LABEL[r.state]}
+        </S.DsLozenge>; } },
+    { key: 'speed', label: 'Скорость, км/ч', mono: true, align: 'right', render: function (r) { return r.speed === null ? '—' : r.speed; } }];
+function SortedTable() {
+    var sort = React.useState({ key: 'name', dir: 'asc' });
+    var rows = ROWS.slice().sort(function (a, b) { return a[sort[0].key].localeCompare(b[sort[0].key], 'ru') * (sort[0].dir === 'asc' ? 1 : -1); });
+    return <div className={"demo-stack"}>
+    <S.DsTable columns={columns} rows={rows} ariaLabel={'Объекты с сортировкой'} sortKey={sort[0].key} sortDir={sort[0].dir} onSort={function (key, dir) { sort[1]({ key: key, dir: dir }); }}/>
+    </div>;
 }
-function ViewingTable(){
- var active=React.useState(4),viewed=ROWS.find(function(row){return row.id===active[0];});
- return h('section',{'aria-label':'Просмотр объектов'},h('h3',null,'Просмотр объектов'),
-  h('p',{className:'cap'},'Нажмите строку для просмотра, повторно — чтобы снять просмотр.'),
-  h(S.DsTable,{columns:columns.map(function(c){return Object.assign({},c,{sortable:false});}),rows:ROWS,
-   ariaLabel:'Просмотр объектов',activeId:active[0],onRowClick:function(row){active[1](function(id){return id===row.id?null:row.id;});}}),
-  h('p',{className:'cap','aria-live':'polite'},'Просмотр: '+(viewed?viewed.name:'не выбран')));
+function ViewingTable() {
+    var active = React.useState(4), viewed = ROWS.find(function (row) { return row.id === active[0]; });
+    return <div className={"demo-stack"}>
+    <p className={'cap'}>
+    {'Нажмите строку для просмотра, повторно — чтобы снять просмотр.'}
+    </p>
+    <S.DsTable columns={columns.map(function (c) { return Object.assign({}, c, { sortable: false }); })} rows={ROWS} ariaLabel={'Просмотр объектов'} activeId={active[0]} onRowClick={function (row) { active[1](function (id) { return id === row.id ? null : row.id; }); }}/>
+    <p className={'cap'} aria-live={'polite'}>
+    {'Просмотр: ' + (viewed ? viewed.name : 'не выбран')}
+    </p>
+    </div>;
 }
-function SelectionTable(){
- var selected=React.useState([2]);
- return h('section',{'aria-label':'Выбор объектов'},h('h3',null,'Выбор объектов'),
-  h('p',{className:'cap'},'Выбирайте объекты чекбоксами; чекбокс заголовка выбирает все строки таблицы.'),
-  h(S.DsTable,{columns:columns.map(function(c){return Object.assign({},c,{sortable:false});}),rows:ROWS,
-   ariaLabel:'Выбор объектов',selectable:true,selectedIds:selected[0],
-   onToggleRow:function(id){selected[1](function(ids){return ids.includes(id)?ids.filter(function(x){return x!==id;}):ids.concat(id);});},
-   onToggleVisible:function(visible,next){selected[1](function(ids){return next==='checked'?Array.from(new Set(ids.concat(visible))):ids.filter(function(id){return !visible.includes(id);});});},
-   footer:h('span',{'aria-live':'polite'},'Выбрано: '+selected[0].length)}));
+function SelectionTable() {
+    var selected = React.useState([2]);
+    return <div className={"demo-stack"}>
+    <p className={'cap'}>
+    {'Выбирайте объекты чекбоксами; чекбокс заголовка выбирает все строки таблицы.'}
+    </p>
+    <S.DsTable columns={columns.map(function (c) { return Object.assign({}, c, { sortable: false }); })} rows={ROWS} ariaLabel={'Выбор объектов'} selectable={true} selectedIds={selected[0]} onToggleRow={function (id) { selected[1](function (ids) { return ids.includes(id) ? ids.filter(function (x) { return x !== id; }) : ids.concat(id); }); }} onToggleVisible={function (visible, next) { selected[1](function (ids) { return next === 'checked' ? Array.from(new Set(ids.concat(visible))) : ids.filter(function (id) { return !visible.includes(id); }); }); }} footer={<span aria-live={'polite'}>
+    {'Выбрано: ' + selected[0].length}
+    </span>}/>
+    </div>;
 }
-function EmptyTable(){
- var restored=React.useState(false);
- return h('section',{'aria-label':'Пустой результат'},h('h3',null,'Пустой результат'),
-  h(S.DsTable,{ariaLabel:'Результаты поиска объектов',columns:[{key:'name',label:'Объект',strong:true},{key:'group',label:'Группа'}],rows:restored[0]?ROWS:[],
-   empty:h(S.DsEmptyState,{size:'sm',icon:'search',title:'Объекты не найдены',description:'Измените условия поиска или сбросьте фильтры.',
-    action:h(S.DsButton,{variant:'secondary',size:'sm',onClick:function(){restored[1](true);}},'Сбросить фильтры')})}),
-  restored[0]?h(S.DsButton,{variant:'secondary',size:'sm',onClick:function(){restored[1](false);}},'Показать пустой результат'):null);
+function EmptyTable() {
+    var restored = React.useState(false);
+    return <div className={"demo-stack"}>
+    <S.DsTable ariaLabel={'Результаты поиска объектов'} columns={[{ key: 'name', label: 'Объект', strong: true }, { key: 'group', label: 'Группа' }]} rows={restored[0] ? ROWS : []} empty={<S.DsEmptyState size={'sm'} icon={'search'} title={'Объекты не найдены'} description={'Измените условия поиска или сбросьте фильтры.'} action={<S.DsButton variant={'secondary'} size={'sm'} onClick={function () { restored[1](true); }}>
+    {'Сбросить фильтры'}
+    </S.DsButton>}/>}/>
+    {restored[0] ? <S.DsButton variant={'secondary'} size={'sm'} onClick={function () { restored[1](false); }}>
+    {'Показать пустой результат'}
+    </S.DsButton> : null}
+    </div>;
 }
-
-var ALL_ROWS=Array.from({length:12},function(_,i){var source=ROWS[i%ROWS.length];return Object.assign({},source,{id:i+1,name:'Объект '+String(i+1).padStart(2,'0')});});
-function PagedTable(){
- var page=React.useState(0),size=React.useState(4),selected=React.useState([]),all=React.useState(false);
- var visible=ALL_ROWS.slice(page[0]*size[0],(page[0]+1)*size[0]);
- function updateSelection(change){
-  selected[1](function(ids){return change(all[0]?ALL_ROWS.map(function(r){return r.id;}):ids);});
-  all[1](false);
- }
- function clear(){selected[1]([]);all[1](false);}
- return h('section',{'aria-label':'Пагинация и количество строк'},h('h3',null,'Пагинация и количество строк'),
-  h('p',{className:'cap'},'Выбор сохраняется при переключении страниц и изменении количества строк. Чекбокс заголовка выбирает страницу, затем можно выбрать все 12 результатов.'),
-  h(S.DsTable,{ariaLabel:'Объекты с выбором между страницами',columns:[{key:'name',label:'Объект',strong:true},{key:'plate',label:'Номер',mono:true},{key:'group',label:'Группа'}],
-   rows:visible,selectable:true,selectedIds:selected[0],allSelected:all[0],totalCount:ALL_ROWS.length,
-   onToggleRow:function(id){updateSelection(function(ids){return ids.includes(id)?ids.filter(function(x){return x!==id;}):ids.concat(id);});},
-   onToggleVisible:function(ids,next){updateSelection(function(current){return next==='checked'?Array.from(new Set(current.concat(ids))):current.filter(function(id){return !ids.includes(id);});});},
-   onSelectAll:function(){all[1](true);},onClearSelection:clear,
-   footer:h('div',{className:'footer'},
-    h('span',{'aria-live':'polite'},'Выбрано: '+(all[0]?ALL_ROWS.length:selected[0].length)),
-    !all[0]&&selected[0].length?h(S.DsButton,{variant:'secondary',size:'sm',onClick:clear},'Снять выбор'):null,
-    h(S.DsPagination,{page:page[0],pageSize:size[0],pageSizeOptions:[4,8,12],length:ALL_ROWS.length,onPageChange:page[1],onPageSizeChange:function(next){size[1](next);page[1](0);},ariaLabel:'Страницы объектов'}))}));
+var ALL_ROWS = Array.from({ length: 12 }, function (_, i) { var source = ROWS[i % ROWS.length]; return Object.assign({}, source, { id: i + 1, name: 'Объект ' + String(i + 1).padStart(2, '0') }); });
+function PagedTable() {
+    var page = React.useState(0), size = React.useState(4), selected = React.useState([]), all = React.useState(false);
+    var visible = ALL_ROWS.slice(page[0] * size[0], (page[0] + 1) * size[0]);
+    function updateSelection(change) {
+        selected[1](function (ids) { return change(all[0] ? ALL_ROWS.map(function (r) { return r.id; }) : ids); });
+        all[1](false);
+    }
+    function clear() { selected[1]([]); all[1](false); }
+    return <div className={"demo-stack"}>
+    <p className={'cap'}>
+    {'Выбор сохраняется при переключении страниц и изменении количества строк. Чекбокс заголовка выбирает страницу, затем можно выбрать все 12 результатов.'}
+    </p>
+    <S.DsTable ariaLabel={'Объекты с выбором между страницами'} columns={[{ key: 'name', label: 'Объект', strong: true }, { key: 'plate', label: 'Номер', mono: true }, { key: 'group', label: 'Группа' }]} rows={visible} selectable={true} selectedIds={selected[0]} allSelected={all[0]} totalCount={ALL_ROWS.length} onToggleRow={function (id) { updateSelection(function (ids) { return ids.includes(id) ? ids.filter(function (x) { return x !== id; }) : ids.concat(id); }); }} onToggleVisible={function (ids, next) { updateSelection(function (current) { return next === 'checked' ? Array.from(new Set(current.concat(ids))) : current.filter(function (id) { return !ids.includes(id); }); }); }} onSelectAll={function () { all[1](true); }} onClearSelection={clear} footer={<div className={'footer'}>
+    <span aria-live={'polite'}>
+    {'Выбрано: ' + (all[0] ? ALL_ROWS.length : selected[0].length)}
+    </span>
+    {!all[0] && selected[0].length ? <S.DsButton variant={'secondary'} size={'sm'} onClick={clear}>
+    {'Снять выбор'}
+    </S.DsButton> : null}
+    <S.DsPagination page={page[0]} pageSize={size[0]} pageSizeOptions={[4, 8, 12]} length={ALL_ROWS.length} onPageChange={page[1]} onPageSizeChange={function (next) { size[1](next); page[1](0); }} ariaLabel={'Страницы объектов'}/>
+    </div>}/>
+    </div>;
 }
-function FixedTable(){
- var active=React.useState(null);
- return h('section',{'aria-label':'Длинный текст',className:'fixed-example'},h('h3',null,'Длинный текст'),
-  h('p',{className:'cap'},'Фиксированные столбцы. Наведите на сокращённый текст или перейдите к нему через Tab, чтобы прочитать полностью.'),
-  h(S.DsTable,{caption:'Назначения транспорта',fixedLayout:true,activeId:active[0],onRowClick:function(row){active[1](function(id){return id===row.id?null:row.id;});},
-   columns:[{key:'name',label:'Объект',width:'35%',strong:true},{key:'description',label:'Назначение'}],
-   rows:[{id:1,name:'Грузовик 01 — основной автомобиль северного маршрута',description:'Доставка оборудования на распределительный склад в промышленной зоне'},
-    {id:2,name:'Фургон 02',description:'Перевозка расходных материалов между региональными подразделениями'}]}));
+function FixedTable() {
+    var active = React.useState(null);
+    return <div className="demo-stack fixed-example">
+    <p className={'cap'}>
+    {'Фиксированные столбцы. Наведите на сокращённый текст или перейдите к нему через Tab, чтобы прочитать полностью.'}
+    </p>
+    <S.DsTable caption={'Назначения транспорта'} fixedLayout={true} activeId={active[0]} onRowClick={function (row) { active[1](function (id) { return id === row.id ? null : row.id; }); }} columns={[{ key: 'name', label: 'Объект', width: '35%', strong: true }, { key: 'description', label: 'Назначение' }]} rows={[{ id: 1, name: 'Грузовик 01 — основной автомобиль северного маршрута', description: 'Доставка оборудования на распределительный склад в промышленной зоне' },
+        { id: 2, name: 'Фургон 02', description: 'Перевозка расходных материалов между региональными подразделениями' }]}/>
+    </div>;
 }
-
-function App(){return h('div',{className:'examples'},h(SortedTable),h(ViewingTable),h(SelectionTable),h(PagedTable),h(FixedTable),h(EmptyTable));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+function App() { return <LiveExamples>
+<LiveExample id={"sortirovka"} title={"Сортировка"} description={"Нажмите заголовок столбца, чтобы изменить поле и направление сортировки."}>
+<SortedTable />
+</LiveExample>
+<LiveExample id={"prosmotr-obektov"} title={"Просмотр объектов"} description={"Откройте объект нажатием строки или отдельного действия."}>
+<ViewingTable />
+</LiveExample>
+<LiveExample id={"vybor-obektov"} title={"Выбор объектов"} description={"Выбирайте строки отдельно или всей группой; выбранный набор объявляется рядом с таблицей."}>
+<SelectionTable />
+</LiveExample>
+<LiveExample id={"paginatsiya-i-kolichestvo-strok"} title={"Пагинация и количество строк"} description={"Переключайте страницы и размер страницы, сохраняя читаемый набор строк."}>
+<PagedTable />
+</LiveExample>
+<LiveExample id={"dlinnyy-tekst"} title={"Длинный текст"} description={"Сравните поведение длинных значений в пределах доступной ширины таблицы."}>
+<FixedTable />
+</LiveExample>
+<LiveExample id={"pustoy-rezultat"} title={"Пустой результат"} description={"При отсутствии записей покажите понятное сообщение и сохраните контекст области."}>
+<EmptyTable />
+</LiveExample>
+</LiveExamples>; }
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

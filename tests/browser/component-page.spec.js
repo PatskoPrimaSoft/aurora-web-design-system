@@ -2,8 +2,48 @@ import {test,expect} from '@playwright/test';
 import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
+import {chooseCatalogueScope} from './helpers/catalogue-scope.js';
 
 const root=fileURLToPath(new URL('../../',import.meta.url));
+test('preview settings preserve the light documentation shell and interactive state',async({page})=>{
+  await buildCatalogue({root,outDir:`${root}/site`});
+  const served=await serveRoot(`${root}/site`);
+  try{
+    await page.goto(`${served.url}/index.html?card=DsCheckbox`);
+    const frame=page.frameLocator('#preview');
+    const demo=frame.locator('[data-ds-example-demo]').first();
+    await expect(demo).toBeVisible();
+    const initialDemoBackground=await demo.evaluate(node=>getComputedStyle(node).backgroundColor);
+    const initialDescriptionColor=await frame.locator('.example-description').first().evaluate(node=>getComputedStyle(node).color);
+    const checkbox=frame.getByRole('checkbox',{name:'Отправка команд',exact:true});
+    await checkbox.focus();
+    await page.keyboard.press('Space');
+    await expect(checkbox).not.toBeChecked();
+    const shellStyle=()=>page.locator('main').evaluate(node=>{
+      const style=getComputedStyle(node);
+      return {background:style.backgroundColor,color:style.color,font:style.font};
+    });
+    const initial=await shellStyle();
+    await chooseCatalogueScope(page,'theme','RED2');
+    await chooseCatalogueScope(page,'appearance','dark');
+    await chooseCatalogueScope(page,'density','compact');
+    await expect(frame.locator('html')).toHaveAttribute('data-ds-appearance','dark');
+    await expect(frame.locator('html')).toHaveAttribute('data-ds-theme','RED2');
+    await expect(frame.locator('html')).toHaveAttribute('data-ds-density','compact');
+    await expect(demo).toHaveAttribute('data-ds-appearance','dark');
+    await expect(demo).toHaveAttribute('data-ds-theme','RED2');
+    await expect(demo).toHaveAttribute('data-ds-density','compact');
+    expect(await demo.evaluate(node=>getComputedStyle(node).backgroundColor)).not.toBe(initialDemoBackground);
+    expect(await frame.locator('.example-description').first().evaluate(node=>getComputedStyle(node).color)).toBe(initialDescriptionColor);
+    expect(await shellStyle()).toEqual(initial);
+    await expect(checkbox).not.toBeChecked();
+    await page.reload();
+    expect(await shellStyle()).toEqual(initial);
+    await expect(page.locator('#appearance')).toContainText('Тёмное');
+    await expect(frame.locator('html')).toHaveAttribute('data-ds-appearance','dark');
+  }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
+});
+
 test('component page keeps one reading order, inline reference and responsive preview',async({page},testInfo)=>{
   const cards=await buildCatalogue({root,outDir:`${root}/site`});
   expect(cards.find(card=>card.id==='DsCheckbox').layout).toBe('component');
@@ -31,12 +71,14 @@ test('component page keeps one reading order, inline reference and responsive pr
         overflow:iframe.contentDocument.documentElement.scrollWidth>iframe.clientWidth,
       }));
       await expect.poll(async()=>{const size=await fit();return Math.abs(size.outer-size.content)}).toBeLessThanOrEqual(3);
+      await page.locator('main').evaluate(node=>node.scrollTop=0);
       await page.screenshot({path:testInfo.outputPath(`component-${theme}-${appearance}.png`),fullPage:true});
       await page.setViewportSize({width:390,height:900});
       await expect.poll(async()=>{const size=await fit();return Math.abs(size.outer-size.content)}).toBeLessThanOrEqual(3);
       expect((await fit()).overflow).toBe(false);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
       await expect(page.locator('#viewports .preview-scroll')).not.toHaveAttribute('tabindex');
+      await page.locator('main').evaluate(node=>node.scrollTop=0);
       await page.screenshot({path:testInfo.outputPath(`component-mobile-${theme}-${appearance}.png`),fullPage:true});
       await page.getByRole('button',{name:'Сравнить 4 режима'}).click();
       await expect(page.locator('#viewports iframe')).toHaveCount(4);

@@ -1,38 +1,57 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=700 subtitle="Строка объекта со статусом, подписью, значением и дополнительными действиями" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · данные" height=700 subtitle="Строка объекта со статусом, подписью, значением и дополнительными действиями" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:32px}
-.section{display:flex;flex-direction:column;gap:16px;min-width:0}
 .list{display:flex;flex-direction:column;gap:2px;max-width:560px;min-width:0}
 .choice{display:flex;align-items:center;gap:var(--ds-gap-sm);min-width:0}
-h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var objects=[
-  {title:'MAZ 5440',subtitle:'AB 1234-7 · Движется',state:'moving',course:135,value:'62 км/ч',valueMeta:'Иванов П.'},
-  {title:'Volvo FH16',subtitle:'AC 8871-2 · Стоянка',state:'parked',value:'0 км/ч'},
-  {title:'Служебный автомобиль северо-западного подразделения',subtitle:'AE 3401-7 · Нет связи',state:'offline'}];
-function ListExample(props){
-  var canView=props.mode!=='select',canSelect=props.mode!=='view',
-    active=React.useState(0),selected=React.useState([1]),message=React.useState(''),checkSide=React.useState('left');
-  return h('section',{className:'section','aria-label':props.title},
-    h('h3',null,props.title),
-    canSelect?h('div',null,h(S.DsButton,{tone:'secondary',size:'sm',onClick:function(){checkSide[1](checkSide[0]==='left'?'right':'left');}},checkSide[0]==='left'?'Чекбоксы справа':'Чекбоксы слева')):null,
-    h('div',{className:'list'},objects.map(function(object,i){
-      var checkbox=canSelect?h(S.DsCheckbox,{key:'check',state:selected[0].includes(i)?'checked':'unchecked',ariaLabel:'Выбрать: '+object.title,onChange:function(next){selected[1](next==='checked'?selected[0].concat(i):selected[0].filter(function(id){return id!==i;}));}}):null,
-        row=h(S.DsListRow,Object.assign({},object,{key:'row',active:canView&&active[0]===i,selected:canSelect&&selected[0].includes(i),onClick:canView?function(){active[1](i);}:undefined,
-          badge:i===1?h(S.DsLozenge,{tone:'info',size:'sm'},'Pro'):undefined,
-          actionsWidth:canView?32:undefined,actions:canView&&i!==2?h(S.DsIconButton,{icon:'info',label:'Сведения: '+object.title,size:'sm',onClick:function(){message[1]('Сведения об объекте '+object.title);}}):undefined}));
-      return h('div',{className:'choice',key:i},checkSide[0]==='left'?[checkbox,row]:[row,checkbox]);})),
-    h('p',{className:'cap',role:'status'},(canView?'Открыт: '+objects[active[0]].title+'. ':'')+(canSelect?'Выбрано объектов: '+selected[0].length+'.':'')),
-    canView?h('p',{className:'cap',role:'status'},message[0]||(canSelect?'Строка открывает объект, чекбокс меняет выбор.':'Нажмите строку или кнопку сведений.')):null);
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var objects = [
+    { title: 'MAZ 5440', subtitle: 'AB 1234-7 · Движется', state: 'moving', course: 135, value: '62 км/ч', valueMeta: 'Иванов П.' },
+    { title: 'Volvo FH16', subtitle: 'AC 8871-2 · Стоянка', state: 'parked', value: '0 км/ч' },
+    { title: 'Служебный автомобиль северо-западного подразделения', subtitle: 'AE 3401-7 · Нет связи', state: 'offline' }
+];
+function ListExample(props) {
+    var canView = props.mode !== 'select', canSelect = props.mode !== 'view', active = React.useState(0), selected = React.useState([1]), message = React.useState(''), checkSide = React.useState('left');
+    return <div className={"demo-stack"}>
+    {canSelect ? <div>
+    <S.DsButton tone={'secondary'} size={'sm'} onClick={function () { checkSide[1](checkSide[0] === 'left' ? 'right' : 'left'); }}>
+    {checkSide[0] === 'left' ? 'Чекбоксы справа' : 'Чекбоксы слева'}
+    </S.DsButton>
+    </div> : null}
+    <div className={'list'}>
+    {objects.map(function (object, i) {
+        var checkbox = canSelect ? <S.DsCheckbox key={'check'} state={selected[0].includes(i) ? 'checked' : 'unchecked'} ariaLabel={'Выбрать: ' + object.title} onChange={function (next) { selected[1](next === 'checked' ? selected[0].concat(i) : selected[0].filter(function (id) { return id !== i; })); }}/> : null, row = <S.DsListRow {...Object.assign({}, object, { key: 'row', active: canView && active[0] === i, selected: canSelect && selected[0].includes(i), onClick: canView ? function () { active[1](i); } : undefined,
+            badge: i === 1 ? <S.DsLozenge tone={'info'} size={'sm'}>
+            {'Pro'}
+            </S.DsLozenge> : undefined,
+            actionsWidth: canView ? 32 : undefined, actions: canView && i !== 2 ? <S.DsIconButton icon={'info'} label={'Сведения: ' + object.title} size={'sm'} onClick={function () { message[1]('Сведения об объекте ' + object.title); }}/> : undefined })}/>;
+        return <div className={'choice'} key={i}>
+        {checkSide[0] === 'left' ? [checkbox, row] : [row, checkbox]}
+        </div>;
+    })}
+    </div>
+    <p className={'cap'} role={'status'}>
+    {(canView ? 'Открыт: ' + objects[active[0]].title + '. ' : '') + (canSelect ? 'Выбрано объектов: ' + selected[0].length + '.' : '')}
+    </p>
+    {canView ? <p className={'cap'} role={'status'}>
+    {message[0] || (canSelect ? 'Строка открывает объект, чекбокс меняет выбор.' : 'Нажмите строку или кнопку сведений.')}
+    </p> : null}
+    </div>;
 }
-function App(){return h('div',{className:'examples'},
-  h(ListExample,{mode:'view',title:'Просмотр и действия'}),
-  h(ListExample,{mode:'select',title:'Выбор нескольких объектов'}),
-  h(ListExample,{mode:'combined',title:'Просмотр и выбор объектов'}));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+function App() {
+    return <LiveExamples>
+    <LiveExample id={"prosmotr-i-deystviya"} title={"Просмотр и действия"} description={"Нажмите строку для просмотра объекта или отдельную кнопку сведений."}>
+    <ListExample mode={'view'} title={'Просмотр и действия'}/>
+    </LiveExample>
+    <LiveExample id={"vybor-neskolkih-obektov"} title={"Выбор нескольких объектов"} description={"Чекбоксы меняют набор выбранных объектов, не открывая строку."}>
+    <ListExample mode={'select'} title={'Выбор нескольких объектов'}/>
+    </LiveExample>
+    <LiveExample id={"prosmotr-i-vybor-obektov"} title={"Просмотр и выбор объектов"} description={"Строка открывает объект, а чекбокс независимо меняет выбор."}>
+    <ListExample mode={'combined'} title={'Просмотр и выбор объектов'}/>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

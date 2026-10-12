@@ -9,6 +9,15 @@ const fixture=fixtureRoot();try{
  const cards=await buildCatalogue({root:fixture,outDir:join(fixture,'site')});assert.equal(cards.length,2);
  assert.match(readFileSync(join(fixture,'site/components/Example/preview.html'),'utf8'),/<title>Example<\/title>/);
  assert.match(readFileSync(join(fixture,'site/overview.html'),'utf8'),/window\.__DS_CARD_COUNT__=2/);
+ const examplePath=join(fixture,'components/Example/preview.html'),exampleOriginal=readFileSync(examplePath,'utf8');
+ writeFileSync(examplePath,'<!-- @dsCard group="Example" --><html><head></head><body data-ds-examples><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script></body></html>');
+ writeFileSync(join(fixture,'components/Example/examples.json'),JSON.stringify({basic:'const label = "Example";'}));
+ const exampleCards=await buildCatalogue({root:fixture,outDir:join(fixture,'site')});
+ const compiled=readFileSync(join(fixture,'site/components/Example/preview.html'),'utf8');
+ assert.doesNotMatch(compiled,/data-ds-example-sources=/);
+ const repeated=await renderPreview({root:join(fixture,'site'),card:exampleCards.find(card=>card.id==='Example'),mode:'current'});
+ assert.match(repeated,/const label/);
+ writeFileSync(examplePath,exampleOriginal);
  mkdirSync(join(fixture,'components/DsAppHeader'),{recursive:true});
  writeFileSync(join(fixture,'components/DsAppHeader/preview.html'),'<!-- @dsCard group="Navigation" --><html><head></head><body>header</body></html>');
  writeFileSync(join(fixture,'components/DsAppHeader/README.md'),'# Header');

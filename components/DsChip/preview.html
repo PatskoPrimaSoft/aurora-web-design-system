@@ -1,36 +1,68 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=340 subtitle="Компактный фильтр с выбором и счётчиком или удаляемое значение" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · данные" height=340 subtitle="Компактный фильтр с выбором и счётчиком или удаляемое значение" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:32px}
-.section{display:flex;flex-direction:column;gap:16px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var offline=React.useState(true),trucks=React.useState(false),values=React.useState(['Топливо','Пробег']),message=React.useState(''),longValue=React.useState(true);
-  function remove(value){values[1](values[0].filter(function(v){return v!==value;}));message[1]('Удалено значение «'+value+'».');document.getElementById('restore-values').focus();}
-  return h('div',{className:'examples'},
-    h('section',{className:'section','aria-label':'Выбор фильтров'},
-      h('h3',null,'Фильтры'),
-      h('div',{className:'row'},
-        h(S.DsChip,{selected:offline[0],count:12,onClick:function(){offline[1](!offline[0]);}},'Нет связи'),
-        h(S.DsChip,{selected:trucks[0],icon:'local_shipping',count:8,onClick:function(){trucks[1](!trucks[0]);}},'Грузовики'),
-        h(S.DsChip,{disabled:true,onClick:function(){}},'Архив')),
-      h('p',{className:'cap',role:'status'},'Активные фильтры: '+([offline[0]?'Нет связи':null,trucks[0]?'Грузовики':null].filter(Boolean).join(', ')||'нет')+'.')),
-    h('section',{className:'section','aria-label':'Удаление значений'},
-      h('h3',null,'Выбранные значения'),
-      h('div',{className:'row'},values[0].map(function(value){return h(S.DsChip,{key:value,removable:true,onRemove:function(){remove(value);}},value);})),
-      h('div',null,h(S.DsButton,{id:'restore-values',size:'sm',tone:'secondary',onClick:function(){values[1](['Топливо','Пробег']);longValue[1](true);message[1]('Значения восстановлены.');}},'Восстановить значения')),
-      h('p',{className:'cap',role:'status'},message[0]||'Удалите значение крестиком.')),
-    h('section',{className:'section','aria-label':'Длинные и недоступные значения'},
-      h('h3',null,'Длинные и недоступные значения'),
-      h('div',{className:'row'},
-        longValue[0]?h(S.DsChip,{removable:true,maxWidth:220,onRemove:function(){longValue[1](false);message[1]('Длинное значение удалено.');document.getElementById('restore-values').focus();}},'Объекты северо-западного подразделения'):null,
-        h(S.DsChip,{removable:true,disabled:true},'Обязательная группа')),
-      h('p',{className:'cap'},'Обязательная группа закреплена администратором.')));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    var offline = React.useState(true), trucks = React.useState(false), values = React.useState(['Топливо', 'Пробег']), message = React.useState(''), longValue = React.useState(true), longMessage = React.useState('');
+    function remove(value) { values[1](values[0].filter(function (v) { return v !== value; })); message[1]('Удалено значение «' + value + '».'); document.getElementById('restore-values').focus(); }
+    return <LiveExamples>
+    <LiveExample id={"filtry"} title={"Фильтры"} description={"Нажимайте чипы, чтобы включать и выключать условия отбора."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    <S.DsChip selected={offline[0]} count={12} onClick={function () { offline[1](!offline[0]); }}>
+    {'Нет связи'}
+    </S.DsChip>
+    <S.DsChip selected={trucks[0]} icon={'local_shipping'} count={8} onClick={function () { trucks[1](!trucks[0]); }}>
+    {'Грузовики'}
+    </S.DsChip>
+    <S.DsChip disabled={true} onClick={function () { }}>
+    {'Архив'}
+    </S.DsChip>
+    </div>
+    <p className={'cap'} role={'status'}>
+    {'Активные фильтры: ' + ([offline[0] ? 'Нет связи' : null, trucks[0] ? 'Грузовики' : null].filter(Boolean).join(', ') || 'нет') + '.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"vybrannye-znacheniya"} title={"Выбранные значения"} description={"Удалите отдельное значение из набора, не меняя остальные."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    {values[0].map(function (value) { return <S.DsChip key={value} removable={true} onRemove={function () { remove(value); }}>
+    {value}
+    </S.DsChip>; })}
+    </div>
+    <div>
+    <S.DsButton id={'restore-values'} size={'sm'} tone={'secondary'} onClick={function () { values[1](['Топливо', 'Пробег']); message[1]('Значения восстановлены.'); }}>
+    {'Восстановить значения'}
+    </S.DsButton>
+    </div>
+    <p className={'cap'} role={'status'}>
+    {message[0] || 'Удалите значение крестиком.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"dlinnye-i-nedostupnye-znacheniya"} title={"Длинные и недоступные значения"} description={"Сравните поведение длинных подписей и значений, которые нельзя изменить."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    {longValue[0] ? <S.DsChip removable={true} maxWidth={220} onRemove={function () { longValue[1](false); longMessage[1]('Длинное значение удалено.'); document.getElementById('restore-long-value').focus(); }}>
+    {'Объекты северо-западного подразделения'}
+    </S.DsChip> : null}
+    <S.DsChip removable={true} disabled={true}>
+    {'Обязательная группа'}
+    </S.DsChip>
+    </div>
+    <p className={'cap'}>
+    {'Обязательная группа закреплена администратором.'}
+    </p>
+    <div><S.DsButton id="restore-long-value" size="sm" tone="secondary" onClick={() => {longValue[1](true);longMessage[1]('Длинное значение восстановлено.');}}>Восстановить длинное значение</S.DsButton></div>
+    <p className="cap" role="status">{longMessage[0] || 'Удалите длинное значение крестиком.'}</p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

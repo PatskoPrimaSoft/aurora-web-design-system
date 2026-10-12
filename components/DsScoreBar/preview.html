@@ -1,19 +1,27 @@
-<!-- @dsCard group="5 · Компоненты · графики" height=170 subtitle="Значение против именованных полос — рейтинг эко-вождения" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · графики" height=170 subtitle="Значение против именованных полос — рейтинг эко-вождения" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
 .sep{width:1px;height:24px;background:var(--ds-divider)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'col',style:{maxWidth:360}},
-  h(S.DsScoreBar,{value:78,label:'Эко-вождение',unit:'баллов'}),
-  h(S.DsScoreBar,{value:24,label:'Иванов П.',showScale:true}),
-  h(S.DsScoreBar,{value:null,label:'Нет поездок'}));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    return <LiveExamples>
+    <LiveExample id={"score-value"} title={"Значение на шкале"} description={"Шкала показывает результат относительно диапазонов оценки."}>
+    <S.DsScoreBar value={78} label={'Эко-вождение'} unit={'баллов'}/>
+    </LiveExample>
+    <LiveExample id={"score-scale"} title={"Подписи диапазона"} description={"Границы шкалы помогают понять положение значения в общей оценке."}>
+    <S.DsScoreBar value={24} label={'Иванов П.'} showScale={true}/>
+    </LiveExample>
+    <LiveExample id={"score-empty"} title={"Нет данных"} description={"При отсутствии поездок компонент показывает отсутствие оценки."}>
+    <S.DsScoreBar value={null} label={'Нет поездок'}/>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

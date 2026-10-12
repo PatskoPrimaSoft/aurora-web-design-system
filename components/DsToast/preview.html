@@ -1,48 +1,195 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=720 subtitle="Кратко сообщает результат действия и позволяет его отменить" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · обратная связь" height=720 subtitle="Кратко сообщает результат действия и позволяет его отменить" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
-h3{font:var(--ds-type-label);margin:0 0 12px}
 .variants{display:flex;flex-direction:column;gap:12px;align-items:stretch;max-width:520px}
 .sample{display:flex;flex-direction:column;gap:8px;min-width:0}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .demo{position:relative;transform:translateZ(0);min-height:220px;overflow-wrap:anywhere}
 .description{margin:12px 0 0;color:var(--ds-fg-muted)}
-@media(max-width:400px){body{padding:12px}}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var samples=[['neutral','Настройки сохранены.'],['info','Отчёт формируется. Это может занять несколько минут.'],['success','Объект «Volvo FH16» перемещён в архив.'],['warning','Данные объекта не обновлялись более 10 минут.'],['danger','Команда не доставлена: устройство не на связи.']];
-function ArchiveExample(){var archived=React.useState(false),toast=React.useState(null),position=React.useState('bottom-center'),trigger=React.useRef(null);
- function archive(e){if(archived[0])return;trigger.current=e.currentTarget;archived[1](true);toast[1]('archived');}
- function undo(){archived[1](false);toast[1]('restored');requestAnimationFrame(function(){trigger.current.focus();});}
- return h('section',{'aria-label':'Архивирование и отмена'},h('h3',null,'Действие, отмена и закрытие'),
-  h('div',{className:'toolbar'},h(S.DsButton,{tone:'secondary','aria-disabled':archived[0],onClick:archive},'Архивировать объект'),
-   h(S.DsButton,{tone:'subtle',onClick:function(){position[1](position[0]==='bottom-center'?'bottom-right':'bottom-center');}},position[0]==='bottom-center'?'Разместить справа':'Разместить по центру')),
-  h('p',{className:'description'},archived[0]?'Объект находится в архиве.':'Объект находится в списке.'),
-  h('div',{className:'demo',style:{minHeight:toast[0]?160:0}},h(S.DsToastStack,{position:position[0]},toast[0]?h(S.DsToast,{tone:'success',onClose:function(){toast[1](null);trigger.current.focus();},action:toast[0]==='archived'?undo:undefined,actionLabel:'Отменить'},toast[0]==='archived'?'Объект «Volvo FH16» перемещён в архив.':'Объект «Volvo FH16» восстановлен.'):null)));}
-function LongExample(){var expanded=React.useState(false);return h('section',{'aria-label':'Длинное сообщение'},h('h3',null,'Длинный текст и действие'),
- h('div',{className:'variants'},h(S.DsToast,{tone:'warning',announcement:'off',action:function(){expanded[1](!expanded[0]);},actionLabel:expanded[0]?'Скрыть пояснение':'Что можно сделать'},'Не удалось обновить настройки объекта «ОченьДлинноеНазваниеОбъектаБезПробелов»: проверьте соединение и повторите попытку.')),
- expanded[0]?h('p',{className:'description'},'Откройте настройки подключения устройства и проверьте адрес сервера.'):null);}
-function RetryExample(){var state=React.useState('error'),busy=React.useRef(false),timer=React.useRef(null);
- React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
- function retry(){if(busy.current)return;if(state[0]==='done'){state[1]('error');return;}busy.current=true;state[1]('loading');timer.current=setTimeout(function(){busy.current=false;state[1]('done');},1500);}
- return h('section',{'aria-label':'Ошибка и повтор'},h('h3',null,'Ошибка и повторная попытка'),h('div',{className:'variants'},h(S.DsToast,{tone:state[0]==='error'?'danger':state[0]==='loading'?'info':'success',action:retry,actionLabel:state[0]==='error'?'Повторить':state[0]==='loading'?'Повторяем…':'Снова показать ошибку'},state[0]==='error'?'Не удалось загрузить отчёт. Проверьте соединение и повторите попытку.':state[0]==='loading'?'Загружаем отчёт…':'Отчёт загружен.')));}
-function QueueExample(){var list=React.useState([]),id=React.useRef(0),button=React.useRef(null);
- function dismiss(key){list[1](function(items){return items.filter(function(item){return item!==key;});});button.current.focus();}
- return h('section',{'aria-label':'Очередь уведомлений'},h('h3',null,'Несколько уведомлений'),h(S.DsButton,{tone:'secondary',onClick:function(e){button.current=e.currentTarget;id.current++;list[1](function(items){return items.concat(id.current);});}},'Добавить уведомление'),
- h('div',{className:'demo',style:{minHeight:list[0].length?Math.max(160,(list[0].length+1)*80):0}},h(S.DsToastStack,null,list[0].map(function(key){return h(S.DsToast,{key:key,tone:'success',closeLabel:'Закрыть уведомление '+key,onClose:function(){dismiss(key);}},'Изменение '+key+' сохранено.');}))));}
-function TimerExample(){var show=React.useState(false),button=React.useRef(null),serial=React.useRef(0);function close(){var restore=document.activeElement.closest('[data-ds-toast]');show[1](false);if(restore)button.current.focus();}
- return h('section',{'aria-label':'Автозакрытие'},h('h3',null,'Автозакрытие с паузой'),h(S.DsButton,{tone:'secondary',onClick:function(e){if(show[0])return;button.current=e.currentTarget;serial.current++;show[1](true);}},'Показать на 8 секунд'),
- h('p',{className:'description'},'Наведите указатель на тост или перейдите к его кнопке клавишей Tab — отсчёт остановится. После ухода продолжится оставшееся время.'),
- h('div',{className:'demo',style:{minHeight:show[0]?160:0}},h(S.DsToastStack,null,show[0]?h(S.DsToast,{key:serial.current,tone:'success',autoDismiss:8000,onClose:close},'Настройки сохранены.'):null)));}
-function DialogExample(){var open=React.useState(false),show=React.useState(false),saveButton=React.useRef(null);return h('section',{'aria-label':'Уведомление поверх диалога'},h('h3',null,'Уведомление поверх диалога'),h(S.DsButton,{tone:'secondary',onClick:function(){open[1](true);}},'Открыть диалог'),
- h('div',{className:'demo',style:{minHeight:open[0]?420:0}},open[0]?h(S.DsDialog,{title:'Настройки отчёта',size:'sm',onClose:function(){open[1](false);show[1](false);}},h('p',null,'Уведомление остаётся внутри доступной области диалога.'),h(S.DsButton,{onClick:function(e){saveButton.current=e.currentTarget;show[1](true);}},'Сохранить в диалоге'),h(S.DsToastStack,null,show[0]?h(S.DsToast,{tone:'success',onClose:function(){show[1](false);saveButton.current.focus();}},'Настройки отчёта сохранены.'):null)):null));}
-function App(){return h('div',{className:'examples'},
- h('section',null,h('h3',null,'Тон сообщения'),h('div',{className:'variants'},samples.map(function(sample){return h('div',{className:'sample',key:sample[0]},h('span',{className:'cap'},sample[0]),h(S.DsToast,{tone:sample[0],announcement:'off'},sample[1]));}))),
- h('section',null,h('h3',null,'Своя иконка'),h('div',{className:'variants'},h(S.DsToast,{icon:'info',announcement:'off'},'Настройки применятся при следующем входе.'))),
- h(ArchiveExample),h(LongExample),h(RetryExample),h(QueueExample),h(TimerExample),h(DialogExample));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var samples = [['neutral', 'Настройки сохранены.'], ['info', 'Отчёт формируется. Это может занять несколько минут.'], ['success', 'Объект «Volvo FH16» перемещён в архив.'], ['warning', 'Данные объекта не обновлялись более 10 минут.'], ['danger', 'Команда не доставлена: устройство не на связи.']];
+function ArchiveExample() {
+    var archived = React.useState(false), toast = React.useState(null), position = React.useState('bottom-center'), trigger = React.useRef(null);
+    function archive(e) {
+        if (archived[0])
+            return;
+        trigger.current = e.currentTarget;
+        archived[1](true);
+        toast[1]('archived');
+    }
+    function undo() { archived[1](false); toast[1]('restored'); requestAnimationFrame(function () { trigger.current.focus(); }); }
+    return <div className={"demo-stack"}>
+    <div className={'toolbar'}>
+    <S.DsButton tone={'secondary'} aria-disabled={archived[0]} onClick={archive}>
+    {'Архивировать объект'}
+    </S.DsButton>
+    <S.DsButton tone={'subtle'} onClick={function () { position[1](position[0] === 'bottom-center' ? 'bottom-right' : 'bottom-center'); }}>
+    {position[0] === 'bottom-center' ? 'Разместить справа' : 'Разместить по центру'}
+    </S.DsButton>
+    </div>
+    <p className={'description'}>
+    {archived[0] ? 'Объект находится в архиве.' : 'Объект находится в списке.'}
+    </p>
+    <div className={'demo'} style={{ minHeight: toast[0] ? 160 : 0 }}>
+    <S.DsToastStack position={position[0]}>
+    {toast[0] ? <S.DsToast tone={'success'} onClose={function () { toast[1](null); trigger.current.focus(); }} action={toast[0] === 'archived' ? undo : undefined} actionLabel={'Отменить'}>
+    {toast[0] === 'archived' ? 'Объект «Volvo FH16» перемещён в архив.' : 'Объект «Volvo FH16» восстановлен.'}
+    </S.DsToast> : null}
+    </S.DsToastStack>
+    </div>
+    </div>;
+}
+function LongExample() {
+    var expanded = React.useState(false);
+    return <div className={"demo-stack"}>
+    <div className={'variants'}>
+    <S.DsToast tone={'warning'} announcement={'off'} action={function () { expanded[1](!expanded[0]); }} actionLabel={expanded[0] ? 'Скрыть пояснение' : 'Что можно сделать'}>
+    {'Не удалось обновить настройки объекта «ОченьДлинноеНазваниеОбъектаБезПробелов»: проверьте соединение и повторите попытку.'}
+    </S.DsToast>
+    </div>
+    {expanded[0] ? <p className={'description'}>
+    {'Откройте настройки подключения устройства и проверьте адрес сервера.'}
+    </p> : null}
+    </div>;
+}
+function RetryExample() {
+    var state = React.useState('error'), busy = React.useRef(false), timer = React.useRef(null);
+    React.useEffect(function () { return function () { clearTimeout(timer.current); }; }, []);
+    function retry() {
+        if (busy.current)
+            return;
+        if (state[0] === 'done') {
+            state[1]('error');
+            return;
+        }
+        busy.current = true;
+        state[1]('loading');
+        timer.current = setTimeout(function () { busy.current = false; state[1]('done'); }, 1500);
+    }
+    return <div className={"demo-stack"}>
+    <div className={'variants'}>
+    <S.DsToast tone={state[0] === 'error' ? 'danger' : state[0] === 'loading' ? 'info' : 'success'} action={retry} actionLabel={state[0] === 'error' ? 'Повторить' : state[0] === 'loading' ? 'Повторяем…' : 'Снова показать ошибку'}>
+    {state[0] === 'error' ? 'Не удалось загрузить отчёт. Проверьте соединение и повторите попытку.' : state[0] === 'loading' ? 'Загружаем отчёт…' : 'Отчёт загружен.'}
+    </S.DsToast>
+    </div>
+    </div>;
+}
+function QueueExample() {
+    var list = React.useState([]), id = React.useRef(0), button = React.useRef(null);
+    function dismiss(key) { list[1](function (items) { return items.filter(function (item) { return item !== key; }); }); button.current.focus(); }
+    return <div className={"demo-stack"}>
+    <S.DsButton tone={'secondary'} onClick={function (e) { button.current = e.currentTarget; id.current++; list[1](function (items) { return items.concat(id.current); }); }}>
+    {'Добавить уведомление'}
+    </S.DsButton>
+    <div className={'demo'} style={{ minHeight: list[0].length ? Math.max(160, (list[0].length + 1) * 80) : 0 }}>
+    <S.DsToastStack>
+    {list[0].map(function (key) { return <S.DsToast key={key} tone={'success'} closeLabel={'Закрыть уведомление ' + key} onClose={function () { dismiss(key); }}>
+    {'Изменение ' + key + ' сохранено.'}
+    </S.DsToast>; })}
+    </S.DsToastStack>
+    </div>
+    </div>;
+}
+function TimerExample() {
+    var show = React.useState(false), button = React.useRef(null), serial = React.useRef(0);
+    function close() {
+        var restore = document.activeElement.closest('[data-ds-toast]');
+        show[1](false);
+        if (restore)
+            button.current.focus();
+    }
+    return <div className={"demo-stack"}>
+    <S.DsButton tone={'secondary'} onClick={function (e) {
+        if (show[0])
+            return;
+        button.current = e.currentTarget;
+        serial.current++;
+        show[1](true);
+    }}>
+    {'Показать на 8 секунд'}
+    </S.DsButton>
+    <p className={'description'}>
+    {'Наведите указатель на тост или перейдите к его кнопке клавишей Tab — отсчёт остановится. После ухода продолжится оставшееся время.'}
+    </p>
+    <div className={'demo'} style={{ minHeight: show[0] ? 160 : 0 }}>
+    <S.DsToastStack>
+    {show[0] ? <S.DsToast key={serial.current} tone={'success'} autoDismiss={8000} onClose={close}>
+    {'Настройки сохранены.'}
+    </S.DsToast> : null}
+    </S.DsToastStack>
+    </div>
+    </div>;
+}
+function DialogExample() {
+    var open = React.useState(false), show = React.useState(false), saveButton = React.useRef(null);
+    return <div className={"demo-stack"}>
+    <S.DsButton tone={'secondary'} onClick={function () { open[1](true); }}>
+    {'Открыть диалог'}
+    </S.DsButton>
+    <div className={'demo'} style={{ minHeight: open[0] ? 420 : 0 }}>
+    {open[0] ? <S.DsDialog title={'Настройки отчёта'} size={'sm'} onClose={function () { open[1](false); show[1](false); }}>
+    <p>
+    {'Уведомление остаётся внутри доступной области диалога.'}
+    </p>
+    <S.DsButton onClick={function (e) { saveButton.current = e.currentTarget; show[1](true); }}>
+    {'Сохранить в диалоге'}
+    </S.DsButton>
+    <S.DsToastStack>
+    {show[0] ? <S.DsToast tone={'success'} onClose={function () { show[1](false); saveButton.current.focus(); }}>
+    {'Настройки отчёта сохранены.'}
+    </S.DsToast> : null}
+    </S.DsToastStack>
+    </S.DsDialog> : null}
+    </div>
+    </div>;
+}
+function App() {
+    return <LiveExamples>
+    <LiveExample id={"deystvie-otmena-i-zakrytie"} title={"Действие, отмена и закрытие"} description={"Выполните действие, отмените его через уведомление или закройте сообщение."}>
+    <ArchiveExample />
+    </LiveExample>
+    <LiveExample id={"ton-soobscheniya"} title={"Тон сообщения"} description={"Тон помогает отличить успешный результат, предупреждение и ошибку."}>
+    <div className={"demo-stack"}>
+    <div className={'variants'}>
+    {samples.map(function (sample) { return <div className={'sample'} key={sample[0]}>
+    <span className={'cap'}>
+    {sample[0]}
+    </span>
+    <S.DsToast tone={sample[0]} announcement={'off'}>
+    {sample[1]}
+    </S.DsToast>
+    </div>; })}
+    </div>
+    </div>
+    </LiveExample>
+    <LiveExample id={"svoya-ikonka"} title={"Своя иконка"} description={"Иконка уточняет смысл сообщения, сохраняя понятный текст уведомления."}>
+    <div className={"demo-stack"}>
+    <div className={'variants'}>
+    <S.DsToast icon={'info'} announcement={'off'}>
+    {'Настройки применятся при следующем входе.'}
+    </S.DsToast>
+    </div>
+    </div>
+    </LiveExample>
+    <LiveExample id={"dlinnyy-tekst-i-deystvie"} title={"Длинный текст и действие"} description={"Длинное сообщение переносится, сохраняя доступность действия и кнопки закрытия."}>
+    <LongExample />
+    </LiveExample>
+    <LiveExample id={"oshibka-i-povtornaya-popytka"} title={"Ошибка и повторная попытка"} description={"Повторите операцию после ошибки и проверьте сообщение о результате."}>
+    <RetryExample />
+    </LiveExample>
+    <LiveExample id={"neskolko-uvedomleniy"} title={"Несколько уведомлений"} description={"Добавляйте сообщения в очередь и закрывайте их независимо."}>
+    <QueueExample />
+    </LiveExample>
+    <LiveExample id={"avtozakrytie-s-pauzoy"} title={"Автозакрытие с паузой"} description={"Уведомление закрывается по таймеру; наведение и фокус дают время прочитать сообщение."}>
+    <TimerExample />
+    </LiveExample>
+    <LiveExample id={"uvedomlenie-poverh-dialoga"} title={"Уведомление поверх диалога"} description={"Откройте диалог и выполните действие: уведомление остаётся видимым поверх модального слоя."}>
+    <DialogExample />
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

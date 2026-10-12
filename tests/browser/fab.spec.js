@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
@@ -12,7 +13,7 @@ test('DsFab tooltip, truncation and loading stay accessible in every mode',async
       await page.setViewportSize({width,height:900});
       await page.goto(served.url+'/index.html?card=DsFab&theme='+theme+'&appearance='+appearance+'&density='+density);
       const frame=page.frameLocator('#preview');
-      await expect(frame.getByRole('region',{name:'Размеры',exact:true})).toBeVisible();
+      await expect(exampleDemo(frame,'Размеры')).toBeVisible();
       await frame.locator('#root').evaluate(el=>{
         const React=window.React,h=React.createElement,S=window[Object.keys(window).find(k=>k.startsWith('AuroraWebDesignSystem_'))];
         const host=document.createElement('div');el.append(host);const root=window.ReactDOM.createRoot(host);
@@ -67,7 +68,7 @@ test('DsFab opens an object form, cancels and adds without covering content',asy
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
       await page.setViewportSize({width,height:900});
       await page.goto(served.url+'/index.html?card=DsFab&theme='+theme+'&appearance='+appearance+'&density='+density);
-      const frame=page.frameLocator('#preview'),region=frame.getByRole('region',{name:'Действие над содержимым',exact:true});
+      const frame=page.frameLocator('#preview'),region=exampleDemo(frame,'Действие над содержимым');
       const fab=region.getByRole('button',{name:'Добавить объект',exact:true}),input=region.getByRole('textbox',{name:'Название объекта'});
       await fab.focus();await page.keyboard.press('Enter');await expect(input).toBeFocused();
       await input.fill('Отменённый объект');await region.getByRole('button',{name:'Отмена',exact:true}).click();

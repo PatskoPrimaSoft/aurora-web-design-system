@@ -1,52 +1,94 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · формы" height=1250 subtitle="Редактирование фильтра в поповере с применением по кнопке" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · формы" height=1250 subtitle="Редактирование фильтра в поповере с применением по кнопке" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:24px}.example{display:flex;flex-direction:column;gap:12px;min-width:0}
-h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}.stage{min-height:350px}.result{overflow-wrap:anywhere}
-@media(max-width:400px){body{padding:12px}}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var states=[{value:'moving',label:'Движение',count:62},{value:'parked',label:'Стоянка',count:71},{value:'offline',label:'Нет связи',count:15}];
-var groupedStates=[
- {label:'Активность',options:states.slice(0,2)},
- {label:'Связь',options:[states[2],{value:'nodata',label:'Нет данных',count:0}]},
- {label:'Требуют внимания',options:[{value:'alarm',label:'Тревога',count:4},{value:'invalid',label:'Некорректные данные',count:3,disabled:true,description:'Недоступно для вашей роли'}]}
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var states = [{ value: 'moving', label: 'Движение', count: 62 }, { value: 'parked', label: 'Стоянка', count: 71 }, { value: 'offline', label: 'Нет связи', count: 15 }];
+var groupedStates = [
+    { label: 'Активность', options: states.slice(0, 2) },
+    { label: 'Связь', options: [states[2], { value: 'nodata', label: 'Нет данных', count: 0 }] },
+    { label: 'Требуют внимания', options: [{ value: 'alarm', label: 'Тревога', count: 4 }, { value: 'invalid', label: 'Некорректные данные', count: 3, disabled: true, description: 'Недоступно для вашей роли' }] }
 ];
-function GroupedExample(){var selected=React.useState(['moving']);
-return h('section',{className:'example','aria-label':'Выбор с группами'},
- h('h3',null,'Выбор с группами'),
- h('div',{className:'stage',style:{minHeight:500}},h(S.DsFilterMenu,{label:'Состояние по категориям',type:'checkbox-list',searchable:true,value:selected[0],options:groupedStates,onApply:selected[1],onClear:function(){selected[1]([]);}})),
- h('p',{className:'cap',role:'status'},'Применено состояний: '+selected[0].length+'.'));
+function GroupedExample() {
+    var selected = React.useState(['moving']);
+    return <div className={"demo-stack"}>
+    <div className={'stage'} style={{ minHeight: 500 }}>
+    <S.DsFilterMenu label={'Состояние по категориям'} type={'checkbox-list'} searchable={true} value={selected[0]} options={groupedStates} onApply={selected[1]} onClear={function () { selected[1]([]); }}/>
+    </div>
+    <p className={'cap'} role={'status'}>
+    {'Применено состояний: ' + selected[0].length + '.'}
+    </p>
+    </div>;
 }
-function ListStates(){var loading=React.useState(false),empty=React.useState(false),disabled=React.useState(false),value=React.useState(['moving']);
-return h('section',{className:'example','aria-label':'Состояния списка'},h('h3',null,'Состояния списка'),
- h('div',{style:{display:'flex',flexWrap:'wrap',gap:8}},[[loading,'Загрузка вариантов'],[empty,'Нет вариантов'],[disabled,'Недоступно']].map(function(item){return h(S.DsButton,{key:item[1],size:'sm',tone:item[0][0]?'subtle':'secondary','aria-pressed':item[0][0],onClick:function(){item[0][1](!item[0][0]);}},item[1]);})),
- h('div',{className:'stage'},h(S.DsFilterMenu,{label:'Статусы',type:'checkbox-list',options:empty[0]?[]:states,value:value[0],loading:loading[0],disabled:disabled[0],onApply:value[1],onClear:function(){value[1]([]);}})),
- h('p',{className:'cap'},'При обновлении вариантов применённое значение сохраняется.'));
+function ListStates() {
+    var loading = React.useState(false), empty = React.useState(false), disabled = React.useState(false), value = React.useState(['moving']);
+    return <div className={"demo-stack"}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+    {[[loading, 'Загрузка вариантов'], [empty, 'Нет вариантов'], [disabled, 'Недоступно']].map(function (item) { return <S.DsButton key={item[1]} size={'sm'} tone={item[0][0] ? 'subtle' : 'secondary'} aria-pressed={item[0][0]} onClick={function () { item[0][1](!item[0][0]); }}>
+    {item[1]}
+    </S.DsButton>; })}
+    </div>
+    <div className={'stage'}>
+    <S.DsFilterMenu label={'Статусы'} type={'checkbox-list'} options={empty[0] ? [] : states} value={value[0]} loading={loading[0]} disabled={disabled[0]} onApply={value[1]} onClear={function () { value[1]([]); }}/>
+    </div>
+    <p className={'cap'}>
+    {'При обновлении вариантов применённое значение сохраняется.'}
+    </p>
+    </div>;
 }
-function App(){var selected=React.useState(['moving','parked']),range=React.useState({from:60,to:null}),text=React.useState(null),sort=React.useState({key:'name',dir:'asc'}),width=React.useState(260);
-React.useEffect(function(){function resize(){width[1](Math.min(300,Math.max(240,document.documentElement.clientWidth-32)));}resize();window.addEventListener('resize',resize);return function(){window.removeEventListener('resize',resize);};},[]);
-return h('div',{className:'examples'},
- h('section',{className:'example','aria-label':'Выбор нескольких вариантов'},
-  h('h3',null,'Выбор без групп'),
-  h('div',{className:'stage'},h(S.DsFilterMenu,{label:'Состояние объектов',type:'checkbox-list',value:selected[0],options:states,onApply:selected[1],onClear:function(){selected[1]([]);}})),
-  h('p',{className:'cap',role:'status'},'Применено состояний: '+selected[0].length+'.')),
- h(GroupedExample),
- h('section',{className:'example','aria-label':'Текстовый фильтр'},
-  h('h3',null,'Текстовый фильтр'),
-  h('div',{className:'stage',style:{minHeight:220}},h(S.DsFilterMenu,{label:'Название объекта',type:'string',value:text[0],onApply:text[1],onClear:function(){text[1](null);}})),
-  h('p',{className:'cap result',role:'status'},text[0]?'Название содержит: «'+text[0]+'».':'Фильтр по названию не задан.')),
- h('section',{className:'example','aria-label':'Числовой диапазон'},
-  h('h3',null,'Числовой диапазон'),
-  h('div',{className:'stage'},h(S.DsFilterMenu,{label:'Скорость, км/ч',type:'number-range',value:range[0],width:width[0],onApply:range[1],onClear:function(){range[1]({from:null,to:null});}})),
-  h('p',{className:'cap result',role:'status'},'Применённый диапазон: '+(range[0].from==null?'без нижней границы':'от '+range[0].from)+'; '+(range[0].to==null?'без верхней границы':'до '+range[0].to)+'.')),
- h('section',{className:'example','aria-label':'Сортировка'},h('h3',null,'Сортировка без заголовков столбцов'),
-  h('div',{className:'stage'},h(S.DsFilterMenu,{label:'Сортировка объектов',type:'sort-by',value:sort[0],width:width[0],options:[{value:'name',label:'Название',asc:'А → Я',desc:'Я → А'},{value:'last',label:'Последнее сообщение',asc:'Сначала старые',desc:'Сначала новые'}],onApply:sort[1],onClear:function(){sort[1](null);}})),
-  h('p',{className:'cap result',role:'status'},'Применено: '+JSON.stringify(sort[0]))),
- h(ListStates));
+function App() {
+    var selected = React.useState(['moving', 'parked']), range = React.useState({ from: 60, to: null }), text = React.useState(null), sort = React.useState({ key: 'name', dir: 'asc' }), width = React.useState(260);
+    React.useEffect(function () { function resize() { width[1](Math.min(300, Math.max(240, document.documentElement.clientWidth - 32))); } resize(); window.addEventListener('resize', resize); return function () { window.removeEventListener('resize', resize); }; }, []);
+    return <LiveExamples>
+    <LiveExample id={"vybor-bez-grupp"} title={"Выбор без групп"} description={"Выберите значения и примените фильтр. До применения рабочий результат не меняется."}>
+    <div className={"demo-stack"}>
+    <div className={'stage'}>
+    <S.DsFilterMenu label={'Состояние объектов'} type={'checkbox-list'} value={selected[0]} options={states} onApply={selected[1]} onClear={function () { selected[1]([]); }}/>
+    </div>
+    <p className={'cap'} role={'status'}>
+    {'Применено состояний: ' + selected[0].length + '.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"vybor-s-gruppami"} title={"Выбор с группами"} description={"Связанные значения объединены в группы, чтобы упростить выбор в длинном списке."}>
+    <GroupedExample />
+    </LiveExample>
+    <LiveExample id={"tekstovyy-filtr"} title={"Текстовый фильтр"} description={"Введите условие, затем примените или очистите фильтр."}>
+    <div className={"demo-stack"}>
+    <div className={'stage'} style={{ minHeight: 220 }}>
+    <S.DsFilterMenu label={'Название объекта'} type={'string'} value={text[0]} onApply={text[1]} onClear={function () { text[1](null); }}/>
+    </div>
+    <p className={'cap result'} role={'status'}>
+    {text[0] ? 'Название содержит: «' + text[0] + '».' : 'Фильтр по названию не задан.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"chislovoy-diapazon"} title={"Числовой диапазон"} description={"Задайте границы диапазона и примените условие отбора."}>
+    <div className={"demo-stack"}>
+    <div className={'stage'}>
+    <S.DsFilterMenu label={'Скорость, км/ч'} type={'number-range'} value={range[0]} width={width[0]} onApply={range[1]} onClear={function () { range[1]({ from: null, to: null }); }}/>
+    </div>
+    <p className={'cap result'} role={'status'}>
+    {'Применённый диапазон: ' + (range[0].from == null ? 'без нижней границы' : 'от ' + range[0].from) + '; ' + (range[0].to == null ? 'без верхней границы' : 'до ' + range[0].to) + '.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"sortirovka-bez-zagolovkov-stolbtsov"} title={"Сортировка без заголовков столбцов"} description={"Выберите поле и направление сортировки для списка или панели."}>
+    <div className={"demo-stack"}>
+    <div className={'stage'}>
+    <S.DsFilterMenu label={'Сортировка объектов'} type={'sort-by'} value={sort[0]} width={width[0]} options={[{ value: 'name', label: 'Название', asc: 'А → Я', desc: 'Я → А' }, { value: 'last', label: 'Последнее сообщение', asc: 'Сначала старые', desc: 'Сначала новые' }]} onApply={sort[1]} onClear={function () { sort[1](null); }}/>
+    </div>
+    <p className={'cap result'} role={'status'}>
+    {'Применено: ' + JSON.stringify(sort[0])}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"sostoyaniya-spiska"} title={"Состояния списка"} description={"Сравните ожидание, пустой результат и недоступные варианты списка."}>
+    <ListStates />
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

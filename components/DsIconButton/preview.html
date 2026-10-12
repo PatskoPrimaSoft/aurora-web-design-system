@@ -1,11 +1,6 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · кнопки" height=1500 subtitle="Компактная кнопка с иконкой для узнаваемого действия" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · кнопки" height=1500 subtitle="Компактная кнопка с иконкой для узнаваемого действия" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:32px;min-width:0}
-section{display:flex;flex-direction:column;gap:16px;min-width:0}
-h3,p{margin:0}h3{font:var(--ds-type-body-strong)}
 .row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
 .sample{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
@@ -16,60 +11,189 @@ h3,p{margin:0}h3{font:var(--ds-type-body-strong)}
 .actions{display:flex;align-items:center;gap:8px}
 .object-form{display:flex;flex-direction:column;gap:16px;max-width:360px;min-width:0}
 .form-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function ObjectActions(){
-  var name=React.useState('Volvo FH16'),setName=name[1],draft=React.useState(''),setDraft=draft[1];
-  var editing=React.useState(false),setEditing=editing[1],error=React.useState(''),setError=error[1];
-  var favorite=React.useState(false),setFavorite=favorite[1],loading=React.useState(false),setLoading=loading[1];
-  var message=React.useState('Данные объекта актуальны.'),setMessage=message[1];
-  var formRef=React.useRef(null),editButton=React.useRef(null),wasEditing=React.useRef(false),timer=React.useRef(null);
-  React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
-  React.useLayoutEffect(function(){
-    if(editing[0])formRef.current.querySelector('input').focus();
-    else if(wasEditing.current)editButton.current.focus();
-    wasEditing.current=editing[0];
-  },[editing[0]]);
-  function start(e){editButton.current=e.currentTarget;if(editing[0]){formRef.current.querySelector('input').focus();return;}setDraft(name[0]);setError('');setEditing(true);}
-  function save(e){e.preventDefault();var value=draft[0].trim();if(!value){setError('Введите название объекта.');formRef.current.querySelector('input').focus();return;}setName(value);setEditing(false);setMessage('Название объекта сохранено.');}
-  function refresh(){setLoading(true);setMessage('Обновляем данные объекта…');timer.current=setTimeout(function(){setLoading(false);setMessage('Данные объекта обновлены.');},1200);}
-  function reset(){clearTimeout(timer.current);setLoading(false);setEditing(false);setName('Volvo FH16');setFavorite(false);setMessage('Пример сброшен.');}
-  return h('section',{'aria-labelledby':'object-actions'},h('h3',{id:'object-actions'},'Действия объекта'),
-    h('div',{className:'object-row menu-stage'},h('div',{className:'object-name'},h('p',null,name[0]),favorite[0]?h('p',{className:'cap'},'В избранном'):null),
-      h('div',{className:'actions',role:'group','aria-label':'Действия с объектом'},
-        h(S.DsIconButton,{icon:'edit',label:'Изменить название объекта',onClick:start,'aria-expanded':editing[0],'aria-controls':editing[0]?'object-edit-form':undefined}),
-        h(S.DsIconButton,{icon:'refresh',label:'Обновить данные объекта',loading:loading[0],onClick:refresh}),
-        h(S.DsMenu,{align:'end',width:220,trigger:h(S.DsIconButton,{icon:'more_vert',label:'Другие действия с объектом'}),items:[
-          {id:'favorite',icon:favorite[0]?'star':'star_border',label:favorite[0]?'Убрать из избранного':'Добавить в избранное',onClick:function(){setFavorite(!favorite[0]);setMessage(favorite[0]?'Объект убран из избранного.':'Объект добавлен в избранное.');}},
-          {id:'reset',icon:'restart_alt',label:'Сбросить пример',onClick:reset}
-        ]}))),
-    editing[0]?h('form',{id:'object-edit-form',ref:formRef,className:'object-form',noValidate:true,'aria-label':'Редактирование объекта',onSubmit:save},
-      h(S.DsField,{label:'Название объекта',required:true,value:draft[0],error:error[0]||undefined,onChange:function(e){setDraft(e.target.value);setError('');}}),
-      h('div',{className:'form-actions'},h(S.DsButton,{tone:'secondary',onClick:function(){setEditing(false);setMessage('Изменения отменены.');}},'Отмена'),h(S.DsButton,{type:'submit'},'Сохранить'))):null,
-    h('p',{role:'status','aria-label':'Результат действия с объектом'},message[0]));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function ObjectActions() {
+    var name = React.useState('Volvo FH16'), setName = name[1], draft = React.useState(''), setDraft = draft[1];
+    var editing = React.useState(false), setEditing = editing[1], error = React.useState(''), setError = error[1];
+    var favorite = React.useState(false), setFavorite = favorite[1], loading = React.useState(false), setLoading = loading[1];
+    var message = React.useState('Данные объекта актуальны.'), setMessage = message[1];
+    var formRef = React.useRef(null), editButton = React.useRef(null), wasEditing = React.useRef(false), timer = React.useRef(null);
+    React.useEffect(function () { return function () { clearTimeout(timer.current); }; }, []);
+    React.useLayoutEffect(function () {
+        if (editing[0])
+            formRef.current.querySelector('input').focus();
+        else if (wasEditing.current)
+            editButton.current.focus();
+        wasEditing.current = editing[0];
+    }, [editing[0]]);
+    function start(e) {
+        editButton.current = e.currentTarget;
+        if (editing[0]) {
+            formRef.current.querySelector('input').focus();
+            return;
+        }
+        setDraft(name[0]);
+        setError('');
+        setEditing(true);
+    }
+    function save(e) {
+        e.preventDefault();
+        var value = draft[0].trim();
+        if (!value) {
+            setError('Введите название объекта.');
+            formRef.current.querySelector('input').focus();
+            return;
+        }
+        setName(value);
+        setEditing(false);
+        setMessage('Название объекта сохранено.');
+    }
+    function refresh() { setLoading(true); setMessage('Обновляем данные объекта…'); timer.current = setTimeout(function () { setLoading(false); setMessage('Данные объекта обновлены.'); }, 1200); }
+    function reset() { clearTimeout(timer.current); setLoading(false); setEditing(false); setName('Volvo FH16'); setFavorite(false); setMessage('Пример сброшен.'); }
+    return <div className={"demo-stack"}>
+    <div className={'object-row menu-stage'}>
+    <div className={'object-name'}>
+    <p>
+    {name[0]}
+    </p>
+    {favorite[0] ? <p className={'cap'}>
+    {'В избранном'}
+    </p> : null}
+    </div>
+    <div className={'actions'} role={'group'} aria-label={'Действия с объектом'}>
+    <S.DsIconButton icon={'edit'} label={'Изменить название объекта'} onClick={start} aria-expanded={editing[0]} aria-controls={editing[0] ? 'object-edit-form' : undefined}/>
+    <S.DsIconButton icon={'refresh'} label={'Обновить данные объекта'} loading={loading[0]} onClick={refresh}/>
+    <S.DsMenu align={'end'} width={220} trigger={<S.DsIconButton icon={'more_vert'} label={'Другие действия с объектом'}/>} items={[
+        { id: 'favorite', icon: favorite[0] ? 'star' : 'star_border', label: favorite[0] ? 'Убрать из избранного' : 'Добавить в избранное', onClick: function () { setFavorite(!favorite[0]); setMessage(favorite[0] ? 'Объект убран из избранного.' : 'Объект добавлен в избранное.'); } },
+        { id: 'reset', icon: 'restart_alt', label: 'Сбросить пример', onClick: reset }
+    ]}/>
+    </div>
+    </div>
+    {editing[0] ? <form id={'object-edit-form'} ref={formRef} className={'object-form'} noValidate={true} aria-label={'Редактирование объекта'} onSubmit={save}>
+    <S.DsField label={'Название объекта'} required={true} value={draft[0]} error={error[0] || undefined} onChange={function (e) { setDraft(e.target.value); setError(''); }}/>
+    <div className={'form-actions'}>
+    <S.DsButton tone={'secondary'} onClick={function () { setEditing(false); setMessage('Изменения отменены.'); }}>
+    {'Отмена'}
+    </S.DsButton>
+    <S.DsButton type={'submit'}>
+    {'Сохранить'}
+    </S.DsButton>
+    </div>
+    </form> : null}
+    <p role={'status'} aria-label={'Результат действия с объектом'}>
+    {message[0]}
+    </p>
+    </div>;
 }
-function App(){
-  var message=React.useState('Нажмите кнопку, чтобы выполнить действие.'),setMessage=message[1];
-  var filter=React.useState(false),setFilter=filter[1];
-  var applied=React.useState(true),setApplied=applied[1];
-  var loading=React.useState(false),setLoading=loading[1],result=React.useState('Данные актуальны.'),setResult=result[1];
-  var course=React.useState(0),setCourse=course[1],timer=React.useRef(null);
-  React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
-  function refresh(){setLoading(true);setResult('Обновляем данные…');timer.current=setTimeout(function(){setLoading(false);setResult('Данные обновлены.');},1200);}
-  function sample(caption,props){return h('div',{className:'sample',key:caption},h('span',{className:'cap'},caption),h(S.DsIconButton,Object.assign({icon:'edit',label:'Изменить объект',onClick:function(){setMessage('Действие «'+caption+'» выполнено.');}},props)));}
-  return h('div',{className:'examples'},
-    h('section',{'aria-labelledby':'sizes'},h('h3',{id:'sizes'},'Размеры'),h('div',{className:'row'},sample('sm',{size:'sm'}),sample('md',{}),sample('lg',{size:'lg'}))),
-    h('section',{'aria-labelledby':'tones'},h('h3',{id:'tones'},'Тоны'),h('div',{className:'row'},h('div',{className:'sample'},h('span',{className:'cap'},'inverse'),h('div',{style:{background:'var(--ds-surface-inverse)',padding:8,borderRadius:'var(--ds-radius-md)'}},h(S.DsIconButton,{tone:'inverse',icon:'close',label:'Закрыть уведомление',onClick:function(){setMessage('Уведомление закрыто.');}}))),sample('ghost',{}),sample('secondary',{tone:'secondary'}),sample('primary',{tone:'primary',icon:'add',label:'Добавить объект'}),sample('danger',{tone:'danger',icon:'delete',label:'Удалить объект'}),h('div',{className:'sample'},h('span',{className:'cap'},'onHeader'),h('div',{className:'header-surface'},h(S.DsIconButton,{tone:'onHeader',icon:'help',label:'Открыть справку',onClick:function(){setMessage('Справка открыта.');}}))))),
-    h('section',{'aria-labelledby':'toggle'},h('h3',{id:'toggle'},'Переключатель'),h('div',{className:'row'},h(S.DsIconButton,{icon:'filter_alt',label:'Только активные объекты',active:filter[0],onClick:function(){setFilter(function(value){return !value;});}})),h('p',{role:'status','aria-label':'Состояние фильтра'},filter[0]?'Показаны только активные объекты.':'Показаны все объекты.')),
-    h('section',{'aria-labelledby':'indicator'},h('h3',{id:'indicator'},'Индикатор применённых настроек'),h('div',{className:'row menu-stage'},h(S.DsMenu,{width:220,trigger:h(S.DsIconButton,{icon:'filter_alt',label:'Настроить фильтры объектов',dot:applied[0],'aria-describedby':'applied-filter'}),items:[
-      {id:'all',label:'Все объекты',checked:!applied[0],onClick:function(){setApplied(false);}},
-      {id:'active',label:'Только активные объекты',checked:applied[0],onClick:function(){setApplied(true);}}
-    ]})),h('p',{id:'applied-filter',role:'status'},applied[0]?'Применён фильтр: только активные объекты.':'Фильтры не применены.')),
-    h('section',{'aria-labelledby':'loading'},h('h3',{id:'loading'},'Загрузка'),h('div',{className:'row'},sample('sm · ghost',{icon:'refresh',label:'Обновить данные',size:'sm',loading:loading[0],onClick:refresh}),sample('md · primary',{icon:'refresh',label:'Обновить данные',tone:'primary',loading:loading[0],onClick:refresh}),sample('lg · secondary',{icon:'refresh',label:'Обновить данные',size:'lg',tone:'secondary',loading:loading[0],onClick:refresh})),h('p',{role:'status','aria-label':'Результат обновления'},result[0])),
-    h('section',{'aria-labelledby':'rotation'},h('h3',{id:'rotation'},'Поворот иконки'),h('div',{className:'row'},h(S.DsIconButton,{icon:'navigation',label:'Повернуть курс на 90°',rotate:course[0],onClick:function(){setCourse(function(value){return (value+90)%360;});}})),h('p',{role:'status','aria-label':'Курс'},'Курс: '+course[0]+'°.')),
-    h('section',{'aria-labelledby':'disabled'},h('h3',{id:'disabled'},'Недоступное действие'),h('div',{className:'row'},h(S.DsIconButton,{icon:'delete',label:'Удалить выбранные объекты',tone:'danger',disabled:true,'aria-describedby':'disabled-reason'})),h('p',{id:'disabled-reason',className:'cap'},'Для удаления сначала выберите объекты.')),
-    h('p',{role:'status','aria-label':'Результат действия'},message[0]),h(ObjectActions)
-  );
+function App() {
+    var message = React.useState('Нажмите кнопку, чтобы выполнить действие.'), setMessage = message[1];
+    var filter = React.useState(false), setFilter = filter[1];
+    var applied = React.useState(true), setApplied = applied[1];
+    var loading = React.useState(false), setLoading = loading[1], result = React.useState('Данные актуальны.'), setResult = result[1];
+    var course = React.useState(0), setCourse = course[1], timer = React.useRef(null);
+    React.useEffect(function () { return function () { clearTimeout(timer.current); }; }, []);
+    function refresh() { setLoading(true); setResult('Обновляем данные…'); timer.current = setTimeout(function () { setLoading(false); setResult('Данные обновлены.'); }, 1200); }
+    function sample(caption, props) { return <div className={'sample'} key={caption}>
+    <span className={'cap'}>
+    {caption}
+    </span>
+    <S.DsIconButton {...Object.assign({ icon: 'edit', label: 'Изменить объект', onClick: function () { setMessage('Действие «' + caption + '» выполнено.'); } }, props)}/>
+    </div>; }
+    return <LiveExamples>
+    <LiveExample id={"object-actions"} title={"Действия объекта"} description={"Нажмите действие объекта и проверьте результат; доступное имя объясняет назначение кнопки."}>
+    <ObjectActions />
+    </LiveExample>
+    <LiveExample id={"sizes"} title={"Размеры"} description={"Сравните доступные размеры. Для связанных элементов используйте одинаковый размер."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    {sample('sm', { size: 'sm' })}
+    {sample('md', {})}
+    {sample('lg', { size: 'lg' })}
+    </div>
+    </div>
+    <p className="cap" role="status" aria-label="Результат действия">{message[0]}</p>
+    </LiveExample>
+    <LiveExample id={"tones"} title={"Тоны"} description={"Выберите акцент по значимости действия: главное, дополнительное или разрушительное."}>
+    <div className={"demo-stack"}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    {sample('ghost', {})}
+    {sample('secondary', { tone: 'secondary' })}
+    {sample('primary', { tone: 'primary', icon: 'add', label: 'Добавить объект' })}
+    {sample('danger', { tone: 'danger', icon: 'delete', label: 'Удалить объект' })}
+    <div className={'sample'}>
+    <span className={'cap'}>
+    {'onHeader'}
+    </span>
+    <div className={'header-surface'}>
+    <S.DsIconButton tone={'onHeader'} icon={'help'} label={'Открыть справку'} onClick={function () { setMessage('Справка открыта.'); }}/>
+    </div>
+    </div>
+    </div>
+    </div>
+    <p role={'status'} aria-label={'Результат действия'}>
+    {message[0]}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"toggle"} title={"Переключатель"} description={"Нажимайте кнопку, чтобы включить или выключить состояние; выбранность объявляется через aria-pressed."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    <S.DsIconButton icon={'filter_alt'} label={'Только активные объекты'} active={filter[0]} onClick={function () { setFilter(function (value) { return !value; }); }}/>
+    </div>
+    <p role={'status'} aria-label={'Состояние фильтра'}>
+    {filter[0] ? 'Показаны только активные объекты.' : 'Показаны все объекты.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"indicator"} title={"Индикатор применённых настроек"} description={"Индикатор сообщает, что настройки отличаются от исходных."}>
+    <div className={"demo-stack"}>
+    <div className={'row menu-stage'}>
+    <S.DsMenu width={220} trigger={<S.DsIconButton icon={'filter_alt'} label={'Настроить фильтры объектов'} dot={applied[0]} aria-describedby={'applied-filter'}/>} items={[
+        { id: 'all', label: 'Все объекты', checked: !applied[0], onClick: function () { setApplied(false); } },
+        { id: 'active', label: 'Только активные объекты', checked: applied[0], onClick: function () { setApplied(true); } }
+    ]}/>
+    </div>
+    <p id={'applied-filter'} role={'status'}>
+    {applied[0] ? 'Применён фильтр: только активные объекты.' : 'Фильтры не применены.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"loading"} title={"Загрузка"} description={"Запустите операцию: индикатор сообщает об ожидании и предотвращает повторное действие."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    {sample('sm · ghost', { icon: 'refresh', label: 'Обновить данные', size: 'sm', loading: loading[0], onClick: refresh })}
+    {sample('md · primary', { icon: 'refresh', label: 'Обновить данные', tone: 'primary', loading: loading[0], onClick: refresh })}
+    {sample('lg · secondary', { icon: 'refresh', label: 'Обновить данные', size: 'lg', tone: 'secondary', loading: loading[0], onClick: refresh })}
+    </div>
+    <p role={'status'} aria-label={'Результат обновления'}>
+    {result[0]}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"rotation"} title={"Поворот иконки"} description={"Измените направление символа, сохраняя размер и область нажатия."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    <S.DsIconButton icon={'navigation'} label={'Повернуть курс на 90°'} rotate={course[0]} onClick={function () { setCourse(function (value) { return (value + 90) % 360; }); }}/>
+    </div>
+    <p role={'status'} aria-label={'Курс'}>
+    {'Курс: ' + course[0] + '°.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"disabled"} title={"Недоступное действие"} description={"Недоступное действие нельзя выполнить. Видимое пояснение помогает понять причину ограничения."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    <S.DsIconButton icon={'delete'} label={'Удалить выбранные объекты'} tone={'danger'} disabled={true} aria-describedby={'disabled-reason'}/>
+    </div>
+    <p id={'disabled-reason'} className={'cap'}>
+    {'Для удаления сначала выберите объекты.'}
+    </p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

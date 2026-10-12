@@ -1,71 +1,192 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · кнопки" height=1400 subtitle="Кнопка действия с текстом, иконками и состоянием загрузки" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · кнопки" height=1400 subtitle="Кнопка действия с текстом, иконками и состоянием загрузки" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:32px}
-.section{display:flex;flex-direction:column;gap:16px;min-width:0}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .sample{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;max-width:100%}
 .form{display:flex;flex-direction:column;gap:16px;max-width:360px}.actions{justify-content:flex-end}
-h3{font:var(--ds-type-body-strong);margin:0}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function section(title,content){return h('section',{className:'section','aria-label':title},h('h3',null,title),content);}
-function SavePair(){
-  var name=React.useState(''),error=React.useState(''),message=React.useState('Измените название и сохраните объект.');
-  function submit(e){
-    e.preventDefault();
-    if(!name[0].trim()){error[1]('Введите название объекта.');message[1]('Объект не сохранён. Исправьте поле названия.');e.currentTarget.querySelector('input').focus();return;}
-    error[1]('');message[1]('Объект «'+name[0].trim()+'» сохранён.');
-  }
-  function cancel(){name[1]('');error[1]('');message[1]('Изменения отменены.');}
-  return section('Сохранение и отмена',h('form',{className:'form',noValidate:true,onSubmit:submit},
-    h(S.DsField,{label:'Название объекта',required:true,value:name[0],error:error[0],onChange:function(e){name[1](e.target.value);if(error[0])error[1]('');}}),
-    h('div',{className:'row actions'},h(S.DsButton,{tone:'secondary',onClick:cancel},'Отмена'),h(S.DsButton,{type:'submit'},'Сохранить')),
-    h('p',{className:'cap',role:'status'},message[0])));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function section(title, content) { return <div className={"demo-stack"}>
+{content}
+</div>; }
+function SavePair() {
+    var name = React.useState(''), error = React.useState(''), message = React.useState('Измените название и сохраните объект.');
+    function submit(e) {
+        e.preventDefault();
+        if (!name[0].trim()) {
+            error[1]('Введите название объекта.');
+            message[1]('Объект не сохранён. Исправьте поле названия.');
+            e.currentTarget.querySelector('input').focus();
+            return;
+        }
+        error[1]('');
+        message[1]('Объект «' + name[0].trim() + '» сохранён.');
+    }
+    function cancel() { name[1](''); error[1](''); message[1]('Изменения отменены.'); }
+    return section('Сохранение и отмена', <form className={'form'} noValidate={true} onSubmit={submit}>
+    <S.DsField label={'Название объекта'} required={true} value={name[0]} error={error[0]} onChange={function (e) {
+        name[1](e.target.value);
+        if (error[0])
+            error[1]('');
+    }}/>
+    <div className={'row actions'}>
+    <S.DsButton tone={'secondary'} onClick={cancel}>
+    {'Отмена'}
+    </S.DsButton>
+    <S.DsButton type={'submit'}>
+    {'Сохранить'}
+    </S.DsButton>
+    </div>
+    <p className={'cap'} role={'status'}>
+    {message[0]}
+    </p>
+    </form>);
 }
-function DeletePair(){
-  var deleted=React.useState(false),message=React.useState('Удалить объект «Volvo FH16» из примера?');
-  return section('Удаление и отмена',h('div',{className:'form'},
-    h('p',{className:'cap',role:'status'},message[0]),
-    h('div',{className:'row actions'},
-      deleted[0]?null:h(S.DsButton,{key:'cancel',tone:'secondary',onClick:function(){message[1]('Удаление отменено. Объект сохранён.');}},'Отмена'),
-      h(S.DsButton,{key:'action',tone:deleted[0]?'secondary':'danger',onClick:function(){
-        if(deleted[0]){deleted[1](false);message[1]('Удалить объект «Volvo FH16» из примера?');}
-        else{deleted[1](true);message[1]('Объект удалён из примера.');}
-      }},deleted[0]?'Восстановить пример':'Удалить объект'))));
+function DeletePair() {
+    var deleted = React.useState(false), message = React.useState('Удалить объект «Volvo FH16» из примера?');
+    return section('Удаление и отмена', <div className={'form'}>
+    <p className={'cap'} role={'status'}>
+    {message[0]}
+    </p>
+    <div className={'row actions'}>
+    {deleted[0] ? null : <S.DsButton key={'cancel'} tone={'secondary'} onClick={function () { message[1]('Удаление отменено. Объект сохранён.'); }}>
+    {'Отмена'}
+    </S.DsButton>}
+    <S.DsButton key={'action'} tone={deleted[0] ? 'secondary' : 'danger'} onClick={function () {
+        if (deleted[0]) {
+            deleted[1](false);
+            message[1]('Удалить объект «Volvo FH16» из примера?');
+        }
+        else {
+            deleted[1](true);
+            message[1]('Объект удалён из примера.');
+        }
+    }}>
+    {deleted[0] ? 'Восстановить пример' : 'Удалить объект'}
+    </S.DsButton>
+    </div>
+    </div>);
 }
-
-function App(){
-  var wide=React.useState(false),action=React.useState('Нажмите любую доступную кнопку.'),saving=React.useState(false),saved=React.useState(false),timer=React.useRef();
-  React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
-  function report(label){action[1]('Выполнено действие «'+label+'».');}
-  function save(){saving[1](true);saved[1](false);timer.current=setTimeout(function(){saving[1](false);saved[1](true);},1200);}
-  return h('div',{className:'examples'},
-    section('На инверсной поверхности',h('div',{style:{background:'var(--ds-surface-inverse)',padding:12,borderRadius:'var(--ds-radius-md)',alignSelf:'flex-start'}},h(S.DsButton,{tone:'inverse',onClick:function(){report('Отменить');}},'Отменить'))),
-    section('Тоны',h('div',{className:'row'},[
-      ['primary','Сохранить'],['secondary','Отмена'],['subtle','Применить'],['ghost','Подробнее'],['danger','Удалить'],['accent','Попробовать']
-    ].map(function(item){return h('div',{key:item[0],className:'sample'},h(S.DsButton,{tone:item[0],onClick:function(){report(item[1]);}},item[1]),h('span',{className:'cap'},item[0]));}))),
-    section('Размеры и иконки',h('div',{className:'row'},
-      h('div',{className:'sample'},h(S.DsButton,{size:'sm',tone:'secondary',icon:'download',onClick:function(){report('Экспорт CSV');}},'Экспорт CSV'),h('span',{className:'cap'},'sm · иконка слева')),
-      h('div',{className:'sample'},h(S.DsButton,{icon:'add',onClick:function(){report('Добавить объект');}},'Добавить объект'),h('span',{className:'cap'},'md · по умолчанию')),
-      h('div',{className:'sample'},h(S.DsButton,{size:'lg',tone:'secondary',iconRight:'arrow_forward',onClick:function(){report('Продолжить');}},'Продолжить'),h('span',{className:'cap'},'lg · иконка справа')))),
-    section('Недоступное действие',h('div',{className:'row'},['primary','secondary','subtle','ghost','danger','accent'].map(function(tone){return h('div',{className:'sample',key:tone},h(S.DsButton,{tone:tone,disabled:true},tone==='danger'?'Удалить':'Сохранить'),h('span',{className:'cap'},tone));}))),
-    h('p',{className:'cap',role:'status','aria-label':'Результат действия'},action[0]),
-    section('Сохранение с загрузкой',h('div',{className:'form'},
-      h('p',{className:'cap'},'Цвет, ширина и фокус сохраняются. Повторное нажатие недоступно.'),
-      h('div',null,h(S.DsButton,{icon:'save',loading:saving[0],onClick:save},'Сохранить изменения')),
-      h(S.DsButton,{tone:'secondary',fullWidth:true,icon:'save',loading:saving[0],onClick:save},'Сохранить изменения'),
-      h('p',{className:'cap',role:'status','aria-label':'Результат сохранения'},saving[0]?'Сохраняем изменения…':saved[0]?'Изменения сохранены.':'Изменения ещё не сохранены.'))),
-    section('Длинная подпись',h('div',{className:'form'},
-      h('div',{style:{width:wide[0]?'100%':200,maxWidth:'100%',display:'flex'}},h(S.DsButton,{tone:'secondary',icon:'download',iconRight:'arrow_forward',fullWidth:true,onClick:function(){report('Скачать отчёт по выбранным объектам');}},'Скачать отчёт по выбранным объектам')),
-      h('div',null,h(S.DsButton,{tone:'ghost',size:'sm',onClick:function(){wide[1](!wide[0]);}},wide[0]?'Сузить область':'Расширить область')))),
-    h(SavePair),h(DeletePair),
-    section('Причина недоступности',h('div',{className:'form'},
-      h('div',null,h(S.DsButton,{tone:'secondary',disabled:true,'aria-describedby':'export-reason'},'Экспорт')),
-      h('p',{id:'export-reason',className:'cap'},'Экспорт доступен администратору. Обратитесь к администратору проекта.'))));
+function App() {
+    var wide = React.useState(false), action = React.useState('Нажмите любую доступную кнопку.'), saving = React.useState(false), saved = React.useState(false), timer = React.useRef();
+    React.useEffect(function () { return function () { clearTimeout(timer.current); }; }, []);
+    function report(label) { action[1]('Выполнено действие «' + label + '».'); }
+    function save() { saving[1](true); saved[1](false); timer.current = setTimeout(function () { saving[1](false); saved[1](true); }, 1200); }
+    return <LiveExamples>
+    <LiveExample id={"sohranenie-i-otmena"} title={"Сохранение и отмена"} description={"Введите название и сохраните объект. При ошибке фокус возвращается к полю, отмена сбрасывает изменения."}>
+    <SavePair />
+    </LiveExample>
+    <LiveExample id={"tony"} title={"Тоны"} description={"Выберите акцент по значимости действия: главное, дополнительное или разрушительное."}>
+    {section('Тоны', <div className={"demo-stack"}>
+    <div className={'row'}>
+    {[
+        ['primary', 'Сохранить'], ['secondary', 'Отмена'], ['subtle', 'Применить'], ['ghost', 'Подробнее'], ['danger', 'Удалить'], ['accent', 'Попробовать']
+    ].map(function (item) { return <div key={item[0]} className={'sample'}>
+    <S.DsButton tone={item[0]} onClick={function () { report(item[1]); }}>
+    {item[1]}
+    </S.DsButton>
+    <span className={'cap'}>
+    {item[0]}
+    </span>
+    </div>; })}
+    </div>
+    <p className={'cap'} role={'status'} aria-label={'Результат действия'}>
+    {action[0]}
+    </p>
+    </div>)}
+    </LiveExample>
+    <LiveExample id={"razmery-i-ikonki"} title={"Размеры и иконки"} description={"Иконка дополняет подпись, а размер выбирается по месту действия в интерфейсе."}>
+    {section('Размеры и иконки', <div className={'row'}>
+    <div className={'sample'}>
+    <S.DsButton size={'sm'} tone={'secondary'} icon={'download'} onClick={function () { report('Экспорт CSV'); }}>
+    {'Экспорт CSV'}
+    </S.DsButton>
+    <span className={'cap'}>
+    {'sm · иконка слева'}
+    </span>
+    </div>
+    <div className={'sample'}>
+    <S.DsButton icon={'add'} onClick={function () { report('Добавить объект'); }}>
+    {'Добавить объект'}
+    </S.DsButton>
+    <span className={'cap'}>
+    {'md · по умолчанию'}
+    </span>
+    </div>
+    <div className={'sample'}>
+    <S.DsButton size={'lg'} tone={'secondary'} iconRight={'arrow_forward'} onClick={function () { report('Продолжить'); }}>
+    {'Продолжить'}
+    </S.DsButton>
+    <span className={'cap'}>
+    {'lg · иконка справа'}
+    </span>
+    </div>
+    </div>)}
+    <p className="cap" role="status" aria-label="Результат действия">{action[0]}</p>
+    </LiveExample>
+    <LiveExample id={"nedostupnoe-deystvie"} title={"Недоступное действие"} description={"Недоступное действие нельзя выполнить. Видимое пояснение помогает понять причину ограничения."}>
+    {section('Недоступное действие', <div className={'row'}>
+    {['primary', 'secondary', 'subtle', 'ghost', 'danger', 'accent'].map(function (tone) { return <div className={'sample'} key={tone}>
+    <S.DsButton tone={tone} disabled={true}>
+    {tone === 'danger' ? 'Удалить' : 'Сохранить'}
+    </S.DsButton>
+    <span className={'cap'}>
+    {tone}
+    </span>
+    </div>; })}
+    </div>)}
+    </LiveExample>
+    <LiveExample id={"sohranenie-s-zagruzkoy"} title={"Сохранение с загрузкой"} description={"Нажмите «Сохранить изменения»: кнопка сохраняет размеры и сообщает о выполнении операции."}>
+    {section('Сохранение с загрузкой', <div className={'form'}>
+    <p className={'cap'}>
+    {'Цвет, ширина и фокус сохраняются. Повторное нажатие недоступно.'}
+    </p>
+    <div>
+    <S.DsButton icon={'save'} loading={saving[0]} onClick={save}>
+    {'Сохранить изменения'}
+    </S.DsButton>
+    </div>
+    <S.DsButton tone={'secondary'} fullWidth={true} icon={'save'} loading={saving[0]} onClick={save}>
+    {'Сохранить изменения'}
+    </S.DsButton>
+    <p className={'cap'} role={'status'} aria-label={'Результат сохранения'}>
+    {saving[0] ? 'Сохраняем изменения…' : saved[0] ? 'Изменения сохранены.' : 'Изменения ещё не сохранены.'}
+    </p>
+    </div>)}
+    </LiveExample>
+    <LiveExample id={"dlinnaya-podpis"} title={"Длинная подпись"} description={"Проверьте, как подпись помещается в узкой области; доступное имя сохраняется полностью."}>
+    {section('Длинная подпись', <div className={'form'}>
+    <div style={{ width: wide[0] ? '100%' : 200, maxWidth: '100%', display: 'flex' }}>
+    <S.DsButton tone={'secondary'} icon={'download'} iconRight={'arrow_forward'} fullWidth={true} onClick={function () { report('Скачать отчёт по выбранным объектам'); }}>
+    {'Скачать отчёт по выбранным объектам'}
+    </S.DsButton>
+    </div>
+    <div>
+    <S.DsButton tone={'ghost'} size={'sm'} onClick={function () { wide[1](!wide[0]); }}>
+    {wide[0] ? 'Сузить область' : 'Расширить область'}
+    </S.DsButton>
+    </div>
+    </div>)}
+    <p className="cap" role="status" aria-label="Результат действия">{action[0]}</p>
+    </LiveExample>
+    <LiveExample id={"udalenie-i-otmena"} title={"Удаление и отмена"} description={"Разрушительное действие выделено отдельным тоном; пример можно восстановить после удаления."}>
+    <DeletePair />
+    </LiveExample>
+    <LiveExample id={"prichina-nedostupnosti"} title={"Причина недоступности"} description={"Объясните ограничение и следующий шаг рядом с недоступной кнопкой."}>
+    {section('Причина недоступности', <div className={'form'}>
+    <div>
+    <S.DsButton tone={'secondary'} disabled={true} aria-describedby={'export-reason'}>
+    {'Экспорт'}
+    </S.DsButton>
+    </div>
+    <p id={'export-reason'} className={'cap'}>
+    {'Экспорт доступен администратору. Обратитесь к администратору проекта.'}
+    </p>
+    </div>)}
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

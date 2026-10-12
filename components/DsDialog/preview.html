@@ -1,42 +1,142 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · раскладка" height=440 subtitle="Модальное окно для подтверждения действия или короткой задачи" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · раскладка" height=440 subtitle="Модальное окно для подтверждения действия или короткой задачи" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:24px}
-section{display:flex;flex-direction:column;gap:12px}
-h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .stage{position:relative;transform:translateZ(0);min-height:620px}
 .options{display:flex;flex-direction:column;gap:16px}
 .entry{padding:12px 0;border-bottom:1px solid var(--ds-border)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var example=React.useState(null),size=React.useState('md'),archived=React.useState(false),saved=React.useState(false),notifications=React.useState('checked');
-function close(){example[1](null)}
-var mode=example[0];
-return h('div',{className:'examples'},
- h('section',null,h('h3',null,'Подтверждение действия'),
-  h('p',null,'Последствие объяснено до подтверждения. Отмена стоит перед главным действием.'),
-  h('div',{className:'row'},h(S.DsButton,{tone:'danger',icon:'archive',onClick:function(){example[1]('archive')}},'Переместить в архив…')),
-  h('p',{className:'cap',role:'status'},archived[0]?'Объект перемещён в архив.':'Объект доступен на карте.')),
- h('section',null,h('h3',null,'Короткая задача'),
-  h('div',{className:'row'},h(S.DsButton,{tone:'secondary',onClick:function(){example[1]('settings')}},'Настроить уведомления')),
-  h('p',{className:'cap',role:'status'},saved[0]?'Настройки сохранены.':'Измените настройку и сохраните результат.')),
- h('section',null,h('h3',null,'Размер и длинное содержимое'),
-  h('div',{className:'row',role:'group','aria-label':'Размер диалога'},['sm','md','lg','xl'].map(function(value){return h(S.DsButton,{key:value,tone:size[0]===value?'primary':'secondary','aria-pressed':size[0]===value,onClick:function(){size[1](value)}},value)})),
-  h('div',{className:'row'},h(S.DsButton,{tone:'secondary',onClick:function(){example[1]('history')}},'Открыть историю')),
-  h('p',{className:'cap'},'Прокручивается тело диалога; заголовок и действия остаются видимыми.')),
- mode?h('div',{className:'stage'},h(S.DsDialog,{
-  open:true,size:mode==='archive'?'sm':mode==='history'?size[0]:'md',tone:mode==='archive'?'danger':undefined,
-  title:mode==='archive'?'Переместить объект «Volvo FH16» в архив?':mode==='settings'?'Уведомления об объекте':'История объекта',
-  description:mode==='archive'?'Объект пропадёт с карты. Его история останется доступна в отчётах.':mode==='settings'?'Выберите, какие события получать.':undefined,
-  onClose:close,
-  actions:mode==='history'?[h(S.DsButton,{key:'close',tone:'secondary',onClick:close},'Закрыть')]:[
-   h(S.DsButton,{key:'cancel',tone:'secondary',onClick:close},'Отмена'),
-   h(S.DsButton,{key:'confirm',tone:mode==='archive'?'danger':'primary',onClick:function(){if(mode==='archive')archived[1](true);else saved[1](true);close()}},mode==='archive'?'Переместить в архив':'Сохранить')]
- },mode==='settings'?h('div',{className:'options'},h(S.DsCheckbox,{label:'Изменение статуса',state:notifications[0],onChange:notifications[1]})):mode==='history'?Array.from({length:24},function(_,i){return h('p',{className:'entry',key:i},'Событие '+(i+1)+' · Обновлена информация об объекте.')}):null)):null);
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    var example = React.useState(null), size = React.useState('md'), archived = React.useState(false), saved = React.useState(false), notifications = React.useState('checked');
+    function close() { example[1](null); }
+    var mode = example[0];
+    return <LiveExamples>
+    <LiveExample id={"podtverzhdenie-deystviya"} title={"Подтверждение действия"} description={"Откройте диалог, чтобы подтвердить действие; после закрытия фокус возвращается к вызвавшей его кнопке."}>
+    <div className={"demo-stack"}>
+    <div className={"demo-stack"}>
+    <p>
+    {'Последствие объяснено до подтверждения. Отмена стоит перед главным действием.'}
+    </p>
+    <div className={'row'}>
+    <S.DsButton tone={'danger'} icon={'archive'} onClick={function () { example[1]('archive'); }}>
+    {'Переместить в архив…'}
+    </S.DsButton>
+    </div>
+    <p className={'cap'} role={'status'}>
+    {archived[0] ? 'Объект перемещён в архив.' : 'Объект доступен на карте.'}
+    </p>
+    </div>
+    {mode === "archive" ? mode ? <div className={'stage'}>
+    <S.DsDialog open={true} size={mode === 'archive' ? 'sm' : mode === 'history' ? size[0] : 'md'} tone={mode === 'archive' ? 'danger' : undefined} title={mode === 'archive' ? 'Переместить объект «Volvo FH16» в архив?' : mode === 'settings' ? 'Уведомления об объекте' : 'История объекта'} description={mode === 'archive' ? 'Объект пропадёт с карты. Его история останется доступна в отчётах.' : mode === 'settings' ? 'Выберите, какие события получать.' : undefined} onClose={close} actions={mode === 'history' ? [<S.DsButton key={'close'} tone={'secondary'} onClick={close}>
+        {'Закрыть'}
+        </S.DsButton>] : [
+        <S.DsButton key={'cancel'} tone={'secondary'} onClick={close}>
+        {'Отмена'}
+        </S.DsButton>,
+        <S.DsButton key={'confirm'} tone={mode === 'archive' ? 'danger' : 'primary'} onClick={function () {
+            if (mode === 'archive')
+                archived[1](true);
+            else
+                saved[1](true);
+            close();
+        }}>
+        {mode === 'archive' ? 'Переместить в архив' : 'Сохранить'}
+        </S.DsButton>
+    ]}>
+    {mode === 'settings' ? <div className={'options'}>
+    <S.DsCheckbox label={'Изменение статуса'} state={notifications[0]} onChange={notifications[1]}/>
+    </div> : mode === 'history' ? Array.from({ length: 24 }, function (_, i) { return <p className={'entry'} key={i}>
+    {'Событие ' + (i + 1) + ' · Обновлена информация об объекте.'}
+    </p>; }) : null}
+    </S.DsDialog>
+    </div> : null : null}
+    </div>
+    </LiveExample>
+    <LiveExample id={"korotkaya-zadacha"} title={"Короткая задача"} description={"Диалог позволяет выполнить короткую задачу, сохранив контекст страницы."}>
+    <div className={"demo-stack"}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    <S.DsButton tone={'secondary'} onClick={function () { example[1]('settings'); }}>
+    {'Настроить уведомления'}
+    </S.DsButton>
+    </div>
+    <p className={'cap'} role={'status'}>
+    {saved[0] ? 'Настройки сохранены.' : 'Измените настройку и сохраните результат.'}
+    </p>
+    </div>
+    {mode === "settings" ? mode ? <div className={'stage'}>
+    <S.DsDialog open={true} size={mode === 'archive' ? 'sm' : mode === 'history' ? size[0] : 'md'} tone={mode === 'archive' ? 'danger' : undefined} title={mode === 'archive' ? 'Переместить объект «Volvo FH16» в архив?' : mode === 'settings' ? 'Уведомления об объекте' : 'История объекта'} description={mode === 'archive' ? 'Объект пропадёт с карты. Его история останется доступна в отчётах.' : mode === 'settings' ? 'Выберите, какие события получать.' : undefined} onClose={close} actions={mode === 'history' ? [<S.DsButton key={'close'} tone={'secondary'} onClick={close}>
+        {'Закрыть'}
+        </S.DsButton>] : [
+        <S.DsButton key={'cancel'} tone={'secondary'} onClick={close}>
+        {'Отмена'}
+        </S.DsButton>,
+        <S.DsButton key={'confirm'} tone={mode === 'archive' ? 'danger' : 'primary'} onClick={function () {
+            if (mode === 'archive')
+                archived[1](true);
+            else
+                saved[1](true);
+            close();
+        }}>
+        {mode === 'archive' ? 'Переместить в архив' : 'Сохранить'}
+        </S.DsButton>
+    ]}>
+    {mode === 'settings' ? <div className={'options'}>
+    <S.DsCheckbox label={'Изменение статуса'} state={notifications[0]} onChange={notifications[1]}/>
+    </div> : mode === 'history' ? Array.from({ length: 24 }, function (_, i) { return <p className={'entry'} key={i}>
+    {'Событие ' + (i + 1) + ' · Обновлена информация об объекте.'}
+    </p>; }) : null}
+    </S.DsDialog>
+    </div> : null : null}
+    </div>
+    </LiveExample>
+    <LiveExample id={"razmer-i-dlinnoe-soderzhimoe"} title={"Размер и длинное содержимое"} description={"Выберите размер диалога и проверьте прокрутку длинного содержимого."}>
+    <div className={"demo-stack"}>
+    <div className={"demo-stack"}>
+    <div className={'row'} role={'group'} aria-label={'Размер диалога'}>
+    {['sm', 'md', 'lg', 'xl'].map(function (value) { return <S.DsButton key={value} tone={size[0] === value ? 'primary' : 'secondary'} aria-pressed={size[0] === value} onClick={function () { size[1](value); }}>
+    {value}
+    </S.DsButton>; })}
+    </div>
+    <div className={'row'}>
+    <S.DsButton tone={'secondary'} onClick={function () { example[1]('history'); }}>
+    {'Открыть историю'}
+    </S.DsButton>
+    </div>
+    <p className={'cap'}>
+    {'Прокручивается тело диалога; заголовок и действия остаются видимыми.'}
+    </p>
+    </div>
+    {mode === "history" ? mode ? <div className={'stage'}>
+    <S.DsDialog open={true} size={mode === 'archive' ? 'sm' : mode === 'history' ? size[0] : 'md'} tone={mode === 'archive' ? 'danger' : undefined} title={mode === 'archive' ? 'Переместить объект «Volvo FH16» в архив?' : mode === 'settings' ? 'Уведомления об объекте' : 'История объекта'} description={mode === 'archive' ? 'Объект пропадёт с карты. Его история останется доступна в отчётах.' : mode === 'settings' ? 'Выберите, какие события получать.' : undefined} onClose={close} actions={mode === 'history' ? [<S.DsButton key={'close'} tone={'secondary'} onClick={close}>
+        {'Закрыть'}
+        </S.DsButton>] : [
+        <S.DsButton key={'cancel'} tone={'secondary'} onClick={close}>
+        {'Отмена'}
+        </S.DsButton>,
+        <S.DsButton key={'confirm'} tone={mode === 'archive' ? 'danger' : 'primary'} onClick={function () {
+            if (mode === 'archive')
+                archived[1](true);
+            else
+                saved[1](true);
+            close();
+        }}>
+        {mode === 'archive' ? 'Переместить в архив' : 'Сохранить'}
+        </S.DsButton>
+    ]}>
+    {mode === 'settings' ? <div className={'options'}>
+    <S.DsCheckbox label={'Изменение статуса'} state={notifications[0]} onChange={notifications[1]}/>
+    </div> : mode === 'history' ? Array.from({ length: 24 }, function (_, i) { return <p className={'entry'} key={i}>
+    {'Событие ' + (i + 1) + ' · Обновлена информация об объекте.'}
+    </p>; }) : null}
+    </S.DsDialog>
+    </div> : null : null}
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

@@ -1,19 +1,22 @@
-<!-- @dsCard aliases="график|chart" group="5 · Компоненты · графики" height=360 subtitle="Декартов график по токенам: линия, область, столбцы; разрыв телеметрии остаётся разрывом" -->
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="график|chart" group="5 · Компоненты · графики" height=360 subtitle="Декартов график по токенам: линия, область, столбцы; разрыв телеметрии остаётся разрывом" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
 .sep{width:1px;height:24px;background:var(--ds-divider)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var CAT=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00'];
-function App(){return h(S.DsChart,{title:'Скорость и топливо',subtitle:'Сегодня · 9 точек',categories:CAT,height:240,toolbox:true,zoom:true,showMinMax:true,
-  thresholds:[{value:90,label:'Лимит 90',tone:'danger'}],
-  series:[{name:'Скорость',unit:'км/ч',data:[0,42,65,null,null,58,72,88,61]},{name:'Уровень топлива',unit:'л',data:[180,171,160,155,150,142,131,120,112],thin:true}]});}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var CAT = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
+function App() {
+    return <LiveExamples>
+    <LiveExample id={"telemetry-chart"} title={"Скорость и топливо"} description={"Сравните две серии, наведите курсор на точки и измените масштаб. Отсутствующая телеметрия остаётся разрывом."}>
+    <S.DsChart title={'Скорость и топливо'} subtitle={'Сегодня · 9 точек'} categories={CAT} height={240} toolbox={true} zoom={true} showMinMax={true} thresholds={[{ value: 90, label: 'Лимит 90', tone: 'danger' }]} series={[{ name: 'Скорость', unit: 'км/ч', data: [0, 42, 65, null, null, 58, 72, 88, 61] }, { name: 'Уровень топлива', unit: 'л', data: [180, 171, 160, 155, 150, 142, 131, 120, 112], thin: true }]}/>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

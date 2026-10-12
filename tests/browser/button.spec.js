@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
@@ -65,7 +66,7 @@ test('DsButton action groups validate, cancel and delete independently',async({p
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
       await page.setViewportSize({width,height:900});
       await page.goto(served.url+'/index.html?card=DsButton&theme='+theme+'&appearance='+appearance+'&density='+density);
-      const frame=page.frameLocator('#preview'),form=frame.getByRole('region',{name:'Сохранение и отмена',exact:true});
+      const frame=page.frameLocator('#preview'),form=exampleDemo(frame,'Сохранение и отмена');
       const save=form.getByRole('button',{name:'Сохранить',exact:true}),input=form.getByRole('textbox',{name:'Название объекта'});
       await expect(save).toBeEnabled();await save.click();
       await expect(form.getByText('Введите название объекта.',{exact:true})).toBeVisible();await expect(input).toBeFocused();
@@ -73,14 +74,14 @@ test('DsButton action groups validate, cancel and delete independently',async({p
       await expect(form.getByRole('status')).toHaveText('Объект «MAZ 5440» сохранён.');
       await form.getByRole('button',{name:'Отмена',exact:true}).click();
       await expect(input).toHaveValue('');await expect(form.getByRole('status')).toHaveText('Изменения отменены.');
-      const deletion=frame.getByRole('region',{name:'Удаление и отмена',exact:true});
+      const deletion=exampleDemo(frame,'Удаление и отмена');
       await deletion.getByRole('button',{name:'Отмена',exact:true}).click();
       await expect(deletion.getByRole('status')).toHaveText('Удаление отменено. Объект сохранён.');
       await deletion.getByRole('button',{name:'Удалить объект',exact:true}).focus();await page.keyboard.press('Space');
       await expect(deletion.getByRole('status')).toHaveText('Объект удалён из примера.');
       await deletion.getByRole('button',{name:'Восстановить пример'}).click();
       await expect(deletion.getByRole('button',{name:'Удалить объект',exact:true})).toBeVisible();
-      const unavailable=frame.getByRole('region',{name:'Причина недоступности',exact:true});
+      const unavailable=exampleDemo(frame,'Причина недоступности');
       await expect(unavailable.getByRole('button',{name:'Экспорт',exact:true})).toBeDisabled();
       await expect(unavailable.getByText('Экспорт доступен администратору. Обратитесь к администратору проекта.',{exact:true})).toBeVisible();
       expect(await frame.locator('body').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);

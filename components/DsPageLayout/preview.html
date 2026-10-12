@@ -1,10 +1,6 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · раскладка" height=1080 subtitle="Каркас страницы с шапкой, основным содержимым и необязательными боковыми регионами" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · раскладка" height=1080 subtitle="Каркас страницы с шапкой, основным содержимым и необязательными боковыми регионами" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:24px}section{display:flex;flex-direction:column;gap:12px}
-h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .stage{border:1px solid var(--ds-border);min-width:0}
@@ -19,41 +15,109 @@ h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
 .pane h4{margin:0;font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
 .pane input{width:100%;min-width:0;font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-field);padding:8px}
 .entry{padding:12px 0;border-bottom:1px solid var(--ds-border)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function region(text,kind){return h('div',{className:'region '+kind},text)}
-function App(){var mode=React.useState('left'),gap=React.useState(true),footer=React.useState(false),long=React.useState(false),selected=React.useState('Volvo FH16'),note=React.useState(''),saved=React.useState(false);
-var choices=[['main','Основной'],['left','Слева'],['right','Справа'],['both','С двух сторон']];
-return h('div',{className:'examples'},h('section',null,
- h('h3',null,'Регионы страницы'),
- h('div',{className:'row',role:'group','aria-label':'Расположение боковых регионов'},choices.map(function(item){return h(S.DsButton,{key:item[0],tone:mode[0]===item[0]?'primary':'secondary','aria-pressed':mode[0]===item[0],onClick:function(){mode[1](item[0])}},item[1])})),
- h('div',{className:'row'},
-  h(S.DsButton,{tone:!gap[0]?'primary':'secondary','aria-pressed':!gap[0],onClick:function(){gap[1](!gap[0])}},'Без отступов'),
-  h(S.DsButton,{tone:footer[0]?'primary':'secondary','aria-pressed':footer[0],onClick:function(){footer[1](!footer[0])}},'Нижний регион')),
- h('div',{className:'stage'},h(S.DsPageLayout,{
-  responsive:true,mainId:'layout-regions',skipLinkLabel:'К схеме регионов',leftLabel:'Список',rightLabel:'Сведения',header:region('Шапка приложения','header'),pageHeader:region('Заголовок страницы','heading'),
-  left:mode[0]==='left'||mode[0]==='both'?region('Левый регион','side'):undefined,
-  right:mode[0]==='right'||mode[0]==='both'?region('Правый регион','side'):undefined,
-  leftWidth:'clamp(80px, 20vw, 180px)',rightWidth:'clamp(80px, 20vw, 180px)',gap:gap[0],
-  footer:footer[0]?region('Нижний регион','footer'):undefined
- },region('Основное содержимое','content'))),
- h('p',{className:'cap'},'На узкой ширине боковые регионы раскрываются кнопками. На широком экране их ширина задана через leftWidth и rightWidth.')),
- h('section',null,h('h3',null,'Обычная страница'),
-  h('p',null,'Содержимое растёт вместе со страницей. У каркаса нет отдельной прокрутки.'),
-  h('div',{className:'row'},h(S.DsButton,{tone:'secondary','aria-expanded':long[0],'aria-controls':'page-long-content',onClick:function(){long[1](!long[0])}},long[0]?'Свернуть описание':'Развернуть описание')),
-  h('div',{className:'stage'},h(S.DsPageLayout,{mainId:'layout-document',skipLinkLabel:'К описанию страницы',pageHeader:region('Настройки мониторинга','heading')},
-   h('div',{className:'pane',id:'page-long-content'},h('p',null,'Укажите настройки, общие для всех объектов.'),long[0]?Array.from({length:8},function(_,i){return h('p',{key:i,className:'entry'},'Правило '+(i+1)+'. Настройки применяются к новым событиям и не изменяют сохранённую историю.')}):null)))),
- h('section',null,h('h3',null,'Рабочий экран с панелями'),
-  h('p',null,'Выберите объект и сохраните примечание. История и панели прокручиваются отдельно, шапка остаётся видимой.'),
-  h('div',{className:'stage work'},h(S.DsPageLayout,{
-   responsive:true,scroll:'regions',mainId:'layout-work',skipLinkLabel:'К истории объекта',leftLabel:'Объекты',rightLabel:'Сведения',leftWidth:200,rightWidth:220,
-   header:region('Мониторинг','header'),
-   left:h('div',{className:'pane'},h('h4',null,'Объекты'),['Volvo FH16','MAN TGX','Scania R450'].map(function(name){return h(S.DsButton,{key:name,tone:selected[0]===name?'subtle':'ghost',fullWidth:true,'aria-pressed':selected[0]===name,onClick:function(){selected[1](name)}},name)})),
-   right:h('div',{className:'pane'},h('h4',null,selected[0]),h('label',null,'Примечание',h('input',{value:note[0],onChange:function(e){note[1](e.target.value);saved[1](false)}})),h(S.DsButton,{onClick:function(){saved[1](true)}},'Сохранить'),h('p',{className:'cap',role:'status'},saved[0]?'Примечание сохранено.':'Изменения ещё не сохранены.')),
-   footer:region('Данные обновлены','footer')
-  },h('div',{className:'pane'},h('h4',null,'История · '+selected[0]),Array.from({length:20},function(_,i){return h('p',{className:'entry',key:i},'Событие '+(i+1)+' · '+selected[0]+' · обновлена информация об объекте.')})))),
-  h('p',{className:'cap'},'При изменении ширины введённое примечание сохраняется. На узком экране панели раскрываются в потоке и не перекрывают страницу.')));
-
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function region(text, kind) { return <div className={'region ' + kind}>
+{text}
+</div>; }
+function App() {
+    var mode = React.useState('left'), gap = React.useState(true), footer = React.useState(false), long = React.useState(false), selected = React.useState('Volvo FH16'), note = React.useState(''), saved = React.useState(false);
+    var choices = [['main', 'Основной'], ['left', 'Слева'], ['right', 'Справа'], ['both', 'С двух сторон']];
+    return <LiveExamples>
+    <LiveExample id={"obychnaya-stranitsa"} title={"Обычная страница"} description={"Основное содержимое занимает доступную ширину без дополнительных панелей."}>
+    <div className={"demo-stack"}>
+    <p>
+    {'Содержимое растёт вместе со страницей. У каркаса нет отдельной прокрутки.'}
+    </p>
+    <div className={'row'}>
+    <S.DsButton tone={'secondary'} aria-expanded={long[0]} aria-controls={'page-long-content'} onClick={function () { long[1](!long[0]); }}>
+    {long[0] ? 'Свернуть описание' : 'Развернуть описание'}
+    </S.DsButton>
+    </div>
+    <div className={'stage'}>
+    <S.DsPageLayout mainId={'layout-document'} skipLinkLabel={'К описанию страницы'} pageHeader={region('Настройки мониторинга', 'heading')}>
+    <div className={'pane'} id={'page-long-content'}>
+    <p>
+    {'Укажите настройки, общие для всех объектов.'}
+    </p>
+    {long[0] ? Array.from({ length: 8 }, function (_, i) { return <p key={i} className={'entry'}>
+    {'Правило ' + (i + 1) + '. Настройки применяются к новым событиям и не изменяют сохранённую историю.'}
+    </p>; }) : null}
+    </div>
+    </S.DsPageLayout>
+    </div>
+    </div>
+    </LiveExample>
+    <LiveExample id={"regiony-stranitsy"} title={"Регионы страницы"} description={"Каркас связывает шапку, основное содержимое и необязательные боковые области."}>
+    <div className={"demo-stack"}>
+    <div className={'row'} role={'group'} aria-label={'Расположение боковых регионов'}>
+    {choices.map(function (item) { return <S.DsButton key={item[0]} tone={mode[0] === item[0] ? 'primary' : 'secondary'} aria-pressed={mode[0] === item[0]} onClick={function () { mode[1](item[0]); }}>
+    {item[1]}
+    </S.DsButton>; })}
+    </div>
+    <div className={'row'}>
+    <S.DsButton tone={!gap[0] ? 'primary' : 'secondary'} aria-pressed={!gap[0]} onClick={function () { gap[1](!gap[0]); }}>
+    {'Без отступов'}
+    </S.DsButton>
+    <S.DsButton tone={footer[0] ? 'primary' : 'secondary'} aria-pressed={footer[0]} onClick={function () { footer[1](!footer[0]); }}>
+    {'Нижний регион'}
+    </S.DsButton>
+    </div>
+    <div className={'stage'}>
+    <S.DsPageLayout responsive={true} mainId={'layout-regions'} skipLinkLabel={'К схеме регионов'} leftLabel={'Список'} rightLabel={'Сведения'} header={region('Шапка приложения', 'header')} pageHeader={region('Заголовок страницы', 'heading')} left={mode[0] === 'left' || mode[0] === 'both' ? region('Левый регион', 'side') : undefined} right={mode[0] === 'right' || mode[0] === 'both' ? region('Правый регион', 'side') : undefined} leftWidth={'clamp(80px, 20vw, 180px)'} rightWidth={'clamp(80px, 20vw, 180px)'} gap={gap[0]} footer={footer[0] ? region('Нижний регион', 'footer') : undefined}>
+    {region('Основное содержимое', 'content')}
+    </S.DsPageLayout>
+    </div>
+    <p className={'cap'}>
+    {'На узкой ширине боковые регионы раскрываются кнопками. На широком экране их ширина задана через leftWidth и rightWidth.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"rabochiy-ekran-s-panelyami"} title={"Рабочий экран с панелями"} description={"Боковые регионы поддерживают рабочий контекст и адаптируются при уменьшении ширины."}>
+    <div className={"demo-stack"}>
+    <p>
+    {'Выберите объект и сохраните примечание. История и панели прокручиваются отдельно, шапка остаётся видимой.'}
+    </p>
+    <div className={'stage work'}>
+    <S.DsPageLayout responsive={true} scroll={'regions'} mainId={'layout-work'} skipLinkLabel={'К истории объекта'} leftLabel={'Объекты'} rightLabel={'Сведения'} leftWidth={200} rightWidth={220} header={region('Мониторинг', 'header')} left={<div className={'pane'}>
+    <h4>
+    {'Объекты'}
+    </h4>
+    {['Volvo FH16', 'MAN TGX', 'Scania R450'].map(function (name) { return <S.DsButton key={name} tone={selected[0] === name ? 'subtle' : 'ghost'} fullWidth={true} aria-pressed={selected[0] === name} onClick={function () { selected[1](name); }}>
+    {name}
+    </S.DsButton>; })}
+    </div>} right={<div className={'pane'}>
+    <h4>
+    {selected[0]}
+    </h4>
+    <label>
+    {'Примечание'}
+    <input value={note[0]} onChange={function (e) { note[1](e.target.value); saved[1](false); }}/>
+    </label>
+    <S.DsButton onClick={function () { saved[1](true); }}>
+    {'Сохранить'}
+    </S.DsButton>
+    <p className={'cap'} role={'status'}>
+    {saved[0] ? 'Примечание сохранено.' : 'Изменения ещё не сохранены.'}
+    </p>
+    </div>} footer={region('Данные обновлены', 'footer')}>
+    <div className={'pane'}>
+    <h4>
+    {'История · ' + selected[0]}
+    </h4>
+    {Array.from({ length: 20 }, function (_, i) { return <p className={'entry'} key={i}>
+    {'Событие ' + (i + 1) + ' · ' + selected[0] + ' · обновлена информация об объекте.'}
+    </p>; })}
+    </div>
+    </S.DsPageLayout>
+    </div>
+    <p className={'cap'}>
+    {'При изменении ширины введённое примечание сохраняется. На узком экране панели раскрываются в потоке и не перекрывают страницу.'}
+    </p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

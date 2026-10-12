@@ -11,7 +11,7 @@ test('disabled selection stays legible and mixed selection selects all with the 
     for (const [theme, appearance, density] of [['DEFAULT', 'light', 'cozy'], ['DEFAULT', 'dark', 'compact'], ['RED2', 'light', 'cozy'], ['RED2', 'dark', 'compact']]) {
       const query = `theme=${theme}&appearance=${appearance}&density=${density}`;
       await page.goto(`${served.url}/components/DsCheckbox/preview.html?${query}`);
-      await page.locator('#root > *').waitFor();
+      await page.getByRole('region',{name:'Обычный выбор',exact:true}).waitFor();
       const checks = await page.locator('#root').evaluate(root => {
         const luminance = color => {
           const values = color.match(/[\d.]+/g).slice(0, 3).map(Number).map(v => {
@@ -24,11 +24,11 @@ test('disabled selection stays legible and mixed selection selects all with the 
           const x = luminance(a), y = luminance(b);
           return (Math.max(x, y) + .05) / (Math.min(x, y) + .05);
         };
-        const surface = getComputedStyle(document.body).backgroundColor;
         // The disabled column must preserve all three glyphs: tick, dash and radio dot.
         const rows = [...root.querySelectorAll('tbody tr')];
         const disabled = rows.map(row => row.querySelector('td:last-child [aria-hidden="true"]'));
         return disabled.filter(Boolean).map(box => {
+          const surface = getComputedStyle(box.closest('[data-ds-example-demo]')||document.body).backgroundColor;
           const css = getComputedStyle(box), mark = box.firstElementChild;
           const ink = mark && getComputedStyle(mark);
           const markColor = ink?.backgroundColor === 'rgba(0, 0, 0, 0)' ? ink.color : ink?.backgroundColor;
@@ -44,17 +44,25 @@ test('disabled selection stays legible and mixed selection selects all with the 
       }
       await page.screenshot({ path: testInfo.outputPath(`selection-${theme}-${appearance}.png`) });
       const mixed = page.getByRole('checkbox', { name: 'Все объекты группы' });
+      const children=page.getByRole('group',{name:'Объекты группы',exact:true}).getByRole('checkbox');
+      await expect(children).toHaveCount(3);
+      await expect(children.nth(0)).toBeChecked();
+      await expect(children.nth(1)).not.toBeChecked();
       await expect(mixed).toHaveJSProperty('indeterminate', true);
       await mixed.focus();
       await page.keyboard.press('Space');
       await expect(mixed).toBeChecked();
       await expect(mixed).toHaveJSProperty('indeterminate', false);
+      for(const child of await children.all())await expect(child).toBeChecked();
       await page.keyboard.press('Enter');
       await expect(mixed).toBeChecked();
       await expect(mixed).toBeFocused();
       expect(await mixed.evaluate(input=>getComputedStyle(input.nextElementSibling).outlineStyle)).toBe('solid');
       await page.keyboard.press('Space');
       await expect(mixed).not.toBeChecked();
+      for(const child of await children.all())await expect(child).not.toBeChecked();
+      await children.first().focus();await page.keyboard.press('Space');
+      await expect(mixed).toHaveJSProperty('indeterminate',true);
       const week=page.getByRole('radio',{name:'Неделя',exact:true});
       const day=page.getByRole('radio',{name:'Сутки',exact:true});
       await week.focus();await page.keyboard.press('ArrowLeft');
@@ -75,7 +83,7 @@ test('disabled selection stays legible and mixed selection selects all with the 
       await unchecked.focus();await page.keyboard.press('Space');await expect(unchecked).not.toBeChecked();
       await page.setViewportSize({width:390,height:560});
       expect(await page.evaluate(()=>document.body.scrollWidth)).toBeLessThanOrEqual(390);
-      expect(await page.evaluate(()=>document.body.scrollHeight)).toBeLessThanOrEqual(560);
+      expect(await page.locator('[data-ds-example-demo]').evaluateAll(demos=>demos.every(node=>node.scrollHeight<=node.clientHeight+1&&node.scrollWidth<=node.clientWidth+1))).toBe(true);
       await page.screenshot({path:testInfo.outputPath(`selection-mobile-${theme}-${appearance}.png`)});
       await page.setViewportSize({width:1180,height:800});
     }

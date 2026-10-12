@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
@@ -13,7 +14,7 @@ test('empty state keeps semantic headings, optional visuals and narrow actions a
    await expect(page.locator('main h2')).toHaveText(['Живые примеры','Правила применения','Пример кода','Параметры','Токены']);
    await expect(f.locator('[data-ds-empty-state] h4')).toHaveCount(5);
    await expect(f.locator('[data-ds-empty-state][role="status"]')).toHaveCount(1);
-   const two=f.getByRole('region',{name:'Без иконки · два действия'});
+   const two=exampleDemo(f,'Без иконки · два действия');
    await expect(two.locator('.material-symbols-outlined')).toHaveCount(0);
    const button=two.getByRole('button',{name:'Выбрать последние 7 дней'});
    await button.focus();await page.keyboard.press('Enter');
@@ -24,7 +25,7 @@ test('empty state keeps semantic headings, optional visuals and narrow actions a
    await expect(two.locator('#retention-help')).toBeFocused();
    await two.getByRole('button',{name:'Закрыть пояснение'}).focus();await page.keyboard.press('Space');
    await expect(link).toBeFocused();
-   const first=f.getByRole('region',{name:'Первый объект',exact:true});
+   const first=exampleDemo(f,'Первый объект');
    expect(await first.getByRole('button',{name:'Добавить объект'}).evaluate(el=>getComputedStyle(el).backgroundColor)).not.toBe(await f.locator('body').evaluate(el=>getComputedStyle(el).backgroundColor));
    // Long unbroken content and two actions must fit a narrow host independently of page width.
    await f.locator('body').evaluate(()=>{
@@ -53,7 +54,7 @@ test('retry preserves focus while busy, prevents duplicates and reveals loaded c
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
   await page.setViewportSize({width,height:900});
   await page.goto(`${served.url}/index.html?card=DsEmptyState&theme=${theme}&appearance=${appearance}&density=${density}`);
-  const region=page.frameLocator('#preview').getByRole('region',{name:'Ошибка загрузки · компактный вариант'});
+  const region=exampleDemo(page.frameLocator('#preview'),'Ошибка загрузки · компактный вариант');
   const retry=region.getByRole('button',{name:'Повторить запрос'});
   await retry.focus();await page.keyboard.press('Enter');
   await expect(retry).toHaveAttribute('aria-busy','true',{timeout:1500});

@@ -1,27 +1,42 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=240 subtitle="Общие действия над выбранными строками таблицы" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · данные" height=240 subtitle="Общие действия над выбранными строками таблицы" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.example{display:flex;flex-direction:column;gap:16px}
 .controls{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
-h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
 .status{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var count=React.useState(12),floating=React.useState(true),message=React.useState('');
-  function select(n){count[1](n);message[1]('');if(!n)document.querySelector('.controls button').focus();}
-  return h('section',{className:'example','aria-label':'Массовые действия'},
-    h('h3',null,'Выбор строк и действия'),
-    h('div',{className:'controls'},
-      h(S.DsButton,{tone:'secondary',onClick:function(){select(12);}},'Выбрать 12 строк'),
-      h(S.DsSwitch,{label:'Плавающий вид',checked:floating[0],onChange:function(e){floating[1](e.target.checked);}})),
-    h(S.DsBulkActionsBar,{count:count[0],total:148,noun:'объектов',floating:floating[0],style:{flexWrap:'wrap'},
-      onSelectAll:function(all){select(all?148:0);},onClear:function(){select(0);},
-      actions:[
-        h(S.DsButton,{key:'group',size:'sm',tone:'secondary',icon:'label',onClick:function(){message[1]('Пример: назначение группы для '+count[0]+' объектов запрошено.');}},'В группу'),
-        h(S.DsButton,{key:'export',size:'sm',tone:'secondary',icon:'download',onClick:function(){message[1]('Пример: экспорт '+count[0]+' объектов запрошен.');}},'Экспорт')]}),
-    h('p',{className:'status',role:'status'},message[0]|| (count[0]?'Выбрано строк: '+count[0]+'.':'Строки не выбраны — панель скрыта.')));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    var count = React.useState(12), floating = React.useState(true), message = React.useState('');
+    function select(n) {
+        count[1](n);
+        message[1]('');
+        if (!n)
+            document.querySelector('.controls button').focus();
+    }
+    return <LiveExamples>
+    <LiveExample id={"vybor-strok-i-deystviya"} title={"Выбор строк и действия"} description={"Выберите объекты: панель показывает количество выбранных строк и общие действия над ними."}>
+    <div className={"demo-stack"}>
+    <div className={'controls'}>
+    <S.DsButton tone={'secondary'} onClick={function () { select(12); }}>
+    {'Выбрать 12 строк'}
+    </S.DsButton>
+    <S.DsSwitch label={'Плавающий вид'} checked={floating[0]} onChange={function (e) { floating[1](e.target.checked); }}/>
+    </div>
+    <S.DsBulkActionsBar count={count[0]} total={148} noun={'объектов'} floating={floating[0]} style={{ flexWrap: 'wrap' }} onSelectAll={function (all) { select(all ? 148 : 0); }} onClear={function () { select(0); }} actions={[
+        <S.DsButton key={'group'} size={'sm'} tone={'secondary'} icon={'label'} onClick={function () { message[1]('Пример: назначение группы для ' + count[0] + ' объектов запрошено.'); }}>
+        {'В группу'}
+        </S.DsButton>,
+        <S.DsButton key={'export'} size={'sm'} tone={'secondary'} icon={'download'} onClick={function () { message[1]('Пример: экспорт ' + count[0] + ' объектов запрошен.'); }}>
+        {'Экспорт'}
+        </S.DsButton>
+    ]}/>
+    <p className={'status'} role={'status'}>
+    {message[0] || (count[0] ? 'Выбрано строк: ' + count[0] + '.' : 'Строки не выбраны — панель скрыта.')}
+    </p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

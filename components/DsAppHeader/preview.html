@@ -1,26 +1,45 @@
-<!-- @dsCard name="DsAppHeader · Шапка приложения" aliases="DsHeader|шапка|header|шапка приложения|app header" group="5 · Компоненты · навигация" height=320 subtitle="Нейтральная шапка: логотип, навигация, действия и меню пользователя" -->
+<!-- @dsCard layout="component" scopeMode="inherit" name="DsAppHeader · Шапка приложения" aliases="DsHeader|шапка|header|шапка приложения|app header" group="5 · Компоненты · навигация" height=320 subtitle="Нейтральная шапка: логотип, навигация, действия и меню пользователя" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
+.header-stage{min-height:180px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
 .sep{width:1px;height:24px;background:var(--ds-divider)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function HeaderExample(props){var t=React.useState('m');
-  return h('section',{className:'col'},h('div',{className:'cap'},props.label),
-    h(S.DsAppHeader,{product:'Aurora',logoSrc:'../assets/logo/AuroraWhite.png',env:'DEV',
-      actions:[h(S.DsIconButton,{key:'h',icon:'help',label:'Справка',tone:'onHeader'}),
-        h(S.DsUserMenu,{key:'u',name:'a.ivanov',items:[{id:'profile',label:'Профиль',icon:'person'},{id:'settings',label:'Настройки',icon:'settings'}]})]},
-      h(S.DsTabs,{tone:'onHeader',stack:props.stack,active:t[0],onChange:t[1],items:[
-        {id:'m',label:'Мониторинг',icon:'map'},{id:'r',label:'Отчёты',icon:'assessment'},
-        {id:'n',label:'Оповещения',icon:'notifications',badge:3}]})));}
-function App(){return h('div',{className:'col'},
-  h(HeaderExample,{stack:true,label:'Иконки над подписями — компактная навигация'}),
-  h(HeaderExample,{stack:false,label:'Иконки рядом с подписями — короткая навигация'}));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function HeaderExample(props) {
+    var t = React.useState('m');
+    var message = React.useState('');
+    const [compact,setCompact] = React.useState(() => matchMedia('(max-width: 600px)').matches);
+    React.useEffect(() => {
+        const media = matchMedia('(max-width: 600px)');
+        const update = () => setCompact(media.matches);
+        media.addEventListener('change',update);
+        return () => media.removeEventListener('change',update);
+    },[]);
+    return <div className="col header-stage">
+    <S.DsAppHeader product={compact ? '' : 'Aurora'} logoSrc={compact ? undefined : '../assets/logo/AuroraWhite.png'} env={compact ? undefined : 'DEV'} actions={[!compact && <S.DsIconButton key={'h'} icon={'help'} label={'Справка'} tone={'onHeader'} onClick={() => message[1]('Открыта справка.')}/>, <S.DsUserMenu key={'u'} name={'a.ivanov'} items={[{ id: 'profile', label: 'Профиль', icon: 'person' }, { id: 'settings', label: 'Настройки', icon: 'settings' }]} onSelect={item => message[1]('Выбрано: ' + item.label)}/>]}>
+    <S.DsTabs tone={'onHeader'} stack={props.stack} active={t[0]} onChange={t[1]} items={[
+        { id: 'm', label: 'Мониторинг', icon: 'map' }, { id: 'r', label: 'Отчёты', icon: 'assessment' },
+        { id: 'n', label: 'Оповещения', icon: 'notifications', badge: 3 }
+    ]}/>
+    </S.DsAppHeader>
+    <p role="status" aria-label="Результат выбора">{message[0] || 'Открыт раздел: ' + {m:'Мониторинг',r:'Отчёты',n:'Оповещения'}[t[0]]}</p>
+    </div>;
+}
+function App() {
+    return <LiveExamples>
+    <LiveExample id={"stacked-navigation"} title={"Навигация с иконками над текстом"} description={"Переключайте разделы приложения; действия и меню пользователя находятся справа."}>
+    <HeaderExample stack={true}/>
+    </LiveExample>
+    <LiveExample id={"inline-navigation"} title={"Навигация в одну строку"} description={"Короткие подписи позволяют расположить иконку рядом с названием раздела."}>
+    <HeaderExample stack={false}/>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

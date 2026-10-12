@@ -1,28 +1,78 @@
-<!-- @dsCard layout="component" status="deprecated" group="5 · Компоненты · формы" height=650 subtitle="Компонент будет заменён актуальным решением для ввода длительности." -->
+<!-- @dsCard layout="component" scopeMode="inherit" status="deprecated" group="5 · Компоненты · формы" height=650 subtitle="Компонент будет заменён актуальным решением для ввода длительности." -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:24px}.example{display:flex;flex-direction:column;gap:12px;min-width:0}
-h3,p{margin:0}h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium)}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){var value=React.useState({d:'0',h:'2',m:'30'}),days=React.useState(true),disabled=React.useState(false),feedback=React.useState('hint'),demo=React.useState({d:'1',h:'0',m:'0'}),interval=React.useState({h:'0',m:'15'}),error=React.useState(''),applied=React.useState('');
-function apply(){var minutes=Number(interval[0].h||0)*60+Number(interval[0].m||0);if(Number(interval[0].m||0)>59){error[1]('Укажите минуты от 0 до 59.');applied[1]('');return}if(!minutes){error[1]('Интервал должен быть больше нуля.');applied[1]('');return}error[1]('');applied[1]('Применён интервал: '+minutes+' мин.')}
-return h('div',{className:'examples'},
- h('section',{className:'example'},h('h3',null,'Ввод длительности'),
-  h('div',{className:'row'},h(S.DsButton,{tone:days[0]?'primary':'secondary','aria-pressed':days[0],onClick:function(){days[1](!days[0])}},'Показывать дни'),h(S.DsButton,{tone:disabled[0]?'primary':'secondary','aria-pressed':disabled[0],onClick:function(){disabled[1](!disabled[0])}},'Недоступно')),
-  h('div',{role:'group','aria-label':'Ввод длительности'},h(S.DsDuration,{label:'Стоянка дольше',value:value[0],onChange:value[1],showDays:days[0],disabled:disabled[0]})),
-  h('p',{className:'cap'},'Дни: '+(value[0].d||'0')+' · часы: '+(value[0].h||'0')+' · минуты: '+(value[0].m||'0'))),
- h('section',{className:'example'},h('h3',null,'Обратная связь'),
-  h('div',{className:'row',role:'group','aria-label':'Вид пояснения'},[['hint','Подсказка'],['warning','Предупреждение'],['error','Ошибка']].map(function(item){return h(S.DsButton,{key:item[0],tone:feedback[0]===item[0]?'primary':'secondary','aria-pressed':feedback[0]===item[0],onClick:function(){feedback[1](item[0])}},item[1])})),
-  h(S.DsDuration,{label:'Длительность события',value:demo[0],onChange:demo[1],hint:feedback[0]==='hint'?'Укажите минимальную длительность события.':undefined,warning:feedback[0]==='warning'?'Длительность превышает интервал отчёта.':undefined,error:feedback[0]==='error'?'Проверьте введённую длительность.':undefined})),
- h('section',{className:'example'},h('h3',null,'Применение интервала'),
-  h('div',{role:'group','aria-label':'Интервал отчёта'},h(S.DsDuration,{label:'Интервал отчёта',showDays:false,value:interval[0],onChange:function(v){interval[1](v);error[1]('');applied[1]('')},hint:'Укажите положительный интервал; минуты от 0 до 59.',error:error[0]})),
-  h('div',{className:'row'},h(S.DsButton,{onClick:apply},'Применить'),h(S.DsButton,{tone:'secondary',onClick:function(){interval[1]({h:'0',m:'15'});error[1]('');applied[1]('')}},'Сбросить')),
-  h('p',{className:'cap',role:'status'},error[0]||applied[0]),
-  h('p',{className:'cap'},'В этом примере проверка интервала выполняется при нажатии «Применить».')));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    var value = React.useState({ d: '0', h: '2', m: '30' }), days = React.useState(true), disabled = React.useState(false), feedback = React.useState('hint'), demo = React.useState({ d: '1', h: '0', m: '0' }), interval = React.useState({ h: '0', m: '15' }), error = React.useState(''), applied = React.useState('');
+    function apply() {
+        var minutes = Number(interval[0].h || 0) * 60 + Number(interval[0].m || 0);
+        if (Number(interval[0].m || 0) > 59) {
+            error[1]('Укажите минуты от 0 до 59.');
+            applied[1]('');
+            return;
+        }
+        if (!minutes) {
+            error[1]('Интервал должен быть больше нуля.');
+            applied[1]('');
+            return;
+        }
+        error[1]('');
+        applied[1]('Применён интервал: ' + minutes + ' мин.');
+    }
+    return <LiveExamples>
+    <LiveExample id={"vvod-dlitelnosti"} title={"Ввод длительности"} description={"Изменяйте продолжительность интервала с помощью доступных контролов."}>
+    <div className={"demo-stack"}>
+    <div className={'row'}>
+    <S.DsButton tone={days[0] ? 'primary' : 'secondary'} aria-pressed={days[0]} onClick={function () { days[1](!days[0]); }}>
+    {'Показывать дни'}
+    </S.DsButton>
+    <S.DsButton tone={disabled[0] ? 'primary' : 'secondary'} aria-pressed={disabled[0]} onClick={function () { disabled[1](!disabled[0]); }}>
+    {'Недоступно'}
+    </S.DsButton>
+    </div>
+    <div role={'group'} aria-label={'Ввод длительности'}>
+    <S.DsDuration label={'Стоянка дольше'} value={value[0]} onChange={value[1]} showDays={days[0]} disabled={disabled[0]}/>
+    </div>
+    <p className={'cap'}>
+    {'Дни: ' + (value[0].d || '0') + ' · часы: ' + (value[0].h || '0') + ' · минуты: ' + (value[0].m || '0')}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"obratnaya-svyaz"} title={"Обратная связь"} description={"Состояние поля и пояснение сообщают об ошибке или ограничении ввода."}>
+    <div className={"demo-stack"}>
+    <div className={'row'} role={'group'} aria-label={'Вид пояснения'}>
+    {[['hint', 'Подсказка'], ['warning', 'Предупреждение'], ['error', 'Ошибка']].map(function (item) { return <S.DsButton key={item[0]} tone={feedback[0] === item[0] ? 'primary' : 'secondary'} aria-pressed={feedback[0] === item[0]} onClick={function () { feedback[1](item[0]); }}>
+    {item[1]}
+    </S.DsButton>; })}
+    </div>
+    <S.DsDuration label={'Длительность события'} value={demo[0]} onChange={demo[1]} hint={feedback[0] === 'hint' ? 'Укажите минимальную длительность события.' : undefined} warning={feedback[0] === 'warning' ? 'Длительность превышает интервал отчёта.' : undefined} error={feedback[0] === 'error' ? 'Проверьте введённую длительность.' : undefined}/>
+    </div>
+    </LiveExample>
+    <LiveExample id={"primenenie-intervala"} title={"Применение интервала"} description={"Измените интервал и примените выбранное значение."}>
+    <div className={"demo-stack"}>
+    <div role={'group'} aria-label={'Интервал отчёта'}>
+    <S.DsDuration label={'Интервал отчёта'} showDays={false} value={interval[0]} onChange={function (v) { interval[1](v); error[1](''); applied[1](''); }} hint={'Укажите положительный интервал; минуты от 0 до 59.'} error={error[0]}/>
+    </div>
+    <div className={'row'}>
+    <S.DsButton onClick={apply}>
+    {'Применить'}
+    </S.DsButton>
+    <S.DsButton tone={'secondary'} onClick={function () { interval[1]({ h: '0', m: '15' }); error[1](''); applied[1](''); }}>
+    {'Сбросить'}
+    </S.DsButton>
+    </div>
+    <p className={'cap'} role={'status'}>
+    {error[0] || applied[0]}
+    </p>
+    <p className={'cap'}>
+    {'В этом примере проверка интервала выполняется при нажатии «Применить».'}
+    </p>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

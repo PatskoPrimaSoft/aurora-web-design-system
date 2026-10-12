@@ -1,38 +1,79 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · навигация" height=1100 subtitle="Вкладки внутри страницы и навигация между разделами в шапке" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · навигация" height=1100 subtitle="Вкладки внутри страницы и навигация между разделами в шапке" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
-h3{font:var(--ds-type-label);margin:0 0 12px}
-p{margin:12px 0;color:var(--ds-fg-muted)}
 .panel{padding:16px 0}
 .panel p{margin:0 0 12px}
 .header{background:var(--ds-header-bg);color:var(--ds-header-fg);padding:0 8px;border-radius:var(--ds-radius-control)}
-@media(max-width:400px){body{padding:12px}}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var pages=[{id:'overview',label:'Обзор'},{id:'history',label:'История',badge:12},{id:'settings',label:'Настройки'}];
-var periods=[{id:'day',label:'День'},{id:'week',label:'Неделя',badge:7},{id:'month',label:'Месяц'}];
-var longTabs=['Обзор','Состав группы','История изменений','Планирование','Отчёты по поездкам','Настройки доступа'].map(function(label,index){return {id:String(index),label:label};});
-var sections=[{id:'objects',label:'Объекты',icon:'directions_car'},{id:'reports',label:'Отчёты',icon:'bar_chart'},{id:'alerts',label:'События',icon:'notifications',badge:2}];
-function App(){var saved=React.useState('form'),narrow=React.useState('4');var a=React.useState('overview'),b=React.useState('day'),c=React.useState('objects'),d=React.useState('objects');
- var pageContent={overview:'В группе 12 объектов. Данные обновлены сегодня.',history:'Последнее изменение: объект «Грузовик 12» добавлен в группу.',settings:'Название группы: «Основной парк». Уведомления включены.'};
- var periodContent={day:'За сегодня: 18 поездок, 240 км.',week:'За неделю: 94 поездки, 1 380 км.',month:'За месяц: 386 поездок, 5 720 км.'};
- function panel(items,state,idBase,content){return items.map(function(it){return h(S.DsTabPanel,{key:it.id,idBase:idBase,id:it.id,active:state===it.id},h('div',{className:'panel'},h('p',null,content[it.id])));});}
- function header(title,state,stack){return h('section',null,h('h3',null,title),h('div',{className:'header'},h(S.DsTabs,{tone:'onHeader',stack:stack,items:stack?sections:sections.map(function(it){return {id:it.id,label:it.label,badge:it.badge};}),active:state[0],onChange:state[1],'aria-label':title})),h('p',null,'Открыт раздел: '+sections.find(function(it){return it.id===state[0];}).label+'.'));}
- return h('div',{className:'examples'},
-  h('section',null,h('h3',null,'Вкладки страницы'),h(S.DsTabs,{idBase:'object-tabs',items:pages,active:a[0],onChange:a[1],'aria-label':'Карточка группы'}),panel(pages,a[0],'object-tabs',pageContent)),
-  h('section',null,h('h3',null,'Переключение периода'),h(S.DsTabs,{tone:'segmented',idBase:'period-tabs',items:periods,active:b[0],onChange:b[1],'aria-label':'Период отчёта'}),panel(periods,b[0],'period-tabs',periodContent)),
-  h('section',null,h('h3',null,'Сохранение введённых данных'),
-   h(S.DsTabs,{idBase:'draft-tabs',items:[{id:'form',label:'Название'},{id:'help',label:'Подсказка'}],active:saved[0],onChange:saved[1],'aria-label':'Редактирование группы'}),
-   h(S.DsTabPanel,{idBase:'draft-tabs',id:'form',active:saved[0]==='form'},h('div',{className:'panel'},h(S.DsField,{label:'Название группы',defaultValue:'Основной парк'}))),
-   h(S.DsTabPanel,{idBase:'draft-tabs',id:'help',active:saved[0]==='help'},h('p',null,'Вернитесь на вкладку «Название»: введённый текст сохранится.'))),
-  h('section',null,h('h3',null,'Длинная полоса вкладок'),
-   h('div',{style:{maxWidth:360}},h(S.DsTabs,{idBase:'narrow-tabs',items:longTabs,active:narrow[0],onChange:narrow[1],'aria-label':'Разделы карточки'})),
-   panel(longTabs,narrow[0],'narrow-tabs',Object.fromEntries(longTabs.map(function(it){return [it.id,'Открыта вкладка «'+it.label+'».'];})))),
-  header('Навигация в шапке',c,true),
-  header('Короткая навигация в одну строку',d,false));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var pages = [{ id: 'overview', label: 'Обзор' }, { id: 'history', label: 'История', badge: 12 }, { id: 'settings', label: 'Настройки' }];
+var periods = [{ id: 'day', label: 'День' }, { id: 'week', label: 'Неделя', badge: 7 }, { id: 'month', label: 'Месяц' }];
+var longTabs = ['Обзор', 'Состав группы', 'История изменений', 'Планирование', 'Отчёты по поездкам', 'Настройки доступа'].map(function (label, index) { return { id: String(index), label: label }; });
+var sections = [{ id: 'objects', label: 'Объекты', icon: 'directions_car' }, { id: 'reports', label: 'Отчёты', icon: 'bar_chart' }, { id: 'alerts', label: 'События', icon: 'notifications', badge: 2 }];
+function App() {
+    var saved = React.useState('form'), narrow = React.useState('4');
+    var a = React.useState('overview'), b = React.useState('day'), c = React.useState('objects'), d = React.useState('objects');
+    var pageContent = { overview: 'В группе 12 объектов. Данные обновлены сегодня.', history: 'Последнее изменение: объект «Грузовик 12» добавлен в группу.', settings: 'Название группы: «Основной парк». Уведомления включены.' };
+    var periodContent = { day: 'За сегодня: 18 поездок, 240 км.', week: 'За неделю: 94 поездки, 1 380 км.', month: 'За месяц: 386 поездок, 5 720 км.' };
+    function panel(items, state, idBase, content) { return items.map(function (it) { return <S.DsTabPanel key={it.id} idBase={idBase} id={it.id} active={state === it.id}>
+    <div className={'panel'}>
+    <p>
+    {content[it.id]}
+    </p>
+    </div>
+    </S.DsTabPanel>; }); }
+    function header(title, state, stack) { return <div className={"demo-stack"}>
+    <div className={'header'}>
+    <S.DsTabs tone={'onHeader'} stack={stack} items={stack ? sections : sections.map(function (it) { return { id: it.id, label: it.label, badge: it.badge }; })} active={state[0]} onChange={state[1]} aria-label={title}/>
+    </div>
+    <p>
+    {'Открыт раздел: ' + sections.find(function (it) { return it.id === state[0]; }).label + '.'}
+    </p>
+    </div>; }
+    return <LiveExamples>
+    <LiveExample id={"vkladki-stranitsy"} title={"Вкладки страницы"} description={"Переключайте разделы карточки: каждой вкладке соответствует собственная панель."}>
+    <div className={"demo-stack"}>
+    <S.DsTabs idBase={'object-tabs'} items={pages} active={a[0]} onChange={a[1]} aria-label={'Карточка группы'}/>
+    {panel(pages, a[0], 'object-tabs', pageContent)}
+    </div>
+    </LiveExample>
+    <LiveExample id={"pereklyuchenie-perioda"} title={"Переключение периода"} description={"Сегментированные вкладки меняют период и соответствующее содержимое отчёта."}>
+    <div className={"demo-stack"}>
+    <S.DsTabs tone={'segmented'} idBase={'period-tabs'} items={periods} active={b[0]} onChange={b[1]} aria-label={'Период отчёта'}/>
+    {panel(periods, b[0], 'period-tabs', periodContent)}
+    </div>
+    </LiveExample>
+    <LiveExample id={"sohranenie-vvedennyh-dannyh"} title={"Сохранение введённых данных"} description={"Введите название и переключите вкладку: при возврате введённый текст сохраняется."}>
+    <div className={"demo-stack"}>
+    <S.DsTabs idBase={'draft-tabs'} items={[{ id: 'form', label: 'Название' }, { id: 'help', label: 'Подсказка' }]} active={saved[0]} onChange={saved[1]} aria-label={'Редактирование группы'}/>
+    <S.DsTabPanel idBase={'draft-tabs'} id={'form'} active={saved[0] === 'form'}>
+    <div className={'panel'}>
+    <S.DsField label={'Название группы'} defaultValue={'Основной парк'}/>
+    </div>
+    </S.DsTabPanel>
+    <S.DsTabPanel idBase={'draft-tabs'} id={'help'} active={saved[0] === 'help'}>
+    <p>
+    {'Вернитесь на вкладку «Название»: введённый текст сохранится.'}
+    </p>
+    </S.DsTabPanel>
+    </div>
+    </LiveExample>
+    <LiveExample id={"dlinnaya-polosa-vkladok"} title={"Длинная полоса вкладок"} description={"На узком экране полоса вкладок прокручивается внутри своей области."}>
+    <div className={"demo-stack"}>
+    <div style={{ maxWidth: 360 }}>
+    <S.DsTabs idBase={'narrow-tabs'} items={longTabs} active={narrow[0]} onChange={narrow[1]} aria-label={'Разделы карточки'}/>
+    </div>
+    {panel(longTabs, narrow[0], 'narrow-tabs', Object.fromEntries(longTabs.map(function (it) { return [it.id, 'Открыта вкладка «' + it.label + '».']; })))}
+    </div>
+    </LiveExample>
+    <LiveExample id={"navigatsiya-v-shapke"} title={"Навигация в шапке"} description={"Иконки над подписями экономят ширину и обозначают активный раздел."}>
+    {header('Навигация в шапке', c, true)}
+    </LiveExample>
+    <LiveExample id={"korotkaya-navigatsiya-v-odnu-stroku"} title={"Короткая навигация в одну строку"} description={"Для коротких названий и небольшого набора разделов используйте горизонтальную навигацию."}>
+    {header('Короткая навигация в одну строку', d, false)}
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

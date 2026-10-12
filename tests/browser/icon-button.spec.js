@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
@@ -17,7 +18,7 @@ test('DsIconButton separates indicators and provides live object actions',async(
       await expect(filters).toHaveAccessibleDescription('Применён фильтр: только активные объекты.');
       await filters.click();await f.getByRole('menuitem',{name:'Все объекты',exact:true}).click();
       await expect(filters).toHaveAccessibleDescription(/^Фильтры не применены\./);
-      const object=f.getByRole('region',{name:'Действия объекта',exact:true});
+      const object=exampleDemo(f,'Действия объекта');
       const edit=object.getByRole('button',{name:'Изменить название объекта'});
       await edit.focus();await page.keyboard.press('Enter');
       const field=object.getByRole('textbox',{name:'Название объекта'});
@@ -52,7 +53,7 @@ test('DsIconButton tooltip and loading work in every mode and size',async({page}
       await page.setViewportSize({width,height:900});
       await page.goto(served.url+`/index.html?card=DsIconButton&theme=${theme}&appearance=${appearance}&density=${density}`);
       const frame=page.frameLocator('#preview');
-      const loading=frame.getByRole('region',{name:'Загрузка',exact:true});
+      const loading=exampleDemo(frame,'Загрузка');
       await expect(loading).toBeVisible();
       for(let i=0;i<3;i++){
         const buttons=loading.getByRole('button'),button=buttons.nth(i);

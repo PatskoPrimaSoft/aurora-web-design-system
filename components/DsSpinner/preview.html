@@ -1,14 +1,9 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · обратная связь" height=720 subtitle="Показывает, что операция выполняется, когда её прогресс неизвестен" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · обратная связь" height=720 subtitle="Показывает, что операция выполняется, когда её прогресс неизвестен" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:28px;min-width:0}
-h3{font:var(--ds-type-label);margin:0 0 12px}
 .variants{display:flex;flex-wrap:wrap;gap:24px;align-items:center}
 .sample{display:flex;flex-direction:column;align-items:center;gap:8px}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-.inverse{display:flex;align-items:center;justify-content:center;padding:12px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
 .toolbar{margin-bottom:16px}
 .result{display:flex;align-items:center;gap:12px;min-height:48px;overflow-wrap:anywhere}
 .spinner-slot{width:32px;height:32px;flex:none}
@@ -16,25 +11,82 @@ h3{font:var(--ds-type-label);margin:0 0 12px}
 .data p{margin:0}
 .data[aria-busy="true"]{color:var(--ds-fg-muted)}
 .message{font:var(--ds-type-caption);color:var(--ds-fg-muted);min-height:36px;margin:8px 0 0;overflow-wrap:anywhere}
-@media(max-width:400px){body{padding:12px}}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function LoadExample(props){var retry=props.retry,state=React.useState('idle'),timer=React.useRef(null),pending=React.useRef(false),attempt=React.useRef(0);
- var loading=state[0]==='loading',error=state[0]==='error',done=state[0]==='done';
- React.useEffect(function(){return function(){clearTimeout(timer.current);};},[]);
- function load(){if(pending.current)return;pending.current=true;attempt.current++;state[1]('loading');timer.current=setTimeout(function(){pending.current=false;state[1](retry&&attempt.current%2===1?'error':'done');},1500);}
- var message=loading?(retry?'Загрузка отчёта…':'Обновление отчёта…'):error?'Не удалось загрузить отчёт. Повторите попытку.':done?(retry?'Отчёт загружен.':'Отчёт обновлён.'):'';
- return h('section',{'aria-label':retry?'Загрузка с ошибкой':'Обновление отчёта'},h('h3',null,retry?'Ошибка и повторная попытка':'Обновление существующих данных'),
-  h('div',{className:'toolbar'},h(S.DsButton,{variant:'secondary',onClick:load,'aria-disabled':loading},retry?(error?'Повторить загрузку':'Загрузить отчёт'):'Обновить отчёт')),
-  h('div',{className:'result'},h('div',{className:'spinner-slot','aria-hidden':'true'},loading?h(S.DsSpinner,{size:32}):null),
-   h('div',{className:'data','aria-busy':loading},h('p',null,retry&&!done?'Отчёт ещё не загружен.':'Отчёт: 24 объекта.'))),
-  h('p',{role:'status',className:'message'},message));}
-function App(){return h('div',{className:'examples'},
- h('section',null,h('h3',null,'Размеры'),h('div',{className:'variants','aria-hidden':'true'},[16,20,32,48].map(function(size){return h('div',{className:'sample',key:size},h(S.DsSpinner,{size:size,label:'Пример загрузки, '+size+' px'}),h('span',{className:'cap'},size+' px'));}))),
- h('section',null,h('h3',null,'Цвет'),h('div',{className:'variants','aria-hidden':'true'},
-  h('div',{className:'sample'},h(S.DsSpinner,{tone:'brand',label:'Пример брендового индикатора'}),h('span',{className:'cap'},'brand')),
-  h('div',{className:'sample'},h(S.DsSpinner,{tone:'muted',label:'Пример нейтрального индикатора'}),h('span',{className:'cap'},'muted')),
-  h('div',{className:'sample'},h('div',{className:'inverse'},h(S.DsSpinner,{tone:'inverse',label:'Пример инверсного индикатора'})),h('span',{className:'cap'},'inverse')))),
- h(LoadExample),h(LoadExample,{retry:true}));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function LoadExample(props) {
+    var retry = props.retry, state = React.useState('idle'), timer = React.useRef(null), pending = React.useRef(false), attempt = React.useRef(0);
+    var loading = state[0] === 'loading', error = state[0] === 'error', done = state[0] === 'done';
+    React.useEffect(function () { return function () { clearTimeout(timer.current); }; }, []);
+    function load() {
+        if (pending.current)
+            return;
+        pending.current = true;
+        attempt.current++;
+        state[1]('loading');
+        timer.current = setTimeout(function () { pending.current = false; state[1](retry && attempt.current % 2 === 1 ? 'error' : 'done'); }, 1500);
+    }
+    var message = loading ? (retry ? 'Загрузка отчёта…' : 'Обновление отчёта…') : error ? 'Не удалось загрузить отчёт. Повторите попытку.' : done ? (retry ? 'Отчёт загружен.' : 'Отчёт обновлён.') : '';
+    return <div className={"demo-stack"}>
+    <div className={'toolbar'}>
+    <S.DsButton variant={'secondary'} onClick={load} aria-disabled={loading}>
+    {retry ? (error ? 'Повторить загрузку' : 'Загрузить отчёт') : 'Обновить отчёт'}
+    </S.DsButton>
+    </div>
+    <div className={'result'}>
+    <div className={'spinner-slot'} aria-hidden={'true'}>
+    {loading ? <S.DsSpinner size={32}/> : null}
+    </div>
+    <div className={'data'} aria-busy={loading}>
+    <p>
+    {retry && !done ? 'Отчёт ещё не загружен.' : 'Отчёт: 24 объекта.'}
+    </p>
+    </div>
+    </div>
+    <p role={'status'} className={'message'}>
+    {message}
+    </p>
+    </div>;
+}
+function App() {
+    return <LiveExamples>
+    <LiveExample id={"obnovlenie-suschestvuyuschih-dannyh"} title={"Обновление существующих данных"} description={"Во время обновления прежние данные остаются видимыми, а индикатор сообщает об ожидании."}>
+    <LoadExample />
+    </LiveExample>
+    <LiveExample id={"razmery"} title={"Размеры"} description={"Сравните доступные размеры. Для связанных элементов используйте одинаковый размер."}>
+    <div className={"demo-stack"}>
+    <div className={'variants'} aria-hidden={'true'}>
+    {[16, 20, 32, 48].map(function (size) { return <div className={'sample'} key={size}>
+    <S.DsSpinner size={size} label={'Пример загрузки, ' + size + ' px'}/>
+    <span className={'cap'}>
+    {size + ' px'}
+    </span>
+    </div>; })}
+    </div>
+    </div>
+    </LiveExample>
+    <LiveExample id={"tsvet"} title={"Цвет"} description={"Сравните нейтральный и брендовый индикаторы."}>
+    <div className={"demo-stack"}>
+    <div className={'variants'} aria-hidden={'true'}>
+    <div className={'sample'}>
+    <S.DsSpinner tone={'brand'} label={'Пример брендового индикатора'}/>
+    <span className={'cap'}>
+    {'brand'}
+    </span>
+    </div>
+    <div className={'sample'}>
+    <S.DsSpinner tone={'muted'} label={'Пример нейтрального индикатора'}/>
+    <span className={'cap'}>
+    {'muted'}
+    </span>
+    </div>
+    </div>
+    </div>
+    </LiveExample>
+    <LiveExample id={"oshibka-i-povtornaya-popytka"} title={"Ошибка и повторная попытка"} description={"Повторите операцию после ошибки и проверьте сообщение о результате."}>
+    <LoadExample retry={true}/>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

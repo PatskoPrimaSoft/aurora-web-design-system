@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
@@ -10,18 +11,18 @@ test('DsBanner keeps explicit announcements, standard dismissal and narrow layou
    await page.setViewportSize({width,height:900});
    await page.goto(served.url+`/index.html?card=DsBanner&theme=${theme}&appearance=${appearance}&density=${density}`);
    await expect(page.locator('main h2')).toHaveText(['Живые примеры','Правила применения','Пример кода','Параметры','Токены']);
-   const f=page.frameLocator('#preview'),tones=f.getByRole('region',{name:'Тоны сообщения'});
+   const f=page.frameLocator('#preview'),tones=exampleDemo(f,'Тоны сообщения');
    await expect(tones.locator('[data-ds-banner]')).toHaveCount(5);
    await expect(tones.getByRole('alert')).toHaveCount(0);await expect(tones.getByRole('status')).toHaveCount(0);
    await expect(tones.getByRole('heading',{level:4})).toHaveCount(5);
-   const expected=await f.locator('body').evaluate(el=>getComputedStyle(el).color);
+   const expected=await tones.evaluate(el=>getComputedStyle(el).color);
    await expect(tones.locator('[data-ds-banner-body]').first()).toHaveCSS('color',expected);
-   await expect(f.getByRole('region',{name:'Компактное сообщение'}).getByRole('heading',{level:4})).toHaveCount(0);
-   const action=f.getByRole('region',{name:'Исправление проблемы'});
+   await expect(exampleDemo(f,'Компактное сообщение').getByRole('heading',{level:4})).toHaveCount(0);
+   const action=exampleDemo(f,'Исправление проблемы');
    await expect(action.getByRole('status')).toHaveAttribute('aria-atomic','true');
    await action.getByRole('button',{name:'Выбрать последние 7 дней',exact:true}).click();
    await expect(action.getByRole('status')).toContainText('Доступны данные');
-   const closing=f.getByRole('region',{name:'Закрытие сообщения'}),close=closing.getByRole('button',{name:'Скрыть сообщение о плановых работах',exact:true}),restore=closing.getByRole('button',{name:'Показать сообщение снова',exact:true});
+   const closing=exampleDemo(f,'Закрытие сообщения'),close=closing.getByRole('button',{name:'Скрыть сообщение о плановых работах',exact:true}),restore=closing.getByRole('button',{name:'Показать сообщение снова',exact:true});
    await close.hover();await expect(f.getByRole('tooltip')).toHaveText('Скрыть сообщение о плановых работах');
    const bg=await close.evaluate(el=>getComputedStyle(el).backgroundColor);
    await page.mouse.down();await expect.poll(()=>close.evaluate(el=>getComputedStyle(el).backgroundColor)).not.toBe(bg);await page.mouse.up();
@@ -54,7 +55,7 @@ test('DsBanner examples retry with loading, keep navigation as a link and omit o
  try{
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
   await page.setViewportSize({width,height:900});await page.goto(served.url+`/index.html?card=DsBanner&theme=${theme}&appearance=${appearance}&density=${density}`);
-  const f=page.frameLocator('#preview'),retry=f.getByRole('region',{name:'Повторный запрос'});
+  const f=page.frameLocator('#preview'),retry=exampleDemo(f,'Повторный запрос');
   await expect(retry).toBeVisible();
   const button=retry.getByRole('button',{name:'Повторить запрос',exact:true});
   await button.focus();await page.keyboard.press('Enter');await expect(button).toHaveAttribute('aria-busy','true');
@@ -63,12 +64,12 @@ test('DsBanner examples retry with loading, keep navigation as a link and omit o
   await expect(retry.getByRole('button',{name:'Снова показать ошибку',exact:true})).toBeFocused();
   await retry.getByRole('button',{name:'Снова показать ошибку',exact:true}).click();
   await expect(retry.getByRole('status')).toContainText('Не удалось загрузить отчёт');
-  const long=f.getByRole('region',{name:'Сообщение с двумя действиями'}),link=long.getByRole('link',{name:'О сроке хранения данных',exact:true});
+  const long=exampleDemo(f,'Сообщение с двумя действиями'),link=long.getByRole('link',{name:'О сроке хранения данных',exact:true});
   await link.focus();await page.keyboard.press('Enter');
   await expect(long.locator('#storage-help')).toBeVisible();await expect(long.locator('#storage-help')).toBeFocused();
   await long.getByRole('button',{name:'Закрыть пояснение',exact:true}).click();await expect(link).toBeFocused();await expect(long.locator('#storage-help')).toBeHidden();
   await long.getByRole('button',{name:'Выбрать 30 дней',exact:true}).click();await expect(long).toContainText('Период соответствует сроку хранения');
-  const noTitle=f.getByRole('region',{name:'Без заголовка'});await expect(noTitle.locator('[data-ds-banner]')).toContainText('Автоматическое обновление отключено');await expect(noTitle.locator('[data-ds-banner] h1,[data-ds-banner] h2,[data-ds-banner] h3,[data-ds-banner] h4,[data-ds-banner] h5,[data-ds-banner] h6')).toHaveCount(0);
+  const noTitle=exampleDemo(f,'Без заголовка');await expect(noTitle.locator('[data-ds-banner]')).toContainText('Автоматическое обновление отключено');await expect(noTitle.locator('[data-ds-banner] h1,[data-ds-banner] h2,[data-ds-banner] h3,[data-ds-banner] h4,[data-ds-banner] h5,[data-ds-banner] h6')).toHaveCount(0);
   await page.locator('#preview').screenshot({path:`.tmp/banner-final-${width}-${theme}-${appearance}.png`});
   }
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}

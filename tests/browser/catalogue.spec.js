@@ -11,7 +11,7 @@ test('all catalogue pages render from local files without runtime errors',async(
   await expect(page.locator('nav h2')).toHaveText(['1 · Начало','2 · Основы','3 · Миграция','4 · Бренд (общее)',...['выбор','графики','данные','кнопки','навигация','обратная связь','примитивы','раскладка','формы','шапка'].map(name=>'5 · Компоненты · '+name),'6 · Карта','7 · Эталонные экраны']);
   await expect(page.locator('#subtitle')).toContainText(`${cards.length} карточек`);await expect(page.frameLocator('#preview').locator('body')).toContainText(`${cards.length} карточек`);
   await page.locator('nav a[data-id="DsButton"]').click();await expect(page.locator('h1')).toHaveText('DsButton');
-  await chooseCatalogueScope(page,'theme','RED2');await expect(page.locator('html')).toHaveAttribute('data-ds-theme','RED2');
+  await chooseCatalogueScope(page,'theme','RED2');await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-theme','RED2');
   for(const card of cards){await page.setViewportSize(card.viewport);await page.goto(served.url+'/'+card.previewPath);await page.evaluate(()=>document.fonts.ready);
    if(await page.locator('#root').count())await expect.poll(async()=>page.evaluate(()=>document.getElementById('root').childNodes.length>0||document.querySelector('[role="dialog"]')!==null),{message:`${card.id}: React root or visible portal must render`}).toBe(true);
    expect(errors,card.id).toEqual([]);
@@ -70,6 +70,24 @@ test('direct dev preview displays failed builds and reloads after recovery',asyn
   // Восстановление включает полную сборку каталога; на CI она может занять больше 5 секунд.
   await expect(page.locator('#root')).toHaveText('recovered',{timeout:15000});await expect(page.locator('[role="alert"]')).toHaveCount(0);
  }finally{await test.step('leave preview',()=>page.goto('about:blank'));if(dev)await test.step('close dev server',()=>dev.close());rmSync(fixture,{recursive:true,force:true});}
+});
+
+test('multiple dev catalogue tabs can finish loading and refresh without exhausting connections',async({context})=>{
+ const fixture=fixtureRoot(),pages=[];let dev;
+ try{
+  dev=await startDev({root:fixture,port:0});
+  for(let index=0;index<4;index++){
+   const page=await context.newPage();pages.push(page);
+   await page.goto(dev.url+'/?card=Example',{timeout:5000});
+   await expect(page.frameLocator('#preview').locator('#root')).toHaveText('hello');
+  }
+  for(const page of pages){
+   const response=await page.reload({timeout:5000});
+   expect(response.headers()['cache-control']).toBe('no-store');
+   await expect(page.frameLocator('#preview').locator('#root')).toHaveText('hello');
+   expect(await page.evaluate(()=>document.readyState)).toBe('complete');
+  }
+ }finally{for(const page of pages)await page.close();if(dev)await dev.close();rmSync(fixture,{recursive:true,force:true});}
 });
 test('API references use real declarations, defaults and token source',async({page})=>{
  await buildCatalogue({root,outDir:`${root}/site`});const served=await serveRoot(`${root}/site`),errors=[];

@@ -92,7 +92,7 @@ export async function buildCatalogue({ root, outDir }) {
   }
   for (const path of assets) if (path && !['dist/styles.css', 'components/bundle.js', 'components/lib/react.production.min.js', 'components/lib/react-dom.production.min.js'].includes(path.replaceAll('\\','/'))) copyAsset({ root, outDir, path });
   writeFileSync(join(outDir, 'cards.json'), JSON.stringify(cards, null, 2) + '\n');
-  for (const file of ['index.html', 'app.js', 'styles.css','search.js','families.js','state.js']) writeFileSync(join(outDir, file), readFileSync(new URL(`../../catalog/${file}`, import.meta.url)));
+  for (const file of ['index.html', 'app.js', 'styles.css','code-blocks.css','search.js','families.js','state.js','documentation.js']) writeFileSync(join(outDir, file), readFileSync(new URL(`../../catalog/${file}`, import.meta.url)));
   const problems=validateLinks({root,siteRoot:outDir});
   if(problems.length)throw Error(problems.map(p=>`${p.source}: ${p.target}: ${p.reason}`).join('\n'));
   return cards;

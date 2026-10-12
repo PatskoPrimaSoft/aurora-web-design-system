@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
@@ -41,7 +42,7 @@ test('loading resolves automatically without moving rows or keyboard focus',asyn
   for(const [theme,appearance,density] of modes)for(const width of [390,1280]){
    await page.setViewportSize({width,height:900});
    await page.goto(`${served.url}/index.html?card=DsSkeleton&theme=${theme}&appearance=${appearance}&density=${density}`);
-   const f=page.frameLocator('#preview'),live=f.getByRole('region',{name:'Переход к загруженным данным'});
+   const f=page.frameLocator('#preview'),live=exampleDemo(f,'Переход к загруженным данным');
    await expect(page.locator('main h2')).toHaveText(['Живые примеры','Правила применения','Пример кода','Параметры','Токены']);
    const button=live.getByRole('button',{name:'Повторить загрузку'});
    await expect(button).toBeVisible();

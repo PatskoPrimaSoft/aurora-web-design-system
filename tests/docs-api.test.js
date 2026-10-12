@@ -7,6 +7,7 @@ import {extractApi} from '../tools/docs/api.mjs';
 import {renderMarkdown,renderProps,renderComponentProps} from '../tools/docs/markdown.mjs';
 import {renderTokenReference} from '../tools/docs/tokens.mjs';
 import {readTokenModel} from '../tools/tokens/model.mjs';
+import {JSDOM} from 'jsdom';
 const fixture=fileURLToPath(new URL('./fixtures/api/',import.meta.url));
 const api=extractApi({root:fixture}),demo=api.find(c=>c.name==='DsDemo');
 assert.equal(api.length,3,'helpers must not become components');
@@ -61,6 +62,14 @@ try{
  writeFileSync(join(scratch,'README.md'),'# Title\n\n<script>alert(1)</script>\n\n[Demo](demo.md#props)\n\n```ts\nconst x = 3;\n```\n\n![Remote](https://example.com/picture.png)');
  const rendered=renderMarkdown({root:scratch,path:'README.md',knownRoutes:new Map([['demo.md','/api/components/DsDemo.html']])});
  assert.ok(!rendered.html.includes('<script>'));assert.ok(!rendered.html.includes('<img'));assert.match(rendered.html,/language-ts/);assert.match(rendered.html,/\/api\/components\/DsDemo.html#props/);assert.match(rendered.text,/const x = 3/);
+ const source='<script>alert("unsafe")</script>\n';
+ writeFileSync(join(scratch,'code.md'),'```html\n'+source+'```\n\n```unknown-language\n'+source+'```');
+ const {document}=new JSDOM(renderMarkdown({root:scratch,path:'code.md'}).html).window;
+ assert.equal(document.querySelector('script'),null,'highlighted markup must remain inert');
+ const blocks=[...document.querySelectorAll('pre code')];
+ assert.equal(blocks[0].textContent,source,'highlighting must preserve source for copying');
+ assert.ok(blocks[0].querySelector('span'),'supported languages receive syntax highlighting');
+ assert.equal(blocks[1].textContent,source,'unknown languages retain escaped plain text');
 }finally{rmSync(scratch,{recursive:true,force:true});}
 const model=readTokenModel(JSON.parse(readFileSync(join(actualRoot,'tokens/source.json'),'utf8'))),reference=renderTokenReference(model);
 assert.equal(reference.entries.length,model.names.length);assert.deepEqual(reference.entries.find(e=>e.name==='--ds-brand').aliases,model.aliases['--ds-brand']);

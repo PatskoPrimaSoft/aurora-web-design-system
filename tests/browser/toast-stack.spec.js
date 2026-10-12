@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
@@ -63,7 +64,7 @@ test('stack examples support overflow, order, portal and dialog keyboard access 
  const served=await serveRoot(root),errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
  await page.setViewportSize({width,height:900});await page.goto(`${served.url}/index.html?card=DsToastStack&theme=${theme}&appearance=${appearance}&density=${density}`);
- const f=page.frameLocator('#preview'),q=f.getByRole('region',{name:'Очередь и позиция'}),group=q.getByRole('region',{name:'Результаты операций'});
+ const f=page.frameLocator('#preview'),q=exampleDemo(f,'Очередь, порядок и позиция'),group=q.getByRole('region',{name:'Результаты операций'});
  await expect(group.locator('[data-ds-toast]')).toHaveCount(3);await expect(q).toContainText('Ожидают: 2');
  await expect(page.locator('main h2')).toHaveText(['Живые примеры','Правила применения','Пример кода','Параметры','Токены']);
  await expect(page.getByRole('table',{name:'Параметры DsToastStack'})).toContainText('maxVisible');
@@ -74,11 +75,11 @@ test('stack examples support overflow, order, portal and dialog keyboard access 
  await q.getByRole('button',{name:'Закрыть уведомление 1',exact:true}).click();await expect(group.locator('[data-ds-toast-body]').last()).toContainText('всех подразделений');
  await page.mouse.move(0,0);await q.getByRole('button',{name:'Добавить уведомление'}).focus();await page.waitForTimeout(250);
  await page.locator('#preview').screenshot({path:`.tmp/toast-stack-queue-${width}-${theme}-${appearance}.png`});
- const portal=f.getByRole('region',{name:'Portal и обрезающий контейнер'});await portal.getByRole('button',{name:'Показать через portal'}).click();
+ const portal=exampleDemo(f,'Portal за пределами обрезающего контейнера');await portal.getByRole('button',{name:'Показать через portal'}).click();
  const toast=portal.locator('[data-ds-toast]');await expect(toast).toBeVisible();
  expect(await toast.evaluate(e=>!!e.closest('[data-ds-toast-stack]').parentElement.classList.contains('demo'))).toBe(true);
  await toast.getByRole('button',{name:'Закрыть',exact:true}).focus();await page.keyboard.press('Enter');await expect(portal.getByRole('button',{name:'Показать через portal'})).toBeFocused();
- const modal=f.getByRole('region',{name:'Уведомление поверх диалога'});await modal.getByRole('button',{name:'Открыть диалог'}).click();const dialog=f.getByRole('dialog');
+ const modal=exampleDemo(f,'Уведомление поверх диалога');await modal.getByRole('button',{name:'Открыть диалог'}).click();const dialog=f.getByRole('dialog');
  await dialog.getByRole('button',{name:'Сохранить в диалоге'}).click();await expect(dialog.getByRole('region',{name:'Уведомления'})).toBeVisible();
  const close=dialog.locator('[data-ds-toast]').getByRole('button',{name:'Закрыть',exact:true});await close.focus();await page.keyboard.press('Tab');await expect(dialog.getByRole('button',{name:'Закрыть',exact:true}).first()).toBeFocused();
  await close.focus();await page.keyboard.press('Enter');await expect(dialog.getByRole('button',{name:'Сохранить в диалоге'})).toBeFocused();await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);

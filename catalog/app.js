@@ -1,9 +1,11 @@
 import {searchCards} from './search.js';
 import {familyFor} from './families.js';
 import {parseState,stateUrl,comparisonScopes} from './state.js';
+import {enhanceCodeBlocks,createPageContents} from './documentation.js';
 const cards=await(await fetch('cards.json')).json();
 let state=parseState(new URL(location.href),cards),renderedKey=null,frames=[];
-const {DsSelect,DsButton,DsPageLayout}=window.AuroraWebDesignSystem_96e210;
+let disposeContents=()=>{};
+const {DsMenu,DsButton,DsPageLayout}=window.AuroraWebDesignSystem_96e210;
 const h=window.React.createElement;
 const shell=document.getElementById('catalog-shell');
 const header=shell.querySelector('header'),navigation=shell.querySelector('aside'),content=shell.querySelector('main');
@@ -22,30 +24,46 @@ window.ReactDOM.flushSync(()=>layoutRoot.render(h(DsPageLayout,{
 },h(CatalogueRegion,{source:content,className:'catalog-content'}))));
 const nav=document.getElementById('cards'),viewports=document.getElementById('viewports'),search=document.getElementById('search');
 const headerRoot=window.ReactDOM.createRoot(document.getElementById('catalog-header-content'));
+window.ReactDOM.flushSync(()=>headerRoot.render(
+ h('div',{className:'catalog-identity'},
+  h('span',{className:'catalog-logo'},h('img',{src:'components/assets/logo/AuroraWhite.png',alt:''})),
+  h('strong',{className:'catalog-product'},'Aurora Design'))
+));
+const previewControls=document.createElement('div');
+previewControls.className='catalog-controls';previewControls.setAttribute('role','group');previewControls.setAttribute('aria-label','Настройки примера');
+document.querySelector('.catalog-header').append(previewControls);
+const controlsRoot=window.ReactDOM.createRoot(previewControls);
 const scopeFields=[
  {id:'theme',label:'Бренд',options:['DEFAULT','RED2']},
  {id:'appearance',label:'Оформление',options:[{value:'light',label:'Светлое'},{value:'dark',label:'Тёмное'}]},
  {id:'density',label:'Плотность',options:[{value:'cozy',label:'Обычная'},{value:'compact',label:'Компактная'}]},
 ];
-function renderHeader(){
- window.ReactDOM.flushSync(()=>headerRoot.render(h(window.React.Fragment,null,
-  h('div',{className:'catalog-identity'},
-   h('span',{className:'catalog-logo'},h('img',{src:'components/assets/logo/AuroraWhite.png',alt:''})),
-   h('strong',{className:'catalog-product'},'Aurora Design')),
-  h('div',{className:'catalog-controls'},
-   ...scopeFields.map(field=>h('div',{key:field.id,className:'catalog-scope'},h(DsSelect,{...field,value:state.scope[field.id],onChange:value=>{state.scope[field.id]=value;save(true);render();}}))),
-   h(DsButton,{id:'compare',tone:state.compare?'subtle':'secondary','aria-pressed':state.compare,disabled:state.unknown,onClick:()=>{state.compare=!state.compare;save(true);render();}},'Сравнить 4 режима'))
+function renderControls(){
+ window.ReactDOM.flushSync(()=>controlsRoot.render(h(window.React.Fragment,null,
+   ...scopeFields.map(field=>{
+    const options=field.options.map(option=>typeof option==='string'?{value:option,label:option}:option);
+    const selected=options.find(option=>option.value===state.scope[field.id]);
+    return h(DsMenu,{key:field.id,menuLabel:field.label,width:180,
+     trigger:h(DsButton,{id:field.id,tone:'subtle',iconRight:'expand_more','aria-label':field.label+': '+selected.label},selected.label),
+     items:options.map(option=>({id:option.value,label:option.label,type:'radio',checked:option.value===state.scope[field.id]})),
+     onSelect:item=>{state.scope[field.id]=item.id;save(true);render();}
+    });
+   }),
+   h(DsButton,{id:'compare',tone:state.compare?'subtle':'secondary','aria-pressed':state.compare,disabled:state.unknown,onClick:()=>{state.compare=!state.compare;save(true);render();}},'Сравнить 4 режима')
  )));
 }
 const titleStatus=document.getElementById('card-status'),titleStatusRoot=window.ReactDOM.createRoot(titleStatus);
 let navigationStatusRoots=[];
 function renderStatus(root,card){window.ReactDOM.flushSync(()=>root.render(card?.status==='deprecated'?window.React.createElement(window.AuroraWebDesignSystem_96e210.DsLozenge,{tone:'warning',size:'sm'},'Устарело'):null));}
 const examplesHeading=document.createElement('h2');examplesHeading.id='examples-heading';examplesHeading.textContent='Живые примеры';examplesHeading.hidden=true;viewports.before(examplesHeading);
-function save(push=false){history[push?'pushState':'replaceState'](null,'',stateUrl(location.href,state));}
+function save(push=false){
+ const url=stateUrl(location.href,state);
+ if(new URL(location.href).searchParams.get('card')===state.cardId)url.hash=location.hash;
+ history[push?'pushState':'replaceState'](null,'',url);
+}
 function drawNavigation(){
  const found=searchCards(cards,state.query),groups=new Map();
  for(const root of navigationStatusRoots)root.unmount();navigationStatusRoots=[];nav.replaceChildren();
- renderHeader();
  const tokens=document.createElement('a'),tokensUrl=new URL('api/tokens.html',location.href);
  for(const[name,value]of Object.entries(state.scope))tokensUrl.searchParams.set(name,value);
  tokens.href=tokensUrl;tokens.textContent='Токены';tokens.className='catalog-tokens-link';nav.append(tokens);
@@ -66,8 +84,9 @@ function drawNavigation(){
 function scopeFrame(record){
  const scope=state.compare?record.fixed:state.scope;
  for(const[name,value]of Object.entries(scope))record.element.contentDocument?.documentElement?.setAttribute('data-ds-'+name,value);
+ record.element.contentDocument?.documentElement?.setAttribute('data-ds-example-card-url',stateUrl(location.href,{...state,scope,compare:false,query:''}));
  const caption=`${scope.theme} / ${scope.appearance} / ${scope.density}`;
- record.caption.textContent=caption;record.element.title=record.card.title+' — '+caption;
+ record.caption.textContent=caption;record.caption.hidden=!state.compare;record.element.title=record.card.title+' — '+caption;
 }
 function scopePreviewLink(event,record){
  const link=event.target.closest?.('a[target="_top"][href]');
@@ -89,6 +108,7 @@ function describeCard(card){
  target.hidden=!card?.documentationHtml&&!card?.apiHtml;
  // Locally generated Markdown and API markup; raw Markdown HTML is disabled and API text is escaped.
  target.innerHTML=(card?.documentationHtml??'')+(card?.apiHtml??'');
+ enhanceCodeBlocks(target);
  for(const link of target.querySelectorAll('a[href]')){
   const url=new URL(link.getAttribute('href'),location.href);
   if(url.origin!==location.origin)continue;
@@ -96,8 +116,10 @@ function describeCard(card){
   link.href=url;
  }
 }
-function render(){
- for(const[name,value]of Object.entries(state.scope))document.documentElement.setAttribute('data-ds-'+name,value);
+function render({restoreSection=false}={}){
+ disposeContents();
+ // The catalogue keeps its light reading surface; scope settings belong to previews and links.
+ renderControls();
  search.value=state.query;drawNavigation();
  const card=cards.find(card=>card.id===state.cardId),error=document.getElementById('card-error');error.hidden=!!card;
  document.querySelector('.catalog-content').classList.toggle('component-page',card?.layout==='component');
@@ -105,6 +127,7 @@ function render(){
  if(card?.layout==='component')viewports.setAttribute('aria-labelledby',examplesHeading.id);else viewports.removeAttribute('aria-labelledby');
  titleStatus.hidden=card?.status!=='deprecated';renderStatus(titleStatusRoot,card);
  describeCard(card);
+ disposeContents=()=>{};
  if(!card){document.getElementById('title').textContent='Карточка не найдена';document.getElementById('subtitle').textContent='Выберите карточку в навигации или вернитесь к началу.';document.getElementById('missing-id').textContent=state.cardId;for(const record of frames)record.resizeObserver?.disconnect();viewports.replaceChildren();document.getElementById('reference-links').replaceChildren();frames=[];renderedKey=null;document.getElementById('local-note').hidden=true;return;}
  document.getElementById('title').textContent=card.title;document.getElementById('subtitle').textContent=card.subtitle;document.getElementById('local-note').hidden=card.scopeMode!=='local';referenceLinks(card);
  const key=card.id+'|'+state.compare;
@@ -121,6 +144,7 @@ function render(){
     scroll.removeAttribute('tabindex');scroll.removeAttribute('role');scroll.removeAttribute('aria-labelledby');
    }
    const record={element:frame,caption,fixed,card};frames.push(record);frame.addEventListener('load',()=>{
+    panel.classList.toggle('sectioned-preview',card.layout==='component'&&frame.contentDocument.body.hasAttribute('data-ds-examples'));
     scopeFrame(record);
     if(responsivePreview){
      record.resizeObserver?.disconnect();
@@ -139,8 +163,13 @@ function render(){
   renderedKey=key;
  }
  for(const record of frames)scopeFrame(record);
+ disposeContents=card.layout==='component'?createPageContents({
+  container:document.querySelector('.catalog-content'),
+  headings:[examplesHeading,...document.querySelectorAll('#card-description h2')],
+  scrollRoot:document.querySelector('main'),cardUrl:stateUrl(location.href,state),previewFrame:frames[0]?.element,restoreSection,
+ }):()=>{};
 }
 search.addEventListener('input',()=>{state.query=search.value;save();drawNavigation();});
 document.getElementById('return-catalogue').addEventListener('click',()=>{state={...state,cardId:cards[0].id,query:'',unknown:false};save(true);render();});
-for(const event of ['popstate','hashchange'])window.addEventListener(event,()=>{state=parseState(new URL(location.href),cards);render();});
-render();
+for(const event of ['popstate','hashchange'])window.addEventListener(event,()=>{state=parseState(new URL(location.href),cards);render({restoreSection:true});});
+render({restoreSection:true});

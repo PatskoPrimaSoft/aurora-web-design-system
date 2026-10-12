@@ -1,17 +1,25 @@
-<!-- @dsCard aliases="подсказка|tooltip" group="5 · Компоненты · графики" height=130 subtitle="Считывание по оси: инверсный грунт, моно-значения; переиспользуется на карте" -->
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="подсказка|tooltip" group="5 · Компоненты · графики" height=130 subtitle="Считывание по оси: инверсный грунт, моно-значения; переиспользуется на карте" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:16px;-webkit-font-smoothing:antialiased}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .col{display:flex;flex-direction:column;gap:12px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:start}
 .sep{width:1px;height:24px;background:var(--ds-divider)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
 .dark{display:inline-flex;padding:8px;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-function App(){return h('div',{className:'row'},h(S.DsChartTooltip,{label:'14:00',rows:[
-  {name:'Скорость',value:'72',unit:'км/ч',color:'var(--ds-series-1)'},{name:'Топливо',value:'131',unit:'л',color:'var(--ds-series-2)'}]}));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+function App() {
+    return <LiveExamples>
+    <LiveExample id={"point-values"} title={"Значения в точке"} description={"Подсказка связывает время, название серии, значение и единицу измерения."}>
+    <div className={'row'}>
+    <S.DsChartTooltip label={'14:00'} rows={[
+        { name: 'Скорость', value: '72', unit: 'км/ч', color: 'var(--ds-series-1)' }, { name: 'Топливо', value: '131', unit: 'л', color: 'var(--ds-series-2)' }
+    ]}/>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

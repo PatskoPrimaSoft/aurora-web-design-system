@@ -1,30 +1,70 @@
-<!-- @dsCard layout="component" aliases="выбор|checkbox|чекбокс|radio|радио" group="5 · Компоненты · формы" height=560 subtitle="Выбор нескольких элементов или одного варианта из группы" -->
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="выбор|checkbox|чекбокс|radio|радио" group="5 · Компоненты · формы" height=560 subtitle="Выбор нескольких элементов или одного варианта из группы" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-table{width:100%;max-width:660px;border-collapse:collapse;table-layout:fixed}
-th,td{padding:4px 8px;text-align:center;border-bottom:1px solid var(--ds-divider)}
-th{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
-th:first-child{text-align:left;width:50%}
-.stack{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.group-children{display:flex;flex-direction:column;gap:8px;padding-left:28px}
 .row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
-.hint{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:8px 0 0}
-@media(max-width:400px){body{padding:12px}th,td{padding:4px 2px}}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var examples=[['unchecked','Чекбокс: не выбран',false],['checked','Чекбокс: выбран',false],['indeterminate','Чекбокс: частично',false],['unchecked','Радио: не выбран',true],['checked','Радио: выбран',true]];
-function App(){var a=React.useState('checked'),mixed=React.useState('indeterminate'),radio=React.useState('week'),row=React.useState('unchecked');
- return h('div',null,
-  h('table',{'aria-label':'Состояния чекбокса и радио'},
-   h('thead',null,h('tr',null,h('th',{scope:'col'},'Состояние'),h('th',{scope:'col'},'Обычное'),h('th',{scope:'col'},'Недоступно'))),
-   h('tbody',null,examples.map(function(example,i){return h('tr',{key:i},h('th',{scope:'row'},example[1]),[false,true].map(function(disabled){return h('td',{key:String(disabled)},h(S.DsCheckbox,{state:example[0],radio:example[2],disabled:disabled,ariaLabel:example[1]+(disabled?' — недоступно':''),name:'sample-'+i+'-'+disabled}));}));}))),
-  h('p',{className:'hint'},'Наведите указатель на доступный контрол, чтобы увидеть hover.'),
-  h('div',{className:'stack'},
-   h(S.DsCheckbox,{label:'Отправка команд',state:a[0],onChange:a[1]}),
-   h(S.DsCheckbox,{label:'Все объекты группы',state:mixed[0],onChange:mixed[1]}),
-   h(S.DsCheckbox,{label:'Изменение параметров',disabled:true,description:'Недоступно для вашей роли'}),
-   h('div',{className:'row',role:'group','aria-label':'Период'},['day','week'].map(function(value){return h(S.DsCheckbox,{key:value,radio:true,name:'period',value:value,label:value==='day'?'Сутки':'Неделя',state:radio[0]===value?'checked':'unchecked',onChange:function(){radio[1](value);}});})),
-   h('div',{className:'row'},h(S.DsCheckbox,{ariaLabel:'Выбрать строку',state:row[0],onChange:row[1],hit:24}),h('span',{className:'hint'},'Без подписи — для таблиц и деревьев'))));}
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+.state-matrix{width:100%;max-width:660px;border-collapse:collapse;table-layout:fixed}
+.state-matrix th,.state-matrix td{padding:10px 8px;text-align:center;border-bottom:1px solid var(--ds-divider)}
+.state-matrix th{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.state-matrix th:first-child{text-align:left;width:50%}
+@media(max-width:400px){.state-matrix th,.state-matrix td{padding:8px 2px}}
+</style></head><body data-ds-examples data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const {DsCheckbox}=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+const states=[
+  ['unchecked','Чекбокс: не выбран',false],
+  ['checked','Чекбокс: выбран',false],
+  ['indeterminate','Чекбокс: частично',false],
+  ['unchecked','Радио: не выбран',true],
+  ['checked','Радио: выбран',true],
+];
+function App(){
+  const [checked,setChecked]=React.useState('checked');
+  const [objects,setObjects]=React.useState([true,false,true]);
+  const [period,setPeriod]=React.useState('week');
+  const [row,setRow]=React.useState('unchecked');
+  const selected=objects.filter(Boolean).length;
+  const groupState=selected===0?'unchecked':selected===objects.length?'checked':'indeterminate';
+  return <LiveExamples>
+    <LiveExample id="basic-example" title="Обычный выбор"
+      description="Чекбокс позволяет включить или выключить отдельную опцию. Нажмите на подпись или используйте пробел, когда контрол в фокусе.">
+      <DsCheckbox label="Отправка команд" description="Разрешить отправку команд выбранным объектам" state={checked} onChange={setChecked}/>
+    </LiveExample>
+    <LiveExample id="partial-selection" title="Частичный выбор"
+      description="Прочерк означает, что выбрана только часть группы. Выберите объекты по отдельности или нажмите «Все объекты группы», чтобы выбрать их все.">
+      <div className="stack">
+        <DsCheckbox label="Все объекты группы" state={groupState} onChange={next=>setObjects(objects.map(()=>next==='checked'))}/>
+        <div className="group-children" role="group" aria-label="Объекты группы">
+          {['МАЗ 5440','Volvo FH16','Scania R450'].map((label,index)=><DsCheckbox key={label} label={label} state={objects[index]?'checked':'unchecked'} onChange={next=>setObjects(current=>current.map((value,i)=>i===index?next==='checked':value))}/>)}
+        </div>
+      </div>
+    </LiveExample>
+    <LiveExample id="disabled-selection" title="Недоступное действие"
+      description="Недоступный чекбокс показывает опцию, которую сейчас нельзя изменить. Пояснение рядом помогает понять причину ограничения.">
+      <DsCheckbox label="Изменение параметров" disabled description="Недоступно для вашей роли"/>
+    </LiveExample>
+    <LiveExample id="radio-selection" title="Один вариант из группы"
+      description="Радиокнопки используют, когда нужно выбрать ровно один вариант. В этой группе выбор периода переключается нажатием или стрелками на клавиатуре.">
+      <div className="row" role="group" aria-label="Период">
+        {['day','week'].map(value=><DsCheckbox key={value} radio name="period" value={value} label={value==='day'?'Сутки':'Неделя'} state={period===value?'checked':'unchecked'} onChange={()=>setPeriod(value)}/>)}
+      </div>
+    </LiveExample>
+    <LiveExample id="unlabelled-selection" title="Выбор без подписи"
+      description="В строке таблицы подпись может быть частью соседней ячейки. У самого чекбокса всё равно должно быть доступное имя для скринридера.">
+      <div className="row"><DsCheckbox ariaLabel="Выбрать строку" state={row} onChange={setRow} hit={24}/><span>МАЗ 5440</span></div>
+    </LiveExample>
+    <LiveExample id="selection-states" title="Сравнение состояний"
+      description="Все состояния рядом для сравнения. В правой колонке показаны недоступные контролы; выбранное значение остаётся различимым.">
+      <table className="state-matrix" aria-label="Состояния чекбокса и радио">
+        <thead><tr><th scope="col">Состояние</th><th scope="col">Обычное</th><th scope="col">Недоступно</th></tr></thead>
+        <tbody>{states.map(([state,label,radio],index)=><tr key={label}>
+          <th scope="row">{label}</th>
+          {[false,true].map(disabled=><td key={String(disabled)}><DsCheckbox state={state} radio={radio} disabled={disabled} ariaLabel={label+(disabled?' — недоступно':'')} name={'sample-'+index+'-'+disabled}/></td>)}
+        </tr>)}</tbody>
+      </table>
+    </LiveExample>
+  </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script></body></html>

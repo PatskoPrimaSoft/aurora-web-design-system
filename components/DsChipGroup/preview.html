@@ -1,31 +1,60 @@
-<!-- @dsCard layout="component" group="5 · Компоненты · данные" height=390 subtitle="Группа связанных чипов с переносом строк и общей очисткой" -->
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · данные" height=390 subtitle="Группа связанных чипов с переносом строк и общей очисткой" -->
 <!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><style>
-html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:16px;-webkit-font-smoothing:antialiased}
-.examples{display:flex;flex-direction:column;gap:32px}
-.section{display:flex;flex-direction:column;gap:16px;min-width:0}
-h3{font:var(--ds-type-body);font-weight:var(--ds-weight-medium);margin:0}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin:0}
-</style></head><body><div id="root"></div><script>
-(function(){var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
-var names=['Грузовики','Легковые','Спецтехника','Автобусы','Прицепы'];
-function App(){var selected=React.useState(['Грузовики']),values=React.useState(names),message=React.useState('');
-  function update(next,text){values[1](next);message[1](text);document.getElementById('restore-group').focus();}
-  return h('div',{className:'examples'},
-    h('section',{className:'section','aria-label':'Выбор фильтров'},
-      h('h3',null,'Типы объектов'),
-      h(S.DsChipGroup,{ariaLabel:'Типы объектов',onClearAll:selected[0].length?function(){selected[1]([]);document.querySelector('[role="group"][aria-label="Типы объектов"] button').focus();}:undefined,clearAllLabel:'Снять выбор'},
-        names.map(function(name){return h(S.DsChip,{key:name,selected:selected[0].includes(name),onClick:function(){selected[1](selected[0].includes(name)?selected[0].filter(function(n){return n!==name;}):selected[0].concat(name));}},name);})),
-      h('p',{className:'cap',role:'status'},'Выбрано типов: '+selected[0].length+'.')),
-    h('section',{className:'section','aria-label':'Удаление значений'},
-      h('h3',null,'Выбранные группы'),
-      h('div',null,h(S.DsButton,{id:'restore-group',tone:'secondary',size:'sm',onClick:function(){values[1](names);message[1]('Группы восстановлены.');}},'Восстановить группы')),
-      h(S.DsChipGroup,{ariaLabel:'Выбранные группы',onClearAll:function(){update([],'Все группы удалены.');}},values[0].map(function(name){return h(S.DsChip,{key:name,removable:true,onRemove:function(){update(values[0].filter(function(n){return n!==name;}),'Удалена группа «'+name+'».');}},name);})),
-      h('p',{className:'cap',role:'status'},message[0]||'Удалите отдельную группу или очистите все.')),
-    h('section',{className:'section','aria-label':'Постоянные метки'},
-      h('h3',null,'Категории'),
-      h(S.DsChipGroup,{ariaLabel:'Категории'},h(S.DsChip,null,'Служебный транспорт'),h(S.DsChip,null,'Междугородние перевозки'),h(S.DsChip,null,'Северо-западное подразделение'))));
+</style></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S = window.AuroraWebDesignSystem_96e210;
+const { LiveExamples, LiveExample } = window.DsLiveExamples;
+var names = ['Грузовики', 'Легковые', 'Спецтехника', 'Автобусы', 'Прицепы'];
+function App() {
+    var selected = React.useState(['Грузовики']), values = React.useState(names), message = React.useState('');
+    function update(next, text) { values[1](next); message[1](text); document.getElementById('restore-group').focus(); }
+    return <LiveExamples>
+    <LiveExample id={"tipy-obektov"} title={"Типы объектов"} description={"Выбирайте связанные фильтры в одной группе; элементы переносятся при уменьшении ширины."}>
+    <div className={"demo-stack"}>
+    <S.DsChipGroup ariaLabel={'Типы объектов'} onClearAll={selected[0].length ? function () { selected[1]([]); document.querySelector('[role="group"][aria-label="Типы объектов"] button').focus(); } : undefined} clearAllLabel={'Снять выбор'}>
+    {names.map(function (name) { return <S.DsChip key={name} selected={selected[0].includes(name)} onClick={function () { selected[1](selected[0].includes(name) ? selected[0].filter(function (n) { return n !== name; }) : selected[0].concat(name)); }}>
+    {name}
+    </S.DsChip>; })}
+    </S.DsChipGroup>
+    <p className={'cap'} role={'status'}>
+    {'Выбрано типов: ' + selected[0].length + '.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"vybrannye-gruppy"} title={"Выбранные группы"} description={"Удаляйте отдельные группы или очищайте весь набор одним действием."}>
+    <div className={"demo-stack"}>
+    <div>
+    <S.DsButton id={'restore-group'} tone={'secondary'} size={'sm'} onClick={function () { values[1](names); message[1]('Группы восстановлены.'); }}>
+    {'Восстановить группы'}
+    </S.DsButton>
+    </div>
+    <S.DsChipGroup ariaLabel={'Выбранные группы'} onClearAll={function () { update([], 'Все группы удалены.'); }}>
+    {values[0].map(function (name) { return <S.DsChip key={name} removable={true} onRemove={function () { update(values[0].filter(function (n) { return n !== name; }), 'Удалена группа «' + name + '».'); }}>
+    {name}
+    </S.DsChip>; })}
+    </S.DsChipGroup>
+    <p className={'cap'} role={'status'}>
+    {message[0] || 'Удалите отдельную группу или очистите все.'}
+    </p>
+    </div>
+    </LiveExample>
+    <LiveExample id={"kategorii"} title={"Категории"} description={"Постоянные метки показывают принадлежность объекта и не предлагают действие удаления."}>
+    <div className={"demo-stack"}>
+    <S.DsChipGroup ariaLabel={'Категории'}>
+    <S.DsChip>
+    {'Служебный транспорт'}
+    </S.DsChip>
+    <S.DsChip>
+    {'Междугородние перевозки'}
+    </S.DsChip>
+    <S.DsChip>
+    {'Северо-западное подразделение'}
+    </S.DsChip>
+    </S.DsChipGroup>
+    </div>
+    </LiveExample>
+    </LiveExamples>;
 }
-ReactDOM.createRoot(document.getElementById('root')).render(h(App));})();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script></body></html>

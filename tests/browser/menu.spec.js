@@ -43,6 +43,7 @@ test('DsMenu escapes clipping, flips up, follows scrolling and stays in dialog f
  try{
   await page.setViewportSize({width:390,height:600});await page.goto(served.url+'/components/DsMenu/preview.html');
   await page.waitForFunction(()=>Object.keys(window).some(key=>key.startsWith('AuroraWebDesignSystem_')));
+  await page.addStyleTag({content:'*,*::before,*::after{box-sizing:border-box}'});
   await page.evaluate(()=>{
    const S=window[Object.keys(window).find(key=>key.startsWith('AuroraWebDesignSystem_'))],h=React.createElement;
    document.body.innerHTML='<div id="test-root"></div>';

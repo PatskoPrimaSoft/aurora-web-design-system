@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
@@ -13,7 +14,7 @@ test('switch keeps focus, density targets, descriptions and value during loading
  const track=setting.locator('..').locator('[data-ds-switch-track]');await expect(track).toHaveCSS('outline-style','solid');
  const hit=await setting.locator('..').locator('[data-ds-switch-hit]').evaluate(el=>({height:el.getBoundingClientRect().height,expected:parseFloat(getComputedStyle(el).getPropertyValue('--ds-control-h'))}));expect(hit.height).toBe(hit.expected);
  await frame.locator('body').evaluate(()=>{const native=window.setTimeout;window.setTimeout=(callback,delay,...args)=>delay===1800?(window.finishSave=()=>callback(...args),0):native(callback,delay,...args);});
- const region=frame.getByRole('region',{name:'Сохранение настройки'}),toggle=region.getByRole('switch',{name:'Автоматическое обновление карты',exact:true});
+ const region=exampleDemo(frame,'Сохранение настройки'),toggle=region.getByRole('switch',{name:'Автоматическое обновление карты',exact:true});
  await toggle.focus();await page.keyboard.press('Space');await expect(toggle).toHaveAttribute('aria-busy','true');await expect(toggle).toBeChecked();await expect(toggle).toBeFocused();
  await expect(region.locator('[data-ds-spinner]')).toBeVisible();await expect(region.getByRole('status').filter({hasText:'Загрузка'})).toHaveCount(1);
  await region.getByText('Автоматическое обновление карты',{exact:true}).click({force:true});await expect(toggle).toBeChecked();

@@ -1,3 +1,4 @@
+import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
@@ -30,7 +31,7 @@ test('refresh and retry examples retain geometry, content and focus',async({page
  try{await page.clock.install();page.setDefaultTimeout(3000);
  for(const [theme,appearance,density] of modes)for(const width of [390,1280]){
  await page.setViewportSize({width,height:900});await page.goto(`${served.url}/index.html?card=DsSpinner&theme=${theme}&appearance=${appearance}&density=${density}`);
- const f=page.frameLocator('#preview'),refresh=f.getByRole('region',{name:'Обновление отчёта'}),retry=f.getByRole('region',{name:'Загрузка с ошибкой'});
+ const f=page.frameLocator('#preview'),refresh=exampleDemo(f,'Обновление существующих данных'),retry=exampleDemo(f,'Ошибка и повторная попытка');
  const button=refresh.getByRole('button',{name:'Обновить отчёт'});await button.waitFor();
  await expect(f.locator('.variants').getByRole('status')).toHaveCount(0);
  const geometry=()=>refresh.locator('.data').evaluate(el=>({left:el.offsetLeft,top:el.offsetTop,width:el.offsetWidth,height:el.offsetHeight}));const before=await geometry();await button.focus();await page.keyboard.press('Enter');

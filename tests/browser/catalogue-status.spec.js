@@ -11,7 +11,7 @@ await page.setViewportSize({width,height:900});await page.goto(`${served.url}/in
 if(width===390)await page.getByRole('button',{name:'Навигация',exact:true}).click();
 const link=page.locator('nav a[data-id="DsDuration"]');await expect(link).toContainText('Устарело');await expect(page.locator('#title')).toHaveText('DsDuration');await expect(page.locator('#card-status')).toHaveText('Устарело');
 await link.focus();await page.keyboard.press('Enter');await expect(page.locator('#card-status')).toHaveText('Устарело');
-await page.locator('#search').fill('DsDuration');await expect(page.locator('nav a[data-id]')).toHaveCount(1);await expect(page.locator('nav')).toContainText('Устарело');await page.locator('#search').fill('');
+await page.locator('#search').fill('DsDuration');await expect(page.locator('nav a[data-id]')).toHaveCount(1);await expect(page.getByRole('navigation',{name:'Карточки',exact:true})).toContainText('Устарело');await page.locator('#search').fill('');
 await page.locator('nav a[data-id="DsPanel"]').click();await expect(page.locator('#card-status')).toBeHidden();await expect(page.locator('#title')).toHaveText('DsPanel');
 await page.goBack();await expect(page.locator('#card-status')).toHaveText('Устарело');
 expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
