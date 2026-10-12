@@ -120,7 +120,7 @@ node lint/test/run.js                  # тесты правил, имён и с
 
 ### no-deprecated-token
 
-Предупреждает о ссылке на устаревшее имя, пока оно живёт алиасом: `var(--ds-gap)` →
-`var(--ds-gap-sm-plus)`, `var(--ds-pad)` → `var(--ds-pad-sm)`, `var(--ds-fresh-on)` →
-`var(--ds-fresh-fg)`. Список и версия удаления — `aliases` в `lint/naming.config.json`.
-В готовом конфиге — `severity: warning`: старое имя работает до 3.0.0, миграция идёт по срезам.
+Предупреждает о ссылке на устаревшее имя, пока оно живёт алиасом. Список и версия
+удаления — `aliases` в `lint/naming.config.json`; сейчас список пуст.
+В готовом конфиге — `severity: warning`. Удалённые в 4.0.0 `--ds-gap`, `--ds-pad`
+и `--ds-fresh-on` отклоняет `aurora/known-token`; замены описаны в `docs/migration.md`.

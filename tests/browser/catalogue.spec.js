@@ -1,6 +1,7 @@
 import {chooseCatalogueScope} from './helpers/catalogue-scope.js';
 import{test,expect}from'@playwright/test';import{buildCatalogue}from'../../tools/catalog/build.mjs';import{serveRoot}from'../../tools/baseline/render.mjs';import{fileURLToPath}from'node:url';
 import{startDev}from'../../tools/dev.mjs';import{fixtureRoot}from'../helpers/build-root.js';import{readFileSync,writeFileSync,rmSync}from'node:fs';import{join}from'node:path';
+import{readTokenModel}from'../../tools/tokens/model.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 test('all catalogue pages render from local files without runtime errors',async({page})=>{
  const cards=await buildCatalogue({root,outDir:`${root}/site`});const served=await serveRoot(`${root}/site`);
@@ -103,6 +104,47 @@ test('API references use real declarations, defaults and token source',async({pa
   await page.goto(served.url+'/api/components/DsButton.html');await expect(page.getByRole('row').filter({has:page.getByRole('rowheader',{name:'tone',exact:true})})).toContainText("'primary'");
   await page.goto(served.url+'/api/tokens.html');await expect(page.locator('#ds-brand')).toBeVisible();expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
+});
+
+test('token reference filters categories and switches paired theme values',async({page})=>{
+ await buildCatalogue({root,outDir:`${root}/site`});const served=await serveRoot(`${root}/site`);
+ const tokenCount=readTokenModel(JSON.parse(readFileSync(join(root,'tokens/source.json'),'utf8'))).names.length;
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ try{
+  await page.goto(served.url+'/api/tokens.html?appearance=dark&density=compact');
+  await expect(page.locator('html')).toHaveAttribute('data-ds-appearance','light');
+  await expect(page.locator('html')).toHaveAttribute('data-ds-density','cozy');
+  await expect(page.locator('.token-page-header a')).toHaveText('Aurora Design System');
+  await expect(page.locator('[data-token-row]')).toHaveCount(tokenCount);
+  await expect(page.locator('.token-count')).toHaveText(`${tokenCount} из ${tokenCount} токенов`);
+  await expect(page.locator('#ds-brand [data-theme-value="DEFAULT.light"]')).toBeVisible();
+  await expect(page.locator('#ds-brand [data-theme-value="DEFAULT.dark"]')).toBeVisible();
+  await page.getByRole('combobox',{name:'Бренд'}).selectOption('RED2');
+  await expect(page.locator('#ds-brand [data-theme-value="RED2.light"]')).toBeVisible();
+  await expect(page.locator('#ds-brand [data-theme-value="DEFAULT.light"]')).toBeHidden();
+  await expect(page.locator('#ds-brand [data-theme-value="RED2.dark"] .token-value')).toHaveText('#b9b6b7');
+  await page.getByRole('combobox',{name:'Категория'}).selectOption('spacing');
+  await expect(page.locator('#ds-gap-md [data-density-value="cozy"]')).toBeVisible();
+  await expect(page.locator('#ds-gap-md [data-density-value="compact"]')).toBeVisible();
+  await page.getByRole('searchbox',{name:'Поиск токенов'}).fill('--ds-gap-md');
+  await expect(page.locator('.token-count')).toHaveText(`1 из ${tokenCount} токенов`);
+  await page.getByRole('searchbox',{name:'Поиск токенов'}).fill('not-a-token');
+  await expect(page.locator('.token-empty')).toBeVisible();
+  await page.setViewportSize({width:390,height:844});
+  await page.getByRole('searchbox',{name:'Поиск токенов'}).fill('');
+  await expect(page.locator('#ds-gap-md')).toBeVisible();
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.getByRole('combobox',{name:'Категория'}).selectOption('layout');
+  await expect(page.locator('#ds-bp-l .token-breakpoint')).toContainText('M · 959 px');
+  await expect(page.locator('#ds-bp-l .is-boundary')).toHaveText('L · 960 px');
+  await expect(page.locator('#ds-bp-m-max .is-boundary')).toHaveText('M · 959 px');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.setViewportSize({width:1280,height:900});
+  await page.getByRole('combobox',{name:'Категория'}).selectOption('content');
+  await expect(page.locator('#ds-content-max .token-content-example')).toBeVisible();
+  await expect(page.locator('#token-layout')).toBeHidden();
+  expect(errors).toEqual([]);
+ }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });
 
 test('search, URL history and scope comparison preserve preview contracts',async({page})=>{

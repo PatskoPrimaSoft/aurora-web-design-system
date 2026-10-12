@@ -10,7 +10,7 @@
 | `ds-header-tab-fg-active`, `ds-header-fg-muted` | Подписи выбранного и остальных разделов шапки |
 | `ds-header-icon-fg` | Иконка невыбранного раздела шапки |
 | `ds-header-hover`, `ds-header-indicator` | Подложка выбранного / наведённого раздела и нижний индикатор в шапке |
-| `ds-header-badge-bg`, `ds-header-badge-fg` | Фон и текст счётчика в шапке |
+| `ds-accent`, `ds-accent-on` | Фон и текст счётчика в шапке |
 | `ds-header-h`, `ds-control-h-sm` | Высота навигации в шапке и кнопки сегмента |
 | `ds-gap-md`, `ds-gap-sm` | Интервалы между вкладками `underline` и между иконкой и подписью |
 | `ds-icon`, `ds-icon-sm` | Размер иконок обычной вкладки и сегмента |

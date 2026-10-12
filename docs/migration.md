@@ -195,16 +195,19 @@ class still in the product source — `v2` additionally read as a version number
 the system itself, which it never was. Everything an engineer needs from the deleted
 layer is the name map above.
 
-## Deprecated token aliases (2.0 → 3.0)
+## Removed token aliases (4.0)
 
-These aliases were scheduled for removal in 3.0.0, but their entries remain in `lint/naming.config.json`.
-`aurora/no-deprecated-token` warns on them. Replace them when upgrading; check the installed token inventory and CHANGELOG for actual removal.
+These aliases have been removed from the token inventory. Replace them when upgrading to 4.0; `aurora/known-token` rejects the removed names.
 
 | deprecated | use instead |
 |---|---|
 | `--ds-gap` | `--ds-gap-sm-plus` |
 | `--ds-pad` | `--ds-pad-sm` |
 | `--ds-fresh-on` | `--ds-fresh-fg` |
+| `--ds-header-badge-bg` | `--ds-accent` |
+| `--ds-header-badge-fg` | `--ds-accent-on` |
+| `--ds-header-chip-bg` | `--ds-surface-hover` |
+| `--ds-header-chip-border` | `--ds-border` |
 
 Mechanical replace is safe — values are identical in every theme and density:
 `sed -i 's/var(--ds-gap)/var(--ds-gap-sm-plus)/g; s/var(--ds-pad)/var(--ds-pad-sm)/g; s/var(--ds-fresh-on)/var(--ds-fresh-fg)/g'`.

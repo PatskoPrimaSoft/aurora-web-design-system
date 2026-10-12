@@ -1,0 +1,22 @@
+{
+  "aliases": [
+    {
+      "old": "ds-gap",
+      "new": "ds-gap-sm-plus",
+      "since": "2.0.0",
+      "removeIn": "3.0.0"
+    },
+    {
+      "old": "ds-pad",
+      "new": "ds-pad-sm",
+      "since": "2.0.0",
+      "removeIn": "3.0.0"
+    },
+    {
+      "old": "ds-fresh-on",
+      "new": "ds-fresh-fg",
+      "since": "2.0.0",
+      "removeIn": "3.0.0"
+    }
+  ]
+}

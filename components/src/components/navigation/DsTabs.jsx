@@ -101,8 +101,8 @@ export function DsTabs({items=[],active,onChange,tone='underline',stack=true,idB
 }
 function Tab({it,on,onHeader=false,stacked=false,segmented=false,onChange,a11y}){
   const fg=onHeader?(on?'var(--ds-header-tab-fg-active)':'var(--ds-header-fg-muted)'):(on?(segmented?'var(--ds-fg-strong)':'var(--ds-brand-text)'):'var(--ds-fg-muted)');
-  const badgeBg=onHeader?'var(--ds-header-badge-bg)':'var(--ds-surface-active)';
-  const badgeFg=onHeader?'var(--ds-header-badge-fg)':'var(--ds-fg)';
+  const badgeBg=onHeader?'var(--ds-accent)':'var(--ds-surface-active)';
+  const badgeFg=onHeader?'var(--ds-accent-on)':'var(--ds-fg)';
   /* icon-only ink rule from the header band: a glyph carries no text mass, so an
      unselected tab's glyph gets --ds-header-icon-fg, not the muted label value. */
   const iconFg=onHeader&&!on?'var(--ds-header-icon-fg)':undefined;

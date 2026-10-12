@@ -699,16 +699,6 @@
         "usage": "Ховер кнопок и табов в шапке."
       },
       {
-        "name": "ds-header-chip-bg",
-        "value": "{ds-surface-hover}",
-        "usage": "Фон чипа пользователя в шапке (`DsHeaderChip`)."
-      },
-      {
-        "name": "ds-header-chip-border",
-        "value": "{ds-border}",
-        "usage": "Граница чипа пользователя в шапке."
-      },
-      {
         "name": "ds-header-indicator",
         "value": "{ds-brand}",
         "usage": "Индикатор активного таба в шапке, 3px. Брендовый алиас: переобъявляется на `[data-ds-theme]`. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-bg` ≥ 5,46:1."
@@ -732,16 +722,6 @@
         "name": "ds-header-env-fg",
         "value": "{ds-brand-text}",
         "usage": "Текст метки среды в шапке. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-env-bg` ≥ 7,43:1."
-      },
-      {
-        "name": "ds-header-badge-bg",
-        "value": "{ds-accent}",
-        "usage": "Фон счётчика уведомлений в шапке — сама заливка акцента, одинаковая на любой полосе."
-      },
-      {
-        "name": "ds-header-badge-fg",
-        "value": "{ds-accent-on}",
-        "usage": "Цифра счётчика уведомлений на акцентной заливке, без обводки. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-header-badge-bg` ≥ 5,63:1."
       },
       {
         "name": "ds-state-moving",
@@ -801,11 +781,6 @@
           "ds-appearance-dark-ds-red2": "#0d1520"
         },
         "usage": "Чернила на дисках свежести. Контраст во всех наборах DEFAULT/RED2 × light/dark: `ds-fresh-live` ≥ 5,38:1; `ds-fresh-recent` ≥ 5:1; `ds-fresh-late` ≥ 5,48:1; `ds-fresh-none` ≥ 5,77:1."
-      },
-      {
-        "name": "ds-fresh-on",
-        "value": "{ds-fresh-fg}",
-        "usage": "Устарел: алиас `ds-fresh-fg`, будет удалён в 3.0.0. Линтер предупреждает (`aurora/no-deprecated-token`)."
       },
       {
         "name": "ds-map-point",
@@ -1296,11 +1271,6 @@
         "usage": "Промежуток между соседними элементами; ступень лестницы промежутков, задаётся плотностью. Компонент своих внешних отступов не ставит — промежуток задаёт родитель. Внимание: 12px, то есть ниже `ds-gap-md` — долг регламента имён."
       },
       {
-        "name": "ds-gap",
-        "value": "{ds-gap-sm-plus}",
-        "usage": "Устарел: алиас `ds-gap-sm-plus`, будет удалён в 3.0.0. Линтер предупреждает (`aurora/no-deprecated-token`)."
-      },
-      {
         "name": "ds-gap-md",
         "value": {
           "light": "16px",
@@ -1339,11 +1309,6 @@
           "ds-density-compact": "8px"
         },
         "usage": "Внутренний отступ контейнера: панель, bulk-бар, карточка; ступень лестницы отступов, задаётся плотностью. Внимание: 12px, ниже `ds-pad-md` — долг регламента имён."
-      },
-      {
-        "name": "ds-pad",
-        "value": "{ds-pad-sm}",
-        "usage": "Устарел: алиас `ds-pad-sm`, будет удалён в 3.0.0. Линтер предупреждает (`aurora/no-deprecated-token`)."
       },
       {
         "name": "ds-pad-md",

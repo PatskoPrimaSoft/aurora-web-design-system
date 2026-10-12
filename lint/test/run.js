@@ -40,6 +40,7 @@ const cases = [
   },
   { rule: 'aurora/known-token', code: ':root { --ds-brand: #123456; }', expect: 1, contains: 'нельзя переопределять' },
   { rule: 'aurora/known-token', code: '.a { color: var(--ds-surface-hover); }', expect: 0 },
+  ...['ds-header-badge-fg','ds-gap','ds-pad','ds-fresh-on','ds-header-chip-bg','ds-header-chip-border'].map(name=>({rule:'aurora/known-token',code:`.a { color: var(--${name}); }`,expect:1})),
 
   // --- no-literal-color --------------------------------------------------
   { rule: 'aurora/no-literal-color', code: '.a { color: var(--ds-fg); }', expect: 0 },
@@ -76,9 +77,9 @@ const cases = [
   // --- no-deprecated-token ------------------------------------------------
   { rule: 'aurora/no-deprecated-token', code: '.a { gap: var(--ds-gap-sm-plus); }', expect: 0 },
   { rule: 'aurora/no-deprecated-token', code: '.a { gap: var(--ds-gap-sm); padding: var(--ds-pad-md); }', expect: 0 },
-  { rule: 'aurora/no-deprecated-token', code: '.a { gap: var(--ds-gap); }', expect: 1, contains: '--ds-gap-sm-plus' },
-  { rule: 'aurora/no-deprecated-token', code: '.a { padding: var(--ds-pad) var(--ds-pad); }', expect: 2, contains: '--ds-pad-sm' },
-  { rule: 'aurora/no-deprecated-token', code: '.a { color: var(--ds-fresh-on); }', expect: 1, contains: '--ds-fresh-fg' },
+  { rule: 'aurora/no-deprecated-token', options: [true, {configPath:fileURLToPath(new URL('./fixtures/deprecated-naming.json',import.meta.url))}], code: '.a { gap: var(--ds-gap); }', expect: 1, contains: '--ds-gap-sm-plus' },
+  { rule: 'aurora/no-deprecated-token', options: [true, {configPath:fileURLToPath(new URL('./fixtures/deprecated-naming.json',import.meta.url))}], code: '.a { padding: var(--ds-pad) var(--ds-pad); }', expect: 2, contains: '--ds-pad-sm' },
+  { rule: 'aurora/no-deprecated-token', options: [true, {configPath:fileURLToPath(new URL('./fixtures/deprecated-naming.json',import.meta.url))}], code: '.a { color: var(--ds-fresh-on); }', expect: 1, contains: '--ds-fresh-fg' },
   { rule: 'aurora/shadow-token-only', code: '.a { box-shadow: none; }', expect: 0 },
   { rule: 'aurora/shadow-token-only', code: '.a { box-shadow: 0 1px 2px rgba(0,0,0,.2); }', expect: 1 },
   { rule: 'aurora/shadow-token-only', code: '.a { box-shadow: var(--ds-shadow-sm), 0 0 0 1px; }', expect: 1 },

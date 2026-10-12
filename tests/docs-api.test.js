@@ -73,4 +73,21 @@ try{
 }finally{rmSync(scratch,{recursive:true,force:true});}
 const model=readTokenModel(JSON.parse(readFileSync(join(actualRoot,'tokens/source.json'),'utf8'))),reference=renderTokenReference(model);
 assert.equal(reference.entries.length,model.names.length);assert.deepEqual(reference.entries.find(e=>e.name==='--ds-brand').aliases,model.aliases['--ds-brand']);
+const tokenDocument=new JSDOM(reference.html).window.document;
+assert.equal(tokenDocument.querySelectorAll('[data-token-row]').length,model.names.length,'all public tokens remain available');
+for(const label of ['Текст','Поверхности','Действия','Границы','Статусы','Базовая палитра','Отступы','Размеры и плотность','Скругления','Тени','Типографические роли','Размер шрифта','Начертание','Межбуквенный интервал','Межстрочный интервал','Движение','Брейкпоинты'])
+ assert.ok([...tokenDocument.querySelectorAll('.token-section h2')].some(h=>h.textContent===label),label);
+assert.ok(tokenDocument.querySelector('#ds-brand [data-theme-value="RED2.dark"]'),'theme values stay independently selectable');
+assert.ok(tokenDocument.querySelector('#ds-gap-md [data-density-value="compact"]'),'density values remain visible together');
+assert.ok(tokenDocument.querySelector('input[type="search"]'),'page provides token search');
+for(const [name,before,after,selected] of [
+ ['m','S · 719 px','M · 720 px','Начало M'],['l','M · 959 px','L · 960 px','Начало L'],
+ ['xl','L · 1139 px','XL · 1140 px','Начало XL'],['s-max','S · 719 px','M · 720 px','Последний размер S'],
+ ['m-max','M · 959 px','L · 960 px','Последний размер M'],['l-max','L · 1139 px','XL · 1140 px','Последний размер L'],
+]){
+ const text=tokenDocument.querySelector(`#ds-bp-${name}`).textContent;
+ for(const expected of [before,after,selected])assert.ok(text.includes(expected),`${name}: ${expected}`);
+}
+assert.match(tokenDocument.querySelector('#token-layout .token-breakpoint-scale').textContent,/S.*719.*M.*720.*959.*L.*960.*1139.*XL.*1140/s);
+assert.ok(tokenDocument.querySelector('#token-content #ds-content-max'),'content width has its own category');
 console.log('docs-api: unions, callbacks, ReactNode, shared files and invalid contracts passed');
