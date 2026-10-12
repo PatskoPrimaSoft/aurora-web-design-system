@@ -3,6 +3,8 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Policy: [Versions and publishing](docs/release.md#versioning).
 
+## [Unreleased]
+
 ## [4.0.0] — 2026-10-12
 
 - Страница токенов встроена в общую оболочку каталога: шапка, левое меню с поиском компонентов и активный пункт «Токены». Сохранены адрес страницы, фильтры и прямые ссылки.
