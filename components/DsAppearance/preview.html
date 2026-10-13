@@ -20,8 +20,7 @@ a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-br
 summary{cursor:pointer;font:var(--ds-type-ui);padding:10px 12px;border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);background:var(--ds-surface)}
 summary:hover{background:var(--ds-surface-hover)}summary:focus-visible,a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
 details{margin-top:24px}details>div{margin-top:24px}
-.token-row{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:24px;padding:16px 0;border-bottom:1px solid var(--ds-divider)}
-@media(max-width:640px){main{padding:20px 0}.pair,.choices,.token-row{grid-template-columns:minmax(0,1fr)}.scene{padding:16px}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}.token-row{gap:8px}}
+@media(max-width:640px){main{padding:20px 0}.pair,.choices{grid-template-columns:minmax(0,1fr)}.scene{padding:16px}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}}
 </style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
 <section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Режим оформления в интерфейсе</h2>
 <p class="lead">Выберите светлое или тёмное оформление. Готовые компоненты автоматически меняют цвета текста, поверхностей и состояний; данные и поведение остаются прежними.</p>
@@ -29,40 +28,33 @@ details{margin-top:24px}details>div{margin-top:24px}
 <p class="caption" style="margin-top:16px">Измените оформление в шапке каталога. Попробуйте снять флажок и сохранить настройку.</p></section>
 
 <section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2><dl class="choices">
-<dt>Оформление</dt><dd>Светлое или тёмное: меняет цвета поверхностей, текста и состояний. Выбор пользователя применяйте ко всему интерфейсу.</dd>
-<dt>Бренд</dt><dd>Задаёт палитру главного действия и акцента. Каждый бренд поддерживает оба режима. Подробнее — <a href="../DsBrandThemes/preview.html">«Цветовые темы»</a>.</dd>
-<dt>Плотность</dt><dd>Задаёт высоты и отступы независимо от оформления. Тёмный режим не делает интерфейс компактнее. Подробнее — <a href="../DsDensity/preview.html">«Плотность интерфейса»</a>.</dd>
-</dl></section>
+<dt>Готовые компоненты</dt><dd>Достаточно задать режим контейнеру. Отдельные стили для каждой кнопки и поля не нужны.</dd>
+<dt>Выбор пользователя</dt><dd>Предлагайте «Светлый», «Тёмный» и «Как в системе». Явный выбор пользователя имеет приоритет над настройкой устройства.</dd>
+<dt>Задача приложения</dt><dd>Приложение применяет и сохраняет выбор, а для варианта «Как в системе» отслеживает настройку устройства. Этот механизм нужно реализовать в приложении.</dd>
+</dl><p class="caption" style="margin-top:16px"><a href="../DsBrandThemes/preview.html">Бренд</a> и <a href="../DsDensity/preview.html">плотность</a> задаются независимо от светлого и тёмного режима.</p></section>
 
 <section aria-labelledby="comparison"><h2 id="comparison" tabindex="-1">Один интерфейс в двух режимах</h2>
-<p class="lead">Одинаковые данные и действия. Меняются цвета, а статус «На связи» сохраняет смысл. Бренд и плотность берутся из настроек каталога.</p>
-<div class="pair" id="mode-comparison"></div></section>
+<p class="lead">Сравните фон страницы, поверхность панели, текст и границу поля. Статус «На связи» сохраняет смысл в обоих режимах.</p>
+<div class="pair" id="mode-comparison"></div>
+<p class="caption" style="margin-top:16px">Измените название маршрута — оно обновится в обеих панелях. Бренд и плотность берутся из шапки каталога.</p></section>
 
-<section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Правила применения</h2>
-<p>Переключайте оформление целиком, чтобы текст, фон и состояния оставались согласованными.</p>
+<section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Что проверить в обоих режимах</h2>
 <ul class="rules">
-<li>Используйте готовые компоненты: их наведение, выбор, отключение и фокус уже поддерживают оба режима.</li>
-<li>В собственной разметке задавайте и фон, и цвет текста через роли. Не оставляйте фиксированный светлый фон под текстом, который меняется вместе с режимом.</li>
-<li>Проверяйте основной и второстепенный текст, поля, выбранные элементы и фокус в обоих режимах. Успех и ошибка должны оставаться понятными по подписи, а не только по цвету.</li>
-<li>Иконки, изображения и графики проверяйте отдельно. Фотография не меняется от переключения режима; графику оформляйте по <a href="../DsCharts/preview.html">правилам цветов графиков</a>.</li>
+<li><strong>Текст читается.</strong> Проверьте основной текст и второстепенные подписи на их фоне.</li>
+<li><strong>Поверхности различимы.</strong> Панели и поля не сливаются с фоном. В тёмном режиме не полагайтесь только на тень — учитывайте цвет поверхности и границу. Подробнее — <a href="../DsShape/preview.html">«Форма и глубина»</a>.</li>
+<li><strong>Состояния понятны.</strong> Выбор и клавиатурный фокус видны одновременно; успех и ошибка различаются по подписи, а не только по цвету.</li>
+<li><strong>Графика подходит к фону.</strong> Проверьте иконки, изображения и <a href="../DsCharts/preview.html">графики</a>, особенно ресурсы с фиксированными цветами.</li>
 </ul></section>
 
 <section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Для собственных стилей</h2>
-<p>Готовые компоненты получают оформление от контейнера. Для собственной разметки используйте те же роли: их значения меняются вместе с режимом.</p>
+<p>Задавайте фон и текст парой через цветовые роли. Фиксированный светлый фон может стать нечитаемым, когда текст переключится в тёмный режим.</p>
 <details id="appearance-reference"><summary>Показать подключение и цветовые роли</summary><div class="content">
 <div><h3>Оформление задаётся контейнером</h3><p>Атрибут <code>data-ds-appearance="light"</code> или <code>"dark"</code> действует на элемент и его содержимое. Вложенный контейнер может задать другой режим, например светлую область внутри тёмного интерфейса. На этой области задавайте её фон и цвет текста.</p></div>
-<p>Выбор режима, его сохранение и чтение системной настройки реализует приложение. Подключение стилей само по себе не добавляет переключатель и не выбирает режим по настройкам устройства.</p>
-<div aria-label="Основные цветовые роли">
-<div class="token-row"><code>--ds-bg</code><p>Фон страницы под панелями.</p></div>
-<div class="token-row"><code>--ds-surface</code><p>Поверхность панели или карточки.</p></div>
-<div class="token-row"><code>--ds-fg</code><p>Основной текст на поверхности.</p></div>
-<div class="token-row"><code>--ds-fg-muted</code><p>Второстепенный текст и пояснения.</p></div>
-<div class="token-row"><code>--ds-border</code><p>Граница панели или карточки.</p></div>
-</div>
+<p>Например, для собственной панели используйте <code>background: var(--ds-surface)</code> и <code>color: var(--ds-fg)</code>.</p>
 <p>Подробный выбор ролей и состояний — в разделе <a href="../DsNeutrals/preview.html">«Нейтральные цвета»</a>. Для инверсной поверхности подбирайте предназначенные для неё цвета текста; она не заменяет переключение режима всей области.</p>
 </div></details></section>
 </main><script type="text/babel">
-const {DsPanel,DsButton,DsCheckbox,DsLozenge}=window.AuroraWebDesignSystem_96e210;
+const {DsPanel,DsButton,DsCheckbox,DsLozenge,DsField}=window.AuroraWebDesignSystem_96e210;
 function Settings(){
   const [selected,setSelected]=React.useState('checked'),[saved,setSaved]=React.useState(false);
   return <DsPanel title="Настройки объекта" headingLevel="h3"><div className="content">
@@ -72,14 +64,14 @@ function Settings(){
     <p role="status" className="caption">{saved?'Изменения сохранены.':'Настройка применяется к выбранному объекту.'}</p>
   </div></DsPanel>;
 }
-function ModeSample(){const [saved,setSaved]=React.useState(false);return <div className="content">
-  <div className="row"><p>МАЗ 5440</p><DsLozenge tone="success">На связи</DsLozenge></div>
+function ModeSample({route,onRouteChange}){return <DsPanel title="МАЗ 5440" headingLevel="h3"><div className="content">
+  <div><DsLozenge tone="success">На связи</DsLozenge></div>
   <p className="caption">Последнее сообщение — 14:32</p>
-  <div><DsButton onClick={()=>setSaved(true)}>Сохранить изменения</DsButton></div>
-  <p role="status" className="caption">{saved?'Изменения сохранены.':'Данные актуальны.'}</p>
-</div>;}
+  <DsField label="Маршрут" value={route} onChange={event=>onRouteChange(event.target.value)}/>
+</div></DsPanel>;}
+function ModeComparison(){const [route,setRoute]=React.useState('Минск — Брест');return <>{['light','dark'].map(mode=><div className="scene" id={'mode-'+mode} data-fixed-appearance={mode} data-ds-appearance={mode} key={mode}><p className="mode">{mode==='light'?'Светлый':'Тёмный'}</p><ModeSample route={route} onRouteChange={setRoute}/></div>)}</>;}
 ReactDOM.createRoot(document.getElementById('ready-interface')).render(<Settings/>);
-ReactDOM.createRoot(document.getElementById('mode-comparison')).render(<>{['light','dark'].map(mode=><div className="scene" id={'mode-'+mode} data-fixed-appearance={mode} data-ds-appearance={mode} key={mode}><p className="mode">{mode==='light'?'Светлый':'Тёмный'}</p><ModeSample/></div>)}</>);
+ReactDOM.createRoot(document.getElementById('mode-comparison')).render(<ModeComparison/>);
 function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){
   scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';
   scene.dataset.dsAppearance=scene.dataset.fixedAppearance||root.dataset.dsAppearance||'light';

@@ -32,11 +32,15 @@ test('appearance examples follow scope, preserve interaction and remain accessib
           await expect(sample).toHaveAttribute('data-ds-appearance',mode);
           await expect(sample).toHaveAttribute('data-ds-theme',theme);
         }
+        await frame.locator('#mode-light').getByRole('textbox',{name:'Маршрут'}).fill('Минск — Гродно');
+        await expect(frame.locator('#mode-dark').getByRole('textbox',{name:'Маршрут'})).toHaveValue('Минск — Гродно');
+        await frame.locator('#mode-dark').getByRole('textbox',{name:'Маршрут'}).fill('Брест — Гродно');
+        await expect(frame.locator('#mode-light').getByRole('textbox',{name:'Маршрут'})).toHaveValue('Брест — Гродно');
         const details = frame.locator('#appearance-reference');
         await expect(details).not.toHaveAttribute('open','');
         await details.locator('summary').focus();
         await page.keyboard.press('Enter');
-        await expect(details.getByText('--ds-surface',{exact:true})).toBeVisible();
+        await expect(details.getByText('background: var(--ds-surface)',{exact:true})).toBeVisible();
         const fullCode = page.locator('#card-description details');
         await expect(fullCode).not.toHaveAttribute('open','');
         await fullCode.locator('summary').focus();
