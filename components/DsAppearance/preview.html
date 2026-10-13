@@ -1,57 +1,89 @@
-<!-- @dsCard name="Светлый и тёмный режим" group="2 · Основы" height=740 subtitle="Одинаковые компоненты в light и dark; цветовой режим задаётся контейнером" page -->
-<!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8"><title>Светлый и тёмный режим</title><style>.snip{margin:0;font:var(--ds-type-mono);font-size:11px;line-height:1.55;color:var(--ds-fg-muted);white-space:pre-wrap}.snip b{font-weight:400;color:var(--ds-brand-text)}.how{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;padding-top:14px;border-top:1px solid var(--ds-divider)}.how>div{display:flex;flex-direction:column;gap:8px;min-width:0}html,body{margin:0}body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:20px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-.eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.mono{font:var(--ds-type-mono);color:var(--ds-fg-muted)}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-body{background:var(--ds-bg);max-width:1120px;margin:0 auto;padding:22px 24px 26px}
-</style></head><body>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-<div style="background:var(--ds-bg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);padding:14px">
-<div class="eb" style="margin-bottom:10px">light — по умолчанию</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-<div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-surface)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">surface</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">фон карточек, панелей, таблиц</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-bg)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">bg</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">фон страницы под карточками</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-surface-hover)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">surface-hover</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">подсветка строки или кнопки при наведении</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-border)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">border</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">рамки карточек и полей ввода</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-fg-muted)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">fg-muted</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">второстепенный текст и подписи</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-fg)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">fg</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">основной текст и иконки</div></div></div><div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
-<div style="display:flex;gap:8px;align-items:center">
-<button style="font:var(--ds-type-ui);height:32px;padding:0 14px;border-radius:var(--ds-radius-md);border:none;background:var(--ds-brand);color:var(--ds-on-brand);cursor:pointer">Построить</button>
-<button style="font:var(--ds-type-ui);height:32px;padding:0 14px;border-radius:var(--ds-radius-md);border:1px solid var(--ds-border-field);background:var(--ds-surface);color:var(--ds-fg);cursor:pointer">Отмена</button>
-<span style="font:var(--ds-type-caption);background:var(--ds-success-bg);color:var(--ds-success-fg);border:1px solid var(--ds-success-line);border-radius:var(--ds-radius-pill);padding:3px 10px">Движение</span>
-<span style="font:var(--ds-type-caption);background:var(--ds-danger-bg);color:var(--ds-danger-fg);border:1px solid var(--ds-danger-line);border-radius:var(--ds-radius-pill);padding:3px 10px">Нет связи</span>
-</div>
-<div style="border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);overflow:hidden;background:var(--ds-surface)">
-<div style="display:flex;font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle);background:var(--ds-bg);border-bottom:1px solid var(--ds-border)"><span style="flex:2;padding:8px 12px">Объект</span><span style="flex:1;padding:8px 12px">Скорость</span></div>
-<div style="display:flex;border-bottom:1px solid var(--ds-divider)"><span style="flex:2;padding:8px 12px">MAZ 5440 · AB 1234-7</span><span style="flex:1;padding:8px 12px;font:var(--ds-type-mono)">62 км/ч</span></div>
-<div style="display:flex;background:var(--ds-surface-selected)"><span style="flex:2;padding:8px 12px">Volvo FH · AC 8871-2</span><span style="flex:1;padding:8px 12px;font:var(--ds-type-mono)">0 км/ч</span></div>
-</div></div></div>
-<div data-ds-appearance="dark" style="background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);padding:14px">
-<div class="eb" style="margin-bottom:10px">dark — [data-ds-appearance="dark"]</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-<div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-surface)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">surface</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">фон карточек, панелей, таблиц</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-bg)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">bg</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">фон страницы под карточками</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-surface-hover)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">surface-hover</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">подсветка строки или кнопки при наведении</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-border)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">border</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">рамки карточек и полей ввода</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-fg-muted)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">fg-muted</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">второстепенный текст и подписи</div></div><div style="min-width:0"><div style="height:34px;border-radius:var(--ds-radius-sm);border:1px solid var(--ds-border);background:var(--ds-fg)"></div><div style="font:var(--ds-type-mono);font-size:10px;color:var(--ds-fg);margin-top:5px">fg</div><div style="font-size:9px;line-height:1.35;color:var(--ds-fg-subtle);margin-top:2px">основной текст и иконки</div></div></div><div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
-<div style="display:flex;gap:8px;align-items:center">
-<button style="font:var(--ds-type-ui);height:32px;padding:0 14px;border-radius:var(--ds-radius-md);border:none;background:var(--ds-brand);color:var(--ds-on-brand);cursor:pointer">Построить</button>
-<button style="font:var(--ds-type-ui);height:32px;padding:0 14px;border-radius:var(--ds-radius-md);border:1px solid var(--ds-border-field);background:var(--ds-surface);color:var(--ds-fg);cursor:pointer">Отмена</button>
-<span style="font:var(--ds-type-caption);background:var(--ds-success-bg);color:var(--ds-success-fg);border:1px solid var(--ds-success-line);border-radius:var(--ds-radius-pill);padding:3px 10px">Движение</span>
-<span style="font:var(--ds-type-caption);background:var(--ds-danger-bg);color:var(--ds-danger-fg);border:1px solid var(--ds-danger-line);border-radius:var(--ds-radius-pill);padding:3px 10px">Нет связи</span>
-</div>
-<div style="border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);overflow:hidden;background:var(--ds-surface)">
-<div style="display:flex;font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle);background:var(--ds-bg);border-bottom:1px solid var(--ds-border)"><span style="flex:2;padding:8px 12px">Объект</span><span style="flex:1;padding:8px 12px">Скорость</span></div>
-<div style="display:flex;border-bottom:1px solid var(--ds-divider)"><span style="flex:2;padding:8px 12px">MAZ 5440 · AB 1234-7</span><span style="flex:1;padding:8px 12px;font:var(--ds-type-mono)">62 км/ч</span></div>
-<div style="display:flex;background:var(--ds-surface-selected)"><span style="flex:2;padding:8px 12px">Volvo FH · AC 8871-2</span><span style="flex:1;padding:8px 12px;font:var(--ds-type-mono)">0 км/ч</span></div>
-</div></div></div>
-</div>
-<div class="how">
-<div><b style="font:var(--ds-type-body-strong)">Тема задаётся контейнеру и действует на всё его содержимое</b>
-<p style="margin:0"><span class="mono" style="font-size:12px">data-ds-appearance="dark"</span> или <span class="mono" style="font-size:12px">"light"</span> задаёт тему для всего элемента и его вложенных компонентов. Все компоненты внутри автоматически получают соответствующие значения цветовых переменных.</p>
-<p style="margin:0">Если внутри нужно использовать другую тему, её можно явно переопределить на вложенном контейнере.</p>
-<p class="snip">&lt;body <b>data-ds-appearance="dark"</b>&gt;
-  &lt;aside&gt;тёмная тема&lt;/aside&gt;
+<!-- @dsCard name="Светлый и тёмный режим" group="2 · Основы" scopeMode="inherit" subtitle="Как менять оформление, сохраняя читаемость и смысл состояний" page -->
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Светлый и тёмный режим</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.pair>*{min-width:0}
+.scene{padding:24px;background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
+.content{display:grid;gap:16px}.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.row p{flex:1;min-width:120px}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}.mode{font:var(--ds-type-body-strong);margin-bottom:16px}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{padding-left:20px;max-width:74ch;margin:24px 0 0}.rules li+li{margin-top:12px}
+summary{cursor:pointer;font:var(--ds-type-ui);padding:10px 12px;border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);background:var(--ds-surface)}
+summary:hover{background:var(--ds-surface-hover)}summary:focus-visible,a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+details{margin-top:24px}details>div{margin-top:24px}
+.token-row{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:24px;padding:16px 0;border-bottom:1px solid var(--ds-divider)}
+@media(max-width:640px){main{padding:20px 0}.pair,.choices,.token-row{grid-template-columns:minmax(0,1fr)}.scene{padding:16px}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}.token-row{gap:8px}}
+</style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Режим оформления в интерфейсе</h2>
+<p class="lead">Выберите светлое или тёмное оформление. Готовые компоненты автоматически меняют цвета текста, поверхностей и состояний; данные и поведение остаются прежними.</p>
+<div class="scene" id="ready-interface"></div>
+<p class="caption" style="margin-top:16px">Измените оформление в шапке каталога. Попробуйте снять флажок и сохранить настройку.</p></section>
 
-  &lt;main <b>data-ds-appearance="light"</b>&gt;
-    светлая тема
-  &lt;/main&gt;
-&lt;/body&gt;</p></div>
-<div><b style="font:var(--ds-type-body-strong)">Компоненты не знают, какая тема включена</b>
-<p style="margin:0">Компонент всегда использует одни и те же переменные:</p>
-<p class="snip">background: <b>var(--ds-surface)</b>;
-color: <b>var(--ds-fg)</b>;
-border: 1px solid <b>var(--ds-border)</b>;</p>
-<p style="margin:0">Он не содержит отдельных стилей для light и dark. Тема меняет только значения переменных <span class="mono" style="font-size:12px">--ds-*</span>, а сам код компонента остаётся одинаковым.</p>
-<p style="margin:0;font:var(--ds-type-caption);color:var(--ds-fg-subtle)">То есть логика такая: тема → подставляет значения переменных → компонент использует переменные.</p></div>
-</div></body></html>
+<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2><dl class="choices">
+<dt>Оформление</dt><dd>Светлое или тёмное: меняет цвета поверхностей, текста и состояний. Выбор пользователя применяйте ко всему интерфейсу.</dd>
+<dt>Бренд</dt><dd>Задаёт палитру главного действия и акцента. Каждый бренд поддерживает оба режима. Подробнее — <a href="../DsBrandThemes/preview.html">«Цветовые темы»</a>.</dd>
+<dt>Плотность</dt><dd>Задаёт высоты и отступы независимо от оформления. Тёмный режим не делает интерфейс компактнее. Подробнее — <a href="../DsDensity/preview.html">«Плотность интерфейса»</a>.</dd>
+</dl></section>
+
+<section aria-labelledby="comparison"><h2 id="comparison" tabindex="-1">Один интерфейс в двух режимах</h2>
+<p class="lead">Одинаковые данные и действия. Меняются цвета, а статус «На связи» сохраняет смысл. Бренд и плотность берутся из настроек каталога.</p>
+<div class="pair" id="mode-comparison"></div></section>
+
+<section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Правила применения</h2>
+<p>Переключайте оформление целиком, чтобы текст, фон и состояния оставались согласованными.</p>
+<ul class="rules">
+<li>Используйте готовые компоненты: их наведение, выбор, отключение и фокус уже поддерживают оба режима.</li>
+<li>В собственной разметке задавайте и фон, и цвет текста через роли. Не оставляйте фиксированный светлый фон под текстом, который меняется вместе с режимом.</li>
+<li>Проверяйте основной и второстепенный текст, поля, выбранные элементы и фокус в обоих режимах. Успех и ошибка должны оставаться понятными по подписи, а не только по цвету.</li>
+<li>Иконки, изображения и графики проверяйте отдельно. Фотография не меняется от переключения режима; графику оформляйте по <a href="../DsCharts/preview.html">правилам цветов графиков</a>.</li>
+</ul></section>
+
+<section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Для собственных стилей</h2>
+<p>Готовые компоненты получают оформление от контейнера. Для собственной разметки используйте те же роли: их значения меняются вместе с режимом.</p>
+<details id="appearance-reference"><summary>Показать подключение и цветовые роли</summary><div class="content">
+<div><h3>Оформление задаётся контейнером</h3><p>Атрибут <code>data-ds-appearance="light"</code> или <code>"dark"</code> действует на элемент и его содержимое. Вложенный контейнер может задать другой режим, например светлую область внутри тёмного интерфейса. На этой области задавайте её фон и цвет текста.</p></div>
+<p>Выбор режима, его сохранение и чтение системной настройки реализует приложение. Подключение стилей само по себе не добавляет переключатель и не выбирает режим по настройкам устройства.</p>
+<div aria-label="Основные цветовые роли">
+<div class="token-row"><code>--ds-bg</code><p>Фон страницы под панелями.</p></div>
+<div class="token-row"><code>--ds-surface</code><p>Поверхность панели или карточки.</p></div>
+<div class="token-row"><code>--ds-fg</code><p>Основной текст на поверхности.</p></div>
+<div class="token-row"><code>--ds-fg-muted</code><p>Второстепенный текст и пояснения.</p></div>
+<div class="token-row"><code>--ds-border</code><p>Граница панели или карточки.</p></div>
+</div>
+<p>Подробный выбор ролей и состояний — в разделе <a href="../DsNeutrals/preview.html">«Нейтральные цвета»</a>. Для инверсной поверхности подбирайте предназначенные для неё цвета текста; она не заменяет переключение режима всей области.</p>
+</div></details></section>
+</main><script type="text/babel">
+const {DsPanel,DsButton,DsCheckbox,DsLozenge}=window.AuroraWebDesignSystem_96e210;
+function Settings(){
+  const [selected,setSelected]=React.useState('checked'),[saved,setSaved]=React.useState(false);
+  return <DsPanel title="Настройки объекта" headingLevel="h3"><div className="content">
+    <div className="row"><p>МАЗ 5440 · Минск — Брест</p><DsLozenge tone="success">На связи</DsLozenge></div>
+    <DsCheckbox label="Показывать трек" state={selected} onChange={value=>{setSelected(value);setSaved(false);}}/>
+    <div><DsButton onClick={()=>setSaved(true)}>Сохранить изменения</DsButton></div>
+    <p role="status" className="caption">{saved?'Изменения сохранены.':'Настройка применяется к выбранному объекту.'}</p>
+  </div></DsPanel>;
+}
+function ModeSample(){const [saved,setSaved]=React.useState(false);return <div className="content">
+  <div className="row"><p>МАЗ 5440</p><DsLozenge tone="success">На связи</DsLozenge></div>
+  <p className="caption">Последнее сообщение — 14:32</p>
+  <div><DsButton onClick={()=>setSaved(true)}>Сохранить изменения</DsButton></div>
+  <p role="status" className="caption">{saved?'Изменения сохранены.':'Данные актуальны.'}</p>
+</div>;}
+ReactDOM.createRoot(document.getElementById('ready-interface')).render(<Settings/>);
+ReactDOM.createRoot(document.getElementById('mode-comparison')).render(<>{['light','dark'].map(mode=><div className="scene" id={'mode-'+mode} data-fixed-appearance={mode} data-ds-appearance={mode} key={mode}><p className="mode">{mode==='light'?'Светлый':'Тёмный'}</p><ModeSample/></div>)}</>);
+function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){
+  scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';
+  scene.dataset.dsAppearance=scene.dataset.fixedAppearance||root.dataset.dsAppearance||'light';
+  scene.dataset.dsDensity=root.dataset.dsDensity||'cozy';
+}}
+refresh();new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density','style']});
+</script></body></html>
