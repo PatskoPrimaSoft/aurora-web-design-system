@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import { buildDist } from '../../tools/build.js';
 import { buildCatalogue } from '../../tools/catalog/build.mjs';
 import { serveRoot } from '../../tools/baseline/render.mjs';
@@ -32,89 +33,71 @@ test('standalone fields and all keyboard controls share the token focus outline'
   await expect(page.getByRole('link')).toHaveCSS('outline-width', '2px');
 });
 
-test('focus foundation demonstrates real controls in every theme and density', async ({ page }, testInfo) => {
-  const root = fileURLToPath(new URL('../../', import.meta.url));
-  const cards = await buildCatalogue({ root, outDir: `${root}/site` });
-  expect(cards.find(card => card.id === 'DsFocus')?.group).toBe('2 · Основы');
-  const served = await serveRoot(`${root}/site`);
-  const errors = [];
-  page.on('pageerror', error => errors.push(error.message));
+test('focus guide supports keyboard forms and navigation in every mode', async ({page}, testInfo) => {
+  const root=fileURLToPath(new URL('../../',import.meta.url));
+  await buildCatalogue({root,outDir:root+'/site'});
+  const served=await serveRoot(root+'/site');
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
   try {
-    for (const [theme, appearance, density] of [['DEFAULT', 'light', 'cozy'], ['DEFAULT', 'dark', 'compact'], ['RED2', 'light', 'cozy'], ['RED2', 'dark', 'compact']]) {
-      await page.goto(`${served.url}/components/DsFocus/preview.html?theme=${theme}&appearance=${appearance}&density=${density}`);
-      const button = page.getByRole('button', { name: 'Построить', exact: true });
-      await button.click();
-      await expect(button).not.toHaveCSS('outline-style', 'solid');
-      await page.keyboard.press('Tab');
-      await expect(page.getByRole('button', { name: 'Сохранить', exact: true })).toHaveCSS('outline-width', '2px');
-      await page.keyboard.press('Shift+Tab');
-      await expect(button).toBeFocused();
-      const projected = new Set();
-      // Walk the actual Tab order, including visually hidden native selection inputs.
-      for (let i = 0; i < 18; i++) {
-        const result = await page.evaluate(() => {
-          const el = document.activeElement;
-          if (!el || !document.querySelector('main').contains(el)) return null;
-          const shell = el.closest('[data-ds-field]');
-          const hiddenSelection = el.matches('input[type=checkbox],input[type=radio]') && getComputedStyle(el).opacity === '0';
-          const switchTrack=el.matches('[data-ds-switch] input')?el.closest('[data-ds-switch]').querySelector('[data-ds-switch-track]'):null;
-          const target = shell || switchTrack || (hiddenSelection ? el.nextElementSibling : el);
-          const css = getComputedStyle(target);
-          return { kind: el.getAttribute('role') || el.type || el.tagName.toLowerCase(), style: css.outlineStyle, width: css.outlineWidth, offset: css.outlineOffset, disabled: el.disabled, inner: shell ? getComputedStyle(el).outlineStyle : null };
-        });
-        expect(result).not.toBeNull();
-        expect(result.disabled).not.toBe(true);
-        expect(result.style).toBe('solid');
-        expect(result.width).toBe('2px');
-        expect(result.offset).toBe('2px');
-        if (result.inner !== null) expect(result.inner).toBe('none');
-        projected.add(result.kind);
+    for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]) {
+      for(const width of [1440,390]) {
+        await page.setViewportSize({width,height:900});
+        await page.goto(`${served.url}/index.html?card=DsFocus&theme=${theme}&appearance=${appearance}&density=${density}`);
+        const frame=page.frameLocator('#preview'),scene=frame.locator('#ready-interface');
+        await expect(page.locator('.page-contents')).toHaveCount(1);
+        await expect(frame.locator('body')).toHaveAttribute('data-ds-appearance','light');
+        await expect(scene).toHaveAttribute('data-ds-theme',theme);
+        await expect(scene).toHaveAttribute('data-ds-appearance',appearance);
+        await expect(scene).toHaveAttribute('data-ds-density',density);
+        const field=scene.getByRole('textbox',{name:'Название объекта'});
+        await field.click();
+        await expect(field.locator('..')).toHaveCSS('outline-width','2px');
+        await field.fill('МАЗ 5440');
         await page.keyboard.press('Tab');
+        const check=scene.getByRole('checkbox',{name:'Показывать названия'});
+        await expect(check).toBeFocused();
+        await expect(check.locator('+ span')).toHaveCSS('outline-width','2px');
+        await page.keyboard.press('Space');await expect(check).toBeChecked();
+        await page.keyboard.press('Tab');
+        const save=scene.getByRole('button',{name:'Сохранить',exact:true});
+        await expect(save).toBeFocused();await expect(save).toHaveCSS('outline-offset','2px');
+        await page.keyboard.press('Enter');await expect(scene.getByRole('status')).toHaveText('Настройки сохранены.');
+        await page.keyboard.press('Tab');await expect(scene.getByRole('button',{name:'Отмена',exact:true})).toBeFocused();
+        await page.keyboard.press('Shift+Tab');await expect(save).toBeFocused();
+        const tab=frame.getByRole('tab',{name:'Объекты',exact:true});
+        await tab.focus();await page.keyboard.press('ArrowRight');
+        const events=frame.getByRole('tab',{name:'События',exact:true});
+        await expect(events).toBeFocused();await expect(events).toHaveAttribute('aria-selected','true');
+        await expect(events).toHaveCSS('outline-width','2px');
+        const trigger=frame.getByRole('button',{name:'Действия',exact:true});
+        await trigger.focus();await page.keyboard.press('Enter');
+        await expect(frame.getByRole('menuitem',{name:'Экспортировать'})).toBeFocused();
+        await page.keyboard.press('ArrowDown');await expect(frame.getByRole('menuitem',{name:'Копировать'})).toBeFocused();
+        await page.keyboard.press('Escape');await expect(trigger).toBeFocused();
+        const reference=frame.locator('#focus-reference');
+        await expect(reference).not.toHaveAttribute('open','');
+        await reference.locator('summary').focus();await page.keyboard.press('Enter');
+        await expect(reference.getByRole('table')).toBeVisible();
+        await expect.poll(()=>page.locator('#preview').evaluate(el=>({height:el.clientHeight>=el.contentDocument.body.scrollHeight,width:el.contentDocument.documentElement.scrollWidth<=el.clientWidth}))).toEqual({height:true,width:true});
+        expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([]);
+        await reference.locator('summary').click();
+        if(theme==='DEFAULT'&&appearance==='light') {
+          await frame.locator('#in-interface').evaluate(el=>el.scrollIntoView());
+          await page.screenshot({path:testInfo.outputPath(`focus-${width}.png`)});
+        }
+        if(width===390) await page.locator('.page-contents summary').click();
+        await page.locator('.page-contents').getByRole('link',{name:'Для собственной разметки',exact:true}).click();
+        await expect(frame.locator('#reference')).toBeFocused();
+        await page.reload();await expect(frame.locator('#reference')).toBeInViewport();
       }
-      for (const kind of ['button', 'a', 'checkbox', 'radio', 'switch', 'text', 'select-one', 'textarea', 'tab']) {
-        expect(projected.has(kind), `visited ${kind}`).toBe(true);
-      }
-      const field = page.getByRole('textbox', { name: 'Название объекта' });
-      await field.click();
-      await expect(field.locator('..')).toHaveCSS('outline-style', 'solid');
-      const choice = page.getByRole('combobox', { name: 'Группа' });
-      await choice.click();
-      await expect(choice.locator('..')).toHaveCSS('outline-style', 'solid');
-      await page.keyboard.press('Escape');
-      const tab = page.getByRole('tab', { name: 'Объекты', exact: true });
-      await tab.focus();
-      await page.keyboard.press('ArrowRight');
-      await expect(page.getByRole('tab', { name: 'События' })).toBeFocused();
-      await expect(page.getByRole('tab', { name: 'События' })).toHaveCSS('outline-style', 'solid');
-      const trigger = page.getByRole('button', { name: 'Действия', exact: true });
-      await trigger.focus();
-      await page.keyboard.press('Enter');
-      const item = page.getByRole('menuitem', { name: 'Экспортировать' });
-      await expect(item).toBeFocused();
-      await expect(item).toHaveCSS('outline-offset', '2px');
-      const clearance = await item.evaluate(el => {
-        const box = el.getBoundingClientRect(), parent = el.parentElement.getBoundingClientRect();
-        return Math.min(box.left - parent.left, parent.right - box.right, box.top - parent.top);
-      });
-      expect(clearance).toBeGreaterThanOrEqual(4);
-      await page.keyboard.press('ArrowDown');
-      await expect(page.getByRole('menuitem', { name: 'Копировать' })).toBeFocused();
-      await page.keyboard.press('Escape');
-      await expect(trigger).toBeFocused();
-      const slider = page.getByRole('slider', { name: 'Масштаб' });
-      await slider.focus();
-      await page.keyboard.press('ArrowRight');
-      await expect(slider).toHaveValue('51');
-      await expect(slider).toHaveCSS('outline-width', '2px');
-      await page.screenshot({ path: testInfo.outputPath(`focus-${theme}-${appearance}.png`), fullPage: true });
     }
+    await page.goto(`${served.url}/index.html?card=DsFocus&compare=1`);
+    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('.page-contents')).toHaveCount(1);
+    for(let i=0;i<4;i++) await expect(page.frameLocator('#preview-'+i).getByRole('button',{name:'Сохранить',exact:true})).toBeVisible();
     expect(errors).toEqual([]);
-  } finally {
-    served.server.closeAllConnections();
-    await new Promise(resolve => served.server.close(resolve));
-  }
+  } finally {served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });
-
 test('fields show a solid focus outline on click and Tab while buttons use keyboard focus', async ({ page }) => {
   const { styles } = buildDist();
   for (const [theme, appearance, density] of [['DEFAULT', 'light', 'cozy'], ['DEFAULT', 'dark', 'compact'], ['RED2', 'light', 'cozy'], ['RED2', 'dark', 'compact']]) {

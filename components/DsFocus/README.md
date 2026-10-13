@@ -1,45 +1,65 @@
 # Фокус
 
-## Где сейчас находится действие
+## Пример кода
 
-Обводка показывает, какой контрол принимает ввод с клавиатуры. Она отличается
-от наведения, нажатия и выбранного состояния: выбранная вкладка или включённый
-переключатель сохраняют своё состояние и после ухода фокуса.
+Готовая кнопка уже показывает обводку при управлении с клавиатуры. Подключите
+стили пакета и передайте обработчик действия.
 
-## Когда появляется обводка
+```jsx
+import {DsButton} from '@primasoftllc/design-system';
+import '@primasoftllc/design-system/styles.css';
 
-| Контрол | Показ обводки |
-| --- | --- |
-| Кнопки, ссылки, чекбоксы, радио, переключатели | При клавиатурном фокусе |
-| Вкладки, пункты меню, слайдеры | При клавиатурном фокусе, в том числе при переходе стрелками |
-| Поля ввода, многострочные поля, селекты | При любом фокусе, включая клик мышью |
-| Составное поле: длительность, поиск с иконкой | Вокруг всей оболочки, когда фокус внутри |
-| Недоступные контролы | Не получают фокус через Tab |
+export function SaveButton({onSave}) {
+  return <DsButton onClick={onSave}>Сохранить</DsButton>;
+}
+```
 
-Клавиатурный индикатор определяется браузером через `:focus-visible`.
-Программный перевод фокуса также должен сохранять видимость при работе
-клавиатурой. Для полей система использует `:focus` или `:focus-within`.
+<details>
+<summary>Полный код формы и навигации</summary>
 
-## Единый контур
+Форма подтверждает сохранение локально. В приложении показывайте результат
+после ответа сервера. Вкладки и меню используют встроенное управление с клавиатуры.
 
-Толщина — **2 px**, отступ от контрола — **2 px**. Цвет задаёт `ds-focus-color`,
-геометрию — `ds-focus-width` и `ds-focus-offset`. Обводка не меняет размеры
-контрола. Она следует скруглению элемента и использует цвет текущей темы.
-Красная или жёлтая граница поля сохраняет статус ошибки или предупреждения;
-обводка фокуса остаётся цвета темы.
+```jsx
+import React from 'react';
+import {DsButton, DsCheckbox, DsField, DsTabs, DsTabPanel, DsMenu} from '@primasoftllc/design-system';
+import '@primasoftllc/design-system/styles.css';
 
-У составных полей контур рисует `[data-ds-field]`, а у чекбокса, радио
-и переключателя — видимая часть рядом с нативным input. Декоративный
-[DsCheckbox](../DsCheckbox/README.md) получает фокус через настоящий input; кольцо рисуется вокруг области выбора.
+function Settings(){
+  const [name,setName]=React.useState('МАЗ 5440');
+  const [checked,setChecked]=React.useState(false);
+  const [message,setMessage]=React.useState('Изменения ещё не сохранены.');
+  return <form onSubmit={e=>{e.preventDefault();setMessage('Настройки сохранены.');}} style={{display:'grid',gap:'var(--ds-gap-md)'}}>
+    <DsField label="Название объекта" value={name} onChange={e=>setName(e.target.value)}/>
+    <DsCheckbox label="Показывать названия" state={checked?'checked':'unchecked'} onChange={next=>setChecked(next==='checked')}/>
+    <div style={{display:'flex',flexWrap:'wrap',gap:'var(--ds-gap-sm)'}}>
+      <DsButton type="submit">Сохранить</DsButton>
+      <DsButton type="button" tone="secondary" onClick={()=>{setName('МАЗ 5440');setChecked(false);setMessage('Изменения отменены.');}}>Отмена</DsButton>
+      <DsButton disabled>Недоступно</DsButton>
+    </div><p role="status">{message}</p>
+  </form>;
+}
+function Navigation(){const [tab,setTab]=React.useState('objects');const [message,setMessage]=React.useState('Выберите действие в меню.');return <div style={{display:'grid',gap:'var(--ds-gap-md)'}}>
+  <DsTabs idBase="focus-tabs" aria-label="Представление" items={[{id:'objects',label:'Объекты'},{id:'events',label:'События'}]} active={tab} onChange={setTab}/>
+  <DsTabPanel idBase="focus-tabs" id="objects" active={tab==='objects'}>Объект МАЗ 5440</DsTabPanel>
+  <DsTabPanel idBase="focus-tabs" id="events" active={tab==='events'}>Последнее сообщение — 14:32</DsTabPanel>
+  <div><DsMenu trigger={<DsButton tone="secondary">Действия</DsButton>} items={[{id:'export',label:'Экспортировать'},{id:'copy',label:'Копировать'}]} onSelect={item=>setMessage(item.id==='export'?'Выбран экспорт.':'Выбрано копирование.')}/></div>
+  <p role="status">{message}</p>
+</div>;}
 
-## Как проверить
+export function FocusExamples() {
+  return <section style={{display: 'grid', gap: 24}}>
+    <Settings />
+    <Navigation />
+  </section>;
+}
+```
 
-Кликните кнопку, затем нажимайте **Tab** и **Shift+Tab**. У кнопки после обычного
-клика обводки нет, после перехода клавиатурой — есть. Вкладки и меню поддерживают
-стрелки; **Enter** и **Space** активируют соответствующие контролы, **Escape**
-закрывает меню. В текстовое поле можно кликнуть: обводка появится сразу.
+</details>
 
-Проверяйте DEFAULT и RED2 в светлом и тёмном режиме, cozy и compact.
-Не обрезайте контур через `overflow: hidden` на родителе: оставляйте место
-для толщины и отступа обводки. Убирайте дополнительные локальные контуры,
-если состояние уже рисует оболочка поля; у одного поля должен быть один контур.
+## Дальше
+
+- [Наведение и нажатие](../DsHover/README.md) — временная реакция на указатель и действие.
+- [Кнопка](../DsButton/README.md) — готовое действие с клавиатурным фокусом.
+- [Поле](../DsField/README.md) — обводка вокруг оболочки ввода.
+- [Вкладки](../DsTabs/README.md) и [меню](../DsMenu/README.md) — навигация внутри группы.
