@@ -1,86 +1,79 @@
-<!-- @dsCard name="Наведение и нажатие" group="2 · Основы" height=670 subtitle="Состояния контролов с заливкой и без неё в светлом и тёмном режиме" page -->
-<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>Наведение и нажатие</title><style>html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);-webkit-font-smoothing:antialiased}
-#page{max-width:1120px;margin:0 auto;padding:22px 24px 26px;display:flex;flex-direction:column;gap:20px}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-h1{margin:0;font:var(--ds-type-title);color:var(--ds-fg-strong);letter-spacing:var(--ds-tracking-tight)}
-h2{margin:0;font:var(--ds-type-section);color:var(--ds-fg-strong)}
-p{margin:0;max-width:96ch;text-wrap:pretty}
-.muted{color:var(--ds-fg-muted)}
-.eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);flex:none;max-width:420px}
-.top{display:flex;gap:24px;align-items:flex-end}
-.strip select{height:var(--ds-control-h);padding:0 8px;font:var(--ds-type-ui);color:var(--ds-fg);background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md)}
-.card{display:flex;flex-direction:column;gap:12px;padding:18px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg)}
-.grid{display:grid;grid-template-columns:118px repeat(3,minmax(0,150px));gap:10px 16px;align-items:center}
-.row2{display:grid;grid-template-columns:658px minmax(0,1fr);gap:24px;align-items:start}
-.blist{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center}
-.grid .hd{font:var(--ds-type-body-strong);color:var(--ds-fg-muted)}
-.tone{font:var(--ds-type-mono);font-size:14px;color:var(--ds-fg-muted)}
-.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 20px;font:var(--ds-type-ui);font-size:16px;white-space:nowrap;border:1px solid transparent;border-radius:var(--ds-radius-md);background:var(--fill);color:var(--ink);cursor:default}
-.btn.line{border-color:var(--ds-border-field)}
-.ov10{background-image:linear-gradient(0deg,color-mix(in oklab,var(--ink) 10%,transparent),color-mix(in oklab,var(--ink) 10%,transparent))}
-.ov16{background-image:linear-gradient(0deg,color-mix(in oklab,var(--ink) 16%,transparent),color-mix(in oklab,var(--ink) 16%,transparent))}
-.gap{font:var(--ds-type-caption);color:var(--ds-fg-subtle);font-style:italic}
-.note{padding:12px 14px;background:var(--ds-info-bg);border:1px solid var(--ds-info-line);border-radius:var(--ds-radius-md);font:var(--ds-type-body);color:var(--ds-info-fg)}
-.ev{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.evcell{display:flex;flex-direction:column;gap:6px;padding:14px;background:var(--ds-bg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md)}
-.val{font:var(--ds-type-mono);font-size:13px;color:var(--ds-fg-muted)}
-.verdict{font:var(--ds-type-body-strong)}</style></head>
-<body>
-<div id="page">
-<div class="row2">
-<div class="card">
-<h2>A · Оверлей собственными чернилами — действующая доктрина</h2>
-<p class="muted">В light чернила белые, в dark — тёмные: там светлеет сама заливка.</p>
-<div class="grid">
-<span></span><span class="hd">rest</span><span class="hd">hover · ink 10%</span><span class="hd">press · ink 16%</span>
-<span class="tone">primary</span>
-<span class="btn" style="--fill:var(--ds-brand);--ink:var(--ds-on-brand)">Построить</span>
-<span class="btn ov10" style="--fill:var(--ds-brand);--ink:var(--ds-on-brand)">Построить</span>
-<span class="btn ov16" style="--fill:var(--ds-brand);--ink:var(--ds-on-brand)">Построить</span>
-<span class="tone">accent</span>
-<span class="btn" style="--fill:var(--ds-accent);--ink:var(--ds-accent-on)">Назначить</span>
-<span class="btn ov10" style="--fill:var(--ds-accent);--ink:var(--ds-accent-on)">Назначить</span>
-<span class="btn ov16" style="--fill:var(--ds-accent);--ink:var(--ds-accent-on)">Назначить</span>
-<span class="tone">danger</span>
-<span class="btn" style="--fill:var(--ds-danger-solid);--ink:var(--ds-on-solid)">В архив</span>
-<span class="btn ov10" style="--fill:var(--ds-danger-solid);--ink:var(--ds-on-solid)">В архив</span>
-<span class="btn ov16" style="--fill:var(--ds-danger-solid);--ink:var(--ds-on-solid)">В архив</span>
-<span class="tone">subtle</span>
-<span class="btn" style="--fill:var(--ds-brand-subtle);--ink:var(--ds-brand-text)">Показать все</span>
-<span class="btn ov10" style="--fill:var(--ds-brand-subtle);--ink:var(--ds-brand-text)">Показать все</span>
-<span class="btn ov16" style="--fill:var(--ds-brand-subtle);--ink:var(--ds-brand-text)">Показать все</span>
-<span class="tone">secondary</span>
-<span class="btn line" style="--fill:var(--ds-surface);--ink:var(--ds-fg)">Отмена</span>
-<span class="btn line" style="--fill:var(--ds-surface-hover);--ink:var(--ds-fg)">Отмена</span>
-<span class="btn line" style="--fill:var(--ds-surface-active);--ink:var(--ds-fg)">Отмена</span>
-<span class="tone">ghost</span>
-<span class="btn" style="--fill:transparent;--ink:var(--ds-fg-muted)">Очистить карту</span>
-<span class="btn" style="--fill:var(--ds-surface-hover);--ink:var(--ds-fg-muted)">Очистить карту</span>
-<span class="btn" style="--fill:var(--ds-surface-active);--ink:var(--ds-fg-muted)">Очистить карту</span>
-</div>
-</div>
+<!-- @dsCard name="Наведение и нажатие" group="2 · Основы" scopeMode="inherit" aliases="наведение|нажатие|hover|press|состояния" subtitle="Как показывать реакцию на действие и отличать её от выбора" page -->
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Наведение и нажатие</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.scene{padding:24px;background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.state-comparison{margin:24px 0 0}.state-comparison figcaption{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-bottom:16px}
+.state-strip{display:flex;gap:var(--ds-gap-md);flex-wrap:wrap}.state-item{display:grid;gap:8px;justify-items:start}.state-label{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.state-sample{display:inline-flex;align-items:center;justify-content:center;height:var(--ds-control-h);padding:0 var(--ds-control-pad-x);font:var(--ds-type-ui);border:1px solid transparent;border-radius:var(--ds-radius-md);background:var(--ds-brand);color:var(--ds-on-brand)}
+.state-sample[data-state="hover"],.state-sample[data-state="press"]{background-image:linear-gradient(0deg,color-mix(in oklab,var(--ds-on-brand) var(--state-depth),transparent),color-mix(in oklab,var(--ds-on-brand) var(--state-depth),transparent))}
+.state-sample[data-state="hover"]{--state-depth:var(--ds-overlay-hover)}.state-sample[data-state="press"]{--state-depth:var(--ds-overlay-press)}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{padding-left:20px;max-width:74ch;margin:0}.rules li+li{margin-top:12px}
+summary{cursor:pointer;font:var(--ds-type-ui);padding:10px 12px;border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);background:var(--ds-surface)}
+summary:hover{background:var(--ds-surface-hover)}summary:focus-visible,a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:grid;gap:24px}
+.table-scroll{overflow-x:auto}.tokens{width:100%;border-collapse:collapse;text-align:left}.tokens th,.tokens td{padding:12px 8px;border-bottom:1px solid var(--ds-divider);vertical-align:top}.tokens th{font:var(--ds-type-body-strong)}
+@media(max-width:640px){main{padding:20px 0}.scene{padding:16px}.choices{grid-template-columns:minmax(0,1fr)}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}}
+</style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Реакция на действие</h2>
+<p class="lead">Готовые компоненты автоматически реагируют на наведение и нажатие. Приложение обрабатывает действие и сообщает результат.</p>
+<div class="scene" id="ready-interface"></div>
+<p class="caption" style="margin-top:16px">Наведите указатель и удержите кнопку. С клавиатуры используйте Tab, затем Space или Enter. Сообщение под кнопками показывает результат; в примере он подтверждается локально.</p>
+<figure class="scene state-comparison" id="state-comparison"><figcaption>Одна кнопка в трёх состояниях · образцы для сравнения</figcaption>
+<div class="state-strip">
+<div class="state-item"><span class="state-label">Обычно</span><span class="state-sample" data-state="rest">Сохранить</span></div>
+<div class="state-item"><span class="state-label">Наведение</span><span class="state-sample" data-state="hover">Сохранить</span></div>
+<div class="state-item"><span class="state-label">Нажатие</span><span class="state-sample" data-state="press">Сохранить</span></div>
+</div></figure></section>
 
-<div class="card">
-<h2 style="text-decoration:line-through;text-decoration-thickness:1px">B · Смена цвета по токенам — отвергнуто</h2>
-<p class="muted">Так работали primary и danger до сентября 2026. На остальные тона пришлось бы завести по значению на каждую тему × light/dark × 2 состояния — и заново на каждый новый бренд, руками. Значения <code>--ds-brand-hover</code> и <code>--ds-brand-active</code> из системы удалены; оттенки ниже вписаны вручную, чтобы показать, как это выглядело.</p>
-<div style="display:flex;gap:10px;flex-wrap:wrap">
-<span class="btn" style="--fill:var(--ds-brand);--ink:var(--ds-on-brand)">rest</span>
-<span class="btn" style="--fill:#234f84;--ink:var(--ds-on-brand)">hover</span>
-<span class="btn" style="--fill:#1c4069;--ink:var(--ds-on-brand)">press</span>
-</div>
-<div class="blist">
-<span class="tone">primary</span><span class="gap">была пара токенов — удалена 16.09.2026</span>
-<span class="tone">accent</span><span class="gap">токенов нет</span>
-<span class="tone">danger</span><span class="gap">токенов нет</span>
-<span class="tone">subtle</span><span class="gap">токенов нет</span>
-</div>
-</div>
-</div>
+<section aria-labelledby="states"><h2 id="states" tabindex="-1">Краткая памятка</h2><dl class="choices">
+<dt>Наведение</dt><dd>Указатель находится над элементом. Само действие ещё не выполнено.</dd>
+<dt>Нажатие</dt><dd>Кнопку удерживают мышью, касанием или клавиатурой. Отклик временный.</dd>
+<dt>Выбор</dt><dd>Сохраняется после отпускания: например, активная вкладка или отмеченный флажок.</dd>
+</dl></section>
 
-<div class="note"><strong>Инвариант:</strong> оверлей собственными чернилами — единственный вариант, который в light и в dark меняет заливку в одну и ту же сторону и не упирается в предел шкалы, на какой бы светлоте ни оказался бренд. Принят вариант <strong>A</strong> и распространён на всю залитую хрому: <code>DsButton</code>, <code>DsIconButton</code>, <code>DsFab</code>, <code>DsChip</code>, коробка <code>DsCheckbox</code>, трек <code>DsSwitch</code>. <code>DsTabs</code> с <code>tone="onBrand"</code> не менялся: он берёт <code>--ds-surface-hover</code>, а тот на brand-бэндах сам собран из <code>--ds-overlay-hover</code> — та же доктрина в скоупе шапки.</div>
-</div>
+<section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Правила применения</h2><ul class="rules">
+<li><strong>Сохраняйте клавиатурный фокус.</strong> Он показывает, где находится управление с клавиатуры, и может быть виден вместе с наведением. Подробнее — <a href="../DsFocus/preview.html">«Фокус»</a>.</li>
+<li><strong>Не прячьте действие за наведением.</strong> На сенсорном экране его нет. Назначение и доступность управления должны быть понятны до касания.</li>
+<li><strong>Проверяйте недоступное состояние.</strong> Отключённый элемент не выполняет действие и не реагирует как доступный. В приложении сообщайте, что нужно для его включения.</li>
+<li><strong>Подтверждайте результат.</strong> Эффект нажатия не означает, что сохранение прошло успешно. Показывайте успех после ответа приложения, а ошибку — с понятным следующим шагом.</li>
+</ul></section>
 
-</body></html>
+<section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Для собственных контролов</h2>
+<p>Собственной кнопке нужны не только цвета состояний, но и семантика, фокус и обработка мыши, касания и клавиатуры. Для обычных действий используйте <a href="../DsButton/preview.html">DsButton</a>.</p>
+<details id="hover-reference"><summary>Показать токены и принцип оформления</summary><div class="reference-content">
+<div><h3>Кнопки с цветной заливкой</h3><p>У <code>primary</code>, <code>accent</code>, <code>danger</code> и <code>subtle</code> поверх фона накладывается полупрозрачный цвет подписи. Он адаптируется к бренду и оформлению; отдельные оттенки для каждого состояния не нужны.</p></div>
+<div class="table-scroll"><table class="tokens"><caption>Оформление состояний</caption><thead><tr><th scope="col">Применение</th><th scope="col">Наведение</th><th scope="col">Нажатие</th></tr></thead><tbody>
+<tr><td>Слой цвета подписи поверх заливки</td><td><code>--ds-overlay-hover</code> · 10%</td><td><code>--ds-overlay-press</code> · 16%</td></tr>
+<tr><td>Фон кнопок <code>secondary</code>, <code>ghost</code> и обычных интерактивных строк</td><td><code>--ds-surface-hover</code></td><td><code>--ds-surface-active</code></td></tr>
+</tbody></table></div>
+<p class="caption">Токены surface задают цвет фона, overlay — долю цвета в слое. Название surface-active здесь относится к временному нажатию; устойчивый выбор оформляется отдельно, например через surface-selected.</p>
+</div></details></section>
+</main><script type="text/babel">
+const {DsButton}=window.AuroraWebDesignSystem_96e210;
+function Actions(){const [result,setResult]=React.useState('Изменения ещё не сохранены.');return <div style={{display:'grid',gap:'var(--ds-gap-md)'}}>
+  <p>Настройки объекта МАЗ 5440</p>
+  <div style={{display:'flex',gap:'var(--ds-gap-sm)',flexWrap:'wrap'}}>
+    <DsButton onClick={()=>setResult('Изменения сохранены.')}>Сохранить</DsButton>
+    <DsButton tone="secondary" onClick={()=>setResult('Изменения отменены.')}>Отмена</DsButton>
+    <DsButton disabled>Недоступно</DsButton>
+  </div>
+  <p role="status">{result}</p>
+</div>;}
+ReactDOM.createRoot(document.getElementById('ready-interface')).render(<Actions/>);
+function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){
+  scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';scene.dataset.dsAppearance=root.dataset.dsAppearance||'light';scene.dataset.dsDensity=root.dataset.dsDensity||'cozy';
+}}
+refresh();new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density','style']});
+</script></body></html>
