@@ -38,7 +38,7 @@ export function enhanceCodeBlocks(container){
   }
 }
 
-export function createPageContents({container,headings,scrollRoot,cardUrl,previewFrame,restoreSection=false}){
+export function createPageContents({container,headings,scrollRoot,cardUrl,previewFrame,previewSectionsSelector=null,restoreSection=false}){
   if(!headings.length)return ()=>{};
   const aside=document.createElement('aside'),details=document.createElement('details'),summary=document.createElement('summary'),nav=document.createElement('nav');
   aside.className='page-contents';summary.textContent='На этой странице';nav.setAttribute('aria-label','На этой странице');
@@ -58,7 +58,7 @@ export function createPageContents({container,headings,scrollRoot,cardUrl,previe
   function rebuild(){
     const list=document.createElement('ul');entries=[];links=[];
     function append(heading,parent,preview=false){
-      const id=preview?'example-'+heading.id:heading.id;
+      const id=preview&&!previewSectionsSelector?'example-'+heading.id:heading.id;
       const entry={heading,id,preview},item=document.createElement('li'),link=document.createElement('a'),url=new URL(cardUrl);url.hash=id;
       heading.tabIndex=-1;link.href=url;link.textContent=heading.textContent;
       item.append(link);parent.append(item);entries.push(entry);links.push(link);
@@ -72,9 +72,10 @@ export function createPageContents({container,headings,scrollRoot,cardUrl,previe
       });
       return item;
     }
+    if(previewSectionsSelector)for(const heading of exampleHeadings)append(heading,list,true);
     for(const [index,heading]of headings.entries()){
       const item=append(heading,list);
-      if(index===0&&exampleHeadings.length){
+      if(!previewSectionsSelector&&index===0&&exampleHeadings.length){
         const nested=document.createElement('ul');item.append(nested);
         for(const heading of exampleHeadings)append(heading,nested,true);
       }
@@ -84,7 +85,7 @@ export function createPageContents({container,headings,scrollRoot,cardUrl,previe
     if(anchor)jump(anchor);else schedule();
   }
   function readExamples(){
-    const next=[...previewDocument.querySelectorAll('body[data-ds-examples] h3[id]')];
+    const next=[...previewDocument.querySelectorAll(previewSectionsSelector??'body[data-ds-examples] h3[id]')];
     if(next.length===exampleHeadings.length&&next.every((heading,index)=>heading===exampleHeadings[index]))return;
     exampleHeadings=next;rebuild();
   }

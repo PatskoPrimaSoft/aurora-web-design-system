@@ -1,197 +1,150 @@
-<!-- @dsCard name="Типографика" group="2 · Основы" height=2520 subtitle="Девять текстовых ролей, шрифты интерфейса и оформление телеметрии" page -->
+<!-- @dsCard name="Типографика" group="2 · Основы" height=2520 aliases="типографика|шрифты|typography|font|текст" subtitle="Как выбирать текстовые роли, выстраивать иерархию и показывать данные" page -->
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>Типографика</title><style>html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);-webkit-font-smoothing:antialiased}
-#page{max-width:1120px;margin:0 auto;padding:22px 24px 26px;display:flex;flex-direction:column;gap:20px}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-h1{margin:0;font:var(--ds-type-title);color:var(--ds-fg-strong);letter-spacing:var(--ds-tracking-tight)}
-h2{margin:0;font:var(--ds-type-section);color:var(--ds-fg-strong)}
-p{margin:0;max-width:96ch;text-wrap:pretty}
-code{font:var(--ds-type-mono);font-size:12px}
-.muted{color:var(--ds-fg-muted)}
-.eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.top{display:flex;gap:24px;align-items:flex-end}
-.strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);flex:none}
-.strip select{height:var(--ds-control-h);padding:0 8px;font:var(--ds-type-ui);color:var(--ds-fg);background:var(--ds-surface);border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md)}
-.card{display:flex;flex-direction:column;gap:12px;padding:18px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg)}
-.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
-.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-table{width:100%;border-collapse:collapse}
-th{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle);text-align:left;padding:0 12px 8px 0;border-bottom:1px solid var(--ds-border)}
-td{padding:11px 12px 11px 0;border-bottom:1px solid var(--ds-divider);vertical-align:baseline}
-td.tok{font:var(--ds-type-mono);font-size:12px;color:var(--ds-brand-text);white-space:nowrap}
-td.spec{font:var(--ds-type-mono);font-size:12px;color:var(--ds-fg-muted);white-space:nowrap}
-td.use{color:var(--ds-fg-muted);font:var(--ds-type-caption)}
-.pane{display:flex;flex-direction:column;gap:6px;padding:14px;background:var(--ds-bg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md)}
-.verdict{font:var(--ds-type-body-strong)}
-.ok{color:var(--ds-success-fg)}.bad{color:var(--ds-danger-fg)}.warn{color:var(--ds-warning-fg)}
-.note{padding:12px 14px;background:var(--ds-info-bg);border:1px solid var(--ds-info-line);border-radius:var(--ds-radius-md);font:var(--ds-type-body);color:var(--ds-info-fg)}
-.tel{display:flex;flex-direction:column;gap:2px}
-.tel span{display:flex;justify-content:space-between;gap:16px;padding:3px 0;border-bottom:1px solid var(--ds-divider)}
-.rule{display:grid;grid-template-columns:auto 1fr;gap:9px 12px;align-items:baseline}
-.rule b{font:var(--ds-type-body-strong);white-space:nowrap}
-.dr{display:flex;flex-direction:column;border:1px solid var(--ds-border);border-radius:var(--ds-radius-md);overflow:hidden}
-.dr .r{display:grid;grid-template-columns:minmax(0,1fr) 92px;align-items:center;height:var(--ds-row-h);padding:0 var(--ds-cell-pad-x);border-bottom:1px solid var(--ds-divider);font:var(--ds-type-body)}
-.dr .r:last-child{border-bottom:0}
-.dr .r span:last-child{font:var(--ds-type-mono);font-size:13px;color:var(--ds-fg-muted);text-align:right}
-.dr .hdr{height:auto;padding:8px var(--ds-cell-pad-x);background:var(--ds-bg);font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.legacy{display:flex;flex-wrap:wrap;gap:6px}
-.legacy i{font-style:normal;font:var(--ds-type-mono);font-size:12px;padding:3px 7px;background:var(--ds-bg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-xs);color:var(--ds-fg-muted)}
-.clip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}</style></head>
-<body>
-<div id="page">
-<div class="card">
-<h2>A · Девять ролей</h2>
-<table>
-<thead><tr><th style="width:132px">роль</th><th style="width:210px">токен</th><th style="width:150px">кегль / вес / LH</th><th style="width:118px">трекинг</th><th>образец и где применять</th></tr></thead>
-<tbody>
-<tr><td class="eb" style="padding-top:13px">display</td><td class="tok">--ds-type-display</td><td class="spec">30 / 600 / 1.2</td><td class="spec">tight</td>
-<td><div style="font:var(--ds-type-display);letter-spacing:var(--ds-tracking-tight)">Обзор парка</div><div class="use">Единственный заголовок экрана. Один на страницу.</div></td></tr>
-<tr><td class="eb" style="padding-top:13px">title</td><td class="tok">--ds-type-title</td><td class="spec">20 / 600 / 1.2</td><td class="spec">tight</td>
-<td><div style="font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight)">Объекты · 148</div><div class="use">Заголовок панели, модалки, шапка карточки.</div></td></tr>
-<tr><td class="eb" style="padding-top:13px">section</td><td class="tok">--ds-type-section</td><td class="spec">16 / 600 / 1.35</td><td class="spec">normal</td>
-<td><div style="font:var(--ds-type-section)">Эко-вождение</div><div class="use">Раздел внутри панели или формы.</div></td></tr>
-<tr><td class="eb" style="padding-top:13px">body</td><td class="tok">--ds-type-body</td><td class="spec">14 / 400 / 1.5</td><td class="spec">normal</td>
-<td><div>Водитель не назначен на этот объект.</div><div class="use">Проза, ячейки таблиц, значения полей. Базовый кегль продукта.</div></td></tr>
-<tr><td class="eb" style="padding-top:13px">body-strong</td><td class="tok">--ds-type-body-strong</td><td class="spec">14 / 500 / 1.5</td><td class="spec">normal</td>
-<td><div style="font:var(--ds-type-body-strong)">МАЗ 5440 · AB 1234-7</div><div class="use">Опорная ячейка строки, имя объекта, итог. Не для выделения внутри абзаца.</div></td></tr>
-<tr><td class="eb" style="padding-top:13px">ui</td><td class="tok">--ds-type-ui</td><td class="spec">13 / 500 / 1.35</td><td class="spec">normal</td>
-<td><div style="font:var(--ds-type-ui)">Переместить в архив</div><div class="use">Всё, что нажимается: кнопки, табы, чипы, пункты меню, поля ввода.</div></td></tr>
-<tr><td class="eb" style="padding-top:13px">caption</td><td class="tok">--ds-type-caption</td><td class="spec">12 / 400 / 1.35</td><td class="spec">normal</td>
-<td><div style="font:var(--ds-type-caption)">Последнее сообщение 14:32:07</div><div class="use">Подпись под полем, вторая строка ячейки, хинт, пагинация.</div></td></tr>
-<tr><td class="eb" style="padding-top:13px">eyebrow</td><td class="tok">--ds-type-eyebrow</td><td class="spec">11 / 600 / 1.35</td><td class="spec">eyebrow&nbsp;+0.06em</td>
-<td><div style="font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase">ОБЪЕКТ</div><div class="use">Заголовок столбца, метка группы. Всегда капитель + трекинг: без них 11px читается как сломанный body.</div></td></tr>
-<tr><td class="eb" style="padding-top:13px">mono</td><td class="tok">--ds-type-mono</td><td class="spec">13 / 400 / 1.35</td><td class="spec">normal</td>
-<td><div style="font:var(--ds-type-mono)">62.4 км/ч · 53.9045, 27.5615</div><div class="use">Только телеметрия: скорость, координаты, IMEI, таймстемпы, ID.</div></td></tr>
-</tbody></table>
-<p class="muted" style="font:var(--ds-type-caption)">Десятой роли нет и не будет. Если кажется, что нужен кегль между <code>section</code> и <code>title</code> — это задача отбивки, а не кегля: добавьте <code>--ds-gap-*</code>.</p>
+<html lang="ru"><head><meta charset="utf-8"><title>Типографика</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;margin:0;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+a:focus-visible,summary:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset);border-radius:var(--ds-radius-xs)}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.pair>*{min-width:0}
+.sample{border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);padding:24px;min-width:0;background:var(--ds-surface)}
+.sample p+p{margin-top:8px}
+.sample-label{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-bottom:8px}
+.sample-title{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong)}
+.sample-heading{font:var(--ds-type-section);color:var(--ds-fg-strong)}
+.sample-strong{font:var(--ds-type-body-strong)}
+.sample-caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.sample-mono{font:var(--ds-type-mono)}
+.sample-eyebrow{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-muted)}
+.sample-ui{font:var(--ds-type-ui)}
+.annotated{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:12px;align-items:baseline;padding:10px 0}
+.annotated+.annotated{border-top:1px solid var(--ds-divider)}.annotated p{margin:0}
+.role-name{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+summary{cursor:pointer;font:var(--ds-type-ui)}
+.font-specimen{font:var(--ds-type-title);margin:16px 0;letter-spacing:var(--ds-tracking-normal)}
+.font-specimen.mono{font-family:var(--ds-font-mono);font-weight:var(--ds-weight-regular)}
+.font-characters{font:var(--ds-type-body);font-family:var(--ds-font-sans);margin-top:16px}
+.font-characters.mono{font-family:var(--ds-font-mono)}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}
+.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.role-group{margin-top:28px}.role-group h3{margin-bottom:0}
+.role-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,240px);gap:24px;padding:20px 0;border-bottom:1px solid var(--ds-divider)}
+.role-row p+p{margin-top:8px}
+.role-meta{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.role-token{display:block;font:var(--ds-type-mono);color:var(--ds-fg);margin-bottom:8px}
+.role-sample{color:var(--ds-fg-strong)}
+.recommendation{font:var(--ds-type-body-strong);margin-bottom:12px}
+.rules{margin:24px 0 0;padding-left:20px;max-width:74ch}.rules li+li{margin-top:12px}
+.truncated{font:var(--ds-type-body-strong);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px}
+#full-name{margin-top:12px}#full-name summary{color:var(--ds-brand-text)}#full-name p{margin-top:12px}
+.data-table{width:100%;border-collapse:collapse;margin-top:16px;font:var(--ds-type-mono)}
+.data-table th,.data-table td{padding:8px 0;border-bottom:1px solid var(--ds-divider);text-align:right;white-space:nowrap}
+.data-table th{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.data-table th:first-child,.data-table td:first-child{text-align:left;font:var(--ds-type-body)}
+.density-table td{height:var(--ds-row-h);padding:0 8px}
+.tracking-sample{font:var(--ds-type-display);color:var(--ds-fg-strong);margin-top:12px}.tight{letter-spacing:var(--ds-tracking-tight)}
+@media(max-width:640px){main{padding:20px 0}.pair{grid-template-columns:minmax(0,1fr)}.sample{padding:16px}.role-row{grid-template-columns:minmax(0,1fr);gap:12px}.choices{grid-template-columns:minmax(0,1fr)}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}.annotated{grid-template-columns:minmax(0,1fr) 86px;gap:8px}}
+</style></head><body><main>
+<section aria-labelledby="in-interface">
+<h2 id="in-interface" tabindex="-1">Типографика в интерфейсе</h2>
+<p class="lead">Выбирайте стиль по назначению текста. Размер, вес и межстрочный интервал уже собраны в роль; отступы помогают отделить связанные группы.</p>
+<div class="sample" aria-label="Роли в карточке объекта">
+<div class="annotated"><p class="sample-title">Объект МАЗ 5440</p><span class="role-name">title</span></div>
+<div class="annotated"><p>Объект движется по маршруту Минск — Брест.</p><span class="role-name">body</span></div>
+<div class="annotated"><p class="sample-strong">Водитель: Андрей Иванов</p><span class="role-name">body-strong</span></div>
+<div class="annotated"><p class="sample-mono">62,4&nbsp;км/ч</p><span class="role-name">mono</span></div>
+<div class="annotated"><p class="sample-caption">Последнее сообщение — 14:32</p><span class="role-name">caption</span></div>
+<div class="annotated"><a class="sample-ui" href="../DsTable/preview.html">Открыть таблицу</a><span class="role-name">ui</span></div>
 </div>
+</section>
 
-<div class="row2">
-<div class="card">
-<h2>B · Правило выбора</h2>
-<p class="muted">Читается сверху вниз, первое совпадение выигрывает.</p>
-<div class="rule">
-<b>Это цифры прибора?</b><span class="muted">→ <code>mono</code>, даже если вокруг body.</span>
-<b>Это нажимается?</b><span class="muted">→ <code>ui</code>, независимо от размера контрола.</span>
-<b>Это метка над данными?</b><span class="muted">→ <code>eyebrow</code> + капитель.</span>
-<b>Это служебная строка?</b><span class="muted">→ <code>caption</code>.</span>
-<b>Это опорное значение строки?</b><span class="muted">→ <code>body-strong</code>.</span>
-<b>Это заголовок?</b><span class="muted">→ <code>display</code> / <code>title</code> / <code>section</code> по глубине, не по желаемому размеру.</span>
-<b>Иначе</b><span class="muted">→ <code>body</code>.</span>
+<section aria-labelledby="fonts"><h2 id="fonts" tabindex="-1">Шрифты</h2>
+<p class="lead">Шрифты поставляются вместе с дизайн-системой. Основной текст интерфейса набирается Inter Tight, телеметрия и идентификаторы — JetBrains Mono.</p>
+<div class="pair">
+<div class="sample"><h3>Inter Tight</h3><p>Заголовки, описания, подписи и управление.</p><p class="font-specimen">Маршрут завершён</p><p class="font-characters">Аа Бб Дд Жж Йй Яя<br>0123456789 · 0/O · 1/I/l</p><p class="sample-caption">Роли используют веса 400, 500 и 600.</p></div>
+<div class="sample"><h3>JetBrains Mono</h3><p>Числовые столбцы, координаты, время и ID.</p><p class="font-specimen mono">62,4 км/ч</p><p class="font-characters mono">Аа Бб Дд Жж Йй Яя<br>0123456789 · 0/O · 1/I/l</p><p class="sample-caption">Роль mono использует вес 400.</p></div>
 </div>
-</div>
-<div class="card">
-<h2>C · Длина строки и перенос</h2>
-<div class="rule">
-<b>Проза</b><span class="muted"><code>max-width</code> 74ch; документация и доктрины — до 96ch. Шире — глаз теряет строку.</span>
-<b>Перенос</b><span class="muted"><code>text-wrap: pretty</code> на абзацах и заголовках; висячих слов в <code>display</code> не оставляем.</span>
-<b>Единицы</b><span class="muted">от числа не отрываются: <code>62,4&amp;nbsp;км/ч</code>, <code>148&amp;nbsp;объектов</code>.</span>
-<b>Ячейка</b><span class="muted">одна строка + усечение + полное значение в <code>title</code>. Перенос в таблице ломает ритм <code>--ds-row-h</code>.</span>
-</div>
-<div class="pane" style="gap:4px">
-<span class="eb">усечение в ячейке</span>
-<div class="clip" style="font:var(--ds-type-body-strong);max-width:100%" title="МАЗ 5440 · полуприцеп-рефрижератор · AB 1234-7">МАЗ 5440 · полуприцеп-рефрижератор · AB 1234-7</div>
-<span class="muted" style="font:var(--ds-type-caption)">Один <code>white-space: nowrap</code> + <code>text-overflow: ellipsis</code>, никогда не два ряда.</span>
-</div>
-</div>
-</div>
+</section>
 
-<div class="card">
-<h2>D · Почему моно для телеметрии</h2>
-<p class="muted">Двенадцать скоростей в столбце. Пропорциональные цифры Inter Tight имеют разную ширину — разряды не встают друг под друга, и оператор сравнивает значения посимвольно.</p>
-<div class="row3">
-<div class="pane">
-<span class="eb bad">body — пропорциональные цифры</span>
-<div class="tel" style="font:var(--ds-type-body)">
-<span><span class="muted">AB 1234-7</span><span>111,1 км/ч</span></span>
-<span><span class="muted">CE 8891-2</span><span>62,4 км/ч</span></span>
-<span><span class="muted">AB 4410-9</span><span>7,08 км/ч</span></span>
-<span><span class="muted">MH 2077-1</span><span>98,60 км/ч</span></span>
-</div>
-<span class="verdict bad">Разряды гуляют</span>
-</div>
-<div class="pane">
-<span class="eb warn">body + tabular-nums</span>
-<div class="tel" style="font:var(--ds-type-body);font-variant-numeric:tabular-nums">
-<span><span class="muted">AB 1234-7</span><span>111,1 км/ч</span></span>
-<span><span class="muted">CE 8891-2</span><span>62,4 км/ч</span></span>
-<span><span class="muted">AB 4410-9</span><span>7,08 км/ч</span></span>
-<span><span class="muted">MH 2077-1</span><span>98,60 км/ч</span></span>
-</div>
-<span class="verdict warn">Цифры ровные, запятая нет</span>
-</div>
-<div class="pane">
-<span class="eb ok">mono</span>
-<div class="tel" style="font:var(--ds-type-mono)">
-<span><span class="muted">AB 1234-7</span><span>111,1 км/ч</span></span>
-<span><span class="muted">CE 8891-2</span><span>62,4 км/ч</span></span>
-<span><span class="muted">AB 4410-9</span><span>7,08 км/ч</span></span>
-<span><span class="muted">MH 2077-1</span><span>98,60 км/ч</span></span>
-</div>
-<span class="verdict ok">Столбец читается как прибор</span>
-</div>
-</div>
-<p class="muted" style="font:var(--ds-type-caption)">Компромисс посередине разрешён в одном случае: подписи осей и легенды графиков, где <code>mono</code> зрительно тяжелее самих данных — там <code>--ds-type-caption</code> + <code>font-variant-numeric: tabular-nums</code>. В таблицах и карточках объекта — только <code>mono</code>.</p>
-</div>
+<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Выбор роли</h2>
+<p class="lead">Начните с назначения. Для заголовка учитывайте место в структуре интерфейса; для данных — способ чтения и сравнения.</p>
+<dl class="choices">
+<dt>Заголовок</dt><dd><code>display</code> — экран; <code>title</code> — панель или диалог; <code>section</code> — раздел внутри них.</dd>
+<dt>Основной текст</dt><dd><code>body</code> — описание или значение; <code>body-strong</code> — имя объекта или опорная ячейка.</dd>
+<dt>Управление</dt><dd><code>ui</code> — кнопка, пункт меню, таб или поле ввода.</dd>
+<dt>Подпись</dt><dd><code>caption</code> — вспомогательная строка; <code>eyebrow</code> — короткая метка группы или столбца.</dd>
+<dt>Телеметрия</dt><dd><code>mono</code> — скорость, координаты, время и идентификатор.</dd>
+</dl>
+</section>
 
-<div class="row2">
-<div class="card">
-<h2>E · Трекинг зашит в роль</h2>
-<p class="muted">Inter Tight на крупных кеглях рассыпается, на 11px капители — слипается. Поэтому трекинг не «на вкус», а часть роли.</p>
-<div class="pane">
-<span class="eb bad">display без трекинга</span>
-<div style="font:var(--ds-type-display)">Обзор парка · 148</div>
-<span class="eb ok" style="margin-top:8px">display · tracking-tight −0.015em</span>
-<div style="font:var(--ds-type-display);letter-spacing:var(--ds-tracking-tight)">Обзор парка · 148</div>
+<section aria-labelledby="roles"><h2 id="roles" tabindex="-1">Справочник ролей</h2>
+<p class="lead">Девять ролей используют семь размеров. Назначайте готовую роль через <code>font</code>. Для display, title и eyebrow дополнительно задавайте токен трекинга.</p>
+<div class="role-group"><h3>Заголовки</h3>
+<div class="role-row" data-type-role="display"><div><p class="role-sample" style="font:var(--ds-type-display);letter-spacing:var(--ds-tracking-tight)">Обзор парка</p><p>Главный заголовок экрана. Один на страницу.</p></div><div class="role-meta"><code class="role-token">--ds-type-display</code><p>30px · вес 600 · интервал 1,2</p><p>Трекинг: <code>--ds-tracking-tight</code></p></div></div>
+<div class="role-row" data-type-role="title"><div><p class="role-sample" style="font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight)">Объекты · 148</p><p>Заголовок панели, диалога или карточки.</p></div><div class="role-meta"><code class="role-token">--ds-type-title</code><p>20px · вес 600 · интервал 1,2</p><p>Трекинг: <code>--ds-tracking-tight</code></p></div></div>
+<div class="role-row" data-type-role="section"><div><p class="role-sample" style="font:var(--ds-type-section)">Эко-вождение</p><p>Раздел внутри панели или формы.</p></div><div class="role-meta"><code class="role-token">--ds-type-section</code><p>16px · вес 600 · интервал 1,35</p></div></div>
 </div>
-<div class="pane">
-<span class="eb bad">eyebrow без трекинга</span>
-<div style="font:var(--ds-type-eyebrow);text-transform:uppercase">СТАТУС ОБЪЕКТА</div>
-<span class="eb ok" style="margin-top:8px">eyebrow · tracking-eyebrow +0.06em</span>
-<div style="font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase">СТАТУС ОБЪЕКТА</div>
+<div class="role-group"><h3>Текст и управление</h3>
+<div class="role-row" data-type-role="body"><div><p class="role-sample" style="font:var(--ds-type-body)">Водитель не назначен на этот объект.</p><p>Описания, ячейки таблиц и значения полей.</p></div><div class="role-meta"><code class="role-token">--ds-type-body</code><p>14px · вес 400 · интервал 1,5</p></div></div>
+<div class="role-row" data-type-role="body-strong"><div><p class="role-sample" style="font:var(--ds-type-body-strong)">МАЗ 5440 · AB 1234-7</p><p>Имя объекта, опорная ячейка строки или итог.</p></div><div class="role-meta"><code class="role-token">--ds-type-body-strong</code><p>14px · вес 500 · интервал 1,5</p></div></div>
+<div class="role-row" data-type-role="ui"><div><p class="role-sample" style="font:var(--ds-type-ui)">Переместить в архив</p><p>Кнопки, табы, пункты меню и поля ввода.</p></div><div class="role-meta"><code class="role-token">--ds-type-ui</code><p>13px · вес 500 · интервал 1,35</p></div></div>
 </div>
-<p class="muted" style="font:var(--ds-type-caption)"><code>tracking-tight</code> — от 18px и выше. <code>tracking-eyebrow</code> — только на 11px капители. Между ними <code>normal</code>, то есть ноль.</p>
+<div class="role-group"><h3>Подписи</h3>
+<div class="role-row" data-type-role="caption"><div><p class="role-sample" style="font:var(--ds-type-caption)">Последнее сообщение — 14:32</p><p>Подпись под полем, пояснение или вторая строка ячейки.</p></div><div class="role-meta"><code class="role-token">--ds-type-caption</code><p>12px · вес 400 · интервал 1,35</p></div></div>
+<div class="role-row" data-type-role="eyebrow"><div><p class="role-sample sample-eyebrow">Объект</p><p>Короткая метка группы или заголовок столбца. Не используйте для предложений и основного текста.</p></div><div class="role-meta"><code class="role-token">--ds-type-eyebrow</code><p>11px · вес 600 · интервал 1,35</p><p>Верхний регистр и <code>--ds-tracking-eyebrow</code></p></div></div>
 </div>
+<div class="role-group"><h3>Данные</h3>
+<div class="role-row" data-type-role="mono"><div><p class="role-sample" style="font:var(--ds-type-mono)">62,4 км/ч · 53.9045, 27.5615</p><p>Телеметрия, координаты, IMEI, время и ID.</p></div><div class="role-meta"><code class="role-token">--ds-type-mono</code><p>13px · вес 400 · интервал 1,35</p></div></div>
+</div>
+</section>
 
-<div class="card">
-<h2>F · Плотность не меняет кегль</h2>
-<p class="muted"><code>[data-ds-density]</code> сжимает <strong>геометрию</strong> — высоты строк, паддинги, гэпы. Кегль остаётся тем же: 14px в <code>cozy</code> и 14px в <code>compact</code>. Уменьшать текст вместе с рядами значит платить читаемостью за то, что уже оплачено отбивкой.</p>
-<div class="row2" style="gap:14px">
-<div class="dr" data-ds-density="cozy">
-<div class="r hdr">cozy · row 44px</div>
-<div class="r"><span>МАЗ 5440</span><span>62,4</span></div>
-<div class="r"><span>Sitrak C7H</span><span>7,08</span></div>
-<div class="r"><span>Volvo FH16</span><span>98,60</span></div>
+<section aria-labelledby="readability"><h2 id="readability" tabindex="-1">Читаемость и доступность</h2>
+<p class="lead">Иерархия должна помогать находить информацию. Проверяйте длинные русские подписи, узкий экран и увеличение страницы.</p>
+<div class="pair">
+<div class="sample"><p class="recommendation">Рекомендуется</p><p class="sample-title">Объекты</p><p class="sample-heading">Назначение водителя</p><p>Выберите водителя для объекта.</p><p class="sample-caption">Заголовки различаются по роли; пояснение остаётся обычным текстом.</p></div>
+<div class="sample"><p class="recommendation">Избегайте</p><p>Объекты</p><p>Назначение водителя</p><p>Выберите водителя для объекта.</p><p class="sample-caption">Одинаковое оформление скрывает структуру.</p></div>
 </div>
-<div class="dr" data-ds-density="compact">
-<div class="r hdr">compact · row 34px</div>
-<div class="r"><span>МАЗ 5440</span><span>62,4</span></div>
-<div class="r"><span>Sitrak C7H</span><span>7,08</span></div>
-<div class="r"><span>Volvo FH16</span><span>98,60</span></div>
+<ul class="rules">
+<li>Используйте HTML-заголовки <code>h1–h6</code> по структуре документа, без пропуска уровней. Текстовая роль задаёт внешний вид, HTML-тег — смысл.</li>
+<li>Ограничивайте ширину абзаца примерно <code>74ch</code> и разрешайте перенос. Проверяйте реальный текст: <code>ch</code> не равен числу букв в строке.</li>
+<li>Не отрывайте единицу от числа: <span class="sample-mono">62,4&nbsp;км/ч</span>. В HTML используйте <code>&amp;nbsp;</code>.</li>
+<li>Используйте семантические цвета текста. Caption и eyebrow оставляйте для коротких вспомогательных подписей.</li>
+<li>Если строка усечена, обеспечьте раскрытие полного текста с клавиатуры и на сенсорном экране.</li>
+</ul>
+<div class="sample" style="margin-top:24px"><h3>Длинное название объекта</h3>
+<p class="truncated">МАЗ 5440 · полуприцеп-рефрижератор · AB 1234-7</p>
+<details id="full-name"><summary>Показать полное название</summary><p>МАЗ 5440 · полуприцеп-рефрижератор · AB 1234-7</p></details>
 </div>
-</div>
-<p class="muted" style="font:var(--ds-type-caption)">Оба столбца — <code>--ds-type-body</code> и <code>--ds-type-mono</code> без изменений. В <code>tokens/density.css</code> нет ни одного токена кегля — это проверяемо.</p>
-</div>
-</div>
+</section>
 
-<div class="card">
-<h2 style="text-decoration:line-through;text-decoration-thickness:1px">G · Отвергнуто: тринадцать кеглей на системном Helvetica</h2>
-<div class="row2">
-<div class="pane">
-<span class="eb bad">legacy — 13 размеров, 9→32px</span>
-<div class="legacy"><i>9</i><i>10</i><i>11</i><i>12</i><i>13</i><i>14</i><i>15</i><i>16</i><i>18</i><i>20</i><i>22</i><i>24</i><i>32</i></div>
-<p class="muted" style="font:var(--ds-type-caption);margin-top:6px">Кегль выбирали на глаз, поэтому 13 и 14 встречались в соседних ячейках одной таблицы. Шрифт не поставлялся: <code>Helvetica Neue</code> молча падал на Arial на Windows и на Liberation на Linux — метрики, вес и ширина цифр разъезжались у каждого второго оператора. Веса 500/600 зависели от ОС и местами синтезировались.</p>
+<section aria-labelledby="numbers"><h2 id="numbers" tabindex="-1">Числа и телеметрия</h2>
+<p class="lead">JetBrains Mono даёт одинаковую ширину символов. Для выравнивания десятичных разделителей дополнительно нужны одинаковая точность и выравнивание по правому краю.</p>
+<div class="pair">
+<div class="sample"><p class="recommendation">Рекомендуется</p><p>Одна единица и два знака после запятой.</p><table class="data-table" aria-label="Скорость с одинаковой точностью"><thead><tr><th scope="col">Объект</th><th scope="col">км/ч</th></tr></thead><tbody><tr><td>МАЗ 5440</td><td>111,10</td></tr><tr><td>Volvo FH16</td><td>62,40</td></tr><tr><td>Sitrak C7H</td><td>7,08</td></tr></tbody></table></div>
+<div class="sample"><p class="recommendation">Избегайте</p><p>Разная точность мешает сравнивать разряды.</p><table class="data-table" aria-label="Скорость с разной точностью"><thead><tr><th scope="col">Объект</th><th scope="col">км/ч</th></tr></thead><tbody><tr><td>МАЗ 5440</td><td>111,1</td></tr><tr><td>Volvo FH16</td><td>62,400</td></tr><tr><td>Sitrak C7H</td><td>7,08</td></tr></tbody></table></div>
 </div>
-<div class="pane">
-<span class="eb ok">v2 — 9 ролей, 9 размеров</span>
-<div class="legacy"><i>11</i><i>12</i><i>13</i><i>14</i><i>16</i><i>18</i><i>20</i><i>24</i><i>30</i></div>
-<p class="muted" style="font:var(--ds-type-caption);margin-top:6px">Шкала прореженная: рядом стоящих кеглей нет, ошибиться на один шаг невозможно. Шрифт приезжает с системой, веса реальные. <code>--ds-text-18</code> и <code>--ds-text-24</code> лежат в шкале как сырьё для будущих ролей, но ни одна роль их пока не берёт — брать их напрямую нельзя.</p>
-</div>
-</div>
-</div>
+<p style="margin-top:24px">Точность выбирайте по смыслу данных. Если значения имеют разную точность, выравнивайте целую и дробную части отдельно. На осях и в легендах графиков допустимы <code>caption</code> и <code>font-variant-numeric: tabular-nums</code>; одинаковая ширина цифр также не заменяет форматирование.</p>
+</section>
 
-<div class="note">Правила адъюстажа: <strong>никогда</strong> не писать <code>font-size</code>, <code>font-weight</code> или <code>letter-spacing</code> литералом в компоненте — только <code>font: var(--ds-type-*)</code>. Нужен вес или кегль, которого нет ни в одной роли, — это заявка на изменение доктрины, а не локальный override. Единственное легальное отклонение — <code>font-variant-numeric: tabular-nums</code> на подписях графиков.</div>
+<section aria-labelledby="tracking-density"><h2 id="tracking-density" tabindex="-1">Трекинг и плотность</h2>
+<h3>Трекинг задаётся отдельно</h3>
+<p class="lead">Свойство <code>font</code> объединяет семейство, размер, вес и межстрочный интервал. Межбуквенный интервал задавайте через <code>letter-spacing</code>: tight для display и title, eyebrow для коротких меток верхнего регистра.</p>
+<div class="pair">
+<div class="sample"><p class="sample-label">Без трекинга</p><p class="tracking-sample">Обзор парка</p></div>
+<div class="sample"><p class="sample-label">С токеном tracking-tight</p><p class="tracking-sample tight">Обзор парка</p></div>
 </div>
-
-</body></html>
+<h3 style="margin-top:32px">Плотность сохраняет размер текста</h3>
+<p class="lead">Compact уменьшает высоты строк и отступы. Роли body и mono остаются того же размера, что и в cozy.</p>
+<div class="pair">
+<div class="sample" data-ds-density="cozy"><p class="sample-label">Cozy · строка 44px</p><table class="data-table density-table" aria-label="Обычная плотность"><thead><tr><th scope="col">Объект</th><th scope="col">км/ч</th></tr></thead><tbody><tr><td>МАЗ 5440</td><td>62,40</td></tr><tr><td>Volvo FH16</td><td>7,08</td></tr></tbody></table></div>
+<div class="sample" data-ds-density="compact"><p class="sample-label">Compact · строка 34px</p><table class="data-table density-table" aria-label="Компактная плотность"><thead><tr><th scope="col">Объект</th><th scope="col">км/ч</th></tr></thead><tbody><tr><td>МАЗ 5440</td><td>62,40</td></tr><tr><td>Volvo FH16</td><td>7,08</td></tr></tbody></table></div>
+</div>
+</section>
+</main></body></html>

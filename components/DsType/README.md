@@ -1,26 +1,42 @@
 # Типографика
 
-## Использование токенов
+## Пример кода
 
-Подключение `@primasoftllc/design-system/styles.css` загружает шрифты
-Inter Tight для интерфейса и JetBrains Mono для телеметрии.
-Назначайте тексту роль через `font`, а для заголовков и меток —
-соответствующий токен трекинга.
+Подключение `@primasoftllc/design-system/styles.css` загружает Inter Tight
+и JetBrains Mono. Роль назначается через `font`, а трекинг — отдельно.
+HTML-заголовки выбирайте по структуре документа.
 
 ```css
-.section-title {
-  font: var(--ds-type-section);
+@import '@primasoftllc/design-system/styles.css';
+
+.panel-title {
+  font: var(--ds-type-title);
+  letter-spacing: var(--ds-tracking-tight);
   color: var(--ds-fg-strong);
 }
 
-.telemetry { font: var(--ds-type-mono); }
+.description {
+  font: var(--ds-type-body);
+  color: var(--ds-fg);
+  max-width: 74ch;
+  text-wrap: pretty;
+}
+
+.telemetry {
+  font: var(--ds-type-mono);
+  text-align: right;
+}
 ```
 
-## Проверка текста
+Числа в одном столбце форматируйте с одинаковой точностью, если это
+соответствует смыслу данных. Для верхнего регистра используйте
+`text-transform: uppercase` только с короткими метками роли `eyebrow`;
+добавляйте `letter-spacing: var(--ds-tracking-eyebrow)`.
 
-Проверяйте длинные русские подписи, переносы и числовые столбцы с разным
-количеством разрядов. Усечённое значение должно быть доступно полностью.
-Смена плотности меняет геометрию, сохраняя размер текста.
+Если подходящей роли нет, обсудите изменение системы. Дополнительный
+размер из примитивной шкалы не заменяет согласованную текстовую роль.
 
-Образцы двух плотностей представлены в разделе
-[«Плотность интерфейса»](../DsDensity/README.md).
+## Дальше
+
+- [Плотность интерфейса](../DsDensity/README.md) — сравнение геометрии компонентов.
+- [Смена типографической системы](../../docs/typography-migration.md) — история решения и правила переноса.

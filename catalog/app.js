@@ -84,6 +84,7 @@ function render({restoreSection=false}={}){
  search.value=state.query;drawNavigation();
  const card=cards.find(card=>card.id===state.cardId),error=document.getElementById('card-error');error.hidden=!!card;
  document.querySelector('.catalog-content').classList.toggle('component-page',card?.layout==='component');
+ document.querySelector('.catalog-content').classList.toggle('contents-page',card?.layout==='component'||card?.id==='DsType');
  examplesHeading.hidden=card?.layout!=='component';
  if(card?.layout==='component')viewports.setAttribute('aria-labelledby',examplesHeading.id);else viewports.removeAttribute('aria-labelledby');
  titleStatus.hidden=card?.status!=='deprecated';renderStatus(titleStatusRoot,card);
@@ -92,7 +93,7 @@ function render({restoreSection=false}={}){
  if(!card){document.getElementById('title').textContent='Карточка не найдена';document.getElementById('subtitle').textContent='Выберите карточку в навигации или вернитесь к началу.';document.getElementById('missing-id').textContent=state.cardId;for(const record of frames)record.resizeObserver?.disconnect();viewports.replaceChildren();document.getElementById('reference-links').replaceChildren();frames=[];renderedKey=null;document.getElementById('local-note').hidden=true;return;}
  document.getElementById('title').textContent=card.title;document.getElementById('subtitle').textContent=card.subtitle;document.getElementById('local-note').hidden=card.scopeMode!=='local';referenceLinks(card);
  const key=card.id+'|'+state.compare;
- const documentPreview=card.id==='overview'||card.id==='DsBreakpointsDecisions';
+ const documentPreview=['overview','DsBreakpointsDecisions','DsType'].includes(card.id);
  const responsivePreview=documentPreview||card.layout==='component';
  if(key!==renderedKey){
   for(const record of frames)record.resizeObserver?.disconnect();
@@ -124,9 +125,10 @@ function render({restoreSection=false}={}){
   renderedKey=key;
  }
  for(const record of frames)scopeFrame(record);
- disposeContents=card.layout==='component'?createPageContents({
+ disposeContents=card.layout==='component'||card.id==='DsType'?createPageContents({
   container:document.querySelector('.catalog-content'),
-  headings:[examplesHeading,...document.querySelectorAll('#card-description h2')],
+  headings:[...(card.layout==='component'?[examplesHeading]:[]),...document.querySelectorAll('#card-description h2')],
+  previewSectionsSelector:card.id==='DsType'?'main > section > h2[id]':null,
   scrollRoot:document.querySelector('main'),cardUrl:stateUrl(location.href,state),previewFrame:frames[0]?.element,restoreSection,
  }):()=>{};
 }

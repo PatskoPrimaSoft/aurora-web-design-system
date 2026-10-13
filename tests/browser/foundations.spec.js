@@ -16,6 +16,29 @@ test('foundation and map descriptions stay with examples through navigation, com
   page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
   try {
     await page.goto(served.url + '/index.html?card=DsBreakpoints');
+    await expect(page.locator('nav h3')).toHaveText([
+      'Визуальный язык', 'Режимы интерфейса', 'Состояния контролов',
+      'Компоновка и данные', 'Настройка бренда',
+    ]);
+    const foundationLinks = page.locator('nav a[data-id]').filter({
+      has: page.locator('xpath=preceding-sibling::h2[1][text()="2 · Основы"]'),
+    });
+    expect(await foundationLinks.evaluateAll(links => links.map(link => link.dataset.id))).toEqual([
+      'DsType', 'DsNeutrals', 'DsShape', 'DsStatus',
+      'DsBrandThemes', 'DsAppearance', 'DsDensity', 'DsHover', 'DsFocus',
+      'DsBreakpoints', 'DsSorting', 'DsSortingMenu', 'DsCharts', 'DsBrandPick',
+    ]);
+    await page.locator('#search').fill('сортировка');
+    await expect(page.locator('nav h3')).toHaveText(['Режимы интерфейса', 'Компоновка и данные']);
+    await expect(foundationLinks).toHaveText(['Плотность интерфейса', 'Сортировка в таблице', 'Сортировка вне таблицы']);
+    await page.locator('#search').fill('визуальный язык');
+    await expect(page.locator('nav h3')).toHaveText(['Визуальный язык']);
+    await expect(foundationLinks).toHaveText(['Типографика', 'Нейтральные цвета', 'Форма и глубина', 'Цвета статусов']);
+    await foundationLinks.first().focus();
+    await page.keyboard.press('Enter');
+    await expect(page.locator('#title')).toHaveText('Типографика');
+    await expect(foundationLinks.first()).toHaveAttribute('aria-current', 'page');
+    await page.locator('#search').fill('');
     const description = page.getByRole('article', { name: 'Правила применения' });
     await expect(description).toBeVisible();
     for (const card of foundations) {
@@ -128,6 +151,16 @@ test('foundation and map descriptions stay with examples through navigation, com
     await page.setViewportSize({ width: 390, height: 844 });
     await expect(description).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+    await page.goto(served.url + '/api/tokens.html?theme=RED2&appearance=dark&density=compact');
+    await page.getByRole('button', { name: 'Навигация', exact: true }).click();
+    await expect(page.locator('nav h3')).toHaveCount(5);
+    await page.locator('#search').fill('настройка бренда');
+    await expect(page.locator('nav h3')).toHaveText(['Настройка бренда']);
+    await expect(foundationLinks).toHaveText(['Подбор цветов темы']);
+    await foundationLinks.first().click();
+    await expect(page.locator('#title')).toHaveText('Подбор цветов темы');
+    await expect(page.locator('#theme')).toContainText('RED2');
+    await expect(page.locator('#appearance')).toContainText('Тёмное');
     expect(errors).toEqual([]);
   } finally {
     served.server.closeAllConnections();

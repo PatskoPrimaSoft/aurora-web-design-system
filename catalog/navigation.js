@@ -1,5 +1,5 @@
 import {searchCards} from './search.js';
-import {familyFor} from './families.js';
+import {familyFor,foundationSections,foundationSectionFor} from './families.js';
 import {stateUrl} from './state.js';
 export function createCatalogueNavigation(cards,{base=location.href,tokensActive=false,onSelect}={}){
 const nav=document.getElementById('cards');
@@ -19,10 +19,17 @@ return function drawNavigation(state){
  }
  const orderedGroups=[...groups].sort(([nameA],[nameB])=>nameA.localeCompare(nameB,'ru',{numeric:true}));
  for(const[name,items]of orderedGroups){const h=document.createElement('h2');h.textContent=name;nav.append(h);
-  for(const card of items){const link=document.createElement('a');link.href=stateUrl(base,{...state,cardId:card.id});link.dataset.id=card.id;link.textContent=card.title;
+  const sections=name==='2 · Основы'?
+   [...foundationSections.map(section=>({title:section.title,items:section.cards.map(id=>items.find(card=>card.id===id)).filter(Boolean)})),
+    {title:'Другие основы',items:items.filter(card=>!foundationSectionFor(card))}]:[{items}];
+  for(const section of sections){
+   if(!section.items.length)continue;
+   if(section.title){const heading=document.createElement('h3');heading.textContent=section.title;nav.append(heading);}
+   for(const card of section.items){const link=document.createElement('a');link.href=stateUrl(base,{...state,cardId:card.id});link.dataset.id=card.id;link.textContent=card.title;
    if(card.status==='deprecated'){const status=document.createElement('span');status.className='nav-card-status';link.append(status);const root=window.ReactDOM.createRoot(status);navigationStatusRoots.push(root);renderStatus(root,card);}
    if(!tokensActive&&card.id===state.cardId)link.setAttribute('aria-current','page');
    link.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;if(onSelect){event.preventDefault();onSelect(card);}});nav.append(link);}
+  }
  }
 }
 
