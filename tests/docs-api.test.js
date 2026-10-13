@@ -70,6 +70,13 @@ try{
  assert.equal(blocks[0].textContent,source,'highlighting must preserve source for copying');
  assert.ok(blocks[0].querySelector('span'),'supported languages receive syntax highlighting');
  assert.equal(blocks[1].textContent,source,'unknown languages retain escaped plain text');
+ writeFileSync(join(scratch,'fold.md'),'<details>\n<summary>Полный код</summary>\n\n```js\nconst value = 1;\n```\n\n</details>\n\n<details onclick="alert(1)">\n<summary><img src=x onerror=alert(1)></summary>');
+ const folded=new JSDOM(renderMarkdown({root:scratch,path:'fold.md'}).html).window.document;
+ assert.equal(folded.querySelectorAll('details').length,1);
+ assert.equal(folded.querySelector('details').open,false);
+ assert.equal(folded.querySelector('details summary').textContent,'Полный код');
+ assert.ok(folded.querySelector('details pre code'));
+ assert.equal(folded.querySelector('[onclick],img'),null);
 }finally{rmSync(scratch,{recursive:true,force:true});}
 const model=readTokenModel(JSON.parse(readFileSync(join(actualRoot,'tokens/source.json'),'utf8'))),reference=renderTokenReference(model);
 assert.equal(reference.entries.length,model.names.length);assert.deepEqual(reference.entries.find(e=>e.name==='--ds-brand').aliases,model.aliases['--ds-brand']);

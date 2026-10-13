@@ -8,6 +8,15 @@ export function renderMarkdown({root,path,knownRoutes=new Map()}){
  const md=new MarkdownIt({html:false,linkify:false,typographer:false,
   highlight:(source,language)=>language&&hljs.getLanguage(language)?hljs.highlight(source,{language,ignoreIllegals:true}).value:'',
  }),links=[];
+ md.block.ruler.before('paragraph','disclosure',(state,startLine,endLine,silent)=>{
+  const line=state.src.slice(state.bMarks[startLine]+state.tShift[startLine],state.eMarks[startLine]);
+  const summary=line.match(/^<summary>([^<>]+)<\/summary>$/);
+  if(line!=='<details>'&&line!=='</details>'&&!summary)return false;
+  if(silent)return true;
+  const token=state.push('html_block','',0);
+  token.content=summary?`<summary>${escapeHtml(summary[1])}</summary>\n`:line+'\n';
+  token.map=[startLine,startLine+1];state.line=startLine+1;return true;
+ },{alt:['paragraph']});
  const headings=new Map();
  md.renderer.rules.heading_open=(tokens,idx,options,env,self)=>{
   const text=(tokens[idx+1]?.children??[]).map(token=>token.content).join('');
