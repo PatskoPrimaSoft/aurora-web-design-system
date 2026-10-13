@@ -38,8 +38,8 @@ test('preview settings preserve the light documentation shell and interactive st
     expect(await shellStyle()).toEqual(initial);
     await expect(checkbox).not.toBeChecked();
     await page.reload();
-    expect(await shellStyle()).toEqual(initial);
     await expect(page.locator('#appearance')).toContainText('Тёмное');
+    expect(await shellStyle()).toEqual(initial);
     await expect(frame.locator('html')).toHaveAttribute('data-ds-appearance','dark');
   }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });
