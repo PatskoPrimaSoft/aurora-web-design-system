@@ -21,8 +21,8 @@ test('typography stays readable and reveals full text with the keyboard in every
         const contents = page.locator('.page-contents');
         await expect(contents).toHaveCount(1);
         await expect(contents.locator('a')).toHaveText([
-          'Типографика в интерфейсе', 'Шрифты', 'Выбор роли', 'Справочник ролей',
-          'Читаемость и доступность', 'Числа и телеметрия', 'Трекинг и плотность',
+          'Типографика в интерфейсе', 'Краткая памятка', 'Читаемость и доступность',
+          'Числа и телеметрия', 'Справочник ролей', 'Шрифты', 'Настройка собственного стиля',
           'Пример кода', 'Дальше',
         ]);
         await expect(frame.locator('.contents')).toHaveCount(0);
@@ -37,8 +37,8 @@ test('typography stays readable and reveals full text with the keyboard in every
           await contents.locator('summary').click();
         }
         await expect(frame.getByRole('heading', {level: 2})).toHaveText([
-          'Типографика в интерфейсе', 'Шрифты', 'Выбор роли', 'Справочник ролей',
-          'Читаемость и доступность', 'Числа и телеметрия', 'Трекинг и плотность',
+          'Типографика в интерфейсе', 'Краткая памятка', 'Читаемость и доступность',
+          'Числа и телеметрия', 'Справочник ролей', 'Шрифты', 'Настройка собственного стиля',
         ]);
         if (theme === 'DEFAULT' && appearance === 'light') {
           await page.screenshot({path: testInfo.outputPath(`typography-top-${width}.png`)});

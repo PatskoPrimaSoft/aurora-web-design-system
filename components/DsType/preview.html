@@ -54,7 +54,7 @@ summary{cursor:pointer;font:var(--ds-type-ui)}
 </style></head><body><main>
 <section aria-labelledby="in-interface">
 <h2 id="in-interface" tabindex="-1">Типографика в интерфейсе</h2>
-<p class="lead">Выбирайте стиль по назначению текста. Размер, вес и межстрочный интервал уже собраны в роль; отступы помогают отделить связанные группы.</p>
+<p class="lead">Готовые компоненты уже оформляют свои заголовки, подписи и элементы управления. При создании собственной разметки выбирайте роль по назначению текста: она объединяет шрифт, размер, вес и межстрочный интервал. Ниже показано, как роли работают вместе.</p>
 <div class="sample" aria-label="Роли в карточке объекта">
 <div class="annotated"><p class="sample-title">Объект МАЗ 5440</p><span class="role-name">title</span></div>
 <div class="annotated"><p>Объект движется по маршруту Минск — Брест.</p><span class="role-name">body</span></div>
@@ -65,44 +65,15 @@ summary{cursor:pointer;font:var(--ds-type-ui)}
 </div>
 </section>
 
-<section aria-labelledby="fonts"><h2 id="fonts" tabindex="-1">Шрифты</h2>
-<p class="lead">Шрифты поставляются вместе с дизайн-системой. Основной текст интерфейса набирается Inter Tight, телеметрия и идентификаторы — JetBrains Mono.</p>
-<div class="pair">
-<div class="sample"><h3>Inter Tight</h3><p>Заголовки, описания, подписи и управление.</p><p class="font-specimen">Маршрут завершён</p><p class="font-characters">Аа Бб Дд Жж Йй Яя<br>0123456789 · 0/O · 1/I/l</p><p class="sample-caption">Роли используют веса 400, 500 и 600.</p></div>
-<div class="sample"><h3>JetBrains Mono</h3><p>Числовые столбцы, координаты, время и ID.</p><p class="font-specimen mono">62,4 км/ч</p><p class="font-characters mono">Аа Бб Дд Жж Йй Яя<br>0123456789 · 0/O · 1/I/l</p><p class="sample-caption">Роль mono использует вес 400.</p></div>
-</div>
-</section>
-
-<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Выбор роли</h2>
-<p class="lead">Начните с назначения. Для заголовка учитывайте место в структуре интерфейса; для данных — способ чтения и сравнения.</p>
+<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+<p class="lead">Для собственной разметки начните с назначения текста. В готовых компонентах подходящие роли уже выбраны.</p>
 <dl class="choices">
 <dt>Заголовок</dt><dd><code>display</code> — экран; <code>title</code> — панель или диалог; <code>section</code> — раздел внутри них.</dd>
-<dt>Основной текст</dt><dd><code>body</code> — описание или значение; <code>body-strong</code> — имя объекта или опорная ячейка.</dd>
-<dt>Управление</dt><dd><code>ui</code> — кнопка, пункт меню, таб или поле ввода.</dd>
+<dt>Основной текст</dt><dd><code>body</code> — описание, значение поля или обычная ячейка; <code>body-strong</code> — имя объекта или опорная ячейка.</dd>
+<dt>Управление</dt><dd><code>ui</code> — кнопка, пункт меню или вкладка.</dd>
 <dt>Подпись</dt><dd><code>caption</code> — вспомогательная строка; <code>eyebrow</code> — короткая метка группы или столбца.</dd>
-<dt>Телеметрия</dt><dd><code>mono</code> — скорость, координаты, время и идентификатор.</dd>
+<dt>Данные</dt><dd><code>mono</code> — сравниваемые числовые данные, координаты и идентификаторы.</dd>
 </dl>
-</section>
-
-<section aria-labelledby="roles"><h2 id="roles" tabindex="-1">Справочник ролей</h2>
-<p class="lead">Девять ролей используют семь размеров. Назначайте готовую роль через <code>font</code>. Для display, title и eyebrow дополнительно задавайте токен трекинга.</p>
-<div class="role-group"><h3>Заголовки</h3>
-<div class="role-row" data-type-role="display"><div><p class="role-sample" style="font:var(--ds-type-display);letter-spacing:var(--ds-tracking-tight)">Обзор парка</p><p>Главный заголовок экрана. Один на страницу.</p></div><div class="role-meta"><code class="role-token">--ds-type-display</code><p>30px · вес 600 · интервал 1,2</p><p>Трекинг: <code>--ds-tracking-tight</code></p></div></div>
-<div class="role-row" data-type-role="title"><div><p class="role-sample" style="font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight)">Объекты · 148</p><p>Заголовок панели, диалога или карточки.</p></div><div class="role-meta"><code class="role-token">--ds-type-title</code><p>20px · вес 600 · интервал 1,2</p><p>Трекинг: <code>--ds-tracking-tight</code></p></div></div>
-<div class="role-row" data-type-role="section"><div><p class="role-sample" style="font:var(--ds-type-section)">Эко-вождение</p><p>Раздел внутри панели или формы.</p></div><div class="role-meta"><code class="role-token">--ds-type-section</code><p>16px · вес 600 · интервал 1,35</p></div></div>
-</div>
-<div class="role-group"><h3>Текст и управление</h3>
-<div class="role-row" data-type-role="body"><div><p class="role-sample" style="font:var(--ds-type-body)">Водитель не назначен на этот объект.</p><p>Описания, ячейки таблиц и значения полей.</p></div><div class="role-meta"><code class="role-token">--ds-type-body</code><p>14px · вес 400 · интервал 1,5</p></div></div>
-<div class="role-row" data-type-role="body-strong"><div><p class="role-sample" style="font:var(--ds-type-body-strong)">МАЗ 5440 · AB 1234-7</p><p>Имя объекта, опорная ячейка строки или итог.</p></div><div class="role-meta"><code class="role-token">--ds-type-body-strong</code><p>14px · вес 500 · интервал 1,5</p></div></div>
-<div class="role-row" data-type-role="ui"><div><p class="role-sample" style="font:var(--ds-type-ui)">Переместить в архив</p><p>Кнопки, табы, пункты меню и поля ввода.</p></div><div class="role-meta"><code class="role-token">--ds-type-ui</code><p>13px · вес 500 · интервал 1,35</p></div></div>
-</div>
-<div class="role-group"><h3>Подписи</h3>
-<div class="role-row" data-type-role="caption"><div><p class="role-sample" style="font:var(--ds-type-caption)">Последнее сообщение — 14:32</p><p>Подпись под полем, пояснение или вторая строка ячейки.</p></div><div class="role-meta"><code class="role-token">--ds-type-caption</code><p>12px · вес 400 · интервал 1,35</p></div></div>
-<div class="role-row" data-type-role="eyebrow"><div><p class="role-sample sample-eyebrow">Объект</p><p>Короткая метка группы или заголовок столбца. Не используйте для предложений и основного текста.</p></div><div class="role-meta"><code class="role-token">--ds-type-eyebrow</code><p>11px · вес 600 · интервал 1,35</p><p>Верхний регистр и <code>--ds-tracking-eyebrow</code></p></div></div>
-</div>
-<div class="role-group"><h3>Данные</h3>
-<div class="role-row" data-type-role="mono"><div><p class="role-sample" style="font:var(--ds-type-mono)">62,4 км/ч · 53.9045, 27.5615</p><p>Телеметрия, координаты, IMEI, время и ID.</p></div><div class="role-meta"><code class="role-token">--ds-type-mono</code><p>13px · вес 400 · интервал 1,35</p></div></div>
-</div>
 </section>
 
 <section aria-labelledby="readability"><h2 id="readability" tabindex="-1">Читаемость и доступность</h2>
@@ -133,15 +104,44 @@ summary{cursor:pointer;font:var(--ds-type-ui)}
 <p style="margin-top:24px">Точность выбирайте по смыслу данных. Если значения имеют разную точность, выравнивайте целую и дробную части отдельно. На осях и в легендах графиков допустимы <code>caption</code> и <code>font-variant-numeric: tabular-nums</code>; одинаковая ширина цифр также не заменяет форматирование.</p>
 </section>
 
-<section aria-labelledby="tracking-density"><h2 id="tracking-density" tabindex="-1">Трекинг и плотность</h2>
-<h3>Трекинг задаётся отдельно</h3>
-<p class="lead">Свойство <code>font</code> объединяет семейство, размер, вес и межстрочный интервал. Межбуквенный интервал задавайте через <code>letter-spacing</code>: tight для display и title, eyebrow для коротких меток верхнего регистра.</p>
+<section aria-labelledby="roles"><h2 id="roles" tabindex="-1">Справочник ролей</h2>
+<p class="lead">Образцы и параметры девяти ролей для собственной разметки. Применение токенов показано в разделе «Настройка собственного стиля».</p>
+<div class="role-group"><h3>Заголовки</h3>
+<div class="role-row" data-type-role="display"><div><p class="role-sample" style="font:var(--ds-type-display);letter-spacing:var(--ds-tracking-tight)">Обзор парка</p><p>Главный заголовок экрана. Один на страницу.</p></div><div class="role-meta"><code class="role-token">--ds-type-display</code><p>30px · вес 600 · интервал 1,2</p><p>Межбуквенный интервал: <code>--ds-tracking-tight</code></p></div></div>
+<div class="role-row" data-type-role="title"><div><p class="role-sample" style="font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight)">Объекты · 148</p><p>Заголовок панели, диалога или карточки.</p></div><div class="role-meta"><code class="role-token">--ds-type-title</code><p>20px · вес 600 · интервал 1,2</p><p>Межбуквенный интервал: <code>--ds-tracking-tight</code></p></div></div>
+<div class="role-row" data-type-role="section"><div><p class="role-sample" style="font:var(--ds-type-section)">Эко-вождение</p><p>Раздел внутри панели или формы.</p></div><div class="role-meta"><code class="role-token">--ds-type-section</code><p>16px · вес 600 · интервал 1,35</p></div></div>
+</div>
+<div class="role-group"><h3>Текст и управление</h3>
+<div class="role-row" data-type-role="body"><div><p class="role-sample" style="font:var(--ds-type-body)">Водитель не назначен на этот объект.</p><p>Описания, ячейки таблиц и значения полей.</p></div><div class="role-meta"><code class="role-token">--ds-type-body</code><p>14px · вес 400 · интервал 1,5</p></div></div>
+<div class="role-row" data-type-role="body-strong"><div><p class="role-sample" style="font:var(--ds-type-body-strong)">МАЗ 5440 · AB 1234-7</p><p>Имя объекта, опорная ячейка строки или итог.</p></div><div class="role-meta"><code class="role-token">--ds-type-body-strong</code><p>14px · вес 500 · интервал 1,5</p></div></div>
+<div class="role-row" data-type-role="ui"><div><p class="role-sample" style="font:var(--ds-type-ui)">Переместить в архив</p><p>Кнопки, вкладки и пункты меню.</p></div><div class="role-meta"><code class="role-token">--ds-type-ui</code><p>13px · вес 500 · интервал 1,35</p></div></div>
+</div>
+<div class="role-group"><h3>Подписи</h3>
+<div class="role-row" data-type-role="caption"><div><p class="role-sample" style="font:var(--ds-type-caption)">Последнее сообщение — 14:32</p><p>Подпись под полем, пояснение или вторая строка ячейки.</p></div><div class="role-meta"><code class="role-token">--ds-type-caption</code><p>12px · вес 400 · интервал 1,35</p></div></div>
+<div class="role-row" data-type-role="eyebrow"><div><p class="role-sample sample-eyebrow">Объект</p><p>Короткая метка группы или заголовок столбца. Не используйте для предложений и основного текста.</p></div><div class="role-meta"><code class="role-token">--ds-type-eyebrow</code><p>11px · вес 600 · интервал 1,35</p><p>Верхний регистр и <code>--ds-tracking-eyebrow</code></p></div></div>
+</div>
+<div class="role-group"><h3>Данные</h3>
+<div class="role-row" data-type-role="mono"><div><p class="role-sample" style="font:var(--ds-type-mono)">62,4 км/ч · 53.9045, 27.5615</p><p>Телеметрия, координаты и ID; время в столбцах данных.</p></div><div class="role-meta"><code class="role-token">--ds-type-mono</code><p>13px · вес 400 · интервал 1,35</p></div></div>
+</div>
+</section>
+
+<section aria-labelledby="fonts"><h2 id="fonts" tabindex="-1">Шрифты</h2>
+<p class="lead">Шрифты поставляются вместе с дизайн-системой. Основной текст интерфейса набирается Inter Tight, сравниваемые числовые данные и идентификаторы — JetBrains Mono.</p>
 <div class="pair">
-<div class="sample"><p class="sample-label">Без трекинга</p><p class="tracking-sample">Обзор парка</p></div>
-<div class="sample"><p class="sample-label">С токеном tracking-tight</p><p class="tracking-sample tight">Обзор парка</p></div>
+<div class="sample"><h3>Inter Tight</h3><p>Заголовки, описания, подписи и управление.</p><p class="font-specimen">Маршрут завершён</p><p class="font-characters">Аа Бб Дд Жж Йй Яя<br>0123456789 · 0/O · 1/I/l</p><p class="sample-caption">Роли используют веса 400, 500 и 600.</p></div>
+<div class="sample"><h3>JetBrains Mono</h3><p>Числовые столбцы, координаты и ID.</p><p class="font-specimen mono">62,4 км/ч</p><p class="font-characters mono">Аа Бб Дд Жж Йй Яя<br>0123456789 · 0/O · 1/I/l</p><p class="sample-caption">Роль mono использует вес 400.</p></div>
+</div>
+</section>
+
+<section aria-labelledby="tracking-density"><h2 id="tracking-density" tabindex="-1">Настройка собственного стиля</h2>
+<h3>Шрифт, интервалы и цвет</h3>
+<p class="lead">Назначайте роль через <code>font</code>. Межбуквенный интервал (трекинг) задавайте отдельно через <code>letter-spacing</code>: tight для display и title, eyebrow для коротких меток верхнего регистра. Цвет также задаётся отдельно — текстовый токен его не включает. В готовых компонентах эти стили уже согласованы.</p>
+<div class="pair">
+<div class="sample"><p class="sample-label">Обычный межбуквенный интервал</p><p class="tracking-sample">Обзор парка</p></div>
+<div class="sample"><p class="sample-label">С уменьшенным интервалом</p><p class="tracking-sample tight">Обзор парка</p></div>
 </div>
 <h3 style="margin-top:32px">Плотность сохраняет размер текста</h3>
-<p class="lead">Compact уменьшает высоты строк и отступы. Роли body и mono остаются того же размера, что и в cozy.</p>
+<p class="lead">Компактный режим уменьшает высоты строк и отступы, сохраняя размер текста. Подробнее — <a href="../DsDensity/preview.html">«Плотность интерфейса»</a>.</p>
 <div class="pair">
 <div class="sample" data-ds-density="cozy"><p class="sample-label">Cozy · строка 44px</p><table class="data-table density-table" aria-label="Обычная плотность"><thead><tr><th scope="col">Объект</th><th scope="col">км/ч</th></tr></thead><tbody><tr><td>МАЗ 5440</td><td>62,40</td></tr><tr><td>Volvo FH16</td><td>7,08</td></tr></tbody></table></div>
 <div class="sample" data-ds-density="compact"><p class="sample-label">Compact · строка 34px</p><table class="data-table density-table" aria-label="Компактная плотность"><thead><tr><th scope="col">Объект</th><th scope="col">км/ч</th></tr></thead><tbody><tr><td>МАЗ 5440</td><td>62,40</td></tr><tr><td>Volvo FH16</td><td>7,08</td></tr></tbody></table></div>
