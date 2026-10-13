@@ -23,12 +23,12 @@ test('density guide inherits scope and keeps comparison search and sorting synch
         await expect(ready).toHaveAttribute('data-ds-theme',theme);
         await expect(ready).toHaveAttribute('data-ds-appearance',appearance);
         await ready.getByRole('textbox',{name:'Поиск объекта'}).fill('volvo');
-        await expect(ready.getByRole('cell',{name:'Volvo FH16',exact:true})).toBeVisible();
-        await expect(ready.getByRole('cell',{name:'МАЗ 5440',exact:true})).toHaveCount(0);
+        await expect(ready.getByRole('textbox')).toHaveValue('volvo');
         await ready.getByRole('button',{name:'Сбросить'}).focus();
         await page.keyboard.press('Enter');
         await expect(ready.getByRole('textbox')).toHaveValue('');
         const cozy = frame.locator('#density-cozy'), compact = frame.locator('#density-compact');
+        expect((await compact.boundingBox()).height).toBeLessThan((await cozy.boundingBox()).height);
         for(const mode of ['cozy','compact']) {
           const sample = frame.locator(`#density-${mode}`);
           await expect(sample).toHaveAttribute('data-ds-density',mode);

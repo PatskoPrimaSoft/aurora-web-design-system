@@ -10,7 +10,7 @@ p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
 code{font:var(--ds-type-mono);overflow-wrap:anywhere}
 a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
 .lead{color:var(--ds-fg-muted);margin-bottom:24px}
-.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.pair>*{min-width:0}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}.pair>*{min-width:0}
 .scene{padding:24px;background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
 .caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}.mode{font:var(--ds-type-body-strong);margin-bottom:16px}
 .choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
@@ -23,26 +23,26 @@ details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:g
 @media(max-width:640px){main{padding:20px 0}.pair,.choices{grid-template-columns:minmax(0,1fr)}.scene{padding:16px}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}}
 </style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
 <section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Плотность в интерфейсе</h2>
-<p class="lead">Плотность определяет размеры элементов управления и расстояния между ними. Готовые компоненты автоматически используют размеры и отступы выбранного режима; текстовые роли и поведение сохраняются.</p>
+<p class="lead">Плотность меняет высоту кнопок, полей и строк, а также отступы. Готовые компоненты подстраиваются автоматически. Размер текста сохраняется.</p>
 <div class="scene" id="ready-interface"></div>
-<p class="caption" style="margin-top:16px">Измените плотность в шапке каталога. Попробуйте найти объект, отсортировать скорость и сбросить поиск.</p></section>
+<p class="caption" style="margin-top:16px">Переключите плотность в шапке и сравните размеры.</p></section>
 
 <section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2><dl class="choices">
-<dt>Обычная · cozy</dt><dd>Начните с неё для форм, настроек и повседневной работы. Более свободные отступы помогают различать элементы управления.</dd>
-<dt>Компактная · compact</dt><dd>Подходит для таблиц и списков, когда важно видеть больше данных одновременно. Проверьте удобство нажатия и длинные подписи.</dd>
-<dt>Отдельная область</dt><dd>Можно сделать таблицу компактной внутри обычной страницы. Задавайте плотность всему блоку, чтобы его поля, кнопки и строки оставались согласованными.</dd>
-</dl><p class="caption" style="margin-top:16px"><a href="../DsBrandThemes/preview.html">Бренд</a> и <a href="../DsAppearance/preview.html">светлый и тёмный режим</a> выбираются независимо от плотности.</p></section>
+<dt>Обычная · cozy</dt><dd>Основной выбор для форм, настроек и повседневной работы.</dd>
+<dt>Компактная · compact</dt><dd>Для таблиц и списков, когда важно видеть больше данных одновременно.</dd>
+</dl><p style="margin-top:16px">Компактной может быть отдельная область, например таблица внутри обычной страницы. Задавайте плотность всему блоку вместе с его полями и кнопками.</p>
+<p class="caption"><a href="../DsBrandThemes/preview.html">Бренд</a> и <a href="../DsAppearance/preview.html">светлый и тёмный режим</a> выбираются независимо от плотности.</p></section>
 
 <section aria-labelledby="comparison"><h2 id="comparison" tabindex="-1">Один список в двух плотностях</h2>
-<p class="lead">Сравните высоту поля, кнопки и строк, а также промежутки внутри панели. Данные и размер основного текста одинаковы.</p>
+<p class="lead">Одинаковые данные и размер текста; отличаются высота элементов и отступы.</p>
 <div class="pair" id="density-comparison"></div>
-<p class="caption" style="margin-top:16px">Поиск, сброс и сортировка синхронизированы. Здесь плотности закреплены для сравнения; бренд и оформление берутся из шапки каталога.</p></section>
+<p class="caption" style="margin-top:16px">Поиск и сортировка общие для двух примеров. Плотности закреплены для сравнения.</p></section>
 
 <section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Что проверить при уплотнении</h2><ul class="rules">
 <li><strong>Текст читается.</strong> Не уменьшайте шрифт ради дополнительных строк. Выбирайте <a href="../DsType/preview.html">текстовую роль</a> по назначению.</li>
 <li><strong>Управление удобно.</strong> Проверьте нажатия, клавиатурный фокус и соседние кнопки. Компактная плотность сама по себе не гарантирует удобство на сенсорном экране.</li>
 <li><strong>Подписи помещаются.</strong> Проверьте длинные названия и узкий экран. Не скрывайте важные данные ради компактности; правила переноса — в разделе <a href="../DsBreakpoints/preview.html">«Адаптивность и брейкпоинты»</a>.</li>
-<li><strong>Группы различимы.</strong> Сохраняйте заметные промежутки между разными задачами. Компактность не означает одинаково малые отступы везде.</li>
+<li><strong>Группы различимы.</strong> Внутри группы — меньше расстояния, между разными задачами — больше. Сохраняйте эту разницу и в компактном режиме.</li>
 </ul></section>
 
 <section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Для собственных стилей</h2>
@@ -69,7 +69,10 @@ function ObjectList({query,setQuery,sort,setSort,visible}){return <DsPanel title
   <DsField label="Поиск объекта" icon="search" placeholder="Название объекта" value={query} onChange={event=>setQuery(event.target.value)}/>
   <DsTable columns={columns} rows={visible} sortKey={sort.key} sortDir={sort.dir} onSort={(key,dir)=>setSort({key,dir})} empty="Объекты не найдены" ariaLabel="Объекты и скорость"/>
 </DsPanel>;}
-function Ready(){return <ObjectList {...useObjects()}/>;}
+function Ready(){return <form onSubmit={event=>event.preventDefault()} style={{display:'grid',gap:'var(--ds-gap-md)'}}>
+  <DsField label="Поиск объекта" name="object"/>
+  <div><DsButton type="reset" tone="secondary">Сбросить</DsButton></div>
+</form>;}
 function Comparison(){const state=useObjects();return <>{['cozy','compact'].map(density=><div className="scene" id={'density-'+density} data-fixed-density={density} data-ds-density={density} key={density}><p className="mode">{density==='cozy'?'Обычная':'Компактная'}</p><ObjectList {...state}/></div>)}</>;}
 ReactDOM.createRoot(document.getElementById('ready-interface')).render(<Ready/>);
 ReactDOM.createRoot(document.getElementById('density-comparison')).render(<Comparison/>);
