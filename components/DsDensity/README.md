@@ -1,25 +1,78 @@
 # Плотность интерфейса
 
-## Плотность задаёт контейнер
+## Пример кода
 
-Пример использует настоящие `DsPanel`, `DsField`, `DsButton` и `DsTable`.
-Плотность меняет размеры и отступы через токены; отдельные размеры
-компонентам передавать не нужно.
-
-Для всей страницы задайте `data-ds-density="cozy"` или `"compact"` на `<html>`.
-Для отдельного блока задайте атрибут на его контейнере:
+Компактная область с готовыми компонентами. Поле и кнопка наследуют
+плотность контейнера; промежуток между ними задаётся токеном.
 
 ```jsx
-<section data-ds-density="compact">
-  <DsField label="Поиск объекта" />
-  <DsTable columns={columns} rows={rows} />
-</section>
+import {DsField, DsButton} from '@primasoftllc/design-system';
+import '@primasoftllc/design-system/styles.css';
+
+export function ObjectSearch() {
+  return (
+    <form data-ds-density="compact" onSubmit={event => event.preventDefault()}
+      style={{display: 'grid', gap: 'var(--ds-gap-md)'}}>
+      <DsField label="Поиск объекта" name="object" />
+      <div><DsButton type="reset" tone="secondary">Сбросить</DsButton></div>
+    </form>
+  );
+}
 ```
 
-Вложенные компоненты наследуют токены ближайшего контейнера с заданной
-плотностью. Например, компактную таблицу можно разместить на обычной странице.
-Тема (`data-ds-theme`) и цветовой режим (`data-ds-appearance`) задаются независимо.
+<details>
+<summary>Полный код списка с поиском и сортировкой</summary>
 
-В этой карточке плотности примеров закреплены локально для сравнения;
-переключатели темы и цветового режима каталога применяются к обоим примерам.
-Полный API таблицы и её состояния находятся в [DsTable](../DsTable/README.md).
+Код воспроизводит первый пример. Плотность контейнера можно менять
+между `cozy` и `compact` без изменения компонентов.
+
+```jsx
+import {useState} from 'react';
+import {DsPanel, DsField, DsButton, DsTable} from '@primasoftllc/design-system';
+import '@primasoftllc/design-system/styles.css';
+
+const rows = [
+  {id: 1, name: 'МАЗ 5440', speed: 62},
+  {id: 2, name: 'Volvo FH16', speed: 0},
+  {id: 3, name: 'ГАЗ Next', speed: 41},
+  {id: 4, name: 'Renault T', speed: 0},
+];
+const columns = [
+  {key: 'name', label: 'Объект', strong: true, sortable: true},
+  {key: 'speed', label: 'Скорость, км/ч', mono: true, align: 'right', sortable: true},
+];
+
+export function ObjectList({density = 'cozy'}) {
+  const [query, setQuery] = useState('');
+  const [sort, setSort] = useState({key: 'name', dir: 'asc'});
+  const visible = rows
+    .filter(row => row.name.toLowerCase().includes(query.trim().toLowerCase()))
+    .sort((a, b) => (sort.key === 'name'
+      ? a.name.localeCompare(b.name) : a.speed - b.speed)
+      * (sort.dir === 'asc' ? 1 : -1));
+
+  return (
+    <section data-ds-density={density}
+      style={{background: 'var(--ds-bg)', color: 'var(--ds-fg)', padding: 24}}>
+      <DsPanel title="Объекты" headingLevel="h3"
+        bodyStyle={{gap: 'var(--ds-gap-md)'}}
+        actions={<DsButton tone="secondary" onClick={() => setQuery('')}>Сбросить</DsButton>}>
+        <DsField label="Поиск объекта" icon="search" placeholder="Название объекта"
+          value={query} onChange={event => setQuery(event.target.value)} />
+        <DsTable columns={columns} rows={visible} sortKey={sort.key} sortDir={sort.dir}
+          onSort={(key, dir) => setSort({key, dir})}
+          empty="Объекты не найдены" ariaLabel="Объекты и скорость" />
+      </DsPanel>
+    </section>
+  );
+}
+```
+
+</details>
+
+## Дальше
+
+- [Типографика](../DsType/README.md) — роли текста и читаемость данных.
+- [Адаптивность и брейкпоинты](../DsBreakpoints/README.md) — размещение на узком экране.
+- [Таблица](../DsTable/README.md) — сортировка, выбор строк и другие сценарии.
+- [Светлый и тёмный режим](../DsAppearance/README.md) — оформление независимо от плотности.

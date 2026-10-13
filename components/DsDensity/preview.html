@@ -1,56 +1,80 @@
-<!-- @dsCard name="Плотность интерфейса" group="2 · Основы" height=540 aliases="плотность|density|cozy|compact" subtitle="Одинаковые компоненты в cozy и compact; поиск и сортировка синхронизированы" page -->
-<!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8"><title>Плотность интерфейса</title><style>
+<!-- @dsCard name="Плотность интерфейса" group="2 · Основы" scopeMode="inherit" aliases="плотность|density|cozy|compact" subtitle="Как выбирать размеры и отступы для форм и насыщенных данными экранов" page -->
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Плотность интерфейса</title><style>
 html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:24px;max-width:1180px;margin:0 auto;-webkit-font-smoothing:antialiased}
-.comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
-.sample{min-width:0}
-.sample-heading{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
-.sample-heading h2{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0}
-.sample p{margin:0 0 16px;color:var(--ds-fg-muted);font:var(--ds-type-caption)}
-code{font:var(--ds-type-mono)}
-.sample-heading code{color:var(--ds-fg-subtle)}
-.metrics{display:flex;flex-wrap:wrap;gap:4px 16px;color:var(--ds-fg-muted);font:var(--ds-type-caption)}
-@media(max-width:720px){body{padding:16px}.comparison{grid-template-columns:minmax(0,1fr)}}
-</style></head><body><div id="root"></div><script type="text/babel">
-const { DsPanel, DsField, DsButton, DsTable } = window.AuroraWebDesignSystem_96e210;
-const rows = [
-  { id: 1, name: 'MAZ 5440', speed: 62 },
-  { id: 2, name: 'Volvo FH16', speed: 0 },
-  { id: 3, name: 'GAZ Next', speed: 41 },
-  { id: 4, name: 'Renault T', speed: 0 },
-];
-const columns = [
-  { key: 'name', label: 'Объект', strong: true, sortable: true },
-  { key: 'speed', label: 'Скорость, км/ч', mono: true, align: 'right', sortable: true },
-];
-function App() {
-  const [query, setQuery] = React.useState('');
-  const [sort, setSort] = React.useState({ key: 'name', dir: 'asc' });
-  const visible = rows.filter(row => row.name.toLowerCase().includes(query.trim().toLowerCase()))
-    .sort((a, b) => (sort.key === 'name' ? a.name.localeCompare(b.name) : a.speed - b.speed) * (sort.dir === 'asc' ? 1 : -1));
-  return <main>
-    <div className="comparison">
-      {['cozy', 'compact'].map(density => <section key={density} className="sample" data-ds-density={density} aria-labelledby={'heading-' + density}>
-        <div className="sample-heading">
-          <h2 id={'heading-' + density}>{density === 'cozy' ? 'Обычная' : 'Компактная'}</h2><code>{density}</code>
-        </div>
-        <p>{density === 'cozy' ? 'Для повседневной работы и форм.' : 'Для насыщенных данными рабочих экранов.'}</p>
-        <DsPanel title="Объекты" bodyStyle={{ gap: 'var(--ds-gap-md)' }}
-          actions={<DsButton tone="secondary" onClick={() => setQuery('')}>Сбросить</DsButton>}
-          footer={<div className="metrics">
-            <span>Строка <code>{density === 'cozy' ? '44' : '34'}px</code></span>
-            <span>Кнопка <code>{density === 'cozy' ? '36' : '30'}px</code></span>
-            <span>Поле <code>{density === 'cozy' ? '40' : '32'}px</code></span>
-          </div>}>
-          <DsField id={'search-' + density} label="Поиск объекта" icon="search" placeholder="Название объекта"
-            value={query} onChange={event => setQuery(event.target.value)} />
-          <DsTable columns={columns} rows={visible} sortKey={sort.key} sortDir={sort.dir}
-            onSort={(key, dir) => setSort({ key, dir })} empty="Объекты не найдены" />
-        </DsPanel>
-      </section>)}
-    </div>
-  </main>;
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.pair>*{min-width:0}
+.scene{padding:24px;background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}.mode{font:var(--ds-type-body-strong);margin-bottom:16px}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{padding-left:20px;max-width:74ch;margin:24px 0 0}.rules li+li{margin-top:12px}
+summary{cursor:pointer;font:var(--ds-type-ui);padding:10px 12px;border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);background:var(--ds-surface)}
+summary:hover{background:var(--ds-surface-hover)}summary:focus-visible,a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:grid;gap:24px}
+.table-scroll{overflow-x:auto}.sizes{width:100%;border-collapse:collapse;text-align:left}.sizes th,.sizes td{padding:12px 8px;border-bottom:1px solid var(--ds-divider)}.sizes th{font:var(--ds-type-body-strong)}.sizes td:not(:first-child){font:var(--ds-type-mono);white-space:nowrap}
+@media(max-width:640px){main{padding:20px 0}.pair,.choices{grid-template-columns:minmax(0,1fr)}.scene{padding:16px}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}}
+</style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Плотность в интерфейсе</h2>
+<p class="lead">Плотность определяет размеры элементов управления и расстояния между ними. Готовые компоненты автоматически используют размеры и отступы выбранного режима; текстовые роли и поведение сохраняются.</p>
+<div class="scene" id="ready-interface"></div>
+<p class="caption" style="margin-top:16px">Измените плотность в шапке каталога. Попробуйте найти объект, отсортировать скорость и сбросить поиск.</p></section>
+
+<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2><dl class="choices">
+<dt>Обычная · cozy</dt><dd>Начните с неё для форм, настроек и повседневной работы. Более свободные отступы помогают различать элементы управления.</dd>
+<dt>Компактная · compact</dt><dd>Подходит для таблиц и списков, когда важно видеть больше данных одновременно. Проверьте удобство нажатия и длинные подписи.</dd>
+<dt>Отдельная область</dt><dd>Можно сделать таблицу компактной внутри обычной страницы. Задавайте плотность всему блоку, чтобы его поля, кнопки и строки оставались согласованными.</dd>
+</dl><p class="caption" style="margin-top:16px"><a href="../DsBrandThemes/preview.html">Бренд</a> и <a href="../DsAppearance/preview.html">светлый и тёмный режим</a> выбираются независимо от плотности.</p></section>
+
+<section aria-labelledby="comparison"><h2 id="comparison" tabindex="-1">Один список в двух плотностях</h2>
+<p class="lead">Сравните высоту поля, кнопки и строк, а также промежутки внутри панели. Данные и размер основного текста одинаковы.</p>
+<div class="pair" id="density-comparison"></div>
+<p class="caption" style="margin-top:16px">Поиск, сброс и сортировка синхронизированы. Здесь плотности закреплены для сравнения; бренд и оформление берутся из шапки каталога.</p></section>
+
+<section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Что проверить при уплотнении</h2><ul class="rules">
+<li><strong>Текст читается.</strong> Не уменьшайте шрифт ради дополнительных строк. Выбирайте <a href="../DsType/preview.html">текстовую роль</a> по назначению.</li>
+<li><strong>Управление удобно.</strong> Проверьте нажатия, клавиатурный фокус и соседние кнопки. Компактная плотность сама по себе не гарантирует удобство на сенсорном экране.</li>
+<li><strong>Подписи помещаются.</strong> Проверьте длинные названия и узкий экран. Не скрывайте важные данные ради компактности; правила переноса — в разделе <a href="../DsBreakpoints/preview.html">«Адаптивность и брейкпоинты»</a>.</li>
+<li><strong>Группы различимы.</strong> Сохраняйте заметные промежутки между разными задачами. Компактность не означает одинаково малые отступы везде.</li>
+</ul></section>
+
+<section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Для собственных стилей</h2>
+<p>Используйте токены размеров и отступов, чтобы собственная разметка менялась вместе с готовыми компонентами. Внешние промежутки задаёт родитель: фиксированный отступ в px не изменится при переключении плотности.</p>
+<details id="density-reference"><summary>Показать подключение и размеры</summary><div class="reference-content">
+<div><h3>Плотность задаётся контейнером</h3><p>Атрибут <code>data-ds-density="cozy"</code> или <code>"compact"</code> действует на элемент и его содержимое. Вложенный контейнер может задать другую плотность. Для промежутков используйте, например, <code>gap: var(--ds-gap-md)</code>, для внутренних отступов — <code>padding: var(--ds-pad-md)</code>.</p></div>
+<div class="table-scroll"><table class="sizes"><caption>Базовые размеры, px</caption><thead><tr><th scope="col">Назначение и токен</th><th scope="col">Обычная</th><th scope="col">Компактная</th></tr></thead><tbody>
+<tr><td>Средняя кнопка · <code>--ds-control-h</code></td><td>36</td><td>30</td></tr>
+<tr><td>Поле · <code>--ds-field-h</code></td><td>40</td><td>32</td></tr>
+<tr><td>Строка · <code>--ds-row-h</code></td><td>44</td><td>34</td></tr>
+<tr><td>Промежуток · <code>--ds-gap-md</code></td><td>16</td><td>12</td></tr>
+<tr><td>Внутренний отступ · <code>--ds-pad-md</code></td><td>16</td><td>12</td></tr>
+</tbody></table></div><p class="caption">Высота строки зависит и от содержимого: длинный текст может потребовать больше места. Полные шкалы доступны в разделе «Токены» в меню каталога.</p>
+</div></details></section>
+</main><script type="text/babel">
+const {DsPanel,DsField,DsButton,DsTable}=window.AuroraWebDesignSystem_96e210;
+const rows=[{id:1,name:'МАЗ 5440',speed:62},{id:2,name:'Volvo FH16',speed:0},{id:3,name:'ГАЗ Next',speed:41},{id:4,name:'Renault T',speed:0}];
+const columns=[{key:'name',label:'Объект',strong:true,sortable:true},{key:'speed',label:'Скорость, км/ч',mono:true,align:'right',sortable:true}];
+function useObjects(){const [query,setQuery]=React.useState(''),[sort,setSort]=React.useState({key:'name',dir:'asc'});
+  const visible=rows.filter(row=>row.name.toLowerCase().includes(query.trim().toLowerCase())).sort((a,b)=>(sort.key==='name'?a.name.localeCompare(b.name):a.speed-b.speed)*(sort.dir==='asc'?1:-1));
+  return {query,setQuery,sort,setSort,visible};
 }
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+function ObjectList({query,setQuery,sort,setSort,visible}){return <DsPanel title="Объекты" headingLevel="h3" bodyStyle={{gap:'var(--ds-gap-md)'}} actions={<DsButton tone="secondary" onClick={()=>setQuery('')}>Сбросить</DsButton>}>
+  <DsField label="Поиск объекта" icon="search" placeholder="Название объекта" value={query} onChange={event=>setQuery(event.target.value)}/>
+  <DsTable columns={columns} rows={visible} sortKey={sort.key} sortDir={sort.dir} onSort={(key,dir)=>setSort({key,dir})} empty="Объекты не найдены" ariaLabel="Объекты и скорость"/>
+</DsPanel>;}
+function Ready(){return <ObjectList {...useObjects()}/>;}
+function Comparison(){const state=useObjects();return <>{['cozy','compact'].map(density=><div className="scene" id={'density-'+density} data-fixed-density={density} data-ds-density={density} key={density}><p className="mode">{density==='cozy'?'Обычная':'Компактная'}</p><ObjectList {...state}/></div>)}</>;}
+ReactDOM.createRoot(document.getElementById('ready-interface')).render(<Ready/>);
+ReactDOM.createRoot(document.getElementById('density-comparison')).render(<Comparison/>);
+function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){
+  scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';scene.dataset.dsAppearance=root.dataset.dsAppearance||'light';scene.dataset.dsDensity=scene.dataset.fixedDensity||root.dataset.dsDensity||'cozy';
+}}
+refresh();new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density','style']});
 </script></body></html>

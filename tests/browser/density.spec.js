@@ -1,51 +1,85 @@
-import { test, expect } from '@playwright/test';
-import { buildCatalogue } from '../../tools/catalog/build.mjs';
-import { serveRoot } from '../../tools/baseline/render.mjs';
-import { fileURLToPath } from 'node:url';
+import {test, expect} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import {buildCatalogue} from '../../tools/catalog/build.mjs';
+import {serveRoot} from '../../tools/baseline/render.mjs';
+import {fileURLToPath} from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
-
-test('density comparison keeps local sizes and synchronized controls in four scopes', async ({ page }, testInfo) => {
-  await buildCatalogue({ root, outDir: `${root}/site` });
-  const served = await serveRoot(`${root}/site`);
+test('density guide inherits scope and keeps comparison search and sorting synchronized', async ({page}, testInfo) => {
+  await buildCatalogue({root, outDir:root+'/site'});
+  const served = await serveRoot(root+'/site');
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   try {
-    await page.goto(served.url + '/index.html?card=DsDensity&compare=1');
-    await expect(page.locator('#title')).toHaveText('Плотность интерфейса');
-    for (let index = 0; index < 4; index++) {
-      const frame = page.frameLocator('#preview-' + index);
-      for (const [density, rowHeight, buttonHeight, fieldHeight] of [['cozy', 44, 36, 40], ['compact', 34, 30, 32]]) {
-        const sample = frame.locator('section[data-ds-density="' + density + '"]');
-        await expect(sample.getByRole('table')).toBeVisible();
-        await expect(sample.locator('tbody tr')).toHaveCount(4);
-        await expect(sample.locator('tbody tr').first()).toHaveCSS('height', rowHeight + 'px');
-        await expect(sample.getByRole('button', { name: 'Сбросить' })).toHaveCSS('height', buttonHeight + 'px');
-        await expect(sample.locator('[data-ds-field]')).toHaveCSS('height', fieldHeight + 'px');
-      }
-      await frame.getByRole('textbox', { name: 'Поиск объекта' }).first().fill('Volvo');
-      await expect(frame.locator('tbody tr')).toHaveCount(2);
-      await expect(frame.getByRole('textbox').last()).toHaveValue('Volvo');
-      await frame.getByRole('button', { name: 'Сбросить' }).last().focus();
-      await page.keyboard.press('Enter');
-      await expect(frame.locator('tbody tr')).toHaveCount(8);
-      await expect(frame.getByRole('textbox').first()).toHaveValue('');
-      await frame.getByRole('button', { name: 'Объект: сортировать по убыванию', exact: true }).first().focus();
-      await page.keyboard.press('Enter');
-      for (const table of await frame.getByRole('table').all()) {
-        await expect(table.locator('th').first()).toHaveAttribute('aria-sort', 'descending');
-        await expect(table.locator('tbody tr').first()).toContainText('Volvo FH16');
+    for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]) {
+      for(const width of [1440,390]) {
+        await page.setViewportSize({width,height:900});
+        await page.goto(`${served.url}/index.html?card=DsDensity&theme=${theme}&appearance=${appearance}&density=${density}`);
+        const frame = page.frameLocator('#preview');
+        await expect(page.locator('.page-contents')).toHaveCount(1);
+        await expect(frame.locator('body')).toHaveAttribute('data-ds-appearance','light');
+        const ready = frame.locator('#ready-interface');
+        await expect(ready).toHaveAttribute('data-ds-density',density);
+        await expect(ready).toHaveAttribute('data-ds-theme',theme);
+        await expect(ready).toHaveAttribute('data-ds-appearance',appearance);
+        await ready.getByRole('textbox',{name:'Поиск объекта'}).fill('volvo');
+        await expect(ready.getByRole('cell',{name:'Volvo FH16',exact:true})).toBeVisible();
+        await expect(ready.getByRole('cell',{name:'МАЗ 5440',exact:true})).toHaveCount(0);
+        await ready.getByRole('button',{name:'Сбросить'}).focus();
+        await page.keyboard.press('Enter');
+        await expect(ready.getByRole('textbox')).toHaveValue('');
+        const cozy = frame.locator('#density-cozy'), compact = frame.locator('#density-compact');
+        for(const mode of ['cozy','compact']) {
+          const sample = frame.locator(`#density-${mode}`);
+          await expect(sample).toHaveAttribute('data-ds-density',mode);
+          await expect(sample).toHaveAttribute('data-ds-theme',theme);
+          await expect(sample).toHaveAttribute('data-ds-appearance',appearance);
+          await expect(sample.locator('tbody tr').first()).toHaveCSS('height',mode==='cozy'?'44px':'34px');
+          await expect(sample.getByRole('button',{name:'Сбросить'})).toHaveCSS('height',mode==='cozy'?'36px':'30px');
+          await expect(sample.locator('[data-ds-field]')).toHaveCSS('height',mode==='cozy'?'40px':'32px');
+        }
+        await cozy.getByRole('textbox').fill('нет такого объекта');
+        await expect(compact.getByRole('textbox')).toHaveValue('нет такого объекта');
+        await expect(compact.getByText('Объекты не найдены',{exact:true})).toBeVisible();
+        await compact.getByRole('button',{name:'Сбросить'}).click();
+        await expect(cozy.getByRole('textbox')).toHaveValue('');
+        await cozy.getByRole('button',{name:/Скорость/}).focus();
+        await page.keyboard.press('Enter');
+        const names = sample => sample.locator('tbody tr td:first-child').allTextContents();
+        await expect.poll(async()=>await names(cozy)).toEqual(['Volvo FH16','Renault T','ГАЗ Next','МАЗ 5440']);
+        expect(await names(compact)).toEqual(await names(cozy));
+        const reference = frame.locator('#density-reference');
+        await expect(reference).not.toHaveAttribute('open','');
+        await reference.locator('summary').focus();
+        await page.keyboard.press('Enter');
+        await expect(reference.getByRole('table')).toBeVisible();
+        await expect.poll(() => page.locator('#preview').evaluate(el => ({height:el.clientHeight>=el.contentDocument.body.scrollHeight,width:el.contentDocument.documentElement.scrollWidth<=el.clientWidth}))).toEqual({height:true,width:true});
+        expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+        expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([]);
+        await reference.locator('summary').focus();
+        await page.keyboard.press('Enter');
+        if(theme==='DEFAULT'&&appearance==='light') {
+          await frame.locator('#in-interface').evaluate(el=>el.scrollIntoView());
+          await page.screenshot({path:testInfo.outputPath(`density-${width}.png`)});
+        }
+        if(width===390) await page.locator('.page-contents summary').click();
+        await page.locator('.page-contents').getByRole('link',{name:'Для собственных стилей',exact:true}).click();
+        await expect(frame.locator('#reference')).toBeFocused();
+        await page.reload();
+        await expect(frame.locator('#reference')).toBeInViewport();
       }
     }
-    await page.goto(served.url + '/components/DsDensity/preview.html');
-    await page.setViewportSize({ width: 1180, height: 720 });
-    await page.evaluate(() => document.fonts.ready);
-    await page.screenshot({ path: testInfo.outputPath('density-light.png'), fullPage: true });
-    await page.setViewportSize({ width: 360, height: 800 });
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(360);
+    await page.goto(`${served.url}/index.html?card=DsDensity&compare=1`);
+    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('.page-contents')).toHaveCount(1);
+    for(let index=0;index<4;index++) {
+      const frame=page.frameLocator('#preview-'+index);
+      for(const mode of ['cozy','compact']) {
+        const sample=frame.locator('#density-'+mode);
+        await expect(sample.locator('tbody tr')).toHaveCount(4);
+        await expect(sample.locator('tbody tr').first()).toHaveCSS('height',mode==='cozy'?'44px':'34px');
+      }
+    }
     expect(errors).toEqual([]);
-  } finally {
-    served.server.closeAllConnections();
-    await new Promise(resolve => served.server.close(resolve));
-  }
+  } finally {served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });
