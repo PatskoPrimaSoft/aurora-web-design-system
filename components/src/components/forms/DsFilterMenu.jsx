@@ -48,7 +48,7 @@ export function DsFilterMenu({label,type='string',value,options=[],onApply,onCle
     return String(value);
   };
   const summary=summarize(),compact=Array.isArray(value)&&value.length>1&&!formatValue?optionLabel(value[0])+' +'+(value.length-1):summary;
-  const buttonName=name+(active?': '+summary:''),canClear=active&&!!(onClear||onApply);
+  const buttonName=name+(active?': '+summary:''),canClear=type!=='sort-by'&&active&&!!(onClear||onApply);
   const triggerEl=()=>ref.current?.querySelector('button,[tabindex]');
   const close=restore=>{setOpen(false);setQuery('');setAttempted(false);if(restore)triggerEl()?.focus()};
   const clear=()=>{if(disabled)return;if(onClear)onClear();else onApply?.(type==='checkbox-list'?[]:rangeType?{from:null,to:null}:null);close(true)};
@@ -127,9 +127,9 @@ export function DsFilterMenu({label,type='string',value,options=[],onApply,onCle
         <DsField ref={toRef} label={S.filter.to} type={date?'date':'number'} mono width="max(100px, calc((100% - var(--ds-gap-sm)) / 2))" value={toField(range.to)} error={error} onChange={e=>setDraft({...range,to:parse(e.target.value)})}/></div>;
     }
     const cur=flatOptions.find(o=>optionValue(o)===key);
-    return <>{list()}{type==='sort-by'&&two&&!cur?.group&&!loading?<div style={{display:'flex',gap:'var(--ds-gap-sm)',borderTop:'1px solid var(--ds-divider)',paddingTop:'var(--ds-gap-sm)',marginTop:'var(--ds-gap-sm)'}}>
-      <DsButton size="sm" tone={draft.dir!=='desc'?'subtle':'secondary'} icon="arrow_upward" aria-pressed={draft.dir!=='desc'} onClick={()=>setDraft({...draft,dir:'asc'})} style={{flex:1}}>{cur?.asc||S.filter.asc}</DsButton>
-      <DsButton size="sm" tone={draft.dir==='desc'?'subtle':'secondary'} icon="arrow_downward" aria-pressed={draft.dir==='desc'} onClick={()=>setDraft({...draft,dir:'desc'})} style={{flex:1}}>{cur?.desc||S.filter.desc}</DsButton></div>:null}</>;
+    return <>{list()}{type==='sort-by'&&two&&!cur?.group&&!loading?<div style={{display:'flex',flexDirection:'column',gap:'var(--ds-gap-sm)',borderTop:'1px solid var(--ds-divider)',paddingTop:'var(--ds-gap-sm)',marginTop:'var(--ds-gap-sm)'}}>
+      <DsButton size="sm" tone={draft.dir!=='desc'?'subtle':'secondary'} icon="arrow_upward" aria-pressed={draft.dir!=='desc'} onClick={()=>setDraft({...draft,dir:'asc'})} style={{flex:'none'}}>{cur?.asc||S.filter.asc}</DsButton>
+      <DsButton size="sm" tone={draft.dir==='desc'?'subtle':'secondary'} icon="arrow_downward" aria-pressed={draft.dir==='desc'} onClick={()=>setDraft({...draft,dir:'desc'})} style={{flex:'none'}}>{cur?.desc||S.filter.desc}</DsButton></div>:null}</>;
   };
   return <span ref={ref} data-ds-filter-menu="" data-active={active} onBlur={blur} style={{position:'relative',display:'inline-flex',maxWidth:'100%',minWidth:0,borderRadius:'var(--ds-radius-md)',background:active&&!disabled?'var(--ds-brand-subtle)':undefined}}>
     <span onClick={()=>{if(!disabled)setOpen(!open)}} style={{display:'inline-flex',minWidth:0}}>
@@ -144,9 +144,9 @@ export function DsFilterMenu({label,type='string',value,options=[],onApply,onCle
       {rangeType||listType&&type!=='checkbox-list'?<span style={{flex:'none',font:'var(--ds-type-eyebrow)',letterSpacing:'var(--ds-tracking-eyebrow)',textTransform:'uppercase',color:'var(--ds-fg-subtle)'}}>{name}</span>:null}
       {searchable&&listType?<div style={{flex:'none'}}><DsField type="search" label={S.selectField.search} value={query} onChange={e=>setQuery(e.target.value)}/></div>:null}
       <div aria-busy={listType&&loading||undefined} style={{minHeight:0,overflowY:'auto',overflowX:'hidden'}}>{body()}</div>
-      <div style={{flex:'none',display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',borderTop:'1px solid var(--ds-divider)',paddingTop:'var(--ds-gap-sm)'}}>
-        <DsButton tone="ghost" size="sm" onClick={clear}>{S.clear}</DsButton>
-        <DsButton tone="primary" size="sm" disabled={loading&&listType} onClick={apply} style={{marginLeft:'auto'}}>{S.apply}</DsButton>
+      <div style={{flex:'none',display:'flex',flexWrap:'wrap',alignItems:'center',gap:'var(--ds-gap-sm)',borderTop:'1px solid var(--ds-divider)',paddingTop:'var(--ds-gap-sm)'}}>
+        <DsButton tone="ghost" size="sm" onClick={clear} style={{flexShrink:0}}>{type==='sort-by'&&onClear?S.filter.resetSort:S.clear}</DsButton>
+        <DsButton tone="primary" size="sm" disabled={loading&&listType} onClick={apply} style={{marginLeft:'auto',flexShrink:0}}>{S.apply}</DsButton>
       </div>
     </div>:null}
   </span>;

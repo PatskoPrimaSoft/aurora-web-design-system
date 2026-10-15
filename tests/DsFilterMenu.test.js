@@ -66,4 +66,17 @@ m=mount({type:'checkbox-list',value:['moving'],searchable:true,options:[{label:'
 ok(!!m.el.querySelector('input[type="search"]'),'checkbox-list: поиск');ok(m.el.querySelector('input[aria-label="Parked"]')?.disabled,'checkbox-list: недоступный вариант');
 if(m.el.querySelector('input[type="search"]')){m.type(0,'moving');ok(m.el.querySelectorAll('input[type="checkbox"]').length===1,'checkbox-list: поиск внутри групп');}
 m=mount({type:'checkbox-list',value:['moving'],loading:true,options:['moving']});ok(!!m.el.querySelector('[data-ds-spinner]'),'checkbox-list: загрузка');ok(m.inputs().length===0,'checkbox-list: во время загрузки выбор недоступен');
+let resetCount=0;
+m=mount({type:'sort-by',value:{key:'name',dir:'desc'},options:[{value:'name',label:'Название'}],onClear:()=>resetCount++});
+ok(!m.el.querySelector('[data-ds-filter-clear]'),'sort-by: внешний крестик отсутствует');
+const reset=[...m.el.querySelectorAll('button')].find(button=>button.textContent==='Сбросить порядок');
+ok(!!reset,'sort-by: явная подпись сброса');
+if(reset)ReactDOM.flushSync(()=>reset.click());
+ok(resetCount===1&&!m.el.querySelector('[role="dialog"]'),'sort-by: сброс вызывает onClear и закрывает меню');
+m=mount({type:'sort-by',value:{key:'name',dir:'asc'},options:[{value:'name',label:'Название'}]});
+const clearSort=[...m.el.querySelectorAll('button')].find(button=>button.textContent==='Очистить');
+ok(!!clearSort,'sort-by: без onClear сохранена очистка');
+if(clearSort)ReactDOM.flushSync(()=>clearSort.click());
+ok(m.applied()===null,'sort-by: очистка без onClear передаёт null');
+ok(w[NS].dsStringsEn.filter.resetSort==='Reset order','sort-by: английская подпись сброса');
 if(fails){console.error(fails+' FAIL');process.exit(1)}console.log('все проверки прошли');

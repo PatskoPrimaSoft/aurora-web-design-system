@@ -27,7 +27,7 @@ export interface DsStrings {
   state: Record<'moving' | 'parked' | 'offline' | 'invalid' | 'alarm' | 'nodata', string>;
   freshness: Record<'live' | 'recent' | 'late' | 'none', string>;
   signal: Record<'good' | 'weak' | 'none', string>;
-  filter: Record<'contains' | 'from' | 'to' | 'asc' | 'desc' | 'rangeInvalid', string>;
+  filter: Record<'contains' | 'from' | 'to' | 'asc' | 'desc' | 'rangeInvalid' | 'resetSort', string>;
   table: {
     sort: (label: string, dir: 'asc' | 'desc') => string;
     selectPage: string;

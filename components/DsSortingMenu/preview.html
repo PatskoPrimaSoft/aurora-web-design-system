@@ -1,139 +1,84 @@
-<!-- @dsCard name="Сортировка вне таблицы" group="2 · Основы" height=1850 subtitle="Выбор поля и направления для списков и панелей без заголовков столбцов" page -->
-<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>Сортировка вне таблицы</title><style>html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);-webkit-font-smoothing:antialiased}
-#page{max-width:1120px;margin:0 auto;padding:22px 24px 26px;display:flex;flex-direction:column;gap:20px}
-.two-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
-.list.cols{columns:2;column-gap:28px;max-width:none;display:block;padding-left:20px}
-.list.cols li{margin-bottom:6px;break-inside:avoid}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-h1{margin:0;font:var(--ds-type-title);color:var(--ds-fg-strong);letter-spacing:var(--ds-tracking-tight)}
-h2{margin:0;font:var(--ds-type-section);color:var(--ds-fg-strong)}
-p{margin:0;max-width:78ch;text-wrap:pretty}
-.muted{color:var(--ds-fg-muted)}
-.cap{font:var(--ds-type-body);color:var(--ds-fg-subtle)}
-.eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.card{display:flex;flex-direction:column;gap:12px;padding:18px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg)}
-.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.cell{display:flex;flex-direction:column;gap:8px;padding:16px;background:var(--ds-bg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md)}
-.hdr{display:inline-flex;align-items:center;gap:4px;font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle);background:var(--ds-bg);border:1px dashed var(--ds-border);border-radius:var(--ds-radius-md);padding:6px 10px}
-.hdr.on{color:var(--ds-brand-text);border-style:solid;border-color:var(--ds-brand-border)}
-.hdr .material-symbols-outlined{font-size:14px}
-.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.mono{font:var(--ds-type-mono);font-size:13px;color:var(--ds-fg-muted)}
-.list{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;max-width:78ch}
-.list li::marker{color:var(--ds-fg-subtle)}
-.note{padding:12px 14px;background:var(--ds-info-bg);border:1px solid var(--ds-info-line);border-radius:var(--ds-radius-md);color:var(--ds-info-fg)}
-.warn{padding:12px 14px;background:var(--ds-warning-bg);border:1px solid var(--ds-warning-line);border-radius:var(--ds-radius-md);color:var(--ds-warning-fg)}
-table.spec{border-collapse:collapse;width:100%;font:var(--ds-type-body)}
-table.spec th{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle);text-align:left;padding:8px 10px;border-bottom:1px solid var(--ds-border);white-space:nowrap}
-table.spec td{padding:8px 10px;border-bottom:1px solid var(--ds-divider);vertical-align:top}
-table.spec td.k{font:var(--ds-type-mono);font-size:13px;color:var(--ds-fg);white-space:nowrap}
-.yes{color:var(--ds-success-fg);font:var(--ds-type-body-strong)}
-.no{color:var(--ds-danger-fg);font:var(--ds-type-body-strong)}</style>
-<script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-</head>
-<body>
-<div id="page">
-<div class="card">
-<h2>D · Вне таблицы: меню сортировки</h2>
-<p class="muted">В панели объектов заголовков столбцов нет — строка это <code>DsListRow</code>, а не набор ячеек. Порядком управляет меню, которое открывается иконкой <code>sort</code> в actions панели, рядом с фильтром и поиском. Список загружен целиком, поэтому здесь сортировка честно клиентская — ровно та причина, по которой в таблице она запрещена.</p>
-<div id="demo-menu"></div>
-<ul class="list cols">
-<li><strong>Поле и направление разделены.</strong> Радиосписок — это поля («Название», «Последнее сообщение», «Водитель»), под ним одна пара направлений. Бэкенд хранит их слитно (<code class="mono">BY_NAME_ASC</code>, <code class="mono">BY_SECONDS_AGO_DESC</code>, девять значений) — это форма перечисления, а не форма меню: девять пунктов оператор читает как девять разных сортировок.</li>
-<li><strong>Подписи направлений зависят от поля,</strong> а не от математики: у времени «Сначала новые / Сначала старые», у названия «А → Я / Я → А», у числа «Больше / Меньше». «По возрастанию» рядом с датой не читается.</li>
-<li><strong>Группировка — не сортировка.</strong> «По группам» выстраивает список по чужой иерархии, у неё нет направления, и пара направлений для этого пункта скрывается.</li>
-<li><strong>Значение по умолчанию всегда есть</strong> (в панели объектов это «Сначала новые»), и пункт «без сортировки» в меню отсутствует. «Clear» возвращает порядок по умолчанию, а не отменяет его.</li>
-<li><strong>Непустой выбор видно, не открывая меню:</strong> точка на иконке <code>sort</code>, пока порядок отличается от дефолтного. Всё, что нужно поверхности без заголовков.</li>
-</ul>
-</div>
-
-
-<div class="card">
-<h2>E · Сортировка — не фильтр</h2>
-<div class="two">
-<div class="cell">
-<span class="eb">так</span>
-<p class="cap" style="max-width:none">Порядок показывается состоянием своего триггера: активный заголовок в таблице, точка на иконке <code>sort</code> в панели. Счётчик результата (<code class="mono">12 из 148</code>) сортировка не меняет.</p>
-</div>
-<div class="cell">
-<span class="eb">не так</span>
-<p class="cap" style="max-width:none">Порядок не становится чипом применённого фильтра в <code>DsChipGroup</code>. Чип означает «часть строк скрыта» и имеет крестик «вернуть»; у сортировки скрывать нечего, а удалить её нельзя — порядок есть всегда. Чип «Сортировка: Название ×» обещает несуществующее состояние.</p>
-</div>
-</div>
-</div>
-
-
-<div class="card">
-<h2>F · Что не сортируется никогда</h2>
-<ul class="list cols">
-<li><strong>Дерево пользователь → группа → объект.</strong> Порядок здесь — сама иерархия; сортировать можно объекты внутри уровня, но не уровни между собой.</li>
-<li><strong>Датчики в карточке объекта.</strong> Порядок задан типом (зажигание и питание, затем топливо и температура, затем дискретные и аналоговые) — это спроектированная раскладка, а не список, к которому просится алфавит.</li>
-<li><strong>Хронологические строки:</strong> рейсы и стоянки трека, события, лог ретранслятора, журнал команд. Время здесь и есть смысл строки; «по алфавиту адреса» — бессмысленный порядок. Направление времени менять можно (<code class="mono">-time</code> ↔ <code class="mono">+time</code>), поле — нет.</li>
-<li><strong>Шаги <code>DsStepper</code>, вкладки, пункты меню.</strong></li>
-<li><strong>Строки отчёта, у которых порядок — часть отчёта</strong> (итоговые строки, группы по объектам). Если в конфигурации отчёта сортировки нет, заголовок не получает иконку — не «получает, но ничего не делает».</li>
-</ul>
-<div class="warn">Несортируемый заголовок не имеет ни курсора-указателя, ни иконки, ни hover-подсветки. Кликабельный на вид заголовок, который не сортирует, оператор трактует как сломанную таблицу.</div>
-</div>
-
-<div class="card">
-<h2>G · Порядок по умолчанию для каждой поверхности</h2>
-<table class="spec">
-<thead><tr><th>Поверхность</th><th style="width:210px">Дефолт</th><th>Почему</th></tr></thead>
-<tbody>
-<tr><td>Таблицы сущностей админ-портала</td><td class="k">-id / -createdTime</td><td>сначала новые: только что созданная запись — то, ради чего экран открыли</td></tr>
-<tr><td>Справочники и наборы шаблонов</td><td class="k">-name</td><td>читаемый порядок по названию</td></tr>
-<tr><td>Панель объектов (user-portal)</td><td class="k">Сначала новые</td><td>совпадает с админским дефолтом; «Последнее сообщение» — самый частый ручной выбор</td></tr>
-<tr><td>Видео, события, треки</td><td class="k">-startTime / -time</td><td>хронология сверху вниз от свежего</td></tr>
-</tbody></table>
-<p class="cap">Дефолт — решение дизайна, а не то, что вернул сервер без параметров. Он проверяется вместе с экраном в четырёх рендерах (DEFAULT/light/cozy и RED2/dark/compact), потому что активный заголовок красится брендовыми чернилами.</p>
-</div>
-
-
-<div class="note">Компоненты: <code>DsFilterMenu type="sort-by"</code> — радиосписок полей; если значение хранится как <code class="mono">{key, dir}</code>, под списком появляется пара направлений, а опция с <code>group: true</code> её скрывает. Подписи направлений задаются на опции: <code class="mono">asc</code> / <code class="mono">desc</code>.</div>
-</div>
-<script type="text/babel">
-const { DsPanel, DsListRow, DsIconButton, DsFilterMenu } = window.AuroraWebDesignSystem_96e210;
-const ORDER_OPTIONS=[
-  {value:'new',label:'Дате добавления',asc:'Сначала старые',desc:'Сначала новые'},
+<!-- @dsCard name="Сортировка вне таблицы" group="2 · Основы" scopeMode="inherit" aliases="сортировка|порядок|sorting|sort-by" subtitle="Как выбирать поле и направление для списков и карточек" page -->
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Сортировка вне таблицы</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.scene{padding:24px;background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{padding-left:20px;max-width:74ch;margin:24px 0 0}.rules li+li{margin-top:12px}
+summary{cursor:pointer;font:var(--ds-type-ui);padding:10px 12px;border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);background:var(--ds-surface)}
+summary:hover{background:var(--ds-surface-hover)}summary:focus-visible,a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:grid;gap:24px}
+@media(max-width:640px){main{padding:20px 0}.choices{grid-template-columns:minmax(0,1fr)}.scene{padding:16px}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}}
+</style></head>
+<body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Сортировка в списке</h2>
+<p class="lead">Сортировка меняет порядок, но сохраняет состав списка. Выберите поле и направление, затем нажмите «Применить».</p>
+<div class="scene" id="ready-interface"></div>
+</section>
+<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2><dl class="choices">
+<dt>Название</dt><dd>«А → Я / Я → А» — для поиска знакомого объекта в справочнике.</dd>
+<dt>Дата или время</dt><dd>«Сначала новые / Сначала старые» — для последних записей или истории.</dd>
+<dt>Число</dt><dd>«Сначала больше / Сначала меньше» — для сравнения значений, например скорости.</dd>
+</dl><p style="margin-top:16px">В списке или наборе карточек используйте меню рядом с содержимым. Если есть заголовки столбцов, сортировку удобнее разместить в <a href="../DsTable/preview.html">таблице</a>.</p></section>
+<section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Правила применения</h2><ul class="rules">
+<li><strong>Задайте начальный порядок.</strong> Выберите его по задаче: в справочнике — по названию, в журнале — сначала новые. Сброс возвращает этот порядок.</li>
+<li><strong>Показывайте применённый выбор.</strong> Название поля и направление должны быть доступны без открытия меню. В примере они указаны над списком.</li>
+<li><strong>Сохраняйте результаты.</strong> Сортировка меняет порядок, а фильтр — состав списка. Не добавляйте сортировку в чипы применённых фильтров.</li>
+</ul></section>
+<section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Подключение и данные</h2>
+<p>Готовый <code>DsFilterMenu type="sort-by"</code> управляет выбором и подтверждением. Приложение перестраивает список или запрашивает данные с сервера. В примере все четыре объекта загружены целиком и сортируются в браузере.</p>
+<details id="sorting-reference"><summary>Показать технические подробности</summary><div class="reference-content">
+<div><h3>Поле и направление</h3><p>Передавайте <code>value={ {key, dir} }</code>, где <code>dir</code> — <code>asc</code> или <code>desc</code>. У вариантов задавайте понятные подписи <code>asc</code> и <code>desc</code>. <code>onApply</code> получает весь выбор; <code>onClear</code> восстанавливает начальное значение. Не переставляйте шаги процесса и уровни дерева. Группировка объединяет объекты по признаку и не имеет направления. Если меню также содержит группировку, вариант с <code>group: true</code> скрывает направления; само объединение данных реализует приложение.</p></div>
+<div><h3>Порядок всего набора</h3><p>Сортируйте в браузере только полностью загруженный список. При постраничной загрузке передавайте выбор серверу и возвращайтесь на первую страницу, сохраняя фильтры. Текст сравнивайте с учётом языка, числа — как числа, даты — по времени. Для одинаковых значений задайте устойчивый дополнительный порядок, например по идентификатору.</p></div>
+<div><h3>Клавиатура и собственная кнопка</h3><p>Enter или Space открывает меню, стрелки перемещают фокус по полям, Space выбирает пункт. Tab переводит к направлению и действиям. Escape отменяет черновик и возвращает фокус. При передаче <code>trigger</code> используйте доступную кнопку с понятным именем; открытие и возврат фокуса обеспечивает компонент. Полный API — в <a href="../DsFilterMenu/preview.html">DsFilterMenu</a>.</p></div>
+</div></details></section>
+</main><script type="text/babel">
+const {DsFilterMenu,DsButton,DsListRow}=window.AuroraWebDesignSystem_96e210;
+const OPTIONS=[
+  {value:'added',label:'Дате добавления',asc:'Сначала старые',desc:'Сначала новые'},
   {value:'name',label:'Названию',asc:'А → Я',desc:'Я → А'},
-  {value:'last',label:'Последнему сообщению',asc:'Сначала старые',desc:'Сначала новые'},
-  {value:'driver',label:'Водителю',asc:'А → Я',desc:'Я → А'},
-  {value:'group',label:'Группам',group:true}];
-const PANEL=[
-  {id:1,name:'MAZ 5440',details:'62 км/ч · И. Иванов · 14:32:07',state:'moving',course:135},
-  {id:6,name:'MAN TGX',details:'54 км/ч · В. Лукаш · 14:32:04',state:'moving',course:200},
-  {id:2,name:'Volvo FH16',details:'Стоит 1 ч 12 мин · Минский склад',state:'parked'},
-  {id:3,name:'Scania R450',details:'78 км/ч · превышение в зоне 60',state:'alarm',course:88},
-  {id:5,name:'Renault T',details:'Offline с 09:14:22',state:'offline'}];
-
-function MenuDemo(){
-  const [order,setOrder]=React.useState({key:'new',dir:'desc'});
-  const isDefault=order.key==='new'&&order.dir==='desc';
-  const opt=ORDER_OPTIONS.find(o=>o.value===order.key);
-  const dirLabel=opt.group?'без направления':(order.dir==='desc'?opt.desc:opt.asc);
-  return <div style={{display:'grid',gridTemplateColumns:'340px minmax(0,1fr)',gap:16,alignItems:'start'}}>
-    <DsPanel padding={false} scroll={false} style={{height:330}} title="Объекты" eyebrow="6 из 148"
-      actions={<>
-        <DsIconButton icon="filter_alt" label="Фильтры"/>
-        <DsFilterMenu label="Сортировать по" type="sort-by" value={order} options={ORDER_OPTIONS} width={240}
-          onApply={v=>setOrder(v)} onClear={()=>setOrder({key:'new',dir:'desc'})}
-          trigger={<DsIconButton icon="sort" label="Сортировка" dot={!isDefault}/>}/>
-        <DsIconButton icon="search" label="Поиск"/></>}>
-      <div style={{padding:'var(--ds-gap-xs) 0'}}>
-        {PANEL.map(o=><DsListRow key={o.id} title={o.name} subtitle={o.details} state={o.state} course={o.course}/>)}
-      </div></DsPanel>
-    <div className="cell" style={{gap:10}}>
-      <span className="eb">состояние меню</span>
-      <div className="row"><span className="cap">поле</span><span className="mono" style={{color:'var(--ds-fg)'}}>{opt.label}</span></div>
-      <div className="row"><span className="cap">направление</span><span className="mono" style={{color:'var(--ds-fg)'}}>{dirLabel}</span></div>
-      <div className="row"><span className="cap">точка на иконке</span>
-        <span className="mono" style={{color:isDefault?'var(--ds-fg-muted)':'var(--ds-brand-text)'}}>{isDefault?'нет — порядок по умолчанию':'есть — порядок изменён'}</span></div>
-      <p className="cap" style={{maxWidth:'none'}}>Откройте меню иконкой <code>sort</code>: поля — радиосписком, направление — одной парой под ними, подписи пары меняются вместе с полем. У «Группам» пара направлений не показывается: это группировка.</p>
-      <p className="cap" style={{maxWidth:'none'}}>Порядок применяется по «Apply», как и фильтр: полусобранный выбор не должен перетряхивать список у оператора на глазах.</p>
+  {value:'speed',label:'Скорости',asc:'Сначала меньше',desc:'Сначала больше'}
+];
+const OBJECTS=[
+  {id:1,name:'МАЗ 5440',added:Date.parse('2026-10-11'),speed:62,state:'moving'},
+  {id:2,name:'Volvo FH16',added:Date.parse('2026-10-14'),speed:0,state:'parked'},
+  {id:3,name:'ГАЗ Next',added:Date.parse('2026-10-12'),speed:41,state:'moving'},
+  {id:4,name:'Renault T',added:Date.parse('2026-10-13'),speed:18,state:'moving'}
+];
+function ObjectList(){
+  const [order,setOrder]=React.useState({key:'added',dir:'desc'});
+  const option=OPTIONS.find(item=>item.value===order.key);
+  const summary=option.label+' · '+option[order.dir];
+  const sorted=[...OBJECTS].sort((a,b)=>{
+    const difference=order.key==='name'?a.name.localeCompare(b.name,'ru'):a[order.key]-b[order.key];
+    return difference*(order.dir==='asc'?1:-1)||a.id-b.id;
+  });
+  return <div style={{display:'grid',gap:'var(--ds-gap-md)'}}>
+    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'var(--ds-gap-sm)',flexWrap:'wrap'}}>
+      <h3 style={{margin:0}}>Объекты · {sorted.length}</h3>
+      <DsFilterMenu label="Сортировать по" type="sort-by" value={order} options={OPTIONS}
+        onApply={setOrder} onClear={()=>setOrder({key:'added',dir:'desc'})}
+        trigger={<DsButton tone="secondary" icon="sort" aria-haspopup="dialog" aria-label={'Сортировка: '+summary}>Сортировка</DsButton>}/>
     </div>
+    <p className="caption" role="status">{summary}</p>
+    <ul aria-label="Объекты с сортировкой" style={{listStyle:'none',padding:0,margin:0}}>
+      {sorted.map(item=><li key={item.id}><DsListRow as="div" title={item.name} subtitle={item.speed+' км/ч · Добавлен '+new Date(item.added).toLocaleDateString('ru-RU',{timeZone:'UTC'})} state={item.state}/></li>)}
+    </ul>
   </div>;
 }
-ReactDOM.createRoot(document.getElementById('demo-menu')).render(<MenuDemo/>);
-</script>
-</body></html>
+ReactDOM.createRoot(document.getElementById('ready-interface')).render(<ObjectList/>);
+function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){
+  scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';scene.dataset.dsAppearance=root.dataset.dsAppearance||'light';scene.dataset.dsDensity=root.dataset.dsDensity||'cozy';
+}}
+refresh();new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density','style']});
+</script></body></html>

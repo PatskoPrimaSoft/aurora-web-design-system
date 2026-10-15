@@ -48,7 +48,7 @@ export interface DsFilterMenuProps {
   options?: Array<string | DsFilterOption | DsFilterOptionGroup>;
   /** Called with the draft value on Apply. */
   onApply?: (value: DsFilterValue) => void;
-  /** Сброс применённого значения. Без обработчика очистка передаёт пустое значение в onApply. */
+  /** Сброс применённого значения. Для sort-by восстанавливает исходный порядок через «Сбросить порядок». Без обработчика «Очистить» передаёт пустое значение в onApply. */
   onClear?: () => void;
   /** Формат применённого значения в кнопке, например единицы измерения или локальная дата. */
   formatValue?: (value: DsFilterValue) => string;
