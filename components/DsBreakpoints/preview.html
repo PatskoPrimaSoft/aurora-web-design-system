@@ -1,57 +1,116 @@
-<!-- @dsCard name="Адаптивность и брейкпоинты" group="2 · Основы" height=780 subtitle="Четыре диапазона ширины и правила изменения компоновки страницы" page -->
-<!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8"><title>Адаптивность и брейкпоинты</title><style>html,body{margin:0}body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:22px;box-sizing:border-box;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;gap:18px}
-.eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.mono{font:var(--ds-type-mono);color:var(--ds-fg-muted)}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-h3{font:var(--ds-type-section);margin:0 0 8px}
-p{margin:0;text-wrap:pretty}
-table{width:100%;border-collapse:collapse}
-th{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle);text-align:left;padding:0 10px 7px 0;border-bottom:1px solid var(--ds-border);font-weight:var(--ds-weight-semibold)}
-td{padding:8px 10px 8px 0;border-bottom:1px solid var(--ds-divider);font:var(--ds-type-body);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-.matrix td:not(:first-child),.matrix th:not(:first-child){text-align:center;padding-right:0}
-.on{font:var(--ds-type-ui);color:var(--ds-fg)}
-.off{font:var(--ds-type-ui);color:var(--ds-fg-muted)}
-.flip{display:inline-block;font:var(--ds-type-ui);color:var(--ds-brand-text);background:var(--ds-brand-subtle);border:1px solid var(--ds-brand-border);border-radius:var(--ds-radius-md,6px);padding:2px 9px}
-body{background:var(--ds-bg);max-width:1120px;margin:0 auto;padding:22px 24px 26px}
-</style></head><body>
+<!-- @dsCard name="Адаптивность и брейкпоинты" group="2 · Основы" scopeMode="inherit" aliases="адаптивность|брейкпоинты|responsive|breakpoints|ширина|компоновка" subtitle="Как менять компоновку при разной ширине и сохранять доступ к данным и действиям" page -->
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Адаптивность и брейкпоинты</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.layout-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.scene{container-type:inline-size;padding:24px;background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
+.scene[data-layout="narrow"]{max-width:390px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--ds-gap-md)}
+.workspace[data-layout="wide"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+@container(max-width:279px){.workspace[data-layout="wide"]{grid-template-columns:minmax(0,1fr)}}
+.object-list,.object-details{min-width:0;padding:var(--ds-pad-md);background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md)}
+.object-list>div{display:grid;gap:var(--ds-gap-sm)}
+.object-details{display:grid;align-content:start;gap:var(--ds-gap-md)}.object-details h3{margin:0}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{padding-left:20px;max-width:74ch;margin:0}.rules li+li{margin-top:12px}
+summary{cursor:pointer;font:var(--ds-type-ui);padding:10px 12px;border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);background:var(--ds-surface)}
+summary:hover{background:var(--ds-surface-hover)}summary:focus-visible,a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:grid;gap:24px}
+.table-scroll{overflow-x:auto}.tokens{width:100%;border-collapse:collapse;text-align:left}.tokens th,.tokens td{padding:12px 8px;border-bottom:1px solid var(--ds-divider);vertical-align:top}.tokens th{font:var(--ds-type-body-strong)}
+@media(max-width:640px){main{padding:20px 0}.scene{padding:16px}.choices{grid-template-columns:minmax(0,1fr)}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}}
+</style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Адаптивность в интерфейсе</h2>
+<p class="lead">На узком экране содержимое располагается последовательно, на широком список можно поставить рядом со сведениями. Дизайн-система задаёт общие пороги ширины — брейкпоинты. Приложение определяет, что меняется при переходе между ними.</p>
+<p style="margin-bottom:16px">Переключите компоновку и выберите объект: сведения и действие остаются доступны в обоих вариантах.</p>
+<div id="layout-example"></div>
+<p class="caption" style="margin-top:16px">Это демонстрация вариантов, а не измеритель ширины окна. Узкий вариант ограничен 390 px. Если места мало, две колонки также складываются в одну.</p>
+</section>
+<section aria-labelledby="ranges"><h2 id="ranges" tabindex="-1">Краткая памятка</h2>
+<p class="lead">Диапазоны описывают ширину окна. Ниже — возможные решения: переход через порог не требует перестройки, если текущая компоновка удобна.</p>
+<dl class="choices">
+<dt>S · 360–719 px</dt><dd>Начните с одной колонки: главное содержимое и основные действия идут последовательно.</dd>
+<dt>M · 720–959 px</dt><dd>Список и сведения могут оставаться друг под другом. Используйте ширину для более длинных подписей.</dd>
+<dt>L · 960–1139 px</dt><dd>Можно разместить список и сведения рядом, сохранив удобную ширину основного содержимого.</dd>
+<dt>XL · от 1140 px</dt><dd>Используйте дополнительное пространство для данных; длинные абзацы ограничивайте по ширине.</dd>
+</dl>
+<p class="caption" style="margin-top:16px">В памятке S показан от минимальной поддерживаемой ширины. Технически он включает любую ширину меньше 720 px.</p>
+<h3 style="margin-top:24px">На какой ширине проверять</h3>
+<p style="margin-bottom:16px">Для наших макетов используем контрольные ширины окна в CSS px. Это набор проверок, а не дополнительные брейкпоинты или разрешения мониторов.</p>
+<ul class="rules"><li><strong>1440 CSS px</strong> — основной десктопный макет: навигация, рабочая область и нужные боковые панели.</li><li><strong>1280 CSS px</strong> — более тесное окно: проверьте место для содержимого с открытой навигацией.</li><li><strong>1920 CSS px</strong> — широкое окно: проверьте, что данные используют пространство, а текст и формы не растягиваются.</li><li><strong>360 CSS px</strong> — минимум основной компоновки.</li><li><strong>390 CSS px</strong> — основной мобильный макет.</li><li><strong>320 CSS px</strong> — проверка доступности при узком окне и увеличении страницы. Сохраняйте данные и действия; допустима одна колонка.</li></ul></section>
+<section aria-labelledby="desktop"><h2 id="desktop" tabindex="-1">Компоновка на десктопе</h2>
+<p class="lead">Ориентируйтесь на место, оставшееся для задачи после навигации и панелей. Даже на большом мониторе окно может занимать половину экрана.</p>
+<dl class="choices">
+<dt>Список и сведения</dt><dd>Расположите рядом, если оба блока остаются удобными. При сужении окна перенесите сведения под список или открывайте их отдельно, сохраняя выбор и путь назад.</dd>
+<dt>Боковые панели</dt><dd>Оставляйте рядом с рабочей областью, пока они не мешают основной задаче. При нехватке места сворачивайте их с доступной кнопкой открытия.</dd>
+<dt>Текст и формы</dt><dd>Ограничивайте ширину контейнера и длину строк. Свободное место по краям допустимо; поля не нужно растягивать на весь монитор.</dd>
+<dt>Таблицы и карта</dt><dd>Отдавайте им оставшееся пространство. У таблицы сохраняйте читаемые колонки и собственную горизонтальную прокрутку, если данные не помещаются.</dd>
+</dl></section>
+<section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Правила адаптации</h2><ul class="rules">
+<li><strong>Сохраняйте доступ к действиям.</strong> Если кнопка переносится в меню, оно должно работать с клавиатуры и на сенсорном экране.</li>
+<li><strong>Сохраняйте контекст.</strong> При перестройке не сбрасывайте выбранный объект, введённый текст и состояние формы. Порядок чтения и перехода по Tab должен оставаться понятным.</li>
+<li><strong>Проверяйте содержимое.</strong> Длинные названия и подписи должны переноситься или раскрываться. Не уменьшайте шрифт и не скрывайте важные данные ради одной строки.</li>
+<li><strong>Разделяйте ширину и плотность.</strong> Узкий экран сам по себе не включает компактный режим. Выбирайте <a href="../DsDensity/preview.html">плотность</a> с учётом удобства управления.</li>
 
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--ds-border);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg,10px);overflow:hidden;flex:none">
-<div style="background:var(--ds-surface);padding:12px 14px;display:flex;flex-direction:column;gap:5px"><span class="eb">S</span><span style="font:var(--ds-type-mono);color:var(--ds-fg)">0 – 719</span><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">телефон, узкая панель</span></div>
-<div style="background:var(--ds-surface);padding:12px 14px;display:flex;flex-direction:column;gap:5px"><span class="eb">M</span><span style="font:var(--ds-type-mono);color:var(--ds-fg)">720 – 959</span><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">планшет вертикально</span></div>
-<div style="background:var(--ds-surface);padding:12px 14px;display:flex;flex-direction:column;gap:5px"><span class="eb">L</span><span style="font:var(--ds-type-mono);color:var(--ds-fg)">960 – 1139</span><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">планшет горизонтально, небольшой ноутбук</span></div>
-<div style="background:var(--ds-surface);padding:12px 14px;display:flex;flex-direction:column;gap:5px"><span class="eb">XL</span><span style="font:var(--ds-type-mono);color:var(--ds-fg)">1140 +</span><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">десктоп</span></div></div>
+</ul><details id="breakpoints-checklist"><summary>Чек-лист проверки</summary><div><ul class="rules">
+<li>Проверьте компоновку на размерах из памятки выше. На десктопе откройте боковые панели и сузьте окно до половины экрана: основные данные и действия должны остаться доступны.</li>
+<li>Сравните соседние ширины: 719/720, 959/960 и 1139/1140 px. Контролы не должны обрезаться или перекрывать друг друга.</li>
+<li>Перестройте интерфейс после выбора объекта или заполнения формы: состояние должно сохраниться.</li>
+<li>Пройдите по действиям клавишей Tab и проверьте длинные подписи.</li>
+<li>У страницы нет горизонтальной прокрутки. Широкая таблица может прокручиваться внутри своей области.</li>
+</ul></div></details></section>
+<section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Для собственной разметки</h2>
+<p>Для компоновки страницы используйте ширину окна, для блока внутри панели — ширину его контейнера.</p>
+<details id="breakpoints-reference"><summary>Показать токены и технические подробности</summary><div class="reference-content">
+<div><h3>Ширина в CSS-пикселях</h3><p>Проверяйте доступную ширину окна в CSS px, а не физическое разрешение экрана. В <a href="https://www.w3.org/WAI/WCAG22/Understanding/reflow.html">WCAG Reflow</a> 320 CSS px соответствуют, например, окну 1280 px при увеличении до 400%. Это проверка доступности, которая дополняет основной минимум 360 px.</p></div>
+<div class="table-scroll"><table class="tokens"><caption>Пороги и ширина содержимого</caption><thead><tr><th scope="col">Токен</th><th scope="col">Значение и назначение</th></tr></thead><tbody>
+<tr><td><code>--ds-bp-m</code></td><td>720 px · начало M.</td></tr>
+<tr><td><code>--ds-bp-l</code></td><td>960 px · начало L.</td></tr>
+<tr><td><code>--ds-bp-xl</code></td><td>1140 px · начало XL.</td></tr>
+<tr><td><code>--ds-bp-s-max</code>, <code>--ds-bp-m-max</code>, <code>--ds-bp-l-max</code></td><td>719, 959 и 1139 px · верхние границы для целых px.</td></tr>
+<tr><td><code>--ds-content-max</code></td><td>1440 px · ограничение ширины форм и текстовых страниц.</td></tr>
+<tr><td><code>--ds-content-max-prose</code></td><td>72ch · ограничение длины строки абзаца.</td></tr>
+</tbody></table></div>
+<div><h3>Ширина окна и ширина блока</h3><p>Media queries проверяют ширину окна. Для локальной адаптации задайте родителю <code>container-type: inline-size</code> и используйте <code>@container</code>: карточка внутри узкой панели сможет перестроиться даже на широком экране. Порог выбирайте по содержимому блока.</p></div>
+<div><h3>Пороги в CSS</h3><p>CSS-переменные нельзя подставлять в условие media query через <code>var()</code>. В примере используется числовой порог <code>960px</code>, соответствующий <code>--ds-bp-l</code>. Правила без media query задают узкую компоновку, <code>min-width</code> включает широкую с указанного порога.</p></div>
 
-<div><h3>Целевая компоновка страницы</h3>
-<table class="matrix"><thead><tr><th style="width:34%">&nbsp;</th><th>S</th><th>M</th><th>L</th><th>XL</th></tr></thead><tbody>
-<tr><td>Структура страницы</td><td class="on">одна колонка</td><td class="on">одна колонка</td><td><span class="flip">две колонки</span></td><td class="on">две колонки</td></tr>
-<tr><td>Второстепенное содержимое<br><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">края пагинатора, словесный логотип</span></td><td class="off">скрыто</td><td><span class="flip">показано</span></td><td class="on">показано</td><td class="on">показано</td></tr>
-<tr><td>Подписи и имена<br><span style="font:var(--ds-type-caption);color:var(--ds-fg-subtle)">подписи навигации, имя пользователя, вкладки вместо селекта</span></td><td class="off">скрыто</td><td class="off">скрыто</td><td><span class="flip">показано</span></td><td class="on">показано</td></tr>
-</tbody></table>
-<p style="color:var(--ds-fg-muted);margin-top:9px">Эти переходы реализует приложение. Плотность задаётся независимо от ширины окна. Действия при смене компоновки должны оставаться доступными, например через меню строки.</p></div>
-
-<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:26px;align-items:start">
-
-<div><h3>Сравнения строгие</h3>
-<table><thead><tr><th>Вызов</th><th>Истинно на</th><th>Читается как</th></tr></thead><tbody>
-<tr><td class="mono">equal('s')</td><td>S</td><td>только самый узкий</td></tr>
-<tr><td class="mono">more('s')</td><td>M L XL</td><td>&ge; M</td></tr>
-<tr><td class="mono">more('m')</td><td>L XL</td><td>&ge; L</td></tr>
-<tr><td class="mono">less('l')</td><td>S M</td><td>&le; M</td></tr>
-<tr><td class="mono">more('l')</td><td>XL</td><td>= XL</td></tr>
-</tbody></table>
-<p style="font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:9px">Это API <span class="mono">ViewBreakpointService</span> из приложения. <span class="mono">more('m')</span> означает «L и шире». В документации указывайте результирующий диапазон.</p></div>
-
-<div style="display:flex;flex-direction:column;gap:14px">
-<div><h3>Правила</h3>
-<p style="font:var(--ds-type-body);color:var(--ds-fg-muted)">Четыре диапазона, три порога перехода: 720, 960 и 1140px. Локальная адаптация — через container queries.<br>
-Диапазоны не пересекаются: S — ширина меньше 720px, M начинается с 720px. Целочисленные верхние границы — 719, 959 и 1139px.<br>
-Для поведения «начиная с размера» используйте <span class="mono">more()</span> / <span class="mono">less()</span>. <span class="mono">equal()</span> подходит для одного конкретного диапазона.</p></div>
-<div><h3>Ширина контента</h3>
-<p style="font:var(--ds-type-caption);color:var(--ds-fg-muted)">Формы и текстовые страницы ограничивайте токеном <span class="mono">--ds-content-max</span> (1440px), длинный текст — <span class="mono">--ds-content-max-prose</span> (72ch). Карта и таблицы используют доступную ширину. Ограничение не требует отдельного переключения на XL.</p></div>
-<p><a href="../DsBreakpointsDecisions/preview.html">Решения и список работ по миграции</a></p>
-</div>
-
-</div>
-</body></html>
+<div><h3>Ограничение ширины</h3><p>Применяйте <code>max-width: var(--ds-content-max)</code> к контейнеру формы, <code>max-width: var(--ds-content-max-prose)</code> — к абзацам. Карта и таблицы могут занимать доступную ширину. Ограничение не требует отдельного переключения на XL.</p></div>
+</div></details></section>
+</main><script type="text/babel">
+const {DsButton}=window.AuroraWebDesignSystem_96e210;
+function LayoutExample(){
+  const [layout,setLayout]=React.useState('narrow');
+  const [selected,setSelected]=React.useState('МАЗ 5440');
+  const [message,setMessage]=React.useState('');
+  return <>
+    <div className="layout-options" role="group" aria-label="Компоновка примера">
+      {[['narrow','Одна колонка'],['wide','Две колонки']].map(([value,label])=><DsButton key={value} tone={layout===value?'subtle':'secondary'} aria-pressed={layout===value} onClick={()=>setLayout(value)}>{label}</DsButton>)}
+    </div>
+    <div className="scene" id="responsive-example" data-layout={layout}>
+      <div className="workspace" data-layout={layout}>
+        <div className="object-list"><h3>Объекты</h3><div role="group" aria-label="Выбор объекта">
+          {['МАЗ 5440','Volvo FH16'].map(name=><DsButton key={name} tone={selected===name?'subtle':'secondary'} aria-pressed={selected===name} fullWidth onClick={()=>{setSelected(name);setMessage('');}}>{name}</DsButton>)}
+        </div></div>
+        <div className="object-details"><h3>{selected}</h3><p>{selected==='МАЗ 5440'?'Маршрут Минск — Брест.':'Маршрут Минск — Гродно.'}</p>
+          <div><DsButton tone="secondary" onClick={()=>setMessage('Данные '+selected+' обновлены.')}>Обновить</DsButton></div>
+          <p role="status" className="caption">{message||'Последнее сообщение — 14:32'}</p>
+        </div>
+      </div>
+    </div>
+  </>;
+}
+ReactDOM.flushSync(()=>ReactDOM.createRoot(document.getElementById('layout-example')).render(<LayoutExample/>));
+function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){
+  scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';scene.dataset.dsAppearance=root.dataset.dsAppearance||'light';scene.dataset.dsDensity=root.dataset.dsDensity||'cozy';
+}}
+refresh();new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density','style']});
+</script></body></html>
