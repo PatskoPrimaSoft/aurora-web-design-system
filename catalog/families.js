@@ -9,7 +9,7 @@ export const foundationSections = [
   { title: 'Визуальный язык', cards: ['DsType', 'DsNeutrals', 'DsShape', 'DsStatus'] },
   { title: 'Режимы интерфейса', cards: ['DsBrandThemes', 'DsAppearance', 'DsDensity'] },
   { title: 'Состояния контролов', cards: ['DsHover', 'DsFocus'] },
-  { title: 'Компоновка и данные', cards: ['DsBreakpoints', 'DsSorting', 'DsSortingMenu', 'DsCharts'] },
+  { title: 'Компоновка и данные', cards: ['DsBreakpoints', 'DsSortingMenu', 'DsCharts'] },
   { title: 'Настройка бренда', cards: ['DsBrandPick'] },
 ];
 

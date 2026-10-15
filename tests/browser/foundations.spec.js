@@ -26,11 +26,11 @@ test('foundation and map descriptions stay with examples through navigation, com
     expect(await foundationLinks.evaluateAll(links => links.map(link => link.dataset.id))).toEqual([
       'DsType', 'DsNeutrals', 'DsShape', 'DsStatus',
       'DsBrandThemes', 'DsAppearance', 'DsDensity', 'DsHover', 'DsFocus',
-      'DsBreakpoints', 'DsSorting', 'DsSortingMenu', 'DsCharts', 'DsBrandPick',
+      'DsBreakpoints', 'DsSortingMenu', 'DsCharts', 'DsBrandPick',
     ]);
     await page.locator('#search').fill('сортировка');
     await expect(page.locator('nav h3')).toHaveText(['Режимы интерфейса', 'Компоновка и данные']);
-    await expect(foundationLinks).toHaveText(['Плотность интерфейса', 'Сортировка в таблице', 'Сортировка вне таблицы']);
+    await expect(foundationLinks).toHaveText(['Плотность интерфейса', 'Сортировка вне таблицы']);
     await page.locator('#search').fill('визуальный язык');
     await expect(page.locator('nav h3')).toHaveText(['Визуальный язык']);
     await expect(foundationLinks).toHaveText(['Типографика', 'Нейтральные цвета', 'Форма и глубина', 'Цвета статусов']);
@@ -107,7 +107,7 @@ test('foundation and map descriptions stay with examples through navigation, com
     }
     await expect(page.locator('.document-preview .preview-scroll').first()).toHaveCSS('overflow', 'visible');
     await expect(page.locator('#preview-0')).toHaveCSS('border-top-width', '0px');
-    for (const id of ['DsType', 'DsHover', 'DsSorting', 'DsSortingMenu', 'DsBrandThemes', 'IconsArrows', 'IconsMapAssets', 'MapTrack', 'BrandLogoLockup']) {
+    for (const id of ['DsType', 'DsHover', 'DsSortingMenu', 'DsBrandThemes', 'IconsArrows', 'IconsMapAssets', 'MapTrack', 'BrandLogoLockup']) {
       await page.locator(`nav a[data-id="${id}"]`).click();
       for (let index = 0; index < 4; index++) {
         const frame = page.frameLocator('#preview-' + index);

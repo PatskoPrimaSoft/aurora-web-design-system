@@ -1,5 +1,5 @@
 export const scopeOptions={theme:['DEFAULT','RED2'],appearance:['light','dark'],density:['cozy','compact']};
-export const cardRedirects={DsHeader:'DsAppHeader',BrandLogoMark:'BrandLogoLockup'};
+export const cardRedirects={DsHeader:'DsAppHeader',BrandLogoMark:'BrandLogoLockup',DsSorting:'DsTable'};
 export const comparisonScopes=[
  {theme:'DEFAULT',appearance:'light',density:'cozy'},
  {theme:'DEFAULT',appearance:'dark',density:'compact'},

@@ -66,7 +66,7 @@ export function DsTable({columns=[],rows=[],rowKey='id',selectable=false,selecte
             aria-sort={active?(sortDir==='asc'?'ascending':'descending'):sortable?'none':undefined}>
             <TableText action={sortable?()=>onSort(c.key,active&&sortDir==='asc'?'desc':'asc'):undefined}
               label={sortable?S.table.sort(c.label,active&&sortDir==='asc'?'desc':'asc'):undefined}
-              style={sortable?{...sortBtn,color:active?'var(--ds-brand-text)':'inherit'}:undefined}
+              style={sortable?{...sortBtn,justifyContent:c.align==='right'?'flex-end':c.align==='center'?'center':'flex-start',color:active?'var(--ds-brand-text)':'inherit'}:undefined}
               trailing={sortable?<Icon name={active?(sortDir==='asc'?'arrow_upward':'arrow_downward'):'unfold_more'} size="var(--ds-icon-xs)" style={{flex:'none',color:active?'inherit':'var(--ds-fg-subtle)'}}/>:null}>{c.label}</TableText>
           </th>;})}
       </tr></thead>
@@ -165,7 +165,7 @@ function TableText({children,action,rowAction=false,active=false,wrap=false,labe
       onKeyDown={e=>{if(e.key==='Escape'&&tip){e.preventDefault();hide();}}}
       style={{...(action?rowBtn:{display:'block',minWidth:0}),...style,
         background:action&&trailing&&hover?'var(--ds-surface-hover)':action?'transparent':undefined}}>
-      <span ref={textRef} data-ds-table-text="" style={{display:'block',minWidth:0,flex:1,
+      <span ref={textRef} data-ds-table-text="" style={{display:'block',minWidth:0,flex:trailing?'0 1 auto':1,
         overflow:wrap?'visible':'hidden',textOverflow:wrap?undefined:'ellipsis',whiteSpace:wrap?'normal':'nowrap'}}>{children}</span>
       {trailing}
     </Main>
