@@ -59,6 +59,6 @@ const iframe=page.locator('#preview');await expect.poll(()=>iframe.evaluate(n=>M
 expect(await iframe.evaluate(n=>n.contentDocument.documentElement.scrollWidth<=n.clientWidth)).toBe(true);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 await page.screenshot({path:testInfo.outputPath(`panel-${theme}-${appearance}-${width}.png`),fullPage:true});
 }}
-await page.getByRole('button',{name:'Сравнить 4 режима'}).click();await expect(page.locator('#viewports iframe')).toHaveCount(4);
+await expect(page.locator('#compare')).toHaveCount(0);await expect(page.locator('#viewports iframe')).toHaveCount(1);
 expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect(errors).toEqual([]);
 });

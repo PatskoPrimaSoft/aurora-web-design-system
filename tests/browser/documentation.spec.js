@@ -42,13 +42,13 @@ test('contents navigate sections, follow scrolling and restore a shared section 
   await expect.poll(()=>page.locator('main').evaluate(node=>node.scrollTop)).toBe(0);
   expect((await new AxeBuilder({page}).exclude('iframe').analyze()).violations).toEqual([]);
   await page.locator('nav a[data-id="DsTabs"]').click();
-  await expect(page.locator('#title')).toHaveText('DsTabs');
+  await expect(page.locator('#title')).toHaveText('Tabs');
   await expect(toc.getByRole('link',{name:'Токены',exact:true})).toHaveCount(1);
   await page.goto(served.url+'/index.html?card=missing');
   await expect(toc).toHaveCount(0);
 });
 
-test('example contents navigate into the preview, restore links and stay unique in comparison',async({page})=>{
+test('example contents navigate into the preview, restore links and stay unique across scope changes',async({page})=>{
   await page.setViewportSize({width:1500,height:950});
   await page.goto(served.url+'/index.html?card=DsCheckbox');
   const toc=page.getByRole('navigation',{name:'На этой странице'});
@@ -78,10 +78,10 @@ test('example contents navigate into the preview, restore links and stay unique 
   await chooseCatalogueScope(page,'appearance','dark');
   await expect(toc.locator('ul ul a')).toHaveCount(6);
   await expect.poll(()=>page.locator('main').evaluate(node=>node.scrollTop)).toBe(0);
-  await page.getByRole('button',{name:'Сравнить 4 режима'}).click();
+  await expect(page.locator('#compare')).toHaveCount(0);
   await expect(toc.locator('ul ul a')).toHaveCount(6);
   await partial.click();
-  await expect(page.frameLocator('#preview-0').getByRole('heading',{name:'Частичный выбор',exact:true})).toBeFocused();
+  await expect(page.frameLocator('#preview').getByRole('heading',{name:'Частичный выбор',exact:true})).toBeFocused();
   await expect(partial).toHaveAttribute('aria-current','location');
   await page.setViewportSize({width:1500,height:500});
   await expect.poll(()=>page.locator('.page-contents').evaluate(node=>node.getBoundingClientRect().bottom<=document.querySelector('main').getBoundingClientRect().bottom)).toBe(true);
@@ -91,7 +91,7 @@ test('example contents navigate into the preview, restore links and stay unique 
   await page.setViewportSize({width:390,height:844});
   await page.locator('.page-contents summary').click();
   await toc.getByRole('link',{name:'Обычный выбор',exact:true}).click();
-  await expect(page.frameLocator('#preview-0').getByRole('heading',{name:'Обычный выбор',exact:true})).toBeFocused();
+  await expect(page.frameLocator('#preview').getByRole('heading',{name:'Обычный выбор',exact:true})).toBeFocused();
   await expect(toc).toBeHidden();
 });
 
@@ -132,15 +132,15 @@ test('example link buttons copy the current scope and open the exact example',as
   await expect(page.getByRole('navigation',{name:'На этой странице'}).getByRole('link',{name:'Частичный выбор',exact:true})).toHaveAttribute('aria-current','location');
   const offset=await example.locator('h3').evaluate(node=>node.getBoundingClientRect().top+window.frameElement.getBoundingClientRect().top-parent.document.querySelector('main').getBoundingClientRect().top);
   expect(offset).toBeGreaterThanOrEqual(0);expect(offset).toBeLessThan(60);
-  await page.getByRole('button',{name:'Сравнить 4 режима'}).click();
-  const compared=page.frameLocator('#preview-3').getByRole('region',{name:'Обычный выбор',exact:true});
-  await compared.getByRole('button',{name:/Копировать ссылку на пример/}).click();
-  await expect(compared.locator('.example-link-status')).toHaveText('Ссылка скопирована');
-  const comparisonLink=new URL(await page.evaluate(()=>navigator.clipboard.readText()));
-  expect(comparisonLink.searchParams.get('compare')).toBeNull();
-  expect(comparisonLink.searchParams.get('theme')).toBe('RED2');
-  expect(comparisonLink.searchParams.get('appearance')).toBe('dark');
-  expect(comparisonLink.searchParams.get('density')).toBe('compact');
+  await expect(page.locator('#compare')).toHaveCount(0);
+  const linkedExample=page.frameLocator('#preview').getByRole('region',{name:'Обычный выбор',exact:true});
+  await linkedExample.getByRole('button',{name:/Копировать ссылку на пример/}).click();
+  await expect(linkedExample.locator('.example-link-status')).toHaveText('Ссылка скопирована');
+  const exampleLink=new URL(await page.evaluate(()=>navigator.clipboard.readText()));
+  expect(exampleLink.searchParams.get('compare')).toBeNull();
+  expect(exampleLink.searchParams.get('theme')).toBe('RED2');
+  expect(exampleLink.searchParams.get('appearance')).toBe('dark');
+  expect(exampleLink.searchParams.get('density')).toBe('compact');
   await page.goto(served.url+'/components/DsCheckbox/preview.html?theme=RED2&appearance=dark&density=compact');
   await page.getByRole('button',{name:'Копировать ссылку на пример «Обычный выбор»',exact:true}).click();
   await expect(page.locator('.example-link-status').first()).toHaveText('Ссылка скопирована');

@@ -78,15 +78,15 @@ test('typography stays readable and reveals full text with the keyboard in every
         }
       }
     }
-    await page.locator('#compare').click();
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#compare')).toHaveCount(0);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(page.locator('.page-contents a')).toHaveCount(9);
     await page.locator('.page-contents summary').click();
     await page.locator('.page-contents').getByRole('link', {name: 'Числа и телеметрия', exact: true}).click();
-    await expect(page.frameLocator('#preview-0').locator('#numbers')).toBeFocused();
-    await expect(page.frameLocator('#preview-0').locator('#numbers')).toBeInViewport();
-    for (let index = 0; index < 4; index++) {
-      await expect.poll(() => page.locator('#preview-' + index).evaluate(iframe =>
+    await expect(page.frameLocator('#preview').locator('#numbers')).toBeFocused();
+    await expect(page.frameLocator('#preview').locator('#numbers')).toBeInViewport();
+    for (let index = 0; index < 1; index++) {
+      await expect.poll(() => page.locator('#preview').evaluate(iframe =>
         iframe.contentDocument.documentElement.scrollWidth <= iframe.clientWidth && iframe.clientHeight >= iframe.contentDocument.body.scrollHeight
       )).toBe(true);
     }
@@ -94,9 +94,9 @@ test('typography stays readable and reveals full text with the keyboard in every
     await page.locator('#card-description').getByRole('link', {name: 'Смена типографической системы'}).click();
     await expect(page.getByRole('heading', {name: 'Смена типографической системы', exact: true})).toBeVisible();
     await page.goBack();
-    await page.locator('#compare').click();
+    await expect(page.locator('#compare')).toHaveCount(0);
     await page.frameLocator('#preview').getByRole('link', {name: 'Открыть таблицу'}).click();
-    await expect(page.locator('#title')).toHaveText('DsTable');
+    await expect(page.locator('#title')).toHaveText('Table');
     await expect(page.locator('#theme')).toContainText('RED2');
     await expect(page.locator('#appearance')).toContainText('Тёмное');
     await expect(page.locator('#density')).toContainText('Компактная');

@@ -43,7 +43,7 @@ test('brand logo guide displays the real header and accessible references in eve
  }
  await page.goto(served.url+'/index.html?card=BrandLogoMark');await expect(page.locator('#title')).toHaveText('Логотип бренда');
  await page.goto(served.url+'/index.html?card=BrandLogoLockup&compare=1');
- await expect(page.locator('#viewports iframe')).toHaveCount(4);await expect(page.locator('.page-contents')).toHaveCount(1);
- for(let i=0;i<4;i++)await expect(page.frameLocator('#preview-'+i).locator('#ready-interface header img')).toBeVisible();
+ await expect(page.locator('#viewports iframe')).toHaveCount(1);await expect(page.locator('.page-contents')).toHaveCount(1);
+ for(let i=0;i<1;i++)await expect(page.frameLocator('#preview').locator('#ready-interface header img')).toBeVisible();
  }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });

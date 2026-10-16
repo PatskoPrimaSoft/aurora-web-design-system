@@ -5,16 +5,16 @@ const signature=result=>result.violations.flatMap(v=>v.nodes.map(n=>({id:v.id,im
 test('catalogue shell has no AXE violations and keyboard focus remains visible',async({page})=>{
  await buildCatalogue({root,outDir:root+'/site'});const served=await serveRoot(root+'/site');
  try{
-  await page.goto(served.url+'/index.html?card=DsButton');await expect(page.locator('#title')).toHaveText('DsButton');
+  await page.goto(served.url+'/index.html?card=DsButton');await expect(page.locator('#title')).toHaveText('Button');
   const result=await new AxeBuilder({page}).exclude('iframe').analyze();expect(result.violations).toEqual([]);
   for(const [theme,appearance,density]of [['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]){
-   await page.goto(`${served.url}/index.html?card=DsButton&theme=${theme}&appearance=${appearance}&density=${density}`);await expect(page.locator('#title')).toHaveText('DsButton');expect((await new AxeBuilder({page}).exclude('iframe').analyze()).violations).toEqual([]);
+   await page.goto(`${served.url}/index.html?card=DsButton&theme=${theme}&appearance=${appearance}&density=${density}`);await expect(page.locator('#title')).toHaveText('Button');expect((await new AxeBuilder({page}).exclude('iframe').analyze()).violations).toEqual([]);
   }
   await page.locator('#search').focus();await page.keyboard.type('DsButton');await page.keyboard.press('Tab');await expect(page.locator('nav a').first()).toBeFocused();
   expect(await page.locator('nav a').first().evaluate(el=>{const s=getComputedStyle(el);return s.outlineStyle!=='none'&&parseFloat(s.outlineWidth)>0;})).toBe(true);
-  for(const id of ['theme','appearance','density','compare']){await page.locator('#'+id).focus();await expect(page.locator('#'+id)).toBeFocused();expect(await page.locator('#'+id).evaluate(el=>getComputedStyle(el.closest('[data-ds-field]')||el).outlineStyle)).not.toBe('none');}
-  await page.locator('#compare').press('Enter');await expect(page.locator('#viewports iframe')).toHaveCount(4);
-  for(let i=0;i<4;i++){const frame=page.frameLocator('#preview-'+i);await expect(frame.getByRole('button').first()).toBeVisible();await frame.locator('html').evaluate(()=>document.fonts.ready);}
+  for(const id of ['theme','appearance','density']){await page.locator('#'+id).focus();await expect(page.locator('#'+id)).toBeFocused();expect(await page.locator('#'+id).evaluate(el=>getComputedStyle(el.closest('[data-ds-field]')||el).outlineStyle)).not.toBe('none');}
+  await expect(page.locator('#compare')).toHaveCount(0);await expect(page.locator('#viewports iframe')).toHaveCount(1);
+  for(let i=0;i<1;i++){const frame=page.frameLocator('#preview');await expect(frame.getByRole('button').first()).toBeVisible();await frame.locator('html').evaluate(()=>document.fonts.ready);}
   await page.screenshot({path:root+'/.tmp/catalogue-review.png',fullPage:true});
   // Negative control proves that the label rule remains active.
   await page.locator('label[for="search"]').evaluate(el=>el.remove());await page.locator('#search').evaluate(el=>el.removeAttribute('placeholder'));

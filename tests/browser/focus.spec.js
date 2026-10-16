@@ -92,9 +92,9 @@ test('focus guide supports keyboard forms and navigation in every mode', async (
       }
     }
     await page.goto(`${served.url}/index.html?card=DsFocus&compare=1`);
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(page.locator('.page-contents')).toHaveCount(1);
-    for(let i=0;i<4;i++) await expect(page.frameLocator('#preview-'+i).getByRole('button',{name:'Сохранить',exact:true})).toBeVisible();
+    for(let i=0;i<1;i++) await expect(page.frameLocator('#preview').getByRole('button',{name:'Сохранить',exact:true})).toBeVisible();
     expect(errors).toEqual([]);
   } finally {served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });

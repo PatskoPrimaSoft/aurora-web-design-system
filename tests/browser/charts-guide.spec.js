@@ -56,8 +56,8 @@ test('chart guide uses ECharts, exposes data and follows example scopes',async({
       }
     }
     await page.goto(served.url+'/index.html?card=DsCharts&compare=1');
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(page.locator('.page-contents')).toHaveCount(1);
-    for(let i=0;i<4;i++)await expect(page.frameLocator('#preview-'+i).locator('#ready-interface svg')).toHaveCount(1);
+    for(let i=0;i<1;i++)await expect(page.frameLocator('#preview').locator('#ready-interface svg')).toHaveCount(1);
   }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });

@@ -110,8 +110,8 @@ for(const card of components)test(`${card.id}: examples, code and contents work 
     await expect.poll(()=>page.locator('#preview').evaluate(iframe=>iframe.contentDocument.documentElement.scrollWidth<=iframe.clientWidth)).toBe(true);
     expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   }
-  await page.getByRole('button',{name:'Сравнить 4 режима'}).click();
-  await expect(page.locator('#viewports iframe')).toHaveCount(4);
-  for(let i=0;i<4;i++)await expect.poll(()=>page.locator(`#preview-${i}`).evaluate(iframe=>!!iframe.contentDocument?.querySelector('[data-ds-example-demo]')&&iframe.contentDocument.documentElement.scrollWidth<=iframe.clientWidth)).toBe(true);
+  await expect(page.locator('#compare')).toHaveCount(0);
+  await expect(page.locator('#viewports iframe')).toHaveCount(1);
+  for(let i=0;i<1;i++)await expect.poll(()=>page.locator('#preview').evaluate(iframe=>!!iframe.contentDocument?.querySelector('[data-ds-example-demo]')&&iframe.contentDocument.documentElement.scrollWidth<=iframe.clientWidth)).toBe(true);
   expect(errors).toEqual([]);
 });

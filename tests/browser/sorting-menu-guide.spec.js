@@ -65,8 +65,8 @@ test('sorting guide applies real ordering and keeps documentation neutral',async
       }
     }
     await page.goto(`${served.url}/index.html?card=DsSortingMenu&compare=1`);
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(page.locator('.page-contents')).toHaveCount(1);
-    for(let index=0;index<4;index++)await expect(page.frameLocator('#preview-'+index).getByRole('list',{name:'Объекты с сортировкой'}).getByRole('listitem')).toHaveCount(4);
+    for(let index=0;index<1;index++)await expect(page.frameLocator('#preview').getByRole('list',{name:'Объекты с сортировкой'}).getByRole('listitem')).toHaveCount(4);
   }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });

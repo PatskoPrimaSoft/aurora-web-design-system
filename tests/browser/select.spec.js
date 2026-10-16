@@ -30,7 +30,7 @@ await frame.getByRole('button',{name:'Сохранить',exact:true}).click();c
 const multi=frame.getByRole('combobox',{name:'Группы для отчёта',exact:true});await multi.click();await expect(frame.getByRole('listbox')).toHaveAttribute('aria-multiselectable','true');await frame.getByRole('option',{name:'Легковые',exact:true}).click();await expect(frame.getByRole('searchbox')).toBeFocused();await expect(frame.getByRole('option',{name:'Легковые',exact:true})).toHaveAttribute('aria-selected','true');await page.screenshot({path:testInfo.outputPath(`select-multiple-${theme}-${appearance}-${width}.png`),fullPage:true});await frame.getByRole('searchbox').press('Escape');await frame.getByRole('button',{name:'Сохранить группы',exact:true}).click();await expect(frame.getByRole('status').filter({hasText:'Группы в форме:'})).toHaveText('Группы в форме: trucks, vans, cars');
 const iframe=page.locator('#preview');await expect.poll(()=>iframe.evaluate(n=>Math.abs(n.getBoundingClientRect().height-n.contentDocument.body.getBoundingClientRect().height))).toBeLessThanOrEqual(4);expect(await iframe.evaluate(n=>n.contentDocument.documentElement.scrollWidth<=n.clientWidth)).toBe(true);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 }}
-await page.getByRole('button',{name:'Сравнить 4 режима'}).click();await expect(page.locator('#viewports iframe')).toHaveCount(4);expect(errors).toEqual([]);
+await expect(page.locator('#compare')).toHaveCount(0);await expect(page.locator('#viewports iframe')).toHaveCount(1);expect(errors).toEqual([]);
 });
 
 test('empty and changing options stay safe and long lists keep active options visible',async({page})=>{

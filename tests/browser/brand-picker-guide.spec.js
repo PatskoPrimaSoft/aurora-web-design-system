@@ -48,7 +48,7 @@ test('brand picker updates both palettes and keeps reference accessible',async({
    await page.reload();await expect(frame.locator('#choosing')).toBeInViewport();
   }
   await page.goto(served.url+'/index.html?card=DsBrandPick&compare=1');
-  await expect(page.locator('#viewports iframe')).toHaveCount(4);
+  await expect(page.locator('#viewports iframe')).toHaveCount(1);
   await expect(page.locator('.page-contents')).toHaveCount(1);
  }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });

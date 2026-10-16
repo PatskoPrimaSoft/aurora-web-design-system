@@ -8,8 +8,8 @@ test('complete generated site and four-way comparison work without external requ
  const paths=[];const walk=(folder,prefix='')=>{for(const entry of readdirSync(folder,{withFileTypes:true})){const path=prefix+entry.name;if(entry.isDirectory())walk(join(folder,entry.name),path+'/');else if(path.endsWith('.html'))paths.push(path);}};walk(root+'/site');
  try{
   for(const path of paths){await page.goto(served.url+'/'+path);if(await page.locator('#root').count())await expect.poll(()=>page.locator('#root').evaluate(el=>el.childNodes.length)).toBeGreaterThan(0);await page.evaluate(()=>document.fonts.ready);expect(errors,path).toEqual([]);}
-  await page.goto(served.url+'/index.html?card=DsButton&compare=1');await expect(page.locator('#viewports iframe')).toHaveCount(4);
-  for(let i=0;i<4;i++)await expect(page.frameLocator('#preview-'+i).getByRole('button').first()).toBeVisible();
+  await page.goto(served.url+'/index.html?card=DsButton&compare=1');await expect(page.locator('#viewports iframe')).toHaveCount(1);
+  for(let i=0;i<1;i++)await expect(page.frameLocator('#preview').getByRole('button').first()).toBeVisible();
   expect(await page.evaluate(async()=>{const checks=[['Inter Tight',400],['Inter Tight',500],['Inter Tight',600],['Inter Tight',700],['JetBrains Mono',400],['JetBrains Mono',500],['Material Symbols Outlined',400]];return Promise.all(checks.map(async([family,weight])=>{const faces=await document.fonts.load(`${weight} 14px "${family}"`,'Объект123');return faces.length>0&&faces.every(f=>f.status==='loaded');}));})).toEqual(Array(7).fill(true));
   expect(new Set(cards.map(card=>card.id)).size).toBe(cards.length);expect(cards.some(card=>card.id==='overview')).toBe(true);expect(external).toEqual([]);expect(errors).toEqual([]);console.log(`offline: ${paths.length} HTML pages, ${cards.length} previews, comparison and seven fonts passed`);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}

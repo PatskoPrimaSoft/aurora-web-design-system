@@ -1,6 +1,6 @@
 import {mountCatalogueShell} from './shell.js';
 import {createCatalogueNavigation} from './navigation.js';
-import {parseState,stateUrl,comparisonScopes} from './state.js';
+import {parseState,stateUrl} from './state.js';
 import {enhanceCodeBlocks,createPageContents} from './documentation.js';
 const cards=await(await fetch('cards.json')).json();
 const foundationGuides=new Set(['DsType','DsNeutrals','DsBrandThemes','DsAppearance','DsDensity','DsHover','DsFocus','DsBreakpoints','DsSortingMenu','DsCharts','DsChart','DsBrandPick','BrandLogoLockup']);
@@ -29,8 +29,7 @@ function renderControls(){
      items:options.map(option=>({id:option.value,label:option.label,type:'radio',checked:option.value===state.scope[field.id]})),
      onSelect:item=>{state.scope[field.id]=item.id;save(true);render();}
     });
-   }),
-   h(DsButton,{id:'compare',tone:state.compare?'subtle':'secondary','aria-pressed':state.compare,disabled:state.unknown,onClick:()=>{state.compare=!state.compare;save(true);render();}},'Сравнить 4 режима')
+   })
  )));
 }
 const titleStatus=document.getElementById('card-status'),titleStatusRoot=window.ReactDOM.createRoot(titleStatus);
@@ -44,18 +43,18 @@ function save(push=false){
 const drawCatalogueNavigation=createCatalogueNavigation(cards,{onSelect:card=>{state={...state,cardId:card.id,unknown:false};save(true);render();}});
 function drawNavigation(){drawCatalogueNavigation(state);}
 function scopeFrame(record){
- const scope=state.compare?record.fixed:state.scope;
+ const scope=state.scope;
  for(const[name,value]of Object.entries(scope))record.element.contentDocument?.documentElement?.setAttribute('data-ds-'+name,value);
- record.element.contentDocument?.documentElement?.setAttribute('data-ds-example-card-url',stateUrl(location.href,{...state,scope,compare:false,query:''}));
+ record.element.contentDocument?.documentElement?.setAttribute('data-ds-example-card-url',stateUrl(location.href,{...state,scope,query:''}));
  const caption=`${scope.theme} / ${scope.appearance} / ${scope.density}`;
- record.caption.textContent=caption;record.caption.hidden=!state.compare;record.element.title=record.card.title+' — '+caption;
+ record.caption.textContent=caption;record.caption.hidden=true;record.element.title=record.card.title+' — '+caption;
 }
 function scopePreviewLink(event,record){
  const link=event.target.closest?.('a[target="_top"][href]');
  if(!link)return;
  const url=new URL(link.href),catalogue=new URL('index.html',location.href);
  if(url.origin!==catalogue.origin||url.pathname!==catalogue.pathname||!url.searchParams.has('card'))return;
- link.href=stateUrl(location.href,{...state,cardId:url.searchParams.get('card'),scope:state.compare?record.fixed:state.scope});
+ link.href=stateUrl(location.href,{...state,cardId:url.searchParams.get('card'),scope:state.scope});
 }
 function referenceLinks(card){
  const target=document.getElementById('reference-links');target.replaceChildren();
@@ -93,15 +92,15 @@ function render({restoreSection=false}={}){
  disposeContents=()=>{};
  if(!card){document.getElementById('title').textContent='Карточка не найдена';document.getElementById('subtitle').textContent='Выберите карточку в навигации или вернитесь к началу.';document.getElementById('missing-id').textContent=state.cardId;for(const record of frames)record.resizeObserver?.disconnect();viewports.replaceChildren();document.getElementById('reference-links').replaceChildren();frames=[];renderedKey=null;document.getElementById('local-note').hidden=true;return;}
  document.getElementById('title').textContent=card.title;document.getElementById('subtitle').textContent=card.subtitle;document.getElementById('local-note').hidden=card.scopeMode!=='local';referenceLinks(card);
- const key=card.id+'|'+state.compare;
+ const key=card.id;
  const documentPreview=['overview','DsBreakpointsDecisions'].includes(card.id)||foundationGuides.has(card.id);
  const responsivePreview=documentPreview||card.layout==='component';
  if(key!==renderedKey){
   for(const record of frames)record.resizeObserver?.disconnect();
-  viewports.replaceChildren();frames=[];viewports.className=state.compare?'preview-matrix':'single-preview';
-  for(const[index,fixed]of (state.compare?comparisonScopes:[state.scope]).entries()){
+  viewports.replaceChildren();frames=[];viewports.className='single-preview';
+  for(const[index,fixed]of [state.scope].entries()){
    const panel=document.createElement('figure'),caption=document.createElement('figcaption'),scroll=document.createElement('div'),frame=document.createElement('iframe');
-   panel.className='preview-panel';scroll.className='preview-scroll';scroll.tabIndex=0;scroll.setAttribute('role','region');caption.id='preview-caption-'+index;scroll.setAttribute('aria-labelledby',caption.id);frame.id=state.compare?'preview-'+index:'preview';frame.style.width=card.viewport.width+'px';frame.style.height=card.viewport.height+'px';
+   panel.className='preview-panel';scroll.className='preview-scroll';scroll.tabIndex=0;scroll.setAttribute('role','region');caption.id='preview-caption-'+index;scroll.setAttribute('aria-labelledby',caption.id);frame.id='preview';frame.style.width=card.viewport.width+'px';frame.style.height=card.viewport.height+'px';
    if(responsivePreview){
     panel.classList.add(documentPreview?'document-preview':'component-preview');frame.style.width='100%';
     scroll.removeAttribute('tabindex');scroll.removeAttribute('role');scroll.removeAttribute('aria-labelledby');

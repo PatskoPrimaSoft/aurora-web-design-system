@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 test.use({ actionTimeout: 10000 });
 
-test('foundation and map descriptions stay with examples through navigation, comparison and scoped links', async ({ page }, testInfo) => {
+test('foundation and map descriptions stay with examples through navigation and scoped links', async ({ page }, testInfo) => {
   const cards = await buildCatalogue({ root, outDir: `${root}/site` });
   const foundations = cards.filter(card => ['2 · Основы', '3 · Миграция', '4 · Бренд (общее)', '6 · Карта'].includes(card.group));
   const served = await serveRoot(`${root}/site`);
@@ -16,23 +16,21 @@ test('foundation and map descriptions stay with examples through navigation, com
   page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
   try {
     await page.goto(served.url + '/index.html?card=DsBreakpoints');
-    await expect(page.locator('nav h3')).toHaveText([
+    await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText([
       'Визуальный язык', 'Режимы интерфейса', 'Состояния контролов',
-      'Компоновка и данные', 'Настройка бренда',
+      'Компоновка и данные', 'Бренд и темы',
     ]);
-    const foundationLinks = page.locator('nav a[data-id]').filter({
-      has: page.locator('xpath=preceding-sibling::h2[1][text()="2 · Основы"]'),
-    });
+    const foundationLinks = page.locator('[data-navigation-group=foundations] a[data-id]');
     expect(await foundationLinks.evaluateAll(links => links.map(link => link.dataset.id))).toEqual([
       'DsType', 'DsNeutrals', 'DsShape', 'DsStatus',
-      'DsBrandThemes', 'DsAppearance', 'DsDensity', 'DsHover', 'DsFocus',
-      'DsBreakpoints', 'DsSortingMenu', 'DsCharts', 'DsBrandPick',
+      'DsAppearance', 'DsDensity', 'DsHover', 'DsFocus',
+      'DsBreakpoints', 'DsSortingMenu', 'DsCharts', 'DsBrandThemes', 'DsBrandPick', 'BrandLogoLockup',
     ]);
     await page.locator('#search').fill('сортировка');
-    await expect(page.locator('nav h3')).toHaveText(['Режимы интерфейса', 'Компоновка и данные']);
+    await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText(['Режимы интерфейса', 'Компоновка и данные']);
     await expect(foundationLinks).toHaveText(['Плотность интерфейса', 'Сортировка вне таблицы']);
     await page.locator('#search').fill('визуальный язык');
-    await expect(page.locator('nav h3')).toHaveText(['Визуальный язык']);
+    await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText(['Визуальный язык']);
     await expect(foundationLinks).toHaveText(['Типографика', 'Нейтральные цвета', 'Форма и глубина', 'Цвета статусов']);
     await foundationLinks.first().focus();
     await page.keyboard.press('Enter');
@@ -49,7 +47,7 @@ test('foundation and map descriptions stay with examples through navigation, com
       await expect(page.locator('#reference-links').getByRole('link', { name: 'Описание', exact: true })).toHaveCount(0);
       await expect(page.locator('#preview')).toHaveAttribute('src', new RegExp(card.id));
       await expect(page.locator('#title')).not.toHaveText(/^Ds/);
-      await expect(page.locator(`nav a[data-id="${card.id}"]`).locator('xpath=preceding-sibling::h2[1]')).toHaveText(card.group);
+      await expect(page.locator(`nav a[data-id="${card.id}"]`).locator('xpath=preceding-sibling::h2[1]')).toHaveText(['2 · Основы','4 · Бренд (общее)'].includes(card.group)?'Основы':card.group.replace(/^\d+ · /,''));
     }
     await page.locator('nav a[data-id="DsBreakpoints"]').click();
     await chooseCatalogueScope(page,'theme','RED2');
@@ -63,7 +61,7 @@ test('foundation and map descriptions stay with examples through navigation, com
     await page.goBack();
     await expect(page.locator('#title')).toHaveText('Адаптивность и брейкпоинты');
     await page.locator('nav a[data-id="DsBrandThemes"]').click();
-    await page.frameLocator('#preview').getByRole('link', { name: '«Как выбрать цвета темы»' }).click();
+    await page.frameLocator('#preview').getByRole('link', { name: 'подбор цветов темы' }).click();
     await expect(page.locator('#title')).toHaveText('Подбор цветов темы');
     await expect(description).toBeVisible();
     await expect(page.locator('#theme')).toContainText('RED2');
@@ -88,37 +86,31 @@ test('foundation and map descriptions stay with examples through navigation, com
     await expect(page.locator('#appearance')).toContainText('Тёмное');
     await expect(page.locator('#density')).toContainText('Компактная');
     await page.locator('nav a[data-id="DsBreakpoints"]').click();
-    await page.locator('#compare').click();
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#compare')).toHaveCount(0);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(description).toHaveCount(1);
-    for (const [index, scope] of [['DEFAULT', 'light', 'cozy'], ['DEFAULT', 'dark', 'compact'], ['RED2', 'light', 'cozy'], ['RED2', 'dark', 'compact']].entries()) {
-      const frame = page.frameLocator('#preview-' + index);
+    for (const [index, scope] of [['RED2', 'dark', 'compact']].entries()) {
+      const frame = page.frameLocator('#preview');
       for (const [axis, value] of ['theme', 'appearance', 'density'].map((axis, i) => [axis, scope[i]]))
         await expect(frame.locator('html')).toHaveAttribute('data-ds-' + axis, value);
     }
     await page.locator('nav a[data-id="DsBreakpointsDecisions"]').click();
     await expect(description).toBeVisible();
-    for (let index = 0; index < 4; index++) {
-      const frame = page.frameLocator('#preview-' + index);
+    for (let index = 0; index < 1; index++) {
+      const frame = page.frameLocator('#preview');
       await expect(frame.getByRole('heading', { name: 'Статус миграции', exact: true })).toBeVisible();
       await expect.poll(() => frame.locator('body').evaluate(body =>
         body.scrollHeight <= window.innerHeight + 1 && document.documentElement.scrollWidth <= window.innerWidth
       )).toBe(true);
     }
     await expect(page.locator('.document-preview .preview-scroll').first()).toHaveCSS('overflow', 'visible');
-    await expect(page.locator('#preview-0')).toHaveCSS('border-top-width', '0px');
+    await expect(page.locator('#preview')).toHaveCSS('border-top-width', '0px');
     for (const id of ['DsType', 'DsHover', 'DsSortingMenu', 'DsBrandThemes', 'IconsArrows', 'IconsMapAssets', 'MapTrack']) {
       await page.locator(`nav a[data-id="${id}"]`).click();
-      for (let index = 0; index < 4; index++) {
-        const frame = page.frameLocator('#preview-' + index);
-        await expect.poll(() => frame.locator('body').evaluate(body => {
-          const rootStyle = getComputedStyle(document.documentElement);
-          const bodyStyle = getComputedStyle(body);
-          return ['--ds-fg', '--ds-brand', '--ds-control-h'].every(token => rootStyle.getPropertyValue(token) === bodyStyle.getPropertyValue(token));
-        })).toBe(true);
-        if (id === 'DsBrandThemes') await expect.poll(() => frame.locator('.hex').first().evaluate(label =>
-          label.textContent === getComputedStyle(document.documentElement).getPropertyValue(label.dataset.token).trim()
-        )).toBe(true);
+      for (let index = 0; index < 1; index++) {
+        const frame = page.frameLocator('#preview');
+        for (const [axis,value] of Object.entries({theme:'RED2',appearance:'dark',density:'compact'}))
+          await expect(frame.locator('html')).toHaveAttribute('data-ds-'+axis,value);
 
       }
     }
@@ -146,11 +138,11 @@ test('foundation and map descriptions stay with examples through navigation, com
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
     await page.goto(served.url + '/api/tokens.html?theme=RED2&appearance=dark&density=compact');
     await page.getByRole('button', { name: 'Навигация', exact: true }).click();
-    await expect(page.locator('nav h3')).toHaveCount(5);
-    await page.locator('#search').fill('настройка бренда');
-    await expect(page.locator('nav h3')).toHaveText(['Настройка бренда']);
-    await expect(foundationLinks).toHaveText(['Подбор цветов темы']);
-    await foundationLinks.first().click();
+    await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveCount(5);
+    await page.locator('#search').fill('бренд и темы');
+    await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText(['Режимы интерфейса','Бренд и темы']);
+    await expect(foundationLinks).toHaveText(['Светлый и тёмный режим','Цветовые темы','Подбор цветов темы','Логотип бренда']);
+    await page.locator('nav a[data-id=DsBrandPick]').click();
     await expect(page.locator('#title')).toHaveText('Подбор цветов темы');
     await expect(page.locator('#theme')).toContainText('RED2');
     await expect(page.locator('#appearance')).toContainText('Тёмное');

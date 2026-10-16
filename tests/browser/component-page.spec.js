@@ -80,9 +80,9 @@ test('component page keeps one reading order, inline reference and responsive pr
       await expect(page.locator('#viewports .preview-scroll')).not.toHaveAttribute('tabindex');
       await page.locator('main').evaluate(node=>node.scrollTop=0);
       await page.screenshot({path:testInfo.outputPath(`component-mobile-${theme}-${appearance}.png`),fullPage:true});
-      await page.getByRole('button',{name:'Сравнить 4 режима'}).click();
-      await expect(page.locator('#viewports iframe')).toHaveCount(4);
-      for(let index=0;index<4;index++)await expect.poll(()=>page.locator(`#preview-${index}`).evaluate(iframe=>iframe.contentDocument.documentElement.scrollWidth<=iframe.clientWidth)).toBe(true);
+      await expect(page.locator('#compare')).toHaveCount(0);
+      await expect(page.locator('#viewports iframe')).toHaveCount(1);
+      for(let index=0;index<1;index++)await expect.poll(()=>page.locator('#preview').evaluate(iframe=>iframe.contentDocument.documentElement.scrollWidth<=iframe.clientWidth)).toBe(true);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
     }
     expect(errors).toEqual([]);

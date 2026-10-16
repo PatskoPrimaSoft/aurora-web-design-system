@@ -64,9 +64,9 @@ test('hover guide demonstrates transient feedback and confirms activation',async
       }
     }
     await page.goto(`${served.url}/index.html?card=DsHover&compare=1`);
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(page.locator('.page-contents')).toHaveCount(1);
-    for(let index=0;index<4;index++) await expect(page.frameLocator('#preview-'+index).getByRole('button',{name:'Сохранить',exact:true})).toBeVisible();
+    for(let index=0;index<1;index++) await expect(page.frameLocator('#preview').getByRole('button',{name:'Сохранить',exact:true})).toBeVisible();
     expect(errors).toEqual([]);
   } finally {served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });

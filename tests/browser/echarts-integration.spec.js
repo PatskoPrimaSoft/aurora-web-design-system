@@ -59,8 +59,8 @@ test('ECharts integration preserves series selection, theme, sizing and legacy r
       await expect(page.getByRole('heading',{level:1}).first()).toHaveText(old);
     }
     await page.goto(served.url+'/index.html?card=DsChart&compare=1');
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
-    for(let i=0;i<4;i++)await expect(page.frameLocator('#preview-'+i).locator('#echarts-plot svg')).toHaveCount(1);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
+    for(let i=0;i<1;i++)await expect(page.frameLocator('#preview').locator('#echarts-plot svg')).toHaveCount(1);
     for(const name of ['DsSparkline','DsScoreBar'])await expect(page.locator('nav a[data-id="'+name+'"]')).toHaveCount(1);
     // Execute the copyable documentation as a consumer, independently of the preview script.
     const readme=readFileSync(root+'/components/DsChart/README.md','utf8');

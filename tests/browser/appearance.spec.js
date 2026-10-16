@@ -65,7 +65,7 @@ test('appearance examples follow scope, preserve interaction and remain accessib
       }
     }
     await page.goto(`${served.url}/index.html?card=DsAppearance&compare=1`);
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(page.locator('.page-contents')).toHaveCount(1);
     expect(errors).toEqual([]);
   } finally {served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}

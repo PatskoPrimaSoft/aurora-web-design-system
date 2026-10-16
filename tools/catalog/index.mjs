@@ -20,7 +20,7 @@ export function readCards(root) {
     const viewport = { width: size ? Number(size[1]) : 1180, height: size ? Number(size[2]) : Number(attrs.height ?? 900) };
     if ((attrs.viewport && !size) || !Object.values(viewport).every(n => Number.isInteger(n) && n > 0 && n <= 6000)) throw new Error(`${previewPath}: invalid viewport`);
     const readme = `components/${id}/README.md`;
-    return { id, title: attrs.name ?? id, group: attrs.group ?? '1 · Начало', subtitle: (attrs.subtitle ?? '').replaceAll('{{cardCount}}',String(paths.length)), aliases:(attrs.aliases??'').split('|').map(value=>value.trim()).filter(Boolean), previewPath,
+    return { id, title: (attrs.name ?? id).replace(/^Ds(?=[A-Z])/u, ''), group: attrs.group ?? '1 · Начало', subtitle: (attrs.subtitle ?? '').replaceAll('{{cardCount}}',String(paths.length)), aliases:(attrs.aliases??'').split('|').map(value=>value.trim()).filter(Boolean), previewPath,
       readmePath: existsSync(join(root, readme)) ? readme : null, declarationPaths: [], viewport,
       layout: attrs.layout??'preview', status: attrs.status??null,
       scopeMode: attrs.scopeMode ?? (/data-ds-(?:appearance|theme)=/.test(html) ? 'local' : 'inherit') };

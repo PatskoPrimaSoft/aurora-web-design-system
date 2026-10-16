@@ -9,9 +9,12 @@ test('all catalogue pages render from local files without runtime errors',async(
  await page.route('**/*',r=>r.request().url().startsWith(served.url+'/')?r.continue():r.abort('blockedbyclient'));
  try{
   await page.goto(served.url+'/index.html');await expect(page.locator('nav a[data-id]')).toHaveCount(cards.length);
-  await expect(page.locator('nav h2')).toHaveText(['1 · Начало','2 · Основы','3 · Миграция','4 · Бренд (общее)',...['выбор','графики','данные','кнопки','навигация','обратная связь','примитивы','раскладка','формы','шапка'].map(name=>'5 · Компоненты · '+name),'6 · Карта','7 · Эталонные экраны']);
+  await expect(page.locator('nav h2')).toHaveText(['Начало','Основы','Компоненты','Карта','Примеры экранов','Миграция']);
+  await expect(page.locator('[data-navigation-group=components] h3')).toHaveText(['Кнопки и иконки','Поля и выбор','Навигация','Данные и фильтры','Контейнеры и окна','Обратная связь','Графики']);
+  expect(await page.locator('nav a[data-id]').evaluateAll(links=>new Set(links.map(link=>link.dataset.id)).size)).toBe(cards.length);
+  await expect(page.locator('[data-navigation-group=components] a[data-id]').first()).toHaveText('Button');
   await expect(page.locator('#subtitle')).toContainText(`${cards.length} карточек`);await expect(page.frameLocator('#preview').locator('body')).toContainText(`${cards.length} карточек`);
-  await page.locator('nav a[data-id="DsButton"]').click();await expect(page.locator('h1')).toHaveText('DsButton');
+  await page.locator('nav a[data-id="DsButton"]').click();await expect(page.locator('h1')).toHaveText('Button');
   await chooseCatalogueScope(page,'theme','RED2');await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-theme','RED2');
   for(const card of cards){await page.setViewportSize(card.viewport);await page.goto(served.url+'/'+card.previewPath);await page.evaluate(()=>document.fonts.ready);
    if(await page.locator('#root').count())await expect.poll(async()=>page.evaluate(()=>document.getElementById('root').childNodes.length>0||document.querySelector('[role="dialog"]')!==null),{message:`${card.id}: React root or visible portal must render`}).toBe(true);
@@ -26,9 +29,9 @@ test('merged header keeps legacy links and both navigation examples in four scop
  try{
   for(const suffix of ['?card=DsHeader&theme=RED2&appearance=dark&density=compact&compare=1','#DsHeader']){
    await page.goto(served.url+'/index.html'+suffix);
-   await expect(page.locator('#title')).toHaveText('DsAppHeader · Шапка приложения');
+   await expect(page.locator('#title')).toHaveText('AppHeader · Шапка приложения');
    await expect(page.locator('nav a[data-id="DsHeader"]')).toHaveCount(0);
-   if(suffix.startsWith('?')){await expect(page.locator('#theme')).toContainText('RED2');await expect(page.locator('#viewports iframe')).toHaveCount(4);}
+   if(suffix.startsWith('?')){await expect(page.locator('#theme')).toContainText('RED2');await expect(page.locator('#viewports iframe')).toHaveCount(1);}
   }
   for(const[path,destination]of [
    ['components/DsHeader/preview.html','/index.html'],
@@ -45,8 +48,9 @@ test('merged header keeps legacy links and both navigation examples in four scop
   for(const path of ['components/DsHeaderChip/preview.html','docs/cards/DsHeaderChip.html','api/components/DsHeaderChip.html'])
    expect((await page.request.get(served.url+'/'+path)).status()).toBe(404);
   const scopes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
-  for(const[index,scope]of scopes.entries()){
-   const frame=page.frameLocator('#preview-'+index);
+  for(const scope of scopes){
+   await page.goto(served.url+'/index.html?card=DsAppHeader&'+new URLSearchParams({theme:scope[0],appearance:scope[1],density:scope[2]}));
+   const frame=page.frameLocator('#preview');
    for(const[axis,value]of ['theme','appearance','density'].map((axis,i)=>[axis,scope[i]]))await expect(frame.locator('html')).toHaveAttribute('data-ds-'+axis,value);
    await expect(frame.locator('header')).toHaveCount(2);
    expect(await frame.locator('html').evaluate(()=>Object.hasOwn(window.AuroraWebDesignSystem_96e210,'DsHeaderChip'))).toBe(false);
@@ -119,7 +123,7 @@ test('token reference filters categories and switches paired theme values',async
   await expect(page.locator('#cards a[data-id=DsButton]')).toBeVisible();
   await page.locator('#search').fill('DsButton');
   await page.locator('#cards a[data-id=DsButton]').click();
-  await expect(page.locator('#title')).toHaveText('DsButton');
+  await expect(page.locator('#title')).toHaveText('Button');
   await page.goBack();
   await expect(page.locator('#cards .catalog-tokens-link')).toHaveAttribute('aria-current','page');
   await expect(page.locator('[data-token-row]')).toHaveCount(tokenCount);
@@ -178,26 +182,26 @@ test('token reference filters categories and switches paired theme values',async
  }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });
 
-test('search, URL history and scope comparison preserve preview contracts',async({page})=>{
+test('search, URL history and scope selection preserve preview contracts',async({page})=>{
  const cards=await buildCatalogue({root,outDir:`${root}/site`}),served=await serveRoot(`${root}/site`);
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
-  await page.goto(served.url+'/index.html#DsButton');await expect(page.locator('#title')).toHaveText('DsButton');
+  await page.goto(served.url+'/index.html#DsButton');await expect(page.locator('#title')).toHaveText('Button');
   await page.locator('#search').fill('CHECKBOX');await expect(page.locator('nav a[data-id="DsCheckbox"]')).toBeVisible();
   await page.locator('#search').fill('loading');await expect(page.locator('nav a[data-id="DsButton"]')).toBeVisible();
   await page.locator('#search').fill('not-a-card-12345');await expect(page.locator('#search-empty')).toBeVisible();
   await page.locator('#search').fill('');await chooseCatalogueScope(page,'theme','RED2');await chooseCatalogueScope(page,'appearance','dark');await chooseCatalogueScope(page,'density','compact');
   await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-theme','RED2');
   await page.reload();await expect(page.locator('#density')).toContainText('Компактная');await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-appearance','dark');
-  await page.locator('#compare').click();await expect(page.locator('#viewports iframe')).toHaveCount(4);
-  const expected=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
+  await expect(page.locator('#compare')).toHaveCount(0);await expect(page.locator('#viewports iframe')).toHaveCount(1);
+  const expected=[['RED2','dark','compact']];
   for(const[index,scope]of expected.entries()){
-   const frame=page.frameLocator('#preview-'+index);for(const[axis,value]of ['theme','appearance','density'].map((axis,i)=>[axis,scope[i]]))await expect(frame.locator('html')).toHaveAttribute('data-ds-'+axis,value);
+   const frame=page.frameLocator('#preview');for(const[axis,value]of ['theme','appearance','density'].map((axis,i)=>[axis,scope[i]]))await expect(frame.locator('html')).toHaveAttribute('data-ds-'+axis,value);
    const card=cards.find(c=>c.id==='DsButton');
-   expect(await page.locator('#preview-'+index).evaluate(frame=>frame.style.width)).toBe(card.layout==='component'?'100%':card.viewport.width+'px');
+   expect(await page.locator('#preview').evaluate(frame=>frame.style.width)).toBe(card.layout==='component'?'100%':card.viewport.width+'px');
   }
-  await page.reload();await expect(page.locator('#compare')).toHaveAttribute('aria-pressed','true');
-  await page.locator('#compare').click();await page.goBack();await expect(page.locator('#viewports iframe')).toHaveCount(4);
+  await page.reload();await expect(page.locator('#compare')).toHaveCount(0);
+  await expect(page.locator('#compare')).toHaveCount(0);await page.goBack();await expect(page.locator('#viewports iframe')).toHaveCount(1);
   await page.goto(served.url+'/index.html?card=Monitoring&appearance=dark');await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-appearance','dark');await expect(page.frameLocator('#preview').locator('#root [data-ds-appearance]').first()).toHaveAttribute('data-ds-appearance','light');
   await page.locator('#search').focus();await page.keyboard.type('DsButton');await page.keyboard.press('Tab');await expect(page.locator('nav a').first()).toBeFocused();
   await page.goto(served.url+'/index.html?card=%3Cscript%3E&theme=bad');await expect(page.locator('#card-error')).toBeVisible();await expect(page.locator('#missing-id')).toHaveText('<script>');await expect(page.locator('#viewports iframe')).toHaveCount(0);await expect(page.locator('#theme')).toContainText('DEFAULT');

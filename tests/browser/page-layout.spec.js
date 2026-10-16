@@ -56,7 +56,7 @@ const expand=frame.getByRole('button',{name:'Развернуть описани
 await expect.poll(()=>page.locator('#preview').evaluate(n=>Math.abs(n.getBoundingClientRect().height-n.contentDocument.body.getBoundingClientRect().height))).toBeLessThan(4);
 expect(await page.locator('#preview').evaluate(n=>n.contentDocument.documentElement.scrollWidth<=n.clientWidth)).toBe(true);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 await page.screenshot({path:testInfo.outputPath(`layout-${theme}-${appearance}-${width}.png`),fullPage:true});
-await page.getByRole('button',{name:'Сравнить 4 режима'}).click();await expect(page.locator('#viewports iframe')).toHaveCount(4);for(const iframe of await page.locator('#viewports iframe').all())await expect.poll(()=>iframe.evaluate(n=>n.contentDocument.documentElement.scrollWidth<=n.clientWidth)).toBe(true);
+await expect(page.locator('#compare')).toHaveCount(0);await expect(page.locator('#viewports iframe')).toHaveCount(1);for(const iframe of await page.locator('#viewports iframe').all())await expect.poll(()=>iframe.evaluate(n=>n.contentDocument.documentElement.scrollWidth<=n.clientWidth)).toBe(true);
 }expect(errors).toEqual([]);
 });
 

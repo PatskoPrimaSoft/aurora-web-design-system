@@ -70,10 +70,10 @@ test('density guide inherits scope and keeps comparison search and sorting synch
       }
     }
     await page.goto(`${served.url}/index.html?card=DsDensity&compare=1`);
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(page.locator('.page-contents')).toHaveCount(1);
-    for(let index=0;index<4;index++) {
-      const frame=page.frameLocator('#preview-'+index);
+    for(let index=0;index<1;index++) {
+      const frame=page.frameLocator('#preview');
       for(const mode of ['cozy','compact']) {
         const sample=frame.locator('#density-'+mode);
         await expect(sample.locator('tbody tr')).toHaveCount(4);

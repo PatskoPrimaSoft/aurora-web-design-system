@@ -119,14 +119,14 @@ test('neutrals guide adapts its samples and keeps section navigation usable in e
     await page.frameLocator('#preview').locator('html').evaluate(node => node.removeAttribute('style'));
     await expect(contrast).toContainText('15,46');
     const count = await page.locator('.page-contents a').count();
-    await page.locator('#compare').click();
-    await expect(page.locator('#viewports iframe')).toHaveCount(4);
+    await expect(page.locator('#compare')).toHaveCount(0);
+    await expect(page.locator('#viewports iframe')).toHaveCount(1);
     await expect(page.locator('.page-contents a')).toHaveCount(count);
     await page.locator('.page-contents summary').click();
     await page.locator('.page-contents').getByRole('link', {name: 'Исходная шкала', exact: true}).click();
-    await expect(page.frameLocator('#preview-0').locator('#palette')).toBeFocused();
-    for (let index = 0; index < 4; index++) {
-      await expect.poll(() => page.locator('#preview-' + index).evaluate(iframe =>
+    await expect(page.frameLocator('#preview').locator('#palette')).toBeFocused();
+    for (let index = 0; index < 1; index++) {
+      await expect.poll(() => page.locator('#preview').evaluate(iframe =>
         iframe.contentDocument.documentElement.scrollWidth <= iframe.clientWidth && iframe.clientHeight >= iframe.contentDocument.body.scrollHeight
       )).toBe(true);
     }
