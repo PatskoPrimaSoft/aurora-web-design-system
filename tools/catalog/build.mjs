@@ -12,7 +12,7 @@ import {renderMarkdown,renderProps,renderComponentProps,documentPage} from '../d
 import {renderTokenReference} from '../docs/tokens.mjs';
 import {validateLinks} from '../docs/links.mjs';
 import {cardRedirects} from '../../catalog/state.js';
-const hasInlineDescription = card => card.layout === 'component' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
+const hasInlineDescription = card => card.layout === 'component' || card.id === 'DsChart' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
 export async function buildCatalogue({ root, outDir }) {
   if (resolve(root) === resolve(outDir)) throw new Error('Catalogue output must not replace source root');
   const cards = readCards(root);
@@ -59,6 +59,7 @@ export async function buildCatalogue({ root, outDir }) {
   for(const card of cards){
     const contracts=api.filter(doc=>doc.name===card.id||(doc.declarationPath.split('/')[1]===card.id&&!cards.some(own=>own.id===doc.name))).sort((a,b)=>Number(b.name===card.id)-Number(a.name===card.id));
     card.apiPaths=contracts.map(doc=>({name:doc.name,path:`api/components/${doc.name}.html`}));
+    if(card.id==='DsChart')card.apiPaths=[];
     if(card.layout==='component'){
       const descriptionPath=join(dirname(card.previewPath),'API.md');
       const description=existsSync(join(root,descriptionPath))?renderMarkdown({root,path:descriptionPath,knownRoutes}).html:'';
@@ -92,6 +93,8 @@ export async function buildCatalogue({ root, outDir }) {
     [`docs/cards/${old}.html`,`docs/cards/${target}.html`],
     [`api/components/${old}.html`,api.some(doc=>doc.name===target)?`api/components/${target}.html`:'index.html'],
   ]){
+    // Keep the public API reference even when its catalogue page is consolidated.
+    if(path===`api/components/${old}.html`&&api.some(doc=>doc.name===old))continue;
     const href=posix.relative(posix.dirname(path),destination);
     writePage(path,`<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Открыть ${target}</title></head><body><a href="${href}?card=${target}">Открыть ${target}</a><script>const target=new URL(${JSON.stringify(href)},location.href);target.search=location.search;target.searchParams.set('card',${JSON.stringify(target)});location.replace(target.href);</script></body></html>`);
   }

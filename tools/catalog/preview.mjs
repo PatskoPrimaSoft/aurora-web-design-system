@@ -6,6 +6,7 @@ import { transform,build } from 'esbuild';
 import {scopeOptions,applyQueryScope} from '../../catalog/state.js';
 import {readCards} from './index.mjs';
 import hljs from 'highlight.js/lib/common';
+import {vendorAssets} from './assets.mjs';
 
 const attr = (node, name) => node.attrs?.find(a => a.name === name)?.value;
 function setAttr(node, name, value) {
@@ -52,7 +53,8 @@ export async function renderPreview({ root, card, mode = 'legacy', scope, standa
       if (['script', 'img', 'link'].includes(node.tagName) && !node._remove) {
         if (relative(root, resolve(root, path)).startsWith('..') || !existsSync(join(root, path))) throw new Error(`${card.previewPath}: missing asset ${path}`);
       }
-      a.value = posix.relative(posix.dirname(card.previewPath), path) + url.search + url.hash;
+      const destination=Object.keys(vendorAssets).find(key=>vendorAssets[key]===path)??path;
+      a.value = posix.relative(posix.dirname(card.previewPath), destination) + url.search + url.hash;
     }
     for (const child of node.childNodes ?? []) walk(child);
     if (node.childNodes) node.childNodes = node.childNodes.filter(n => !n._remove);

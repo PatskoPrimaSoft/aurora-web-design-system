@@ -262,7 +262,7 @@ SVG-логотипа, локапа только из словесного зна
 | формы | `DsField` · `DsCheckbox` · `DsSwitch` · `DsDuration` · `DsFilterMenu` |
 | данные | `DsTable` · `DsPagination` · `DsChip` · `DsChipGroup` · `DsLozenge` · `DsListRow` · `DsTreeRow` · `DsBulkActionsBar` · `DsStateIcon` |
 | обратная связь | `DsBanner` · `DsToast` · `DsToastStack` · `DsEmptyState` · `DsSpinner` · `DsSkeleton` |
-| графики | `DsChart` · `DsChartLegend` · `DsChartTooltip` · `DsSparkline` · `DsScoreBar` |
+| графики | ECharts + `dsEChartsTheme()` · `DsSparkline` · `DsScoreBar` |
 | раскладка | `DsPanel` · `DsDialog` · `DsPageLayout` |
 | навигация | `DsAppHeader` · `DsTabs` · `DsStepper` · `DsMenu` · `DsUserMenu` |
 

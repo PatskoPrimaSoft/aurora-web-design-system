@@ -4,7 +4,7 @@ import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../../',import.meta.url));
-test('chart guide keeps series stable, exposes data and follows example scopes',async({page},testInfo)=>{
+test('chart guide uses ECharts, exposes data and follows example scopes',async({page},testInfo)=>{
   await buildCatalogue({root,outDir:root+'/site'});
   const served=await serveRoot(root+'/site');
   try{
@@ -17,16 +17,16 @@ test('chart guide keeps series stable, exposes data and follows example scopes',
         await expect(frame.locator('body')).toHaveAttribute('data-ds-appearance','light');
         for(const [axis,value] of Object.entries({theme,appearance,density}))await expect(scene).toHaveAttribute('data-ds-'+axis,value);
         const maz=scene.getByRole('button',{name:'МАЗ 5440 км/ч',exact:true});
-        const first=scene.locator('path[stroke="var(--ds-series-1)"]'),second=scene.locator('path[stroke="var(--ds-series-2)"]');
-        await expect(first).toHaveCount(2);
-        await expect(second).toHaveCount(1);
-        await expect(second).toHaveCSS('stroke-dasharray','6px, 4px');
+        const option=()=>scene.locator('#echarts-plot').evaluate(el=>echarts.getInstanceByDom(el).getOption());
+        await expect(scene.locator('#echarts-plot svg')).toHaveCount(1);
+        expect((await option()).series[0].connectNulls).toBe(false);
+        expect((await option()).series[0].data[3]).toBe(null);
+        expect((await option()).series[1].lineStyle.type).toBe('dashed');
         await maz.press('Enter');
         await expect(maz).toHaveAttribute('aria-pressed','false');
-        await expect(first).toHaveCount(0);
-        await expect(second).toHaveCount(1);
+        expect((await option()).legend[0].selected['МАЗ 5440']).toBe(false);
         await maz.press('Space');
-        await expect(first).toHaveCount(2);
+        expect((await option()).legend[0].selected['МАЗ 5440']).toBe(true);
         const data=frame.locator('#chart-data');
         await data.locator('summary').press('Enter');
         await expect(data.getByRole('row')).toHaveCount(8);
@@ -37,17 +37,13 @@ test('chart guide keeps series stable, exposes data and follows example scopes',
         await reference.locator('summary').press('Enter');
         await expect(frame.locator('#series-palette .swatch')).toHaveCount(8);
         await reference.locator('summary').press('Enter');
-        for(const id of ['chart-types','chart-integration']){
+        for(const id of ['chart-types']){
           const disclosure=frame.locator('#'+id);
           await expect(disclosure).not.toHaveAttribute('open','');
           await disclosure.locator('summary').press('Enter');
           await expect(disclosure).toHaveAttribute('open','');
           await disclosure.locator('summary').press('Enter');
         }
-        const code=page.locator('#card-description details');
-        await code.locator('summary').press('Enter');
-        await expect(code.getByRole('button',{name:'Копировать код',exact:true})).toBeVisible();
-        await code.locator('summary').press('Enter');
         expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
         expect(await frame.locator('html').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
         expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()).violations).toEqual([]);

@@ -27,7 +27,7 @@ details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:g
 </style></head>
 <body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
 <section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">График в интерфейсе</h2>
-<p class="lead">Компонент сам оформляет линии, оси и сетку. Выберите данные и единицы измерения.</p>
+<p class="lead">Графики строит ECharts, а адаптер дизайн-системы задаёт цвета, оси, сетку и подсказки. Приложение выбирает данные и единицы измерения.</p>
 <p class="caption" style="margin-bottom:12px">Нажмите название объекта в легенде, чтобы скрыть его линию. МАЗ — сплошная линия, Volvo — пунктир.</p>
 <div class="scene speed-chart" id="ready-interface"></div>
 <p class="caption" style="margin-top:12px">В 11:00 нет данных МАЗ — линия прерывается.</p>
@@ -46,6 +46,7 @@ details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:g
 <li><strong>Показывайте смысл без опоры только на цвет.</strong> Различайте линии подписями, маркерами или рисунком штриха. Точные значения должны быть доступны в таблице с клавиатуры.</li>
 <li><strong>Сохраняйте достоверность.</strong> Отсутствующее показание — пропуск, а не ноль. Для площади и столбцов сохраняйте нулевую базу; для сравниваемых графиков используйте одинаковые шкалы.</li>
 <li><strong>Сравнивайте совместимые величины.</strong> На одной оси показывайте одну единицу измерения. Скорость и запас топлива выносите в отдельные графики.</li>
+<li><strong>Ограничивайте число серий.</strong> Ориентир — 5–6 различимых цветов одновременно. Если объектов больше, предложите выбор или несколько графиков; сохраняйте отдельные значения телеметрии.</li>
 <li><strong>Убирайте лишнее.</strong> Спокойная сетка помогает читать значения. Для операторских экранов используйте декартовы графики без 3D, градиентов и декоративной анимации; не добавляйте инструменты без работающего действия.</li>
 </ul></section>
 <section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Цвета и технические подробности</h2>
@@ -60,24 +61,5 @@ details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:g
 <dt>Масштаб</dt><dd><code>--ds-chart-zoom-bg</code>, <code>--ds-chart-zoom-window</code>, <code>--ds-chart-zoom-handle</code></dd>
 </dl><p style="margin-top:16px">Область построения <code>--ds-chart-plot</code> прозрачна: видна поверхность родительской панели.</p></div>
 </div></details>
-<details id="chart-integration"><summary>Подключение в приложении</summary><div class="reference-content">
-<div><h3>Готовый компонент и ECharts</h3><p>DsChart читает CSS-токены напрямую. В приложении с ECharts используйте <code>dsEChartsTheme(chartElement)</code> из <code>@primasoftllc/design-system/echarts-theme</code>: адаптер читает токены контейнера при вызове. После смены оформления прочитайте их заново и обновите настройки графика. Данные, устойчивое соответствие цветов и доступную таблицу обеспечивает приложение.</p><p>У адаптера отключена анимация; <code>lineDefaults.connectNulls</code> равен <code>false</code>. Добавляйте <code>lineDefaults</code> в каждую линейную серию. Нулевая база площади и столбцов в ECharts настраивается приложением; DsChart учитывает её сам.</p></div>
-<div><h3>Проверка данных</h3><p>Проверяйте пропуски, одну точку, пустой набор, длинные названия и узкий экран.</p></div>
-</div></details></section>
-</main><script type="text/babel">
-const {DsChart}=window.AuroraWebDesignSystem_96e210;
-const TIMES=['08:00','09:00','10:00','11:00','12:00','13:00','14:00'];
-const SERIES=[
-  {name:'МАЗ 5440',unit:'км/ч',color:'var(--ds-series-1)',data:[24,48,62,null,54,76,60]},
-  {name:'Volvo FH16',unit:'км/ч',color:'var(--ds-series-2)',data:[40,56,48,64,72,60,44]}
-];
-ReactDOM.createRoot(document.getElementById('ready-interface')).render(
-  <DsChart title="Скорость объектов" subtitle="Сегодня · 08:00–14:00 · км/ч" categories={TIMES} series={SERIES} height={220} yMin={0} yMax={100} thresholds={[{value:90,label:'Лимит 90 км/ч',tone:'danger'}]}/>
-);
-const rows=document.getElementById('data-rows');
-TIMES.forEach((time,index)=>{const row=document.createElement('tr');[time,...SERIES.map(series=>series.data[index]===null?'Нет данных':series.data[index])].forEach((value,column)=>{const cell=document.createElement(column===0?'th':'td');if(column===0)cell.scope='row';cell.textContent=value;row.append(cell)});rows.append(row)});
-const palette=document.getElementById('series-palette');
-for(let i=1;i<=8;i++){const item=document.createElement('div'),swatch=document.createElement('div'),label=document.createElement('code');swatch.className='swatch';swatch.style.background='var(--ds-series-'+i+')';label.textContent='series-'+i;item.append(swatch,label);palette.append(item)}
-function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';scene.dataset.dsAppearance=root.dataset.dsAppearance||'light';scene.dataset.dsDensity=root.dataset.dsDensity||'cozy'}}
-refresh();new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density','style']});
-</script></body></html>
+</section>
+</main><script src="../../node_modules/echarts/dist/echarts.min.js"></script><script src="../src/components/charts/echartsTheme.js"></script><script src="../DsChart/echarts-example.js"></script></body></html>

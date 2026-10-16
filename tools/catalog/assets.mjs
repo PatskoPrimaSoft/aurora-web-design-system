@@ -1,11 +1,13 @@
 import { readFileSync, copyFileSync, mkdirSync, existsSync } from 'node:fs';
 import { resolve, relative, dirname, isAbsolute, sep } from 'node:path';
 import { parse } from 'parse5';
+export const vendorAssets = {'vendor/echarts.min.js':'node_modules/echarts/dist/echarts.min.js'};
 export function assetPath(root, from, url) {
   if (/^(?:data:|blob:|#)/.test(url)) return null;
   const u = new URL(url, `http://aurora.local/${from}`);
   if (u.origin !== 'http://aurora.local') throw new Error(`${from}: external asset ${url}`);
-  const path = resolve(root, '.' + decodeURIComponent(u.pathname));
+  const requested = decodeURIComponent(u.pathname).slice(1);
+  const path = resolve(root, vendorAssets[requested] ?? requested);
   const rel = relative(resolve(root), path);
   if (rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel)) throw new Error(`${from}: unsafe asset ${url}`);
   if (!existsSync(path)) throw new Error(`${from}: missing asset ${url}`);
@@ -39,7 +41,8 @@ export function previewAssets(root, from, html, ignoredPaths = []) {
   return [...refs];
 }
 export function copyAsset({ root, outDir, path }) {
-  const target = resolve(outDir, path);
+  const destination = Object.keys(vendorAssets).find(key=>vendorAssets[key]===path.replaceAll('\\','/')) ?? path;
+  const target = resolve(outDir, destination);
   const rel = relative(resolve(outDir), target);
   if (rel.startsWith('..') || isAbsolute(rel)) throw new Error(`Unsafe output asset ${path}`);
   mkdirSync(dirname(target), { recursive: true });
