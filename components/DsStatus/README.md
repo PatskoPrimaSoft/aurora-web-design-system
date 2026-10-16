@@ -1,23 +1,31 @@
 # Цвета статусов
 
-## Роли внутри статуса
+## Пример кода
 
-`neutral`, `info`, `success`, `warning` и `danger` сохраняют смысл при
-смене бренда. Их значения адаптируются к светлому и тёмному режимам.
+В готовом компоненте выбирайте смысл через `tone` и добавляйте подпись.
+Цвета подложки, текста и иконки назначает сам компонент.
 
-| Роль | Назначение |
-| --- | --- |
-| `--ds-*-bg` | Мягкая статусная подложка |
-| `--ds-*-fg` | Текст и иконка на обычной поверхности |
-| `--ds-*-line` | Статусная граница |
-| `--ds-*-solid` | Насыщенная заливка |
+```jsx
+import { DsLozenge, DsBanner } from '@primasoftllc/design-system';
+import '@primasoftllc/design-system/styles.css';
 
-## Инверсная поверхность
+export function ReportStatus() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <DsLozenge tone="success">Готов</DsLozenge>
+      <DsBanner tone="success" title="Отчёт сформирован" headingLevel="h3">
+        Данные за 12 октября доступны в разделе отчётов.
+      </DsBanner>
+    </div>
+  );
+}
+```
 
-На инверсном фоне тоста используйте `--ds-info-fg-on-inverse`,
-`--ds-success-fg-on-inverse`, `--ds-warning-fg-on-inverse` или
-`--ds-danger-fg-on-inverse`. Для нейтрального содержимого — `--ds-fg-on-inverse`.
-Обычные статусные цвета не рассчитаны на такую поверхность.
+## Дальше
 
-Передавайте смысл подписью или иконкой вместе с цветом.
-Примеры применения: [DsLozenge](../DsLozenge/README.md) и [DsToast](../DsToast/README.md).
+- [DsLozenge](../DsLozenge/README.md) — короткая неинтерактивная плашка статуса.
+- [DsBanner](../DsBanner/README.md) — постоянное сообщение внутри страницы.
+- [DsToast](../DsToast/README.md) — результат действия, срочность и время показа.
+- [DsButton](../DsButton/README.md) — варианты кнопок, в том числе для опасных действий.
+- [Нейтральные цвета](../DsNeutrals/README.md) — обычный текст и поверхности.
+- [Оформление интерфейса](../DsAppearance/README.md) — светлый и тёмный режимы.

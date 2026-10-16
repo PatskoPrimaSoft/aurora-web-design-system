@@ -26,7 +26,7 @@ const work = mkdtempSync(join(tmpdir(), 'ds-pack-'));
 try {
   const packed = JSON.parse(sh(['pack', '--json', '--ignore-scripts', '--pack-destination', work], root))[0];
   assert.equal(packed.files.some(f=>/^(?:site|catalog|tests|tools|\.tmp)\//.test(f.path)),false,'catalogue and build/test tooling must not ship');
-  for(const path of ['dist/styles.css','dist/tokens.css','tokens.json','dist/angular/core.mjs','dist/angular/core.d.mts','dist/angular/echarts.mjs','dist/angular/echarts.d.mts'])assert.ok(packed.files.some(f=>f.path===path),path);
+  for(const path of ['dist/styles.css','dist/tokens.css','tokens.json','dist/react/index.mjs','dist/react/index.d.ts','dist/angular/core.mjs','dist/angular/core.d.mts','dist/angular/echarts.mjs','dist/angular/echarts.d.mts'])assert.ok(packed.files.some(f=>f.path===path),path);
   const tgz = packed.filename;
   writeFileSync(join(work, 'package.json'), JSON.stringify({ name: 'consumer', private: true, type: 'module' }));
   sh(['install', '--offline', '--no-audit', '--no-fund', join(work, tgz)], work);
@@ -70,6 +70,29 @@ try {
     const installed = readdirSync(join(work, 'node_modules'));
     for (const dep of ['react', 'react-dom', 'echarts', '@angular']) assert.ok(!installed.includes(dep), dep);
     assert.ok(!existsSync(join(pkgDir, 'lint/test')));
+  });
+  await check('React: импорт и рендер установленного tarball без JSX-loader и ECharts', () => {
+    for(const name of ['react','react-dom','@types','csstype'])
+      symlinkSync(join(root,'node_modules',name),join(work,'node_modules',name),'junction');
+    writeFileSync(join(work,'react-runtime.mjs'),`
+      import assert from 'node:assert/strict';
+      import React from 'react';
+      import {renderToStaticMarkup} from 'react-dom/server';
+      import {DsButton,DsSkeleton,DsStringsProvider,dsStringsEn,dsTabIds} from '@primasoftllc/design-system';
+      const html=renderToStaticMarkup(React.createElement(DsStringsProvider,{strings:dsStringsEn},React.createElement(DsButton,null,'Save')));
+      assert.match(html,/<button/);assert.match(html,/Save/);
+      assert.equal(typeof DsSkeleton,'function');assert.equal(dsTabIds('tabs','one').panelId,'tabs-panel-one');
+    `);
+    const result=spawnSync(process.execPath,[join(work,'react-runtime.mjs')],{cwd:work,encoding:'utf8'});
+    assert.equal(result.status,0,result.stdout+result.stderr);
+    assert.ok(!existsSync(join(work,'node_modules/echarts')));
+  });
+  await check('React: строгие типы потребителя и отклонение неверных props', () => {
+    writeFileSync(join(work,'react-consumer.tsx'),readFileSync(join(root,'tests/fixtures/react-consumer.tsx'),'utf8'));
+    const result=spawnSync(process.execPath,[join(root,'node_modules/typescript/bin/tsc'),
+      '--strict','--noEmit','--skipLibCheck','false','--module','NodeNext','--moduleResolution','NodeNext',
+      '--target','ES2022','--jsx','react-jsx','--types','react,react-dom','react-consumer.tsx'],{cwd:work,encoding:'utf8'});
+    assert.equal(result.status,0,result.stdout+result.stderr);
   });
 } finally {
   rmSync(work, { recursive: true, force: true });

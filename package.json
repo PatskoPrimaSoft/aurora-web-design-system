@@ -11,7 +11,7 @@
     "registry": "https://npm.pkg.github.com"
   },
   "type": "module",
-  "main": "components/src/index.js",
+  "main": "dist/react/index.mjs",
   "files": [
     "dist/",
     "fonts/",
@@ -39,7 +39,11 @@
       "types": "./dist/angular/echarts.d.mts",
       "default": "./dist/angular/echarts.mjs"
     },
-    ".": "./components/src/index.js",
+    ".": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.mjs",
+      "default": "./dist/react/index.mjs"
+    },
     "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
     "./tokens.json": "./tokens.json",
@@ -51,7 +55,7 @@
     "check:angular": "node tools/check-angular.mjs",
     "test": "npm run test:lint && npm run test:ui",
     "test:lint": "node lint/test/run.js",
-    "test:ui": "node tests/DsFilterMenu.test.js && node tests/a11y-tokens.test.js && node tests/checkbox.test.js && node tests/switch.test.js && node tests/rows-buttons.test.js && node tests/nav-dialog-i18n.test.js && node tests/page-layout.test.js && node tests/field.test.js && node tests/select.test.js && node tests/guard-command.test.js && node tests/release-check.test.js && node tests/package.test.js && node tests/fonts.test.js && node tests/changelog-section.test.js",
+    "test:ui": "node tests/DsFilterMenu.test.js && node tests/a11y-tokens.test.js && node tests/checkbox.test.js && node tests/switch.test.js && node tests/rows-buttons.test.js && node tests/nav-dialog-i18n.test.js && node tests/page-layout.test.js && node tests/field.test.js && node tests/select.test.js && node tests/guard-command.test.js && node tests/release-check.test.js && node tests/package.test.js && node tests/fonts.test.js && node tests/changelog-section.test.js && node tests/react-build.test.mjs && node tests/verification-plan.test.js",
     "check:names": "node lint/scripts/check-names.js",
     "check:delivery": "node lint/scripts/check-delivery.js",
     "build:allowlist": "node lint/scripts/build-allowlist.js",
@@ -66,9 +70,9 @@
     "build:catalog": "node tools/catalog/build.mjs"
   },
   "peerDependencies": {
-    "@angular/common": ">=19.0.0",
-    "@angular/core": ">=19.0.0",
-    "echarts": "^5.5.0 || ^6.0.0",
+    "@angular/common": ">=20.3.34",
+    "@angular/core": ">=20.3.34",
+    "echarts": "^6.1.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "stylelint": "^16.10.0 || ^17.0.0"
@@ -94,17 +98,17 @@
     }
   },
   "devDependencies": {
-    "@angular/common": "19.0.7",
-    "@angular/compiler": "19.0.7",
-    "@angular/compiler-cli": "19.0.7",
-    "@angular/core": "19.0.7",
-    "@angular/platform-browser": "19.0.7",
-    "@angular/platform-browser-dynamic": "19.0.7",
+    "@angular/common": "20.3.34",
+    "@angular/compiler": "20.3.34",
+    "@angular/compiler-cli": "20.3.34",
+    "@angular/core": "20.3.34",
+    "@angular/platform-browser": "20.3.34",
+    "@angular/platform-browser-dynamic": "20.3.34",
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "@types/react": "18.3.31",
     "@types/react-dom": "18.3.7",
-    "echarts": "5.5.1",
+    "echarts": "6.1.0",
     "esbuild": "0.28.2",
     "highlight.js": "11.12.0",
     "jsdom": "^24.1.3",
@@ -115,10 +119,11 @@
     "react-dom": "18.3.1",
     "rxjs": "7.8.2",
     "stylelint": "^16.10.0",
-    "typescript": "5.6.3",
+    "typescript": "5.9.3",
     "zone.js": "0.15.1"
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "types": "dist/react/index.d.ts"
 }

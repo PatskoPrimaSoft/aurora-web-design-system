@@ -15,18 +15,22 @@ test('complete generated site and four-way comparison work without external requ
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 test('fixture token, card and broken contract edits rebuild and recover in dev',async({page})=>{
+ test.setTimeout(180000);
  const fixture=fixtureRoot();let dev;
  try{
   dev=await startDev({root:fixture,port:0});await page.goto(dev.url+'/api/tokens.html');
-  const source=join(fixture,'tokens/source.json'),model=JSON.parse(readFileSync(source,'utf8'));model.color.tokens.find(t=>t.name==='ds-n-0').value='#fefdfc';writeFileSync(source,JSON.stringify(model));
+  const status=async()=>await(await page.request.get(dev.url+'/__status')).json();
+  const rebuild=async change=>{const before=await status();change();await expect.poll(async()=>{const next=await status();return next.version!==before.version&&next.error===null;},{timeout:30000,message:'edit must produce a successful new build generation'}).toBe(true);};
+  const rejectBuild=async(change,error)=>{const before=await status();change();await expect.poll(async()=>(await status()).error,{timeout:30000,message:'invalid edit must report its build error'}).toContain(error);expect((await status()).version).toBe(before.version);await expect(page.locator('#build-error')).toContainText(error);};
+  const source=join(fixture,'tokens/source.json'),model=JSON.parse(readFileSync(source,'utf8'));model.color.tokens.find(t=>t.name==='ds-n-0').value='#fefdfc';await rebuild(()=>writeFileSync(source,JSON.stringify(model)));
   await expect(page.locator('#ds-n-0')).toContainText('#fefdfc');await expect.poll(async()=>await(await page.request.get(dev.url+'/dist/styles.css')).text()).toContain('#fefdfc');
-  await page.goto(dev.url+'/index.html');mkdirSync(join(fixture,'components/NewCard'));writeFileSync(join(fixture,'components/NewCard/preview.html'),'<!-- @dsCard name="Fresh discovered card" group="New" --><html><head></head><body>new example</body></html>');
+  await page.goto(dev.url+'/index.html');await rebuild(()=>{mkdirSync(join(fixture,'components/NewCard'));writeFileSync(join(fixture,'components/NewCard/preview.html'),'<!-- @dsCard name="Fresh discovered card" group="New" --><html><head></head><body>new example</body></html>');});
   await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();await page.locator('#search').fill('Fresh');await expect(page.locator('nav a[data-id]')).toHaveCount(1);
-  const contract=join(fixture,'components/DsButton/DsButton.d.ts'),original=readFileSync(contract,'utf8');writeFileSync(contract,original.replace('tone?:',"/** @default 'secondary' */ tone?:"));
-  await expect(page.locator('#build-error')).toContainText('DsButton.tone: @default differs from implementation');await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
-  writeFileSync(contract,original);await expect(page.locator('#build-error')).toBeHidden();await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
-  writeFileSync(contract,original+'\nexport declare const invalidContract: MissingContractType;');await expect(page.locator('#build-error')).toContainText('MissingContractType');writeFileSync(contract,original);await expect(page.locator('#build-error')).toBeHidden();
-  const readme=join(fixture,'components/Example/README.md');writeFileSync(readme,'# Example\n\n[Broken](#does-not-exist)');await expect(page.locator('#build-error')).toContainText('missing-anchor');await expect(page.locator('#build-error')).toContainText('#does-not-exist');await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
-  writeFileSync(readme,'# Example\n\n[Valid](#example)');await expect(page.locator('#build-error')).toBeHidden();await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
+  const contract=join(fixture,'components/DsButton/DsButton.d.ts'),original=readFileSync(contract,'utf8');
+  await rejectBuild(()=>writeFileSync(contract,original.replace('tone?:',"/** @default 'secondary' */ tone?:")),'DsButton.tone: @default differs from implementation');await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
+  await rebuild(()=>writeFileSync(contract,original));await expect(page.locator('#build-error')).toBeHidden();await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
+  await rejectBuild(()=>writeFileSync(contract,original+'\nexport declare const invalidContract: MissingContractType;'),'MissingContractType');await rebuild(()=>writeFileSync(contract,original));await expect(page.locator('#build-error')).toBeHidden();
+  const readme=join(fixture,'components/Example/README.md');await rejectBuild(()=>writeFileSync(readme,'# Example\n\n[Broken](#does-not-exist)'),'missing-anchor');await expect(page.locator('#build-error')).toContainText('#does-not-exist');await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
+  await rebuild(()=>writeFileSync(readme,'# Example\n\n[Valid](#example)'));await expect(page.locator('#build-error')).toBeHidden();await expect(page.locator('nav a[data-id="NewCard"]')).toBeVisible();
  }finally{await page.goto('about:blank');if(dev)await dev.close();rmSync(fixture,{recursive:true,force:true});}
 });

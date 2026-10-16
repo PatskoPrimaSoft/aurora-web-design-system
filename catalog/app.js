@@ -3,7 +3,7 @@ import {createCatalogueNavigation} from './navigation.js';
 import {parseState,stateUrl} from './state.js';
 import {enhanceCodeBlocks,createPageContents} from './documentation.js';
 const cards=await(await fetch('cards.json')).json();
-const foundationGuides=new Set(['DsType','DsNeutrals','DsBrandThemes','DsAppearance','DsDensity','DsHover','DsFocus','DsBreakpoints','DsSortingMenu','DsCharts','DsChart','DsBrandPick','BrandLogoLockup']);
+const foundationGuides=new Set(['DsType','DsNeutrals','DsShape','DsStatus','DsBrandThemes','DsAppearance','DsDensity','DsHover','DsFocus','DsBreakpoints','DsSortingMenu','DsCharts','DsChart','DsBrandPick','BrandLogoLockup']);
 let state=parseState(new URL(location.href),cards),renderedKey=null,frames=[];
 let disposeContents=()=>{};
 const {DsMenu,DsButton}=window.AuroraWebDesignSystem_96e210;
@@ -90,13 +90,13 @@ function render({restoreSection=false}={}){
  titleStatus.hidden=card?.status!=='deprecated';renderStatus(titleStatusRoot,card);
  describeCard(card);
  disposeContents=()=>{};
- if(!card){document.getElementById('title').textContent='Карточка не найдена';document.getElementById('subtitle').textContent='Выберите карточку в навигации или вернитесь к началу.';document.getElementById('missing-id').textContent=state.cardId;for(const record of frames)record.resizeObserver?.disconnect();viewports.replaceChildren();document.getElementById('reference-links').replaceChildren();frames=[];renderedKey=null;document.getElementById('local-note').hidden=true;return;}
+ if(!card){document.getElementById('title').textContent='Карточка не найдена';document.getElementById('subtitle').textContent='Выберите карточку в навигации или вернитесь к началу.';document.getElementById('missing-id').textContent=state.cardId;for(const record of frames)record.disposeResize?.();viewports.replaceChildren();document.getElementById('reference-links').replaceChildren();frames=[];renderedKey=null;document.getElementById('local-note').hidden=true;return;}
  document.getElementById('title').textContent=card.title;document.getElementById('subtitle').textContent=card.subtitle;document.getElementById('local-note').hidden=card.scopeMode!=='local';referenceLinks(card);
  const key=card.id;
  const documentPreview=['overview','DsBreakpointsDecisions'].includes(card.id)||foundationGuides.has(card.id);
  const responsivePreview=documentPreview||card.layout==='component';
  if(key!==renderedKey){
-  for(const record of frames)record.resizeObserver?.disconnect();
+  for(const record of frames)record.disposeResize?.();
   viewports.replaceChildren();frames=[];viewports.className='single-preview';
   for(const[index,fixed]of [state.scope].entries()){
    const panel=document.createElement('figure'),caption=document.createElement('figcaption'),scroll=document.createElement('div'),frame=document.createElement('iframe');
@@ -109,13 +109,21 @@ function render({restoreSection=false}={}){
     panel.classList.toggle('sectioned-preview',card.layout==='component'&&frame.contentDocument.body.hasAttribute('data-ds-examples'));
     scopeFrame(record);
     if(responsivePreview){
-     record.resizeObserver?.disconnect();
+     record.disposeResize?.();
+     const body=frame.contentDocument.body;
+     let pending=null,disposed=false;
      const fit=()=>{
-      const body=frame.contentDocument.body,css=getComputedStyle(body);
+      pending=null;
+      if(disposed||!frame.isConnected||frame.contentDocument.body!==body)return;
+      const css=getComputedStyle(body);
       const height=body.getBoundingClientRect().height+(parseFloat(css.marginTop)||0)+(parseFloat(css.marginBottom)||0);
-      frame.style.height=Math.ceil(height+frame.offsetHeight-frame.clientHeight)+'px';
+      const nextHeight=Math.ceil(height+frame.offsetHeight-frame.clientHeight)+'px';
+      if(frame.style.height!==nextHeight)frame.style.height=nextHeight;
      };
-     record.resizeObserver=new ResizeObserver(fit);record.resizeObserver.observe(frame.contentDocument.body);fit();
+     // Resize the iframe after observer delivery, avoiding a WebKit resize loop.
+     const observer=new ResizeObserver(()=>{if(pending===null&&!disposed)pending=requestAnimationFrame(fit);});
+     record.disposeResize=()=>{disposed=true;observer.disconnect();if(pending!==null)cancelAnimationFrame(pending);};
+     observer.observe(body);fit();
     }
     for(const event of ['click','auxclick','contextmenu'])frame.contentDocument.addEventListener(event,e=>scopePreviewLink(e,record));
    });

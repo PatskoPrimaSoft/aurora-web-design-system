@@ -71,7 +71,7 @@ export type DsStringsOverrides = {
 } & Record<string, DsStringValue | Record<string, DsStringValue | undefined> | undefined>;
 export interface DsStringsProviderProps {
   /** Flat values and partial groups override the inherited dictionary. */
-  strings?: DsStringsOverrides;
+  strings?: DsStrings | DsStringsOverrides;
   children?: React.ReactNode;
 }
 export declare function DsStringsProvider(props: DsStringsProviderProps): JSX.Element;

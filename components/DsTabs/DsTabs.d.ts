@@ -42,3 +42,7 @@ export interface DsTabPanelProps {
   style?: React.CSSProperties;
 }
 export declare function DsTabPanel(props: DsTabPanelProps): JSX.Element;
+/** Контекст размещения вкладок внутри шапки приложения. */
+export declare const DsInHeader: React.Context<boolean>;
+/** Идентификаторы связанной вкладки и панели. */
+export declare function dsTabIds(idBase: string, id: string): {tabId: string; panelId: string};

@@ -42,3 +42,5 @@ export interface DsPageLayoutProps {
   skipLinkLabel?: string;
 }
 export declare function DsPageLayout(props: DsPageLayoutProps): JSX.Element;
+/** Отделяет именованные слоты от основного содержимого; явные props имеют приоритет. */
+export declare function dsSlots<Name extends string>(children: React.ReactNode, names: Name[], given: Partial<Record<Name, React.ReactNode>>): [Partial<Record<Name, React.ReactNode>>, React.ReactNode[]];

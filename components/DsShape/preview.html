@@ -1,15 +1,105 @@
-<!-- @dsCard name="Форма и глубина" group="2 · Основы" height=300 subtitle="Роли скруглений и теней: от контрола до всплывающего слоя" page -->
+<!-- @dsCard name="Форма и глубина" group="2 · Основы" scopeMode="inherit" height=2200 aliases="скругления|тени|радиусы|shape|elevation" subtitle="Как скругления объединяют элементы, а тени показывают слои интерфейса" page -->
 <!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8"><title>Форма и глубина</title><style>html,body{margin:0}body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:20px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-.eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.mono{font:var(--ds-type-mono);color:var(--ds-fg-muted)}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-body{background:var(--ds-bg);max-width:1120px;margin:0 auto;padding:22px 24px 26px}
-</style></head><body>
-<div style="display:flex;gap:10px;margin-bottom:18px">
-<div style="flex:1"><div style="height:56px;background:var(--ds-brand-subtle);border:1px solid var(--ds-brand-border);border-radius:4px"></div><div style="font:var(--ds-type-eyebrow);margin-top:6px">xs</div><div class="mono" style="font-size:10px">4px</div><div style="font-size:10px;color:var(--ds-fg-subtle);line-height:1.3">внутренние чипы, чекбокс</div></div><div style="flex:1"><div style="height:56px;background:var(--ds-brand-subtle);border:1px solid var(--ds-brand-border);border-radius:6px"></div><div style="font:var(--ds-type-eyebrow);margin-top:6px">sm</div><div class="mono" style="font-size:10px">6px</div><div style="font-size:10px;color:var(--ds-fg-subtle);line-height:1.3">мелкие теги</div></div><div style="flex:1"><div style="height:56px;background:var(--ds-brand-subtle);border:1px solid var(--ds-brand-border);border-radius:8px"></div><div style="font:var(--ds-type-eyebrow);margin-top:6px">md</div><div class="mono" style="font-size:10px">8px</div><div style="font-size:10px;color:var(--ds-fg-subtle);line-height:1.3">кнопки, поля</div></div><div style="flex:1"><div style="height:56px;background:var(--ds-brand-subtle);border:1px solid var(--ds-brand-border);border-radius:12px"></div><div style="font:var(--ds-type-eyebrow);margin-top:6px">lg</div><div class="mono" style="font-size:10px">12px</div><div style="font-size:10px;color:var(--ds-fg-subtle);line-height:1.3">карточки, панели</div></div><div style="flex:1"><div style="height:56px;background:var(--ds-brand-subtle);border:1px solid var(--ds-brand-border);border-radius:16px"></div><div style="font:var(--ds-type-eyebrow);margin-top:6px">xl</div><div class="mono" style="font-size:10px">16px</div><div style="font-size:10px;color:var(--ds-fg-subtle);line-height:1.3">диалоги</div></div><div style="flex:1"><div style="height:56px;background:var(--ds-brand-subtle);border:1px solid var(--ds-brand-border);border-radius:999px"></div><div style="font:var(--ds-type-eyebrow);margin-top:6px">pill</div><div class="mono" style="font-size:10px">999px</div><div style="font-size:10px;color:var(--ds-fg-subtle);line-height:1.3">чипы, бейджи</div></div>
-</div>
-<div class="eb" style="margin-bottom:8px">глубина — у покоящихся поверхностей её нет</div>
-<div style="display:flex;gap:12px">
-<div style="flex:1;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);box-shadow:none;padding:12px;min-height:60px"><div style="font:var(--ds-type-ui)">только граница</div><div style="font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:4px">карточка в покое, таблица, панель</div></div><div style="flex:1;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);box-shadow:var(--ds-shadow-sm);padding:12px;min-height:60px"><div style="font:var(--ds-type-ui)">shadow-sm</div><div style="font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:4px">прилипший тулбар</div></div><div style="flex:1;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);box-shadow:var(--ds-shadow-md);padding:12px;min-height:60px"><div style="font:var(--ds-type-ui)">shadow-md</div><div style="font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:4px">меню, поповер</div></div><div style="flex:1;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);box-shadow:var(--ds-shadow-lg);padding:12px;min-height:60px"><div style="font:var(--ds-type-ui)">shadow-lg</div><div style="font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:4px">диалог, тост</div></div><div style="flex:1;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);box-shadow:var(--ds-shadow-map);padding:12px;min-height:60px"><div style="font:var(--ds-type-ui)">shadow-map</div><div style="font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:4px">контрол поверх тайлов карты</div></div>
-</div></body></html>
+<html lang="ru"><head><meta charset="utf-8"><title>Форма и глубина</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;margin:0;padding:24px 0;overflow-wrap:anywhere}
+main>section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+a{color:var(--ds-brand-text);text-underline-offset:3px}
+a:focus-visible,summary:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset);border-radius:var(--ds-radius-xs)}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.pair>*{min-width:0}
+.sample{padding:24px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);background:var(--ds-surface);min-width:0}
+.stage{padding:24px;background:var(--ds-bg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg)}
+.ready-content{display:grid;gap:16px}.ready-content p{margin:0}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{padding-left:20px;margin:0;max-width:74ch}.rules li+li{margin-top:12px}
+.nested{padding:16px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);background:var(--ds-bg);margin:20px 0}
+.nested>div{padding:16px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-md);background:var(--ds-surface)}
+.nested.excessive,.nested.excessive>div{box-shadow:var(--ds-shadow-lg)}
+.nested.tight{padding:2px}
+.component-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:20px 0}
+.mode-stage{padding:20px;background:var(--ds-bg);border-radius:var(--ds-radius-lg);margin-top:16px;color:var(--ds-fg)}
+.layer-example{padding:16px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg)}
+.layer-example+.layer-example{margin-top:16px}
+.layer-example.menu{background:var(--ds-surface-raised);border-radius:var(--ds-radius-md);box-shadow:var(--ds-shadow-md)}
+.layer-example.dialog{border-radius:var(--ds-radius-xl);box-shadow:var(--ds-shadow-lg)}
+.layer-example p{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:8px}
+#ready-interface{position:relative}.dialog-demo{position:absolute;inset:0}.dialog-demo>div{position:absolute!important;border-radius:var(--ds-radius-lg)}
+.scroll-demo{border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);padding:8px;margin-top:16px}
+.scroll-heading{position:relative;z-index:1}
+.scroll-content{height:160px;overflow:auto;padding:16px;outline-offset:2px}
+.scroll-content p{padding:12px 0;border-bottom:1px solid var(--ds-divider)}
+.reference{border-top:1px solid var(--ds-divider);padding:16px 0}.reference+.reference{margin-top:8px}
+summary{cursor:pointer;font:var(--ds-type-ui)}
+.token-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:24px;list-style:none;padding:0}
+.token-grid li{min-width:0}.token-grid p{font:var(--ds-type-caption);color:var(--ds-fg-muted);margin-top:8px}
+.swatch{height:64px;width:100%;max-width:160px;margin-bottom:12px;background:var(--ds-surface);border:1px solid var(--ds-border-control)}
+.shadow-swatch{border-color:var(--ds-border);border-radius:var(--ds-radius-md)}
+@media(max-width:640px){main{padding:20px 0}.pair{grid-template-columns:minmax(0,1fr)}.sample,.stage{padding:16px}.choices{grid-template-columns:minmax(0,1fr)}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}.token-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head><body><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Форма и глубина в интерфейсе</h2>
+<p class="lead">Скругления помогают узнавать элементы, а поверхности и тени отделяют всплывающие слои от содержимого. В готовых компонентах они уже настроены. Для собственной разметки используйте токены системы.</p>
+<div class="stage" id="ready-interface"></div>
+<p style="margin-top:16px">Откройте меню или диалог, чтобы увидеть, как они перекрывают содержимое. В этом примере диалог ограничен областью демонстрации.</p>
+</section>
+<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+<p class="lead">Для собственной разметки ориентируйтесь на назначение элемента. Скругление и тень выбираются независимо.</p>
+<dl class="choices"><dt>Кнопка или поле</dt><dd>Для действия или ввода. Интерактивность сама по себе не требует тени.</dd>
+<dt>Панель или карточка</dt><dd>Для связанных данных в потоке страницы. Обычно достаточно поверхности и границы.</dd>
+<dt>Меню</dt><dd>Для списка действий поверх содержимого. Используйте готовый <a href="../DsMenu/preview.html">DsMenu</a>.</dd>
+<dt>Диалог</dt><dd>Для отдельной задачи с временной блокировкой остального интерфейса. <a href="../DsDialog/preview.html">DsDialog</a> управляет также фокусом и закрытием.</dd></dl>
+</section>
+<section aria-labelledby="rounding"><h2 id="rounding" tabindex="-1">Скругления и вложенность</h2>
+<p class="lead">У вложенного элемента может быть меньшее скругление, чем у контейнера. Сохраняйте достаточный отступ, чтобы контуры не слипались.</p>
+<div id="component-shapes"></div>
+<div class="pair"><div class="sample"><h3>Рекомендуется: достаточно места</h3><div class="nested"><div>Внутренняя область</div></div><p>В этом примере внешний угол — 12 px, внутренний — 8 px, отступ — 16 px. Отступ выбирайте по содержимому: это пример, а не обязательное значение.</p></div>
+<div class="sample"><h3>Избегайте: тесные контуры</h3><div class="nested tight"><div>Внутренняя область</div></div><p>Те же скругления, но отступ только 2 px. Контуры слипаются. Проверяйте сочетание на реальном содержимом.</p></div></div>
+<p style="margin-top:16px">Для коротких плашек есть pill, для круга — circle при равных сторонах. Полная шкала находится в справочнике ниже.</p>
+</section>
+<section aria-labelledby="depth"><h2 id="depth" tabindex="-1">Глубина и слои</h2>
+<p class="lead">Глубину создают поверхность, граница и тень вместе. Ниже показаны сочетания, которые используют готовые компоненты.</p>
+<div id="theme-layers"></div>
+<p style="margin-top:16px">В тёмном режиме одной тени может быть недостаточно: граница и цвет поверхности помогают различать слои. Подробнее о цветовых ролях — в разделе <a href="../DsNeutrals/preview.html">«Нейтральные цвета»</a>.</p>
+<h3 style="margin-top:24px">Не создавайте лишние слои</h3>
+<div class="pair"><div class="sample"><h3>Рекомендуется</h3><div class="nested"><div>Сведения об объекте</div></div><p>Обычные вложенные области разделены фоном, границей и отступом.</p></div>
+<div class="sample"><h3>Избегайте</h3><div class="nested excessive"><div>Сведения об объекте</div></div><p>Тени у каждого контейнера создают лишние уровни. Добавляйте тень, когда она объясняет перекрытие содержимого.</p></div></div>
+</section>
+<section aria-labelledby="guidelines"><h2 id="guidelines" tabindex="-1">Правила применения</h2>
+<div class="pair" style="margin-bottom:24px"><div class="sample"><h3>Скругление и фокус</h3><p>Перейдите к кнопке клавишей Tab: рамка следует её форме и остаётся видимой. Готовый компонент уже оформляет фокус.</p><div id="focus-demo" class="component-row"></div></div>
+<div class="sample"><h3>Тень при прокрутке</h3><p>Прокрутите список вниз и вернитесь к началу. Шапка получает тень, пока часть содержимого скрыта над списком.</p><div id="scroll-demo"></div></div></div>
+<ul class="rules"><li>Не добавляйте тень при каждом наведении. Обратную связь кнопок и полей уже обеспечивают их состояния.</li>
+<li>Проверяйте, что родитель не обрезает тень и фокусную рамку. <code>overflow: hidden</code> нужен для обрезки содержимого, но может скрыть их.</li>
+<li>Тень не меняет порядок наложения. Для всплывающего содержимого нужны также позиционирование, управление слоями и фокусом — используйте готовое меню или диалог.</li>
+<li>Проверяйте углы с длинным текстом и на узком экране. Скругление не должно отнимать место у содержимого.</li></ul>
+</section>
+<section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Справочник токенов</h2>
+<p class="lead">Значения для собственных стилей. Скругления одинаковы в светлом и тёмном оформлении; тени переключаются вместе с оформлением.</p>
+<details class="reference" id="radius-reference"><summary>Показать шкалу скруглений</summary><ul class="token-grid" id="radius-values"></ul></details>
+<details class="reference" id="shadow-reference"><summary>Показать уровни теней</summary><ul class="token-grid" id="shadow-values"></ul></details>
+</section>
+</main>
+<script type="text/babel">
+const {DsPanel,DsField,DsButton,DsMenu,DsDialog,DsCheckbox,DsAppHeader}=window.AuroraWebDesignSystem_96e210;
+function ReadyInterface(){
+  const [message,setMessage]=React.useState('Последний маршрут: Минск — Брест'),[open,setOpen]=React.useState(false);
+  return <><DsPanel title="МАЗ 5440" headingLevel="h3" actions={<DsMenu menuLabel="Действия объекта" align="end" width={220} trigger={<DsButton tone="secondary" iconRight="expand_more">Действия</DsButton>} items={[{id:'route',label:'Показать маршрут'},{id:'details',label:'Сведения об объекте'}]} onSelect={item=>setMessage(item.id==='route'?'Последний маршрут: Минск — Брест':'Госномер: AB 1234-7')}/>}><div className="ready-content"><DsField label="Водитель" defaultValue="Андрей Иванов" readOnly/><p role="status">{message}</p><div><DsButton tone="secondary" onClick={()=>setOpen(true)}>Открыть диалог</DsButton></div></div></DsPanel>{open?<div className="dialog-demo"><DsDialog title="Сведения об объекте" size="sm" onClose={()=>setOpen(false)} actions={<DsButton onClick={()=>setOpen(false)}>Готово</DsButton>}><p>МАЗ 5440 · AB 1234-7</p></DsDialog></div>:null}</>;
+}
+function ComponentShapes(){const [state,setState]=React.useState('unchecked');return <><div className="component-row"><DsCheckbox label="Показывать треки" state={state} onChange={setState}/><DsButton tone="secondary">Кнопка · 8 px</DsButton></div><p style={{marginBottom:24}}>Чекбокс использует xs · 4 px, кнопка и поле — md · 8 px. Панель и диалог показаны выше: lg · 12 px и xl · 16 px.</p></>;}
+function ThemeLayers(){return <div className="pair">{['light','dark'].map(mode=><div key={mode}><h3>{mode==='light'?'Светлый режим':'Тёмный режим'}</h3><div className="mode-stage" data-ds-appearance={mode}><div className="layer-example">Панель<p>surface · граница · без тени</p></div><div className="layer-example menu">Меню<p>surface-raised · граница · shadow-md</p></div><div style={{background:'var(--ds-n-a60)',padding:16,marginTop:16,borderRadius:'var(--ds-radius-lg)'}}><div className="layer-example dialog">Диалог<p>surface · граница · shadow-lg</p></div></div></div></div>)}</div>;}
+function ScrollDemo(){const [scrolled,setScrolled]=React.useState(false);return <div className="scroll-demo"><div className="scroll-heading"><DsAppHeader product="Объекты" scrolled={scrolled}/></div><div className="scroll-content" tabIndex={0} role="region" aria-label="Список объектов с прокруткой" onScroll={event=>setScrolled(event.currentTarget.scrollTop>0)}>{['МАЗ 5440','Volvo FH16','Scania R450','MAN TGX','DAF XF','Mercedes Actros'].map(name=><p key={name}>{name}</p>)}</div></div>;}
+ReactDOM.createRoot(document.getElementById('ready-interface')).render(<ReadyInterface/>);
+ReactDOM.createRoot(document.getElementById('component-shapes')).render(<ComponentShapes/>);
+ReactDOM.createRoot(document.getElementById('theme-layers')).render(<ThemeLayers/>);
+ReactDOM.createRoot(document.getElementById('focus-demo')).render(<DsButton tone="secondary">Проверить фокус</DsButton>);
+ReactDOM.createRoot(document.getElementById('scroll-demo')).render(<ScrollDemo/>);
+const radii=[['xs','4 px','Небольшие внутренние элементы'],['sm','6 px','Мелкие блоки'],['md','8 px','Кнопки, поля, меню'],['lg','12 px','Панели и контейнеры'],['xl','16 px','Диалоги'],['pill','999 px','Капсулы'],['circle','50%','Круг при равных сторонах']];
+ReactDOM.createRoot(document.getElementById('radius-values')).render(<>{radii.map(([name,value,usage])=><li key={name}><div className="swatch" aria-hidden="true" style={{borderRadius:'var(--ds-radius-'+name+')',...(name==='circle'?{width:64}:{})}}/><code>--ds-radius-{name}</code><p>{value} · {usage}</p></li>)}</>);
+const shadows=[['xs','Бегунок переключателя, выбранный сегмент'],['sm','Шапка над прокрученным содержимым'],['md','Меню и всплывающие элементы'],['lg','Диалог и парящая панель действий'],['map','Контролы поверх карты']];
+ReactDOM.createRoot(document.getElementById('shadow-values')).render(<>{shadows.map(([name,usage])=><li key={name}><div className="swatch shadow-swatch" aria-hidden="true" style={{boxShadow:'var(--ds-shadow-'+name+')'}}/><code>--ds-shadow-{name}</code><p>{usage}</p></li>)}</>);
+</script></body></html>

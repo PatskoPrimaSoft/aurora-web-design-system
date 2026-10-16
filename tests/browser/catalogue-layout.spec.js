@@ -11,7 +11,7 @@ test('catalogue regions scroll independently and navigation remains usable on na
    await page.setViewportSize({width:1440,height:900});
    await page.goto(`${served.url}/index.html?card=DsCheckbox&theme=${theme}&appearance=${appearance}&density=${density}`);
    const navigation=page.getByRole('complementary',{name:'Навигация',exact:true}),main=page.getByRole('main');
-   await expect(navigation).toBeVisible();await expect(page.locator('#title')).toHaveText('DsCheckbox');
+   await expect(navigation).toBeVisible();await expect(page.locator('#title')).toHaveText('Checkbox');
    expect(await navigation.evaluate(node=>node.scrollHeight>node.clientHeight)).toBe(true);
    await navigation.evaluate(node=>node.scrollTop=150);
    expect(await main.evaluate(node=>node.scrollTop)).toBe(0);
@@ -23,7 +23,7 @@ test('catalogue regions scroll independently and navigation remains usable on na
    await expect(toggle).toBeVisible();await expect(navigation).toBeHidden();
    await toggle.click();await expect(navigation).toBeVisible();
    await page.locator('#search').fill('DsButton');
-   await page.locator('nav a[data-id="DsButton"]').click();await expect(page.locator('#title')).toHaveText('DsButton');
+   await page.locator('nav a[data-id="DsButton"]').click();await expect(page.locator('#title')).toHaveText('Button');
    await toggle.click();await expect(navigation).toBeHidden();
    const skip=page.getByRole('link',{name:'К содержимому',exact:true});await skip.focus();await page.keyboard.press('Enter');await expect(main).toBeFocused();
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

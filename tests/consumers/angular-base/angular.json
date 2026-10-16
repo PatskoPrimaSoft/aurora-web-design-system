@@ -28,7 +28,7 @@
                                                                                                  ],
                                                                                       "outputHashing":  "none"
                                                                                   },
-                                                                      "builder":  "@angular-devkit/build-angular:application"
+                                                                      "builder":  "@angular/build:application"
                                                                   }
                                                     },
                                       "projectType":  "application",

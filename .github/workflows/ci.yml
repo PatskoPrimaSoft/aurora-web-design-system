@@ -23,10 +23,12 @@ jobs:
   verify:
     name: Verify and publish
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     permissions:
       contents: write
       packages: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -75,8 +77,8 @@ jobs:
           npm ci --prefix tests/consumers/angular-charts
           npm ci --prefix tests/consumers/angular-legacy
 
-      - name: Install browser
-        run: npx playwright install --with-deps chromium
+      - name: Install browser engines
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Verify
         run: npm run verify
@@ -89,6 +91,7 @@ jobs:
           path: |
             .tmp/migration/
             .tmp/browser-results/
+            .tmp/browser-compat-results/
 
       - name: Publish, tag and release (master only)
         if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
@@ -107,3 +110,15 @@ jobs:
           git push origin "v$VERSION"
           node tools/changelog-section.js "$VERSION" > release-notes.md
           gh release create "v$VERSION" --title "v$VERSION" --notes-file release-notes.md
+
+  pages:
+    name: Publish version catalogue
+    needs: verify
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/pages.yml
+    with:
+      tag: v${{ needs.verify.outputs.version }}

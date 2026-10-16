@@ -26,6 +26,9 @@ check('версия semver и совпадает с lock', () => {
   assert.equal(lock.packages[''].version, pkg.version);
 });
 check('входы', () => {
+  assert.equal(pkg.main, 'dist/react/index.mjs');
+  assert.equal(pkg.types, 'dist/react/index.d.ts');
+  assert.deepEqual(pkg.exports['.'], {types:'./dist/react/index.d.ts',import:'./dist/react/index.mjs',default:'./dist/react/index.mjs'});
   assert.equal(pkg.exports['./styles.css'], './dist/styles.css');
   assert.equal(pkg.exports['./tokens.css'], './dist/tokens.css');
   assert.equal(pkg.exports['./stylelint-config'], './lint/config.js');

@@ -1,6 +1,6 @@
 # Версии и публикация
 
-Репозиторий — `github.com/PrimaSoftLLC/aurora-web-design-system` (приватный), пакет — `@primasoftllc/design-system` в
+Репозиторий — `github.com/PrimaSoftLLC/aurora-web-design-system` (публичный), пакет — `@primasoftllc/design-system` в
 GitHub Packages. Исходники и правки живут в репозитории; правила разработки — [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Выпуск версии
@@ -12,6 +12,23 @@ CHANGELOG, переводит `master` fast-forward на релизный ком
 `/aurora-release` в develop ([AGENTS.md](../AGENTS.md), раздел «Релиз»). Push в master запускает `.github/workflows/ci.yml`:
 проверки, `npm publish`, тег `v<version>`, GitHub Release из раздела CHANGELOG. Секреты не нужны — `GITHUB_TOKEN`.
 Руками теги не ставятся и `npm publish` не запускается.
+
+### Каталог на GitHub Pages
+
+Опубликованный каталог: https://primasoftllc.github.io/aurora-web-design-system/.
+Источник в Settings → Pages → Build and deployment — **GitHub Actions**.
+Workflow `.github/workflows/pages.yml` собирает `site/` из тега `vX.Y.Z`,
+проверяет совпадение с `package.json` и публикует каталог с учётом пути репозитория.
+Обычные push в develop и pull request сайт не обновляют.
+
+Релизный CI после создания тега вызывает этот workflow напрямую: события,
+созданные через `GITHUB_TOKEN`, не запускают новый workflow на push тега.
+Отдельный триггер `push.tags: v*` поддерживает теги, отправленные человеком;
+правило проекта о создании релизных тегов только через CI сохраняется.
+Для повторной публикации существующей версии используйте Actions → GitHub Pages →
+Run workflow, укажите тег в поле `tag`. Это не публикует npm-пакет повторно.
+Environment `github-pages` должен разрешать master, develop (ручной повторный запуск)
+и теги `v*`. Теги версий не перемещаются: следующая публикация получает новый тег.
 
 ### Порядок подготовки релиза
 

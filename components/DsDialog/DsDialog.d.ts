@@ -38,3 +38,5 @@ export interface DsDialogProps {
   dismissable?: boolean;
 }
 export declare function DsDialog(props: DsDialogProps): JSX.Element;
+/** Регистрирует слой, обрабатывающий Escape только когда он верхний. */
+export declare function useDsLayer(active: boolean, onEscape?: ((event: KeyboardEvent) => void) | null | false): void;

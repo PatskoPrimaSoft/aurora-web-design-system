@@ -7,7 +7,7 @@ import {readFileSync} from 'node:fs';
 import {transform} from 'esbuild';
 
 const root=fileURLToPath(new URL('../../',import.meta.url));
-const components=readCards(root).filter(card=>card.group.startsWith('5 ·'));
+const components=readCards(root).filter(card=>card.layout==='component');
 let served;
 test.beforeAll(async()=>{
   await buildCatalogue({root,outDir:`${root}/site`});

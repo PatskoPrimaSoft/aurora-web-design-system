@@ -8,6 +8,8 @@ h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(-
 h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
 p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
 code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+kbd{font:var(--ds-type-mono);white-space:nowrap}
+.try-it{margin-bottom:16px}.try-it p+p{margin-top:8px}
 a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
 .lead{color:var(--ds-fg-muted);margin-bottom:24px}
 .scene{padding:24px;background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
@@ -22,24 +24,28 @@ details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:g
 @media(max-width:640px){main{padding:20px 0}.scene{padding:16px}.choices{grid-template-columns:minmax(0,1fr)}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}}
 </style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
 <section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Фокус в интерфейсе</h2>
-<p class="lead">Фокус показывает, какой элемент принимает ввод с клавиатуры. Готовые компоненты уже рисуют обводку; приложение задаёт понятный порядок перехода и возвращает фокус после закрытия всплывающих окон.</p>
+<p class="lead">Фокус показывает, какой элемент сейчас управляется с клавиатуры. Готовые компоненты показывают обводку автоматически.</p>
+<div class="try-it"><p>Нажмите на поле, затем <kbd>Tab</kbd> — обводка перейдёт к следующему элементу.</p>
+<p class="caption"><kbd>Shift+Tab</kbd> — назад · <kbd>Пробел</kbd> — изменить флажок · <kbd>Enter</kbd> — нажать кнопку</p></div>
 <div class="scene" id="ready-interface"></div>
-<p class="caption" style="margin-top:16px">Кликните поле, затем переходите клавишей Tab. Shift+Tab возвращает назад, Space меняет флажок, Enter активирует кнопку. Сохранение в примере подтверждается локально.</p>
+<p class="caption" style="margin-top:16px">На флажке нажмите <kbd>Пробел</kbd>, затем <kbd>Tab</kbd>: отметка останется, обводка переместится.</p>
 </section>
 <section aria-labelledby="states"><h2 id="states" tabindex="-1">Краткая памятка</h2><dl class="choices">
-<dt>Фокус</dt><dd>Показывает место ввода. При переходе к другому элементу обводка перемещается вместе с ним.</dd>
-<dt>Выбор</dt><dd>Сохраняется после ухода фокуса: например, отмеченный флажок или активная вкладка.</dd>
-<dt>Наведение</dt><dd>Показывает элемент под указателем. Может быть видно одновременно с фокусом. Подробнее — <a href="../DsHover/preview.html">«Наведение и нажатие»</a>.</dd>
-</dl><p style="margin-top:16px">Кнопки и переключатели показывают обводку при работе с клавиатуры. Поля ввода — также после клика; у составного поля обводка охватывает всю оболочку.</p></section>
+<dt>Фокус</dt><dd>Элемент, которым сейчас управляют с клавиатуры.</dd>
+<dt>Выбор</dt><dd>Отмеченный вариант, который сохраняется после ухода фокуса.</dd>
+<dt>Наведение</dt><dd>Элемент под указателем; может совпадать с фокусом.</dd>
+</dl><p style="margin-top:16px">У кнопок обводка появляется при работе с клавиатуры, у полей ввода — также после клика.</p></section>
 <section aria-labelledby="navigation"><h2 id="navigation" tabindex="-1">Вкладки и меню</h2>
-<p class="lead">Tab переводит фокус между группами управления. Внутри вкладок и меню используйте стрелки; Escape закрывает меню и возвращает фокус на кнопку, которая его открыла.</p>
+<p class="lead"><kbd>Tab</kbd> переводит фокус между группами управления.</p>
+<div class="try-it"><p><strong>Вкладки:</strong> <kbd>←</kbd> <kbd>→</kbd> переключают вкладку.</p>
+<p><strong>Меню:</strong> <kbd>↑</kbd> <kbd>↓</kbd> перемещают фокус между пунктами, <kbd>Escape</kbd> закрывает меню и возвращает фокус на кнопку.</p></div>
 <div class="scene" id="keyboard-navigation"></div>
 </section>
 <section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Правила применения</h2><ul class="rules">
-<li><strong>Сохраняйте видимую обводку.</strong> Она нужна для управления с клавиатуры. Не заменяйте её только изменением цвета фона.</li>
-<li><strong>Соблюдайте порядок чтения.</strong> Переходите по элементам в той же последовательности, в которой они расположены на экране. Недоступные кнопки пропускаются при переходе Tab.</li>
-<li><strong>Оставляйте место для контура.</strong> Не обрезайте его границами контейнера и не закрывайте закреплённой шапкой или всплывающей панелью.</li>
-<li><strong>Возвращайте управление после закрытия.</strong> У готового меню это уже предусмотрено. В собственном диалоге верните фокус на открывший его элемент; если он исчез, выберите логичный следующий элемент.</li>
+<li><strong>Сохраняйте видимую обводку.</strong> Одного изменения фона недостаточно.</li>
+<li><strong>Соблюдайте порядок чтения.</strong> Переход по <kbd>Tab</kbd> должен следовать расположению элементов; недоступные кнопки пропускаются.</li>
+<li><strong>Не перекрывайте контур.</strong> Он должен оставаться видимым у края контейнера и под закреплёнными панелями.</li>
+<li><strong>Возвращайте фокус после закрытия.</strong> Готовое меню делает это автоматически. В собственном диалоге верните фокус на открывший его элемент или логичный следующий.</li>
 </ul></section>
 <section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Для собственной разметки</h2>
 <p>Используйте настоящие кнопки, ссылки и поля: они поддерживают клавиатуру и получают общие стили фокуса при подключении стилей пакета. Собственному составному контролу дополнительно нужны клавиатурная навигация и управление фокусом.</p>
@@ -49,7 +55,7 @@ details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:g
 <tr><td><code>--ds-focus-width</code></td><td>Толщина: 2 px.</td></tr>
 <tr><td><code>--ds-focus-offset</code></td><td>Отступ от элемента: 2 px.</td></tr>
 </tbody></table></div>
-<p>Для кнопок и ссылок используется <code>:focus-visible</code>: браузер определяет, когда нужен видимый индикатор. Текстовые поля показывают его через <code>:focus</code>, оболочки полей — через <code>:focus-within</code>. Обводка не меняет размеры элемента.</p>
+<p>Для кнопок и ссылок используется <code>:focus-visible</code>: браузер определяет, когда нужен видимый индикатор. Текстовые поля показывают его через <code>:focus</code>. У составного поля обводка охватывает всю оболочку через <code>:focus-within</code>. Обводка не меняет размеры элемента.</p>
 <p>У поля с ошибкой граница сохраняет цвет ошибки, а обводка — цвет фокуса. Внутри составного поля не добавляйте второй контур: его уже рисует оболочка. Проверяйте собственные элементы в обоих брендах и оформлениях.</p>
 </div></details></section>
 </main><script type="text/babel">

@@ -58,7 +58,7 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
     }
     reference = await serveRoot(referenceRoot, originals);
   }
-  let context, page, coldBrowser;
+  let context, page, coldBrowser, currentKey='setup';
   const freshPage=async(cold=false)=>{
    if(context)await context.close();
    if(coldBrowser){await coldBrowser.close();coldBrowser=null;}
@@ -75,6 +75,8 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
     return route.abort('blockedbyclient');
   });
    page=await context.newPage();
+   page.setDefaultTimeout(30000);
+   page.setDefaultNavigationTimeout(30000);
    page.on('pageerror', e => errors.push(e.message));
    page.on('response', r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
   };
@@ -82,6 +84,7 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
   try {
     for (const card of cards) for (const scope of ACCEPTANCE_SCOPES) {
       const key = `${card.id}-${scope.theme}-${scope.appearance}-${scope.density}`;
+      currentKey=key;
       errors.length = 0;
       // Isolate Chromium's variable-font glyph cache from preceding viewports.
       await freshPage();
@@ -90,7 +93,7 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
       // React's initial commit may start font loading after navigation completes.
       // Wait for that commit before taking the font-ready promise.
       if (await page.locator('#root').count()) await page.waitForFunction(() => document.getElementById('root').childNodes.length > 0 || document.querySelector('[role="dialog"]') !== null);
-      await page.evaluate(() => document.fonts.ready);
+      await page.waitForFunction(() => document.fonts.status === 'loaded');
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       assert.deepEqual(errors, [], `${key}: browser errors`);
       const buffer = await page.screenshot({ animations: 'disabled', caret: 'hide' });
@@ -108,7 +111,7 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
           await page.setViewportSize(card.viewport);
           await page.goto(`${reference.url}/frames/${key}.html`);
           if (await page.locator('#root').count()) await page.waitForFunction(() => document.getElementById('root').childNodes.length > 0 || document.querySelector('[role="dialog"]') !== null);
-          await page.evaluate(() => document.fonts.ready);
+          await page.waitForFunction(() => document.fonts.status === 'loaded');
           await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
           assert.deepEqual(errors, [], `${key}: original browser errors`);
           const original = await page.screenshot({animations: 'disabled', caret: 'hide'});
@@ -136,9 +139,12 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
     writeFileSync(join(outDir, 'computed.json'), json);
     if (compareDir) assert.deepEqual(computed, JSON.parse(readFileSync(join(compareDir, 'computed.json'), 'utf8')), 'Computed token baseline mismatch');
     console.log(`${mode}: ${cards.length} cards × 4 scopes and 8 computed sets, SHA256 ${createHash('sha256').update(json).digest('hex')}`);
+  } catch(error) {
+    throw new Error(`${mode} capture ${currentKey}: ${error.message}`,{cause:error});
   } finally {
-    if(context)await context.close();
-    if(coldBrowser)await coldBrowser.close();
+    // A timed-out test may already have closed the browser; preserve the capture error.
+    if(context)await context.close().catch(()=>{});
+    if(coldBrowser)await coldBrowser.close().catch(()=>{});
     if(reference !== served){reference.server.closeAllConnections();await new Promise(resolve => reference.server.close(resolve));}
     served.server.closeAllConnections();
     await new Promise(resolve => served.server.close(resolve));

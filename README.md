@@ -35,3 +35,21 @@ CSS, шрифты, токены, конфиг stylelint и Angular-сервис 
 интеграция ECharts подключается отдельно. React-компоненты служат эталоном:
 готовые Angular-компоненты экранов реализуются в приложении по карточкам системы.
 Доступ к приватному пакету и пошаговая настройка — в [руководстве](docs/usage.md).
+
+Angular-вход требует Angular 20.3.34+, интеграция графиков — ECharts 6.1+.
+Стили и токены можно использовать без этих зависимостей.
+
+Для React 18.3 корневой импорт поставляет скомпилированный ESM и TypeScript-типы:
+
+```tsx
+import { DsButton } from '@primasoftllc/design-system';
+import '@primasoftllc/design-system/styles.css';
+
+export function SaveButton() {
+  return <DsButton tone="primary">Сохранить</DsButton>;
+}
+```
+
+Транспиляция JSX внутри пакета не требуется. React, React DOM и их типы устанавливает
+React-приложение; для потребителя только CSS они остаются необязательными.
+Браузерные цели и проверки описаны в [правилах разработки](CONTRIBUTING.md#browser-support).

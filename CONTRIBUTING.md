@@ -31,11 +31,11 @@ sources and declarations. A prop change updates the implementation, `.d.ts` and
 
 `npm test` builds the project and runs lint, UI, package and release-guard checks.
 `npm run verify` also checks the catalogue, documentation links, browser CSS cascade
-and installed tarball consumers. Before the first full run, prepare Chromium and
+and installed tarball consumers. Before the first full run, prepare the browser engines and
 consumer caches (this preparation uses the network):
 
 ```bash
-mise exec -- npx playwright install chromium
+mise exec -- npx playwright install chromium firefox webkit
 mise exec -- npm ci --prefix tests/consumers/angular-base
 mise exec -- npm ci --prefix tests/consumers/angular-charts
 mise exec -- npm ci --prefix tests/consumers/angular-legacy
@@ -49,6 +49,54 @@ For Angular alone: `mise exec -- npm run build`, then
 For every affected example, apply the [screen acceptance criteria](docs/usage.md#приёмка-экрана):
 four theme/appearance/density combinations, AXE, keyboard focus and loading states.
 Use the [copy rules](docs/design.md#язык-и-тексты) as well.
+
+## Dependency security
+
+The root and all three Angular consumer locks are audited separately. Consumer
+fixtures use Angular 20.3.34 and ECharts 6.1.0; their development toolchains are part
+of the audit too. Update fixtures together with the package and check real tarball
+installation/AOT compilation, not just dependency resolution.
+
+One upstream issue currently has no patched release: nested untrusted glob patterns
+can exhaust the stack in `braces` 3.0.3, used by Stylelint through `fast-glob` and
+`micromatch` ([advisory](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm)).
+Only use repository-controlled lint patterns; do not expose lint as a service that
+accepts external glob input. This affects the development lint process, not the
+browser bundle. Recheck the advisory when upgrading tooling; do not downgrade
+Stylelint or apply unrelated dependency overrides to silence the audit.
+
+## Browser support
+
+The target is current stable desktop Chrome/Edge (Chromium), Firefox and Safari
+(WebKit). Older releases, Internet Explorer, embedded WebViews and mobile browsers
+are outside the tested contract. A 390 px viewport checks responsive layout, not
+mobile-device certification.
+
+`playwright.compat.config.mjs` runs the same behavioral smoke tests in Chromium,
+Firefox and WebKit: keyboard menus, select validation/submission/reset, popovers
+inside dialogs and Escape/focus handling, four theme/density scopes, and narrow
+contents navigation without horizontal overflow. The Playwright version in the
+lockfile pins the actual engine builds. Update Playwright and reinstall all three
+engines when checking a new browser generation.
+
+Playwright WebKit is an engine-level check, not a test of the shipping Safari app
+or its macOS integration. Changes to browser-sensitive features need a manual
+check in current Safari on macOS before claiming Safari certification. Likewise,
+the bundled Chromium check does not certify every Chrome/Edge integration.
+
+Run the short cross-engine suite independently after building:
+
+```bash
+mise exec -- npm run build
+mise exec -- npm run build:catalog
+mise exec -- npx playwright test --config=playwright.compat.config.mjs
+```
+
+`npm run verify` includes this suite. CI installs all engines with their Linux
+dependencies (`playwright install --with-deps chromium firefox webkit`). The full
+browser suite and raster baselines retain their existing Chromium configuration;
+pixel comparisons are not shared across engines. Failed smoke tests retain traces
+in `.tmp/browser-compat-results/`, included in CI failure artifacts.
 
 ## Pull requests
 

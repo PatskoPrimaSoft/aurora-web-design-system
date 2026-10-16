@@ -1,20 +1,110 @@
-<!-- @dsCard name="Цвета статусов" group="2 · Основы" height=220 subtitle="Семантика статусов, роли цветов и применение на разных поверхностях" page -->
+<!-- @dsCard name="Цвета статусов" group="2 · Основы" scopeMode="inherit" height=1800 aliases="статусы|status|success|warning|danger|семантика" subtitle="Как выбирать цвет статуса и сообщать о результате действия" page -->
 <!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8"><title>Цвета статусов</title><style>html,body{margin:0}body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:20px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-.eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-.mono{font:var(--ds-type-mono);color:var(--ds-fg-muted)}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-body{background:var(--ds-bg);max-width:1120px;margin:0 auto;padding:22px 24px 26px}
-</style></head><body>
-<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">
-<div><div style="background:var(--ds-neutral-bg);color:var(--ds-neutral-fg);border:1px solid var(--ds-neutral-line);border-radius:var(--ds-radius-lg);padding:12px"><div style="font:var(--ds-type-body-strong)">Стоянка</div><div class="mono" style="font-size:10px;color:inherit;opacity:.75;margin-top:4px">neutral-bg / -fg</div></div>
-<div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--ds-neutral-solid)"></span><span style="font:var(--ds-type-caption);color:var(--ds-fg-muted)">neutral-solid</span></div></div><div><div style="background:var(--ds-info-bg);color:var(--ds-info-fg);border:1px solid var(--ds-info-line);border-radius:var(--ds-radius-lg);padding:12px"><div style="font:var(--ds-type-body-strong)">Некорректные данные</div><div class="mono" style="font-size:10px;color:inherit;opacity:.75;margin-top:4px">info-bg / -fg</div></div>
-<div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--ds-info-solid)"></span><span style="font:var(--ds-type-caption);color:var(--ds-fg-muted)">info-solid</span></div></div><div><div style="background:var(--ds-success-bg);color:var(--ds-success-fg);border:1px solid var(--ds-success-line);border-radius:var(--ds-radius-lg);padding:12px"><div style="font:var(--ds-type-body-strong)">Движение</div><div class="mono" style="font-size:10px;color:inherit;opacity:.75;margin-top:4px">success-bg / -fg</div></div>
-<div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--ds-success-solid)"></span><span style="font:var(--ds-type-caption);color:var(--ds-fg-muted)">success-solid</span></div></div><div><div style="background:var(--ds-warning-bg);color:var(--ds-warning-fg);border:1px solid var(--ds-warning-line);border-radius:var(--ds-radius-lg);padding:12px"><div style="font:var(--ds-type-body-strong)">Тревога</div><div class="mono" style="font-size:10px;color:inherit;opacity:.75;margin-top:4px">warning-bg / -fg</div></div>
-<div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--ds-warning-solid)"></span><span style="font:var(--ds-type-caption);color:var(--ds-fg-muted)">warning-solid</span></div></div><div><div style="background:var(--ds-danger-bg);color:var(--ds-danger-fg);border:1px solid var(--ds-danger-line);border-radius:var(--ds-radius-lg);padding:12px"><div style="font:var(--ds-type-body-strong)">Нет связи</div><div class="mono" style="font-size:10px;color:inherit;opacity:.75;margin-top:4px">danger-bg / -fg</div></div>
-<div style="display:flex;align-items:center;gap:6px;margin-top:8px"><span style="width:10px;height:10px;border-radius:50%;background:var(--ds-danger-solid)"></span><span style="font:var(--ds-type-caption);color:var(--ds-fg-muted)">danger-solid</span></div></div>
-</div>
-<div data-ds-appearance="dark" style="margin-top:16px;background:var(--ds-bg);border-radius:var(--ds-radius-lg);padding:12px;display:flex;gap:8px;align-items:center">
-<span class="eb" style="color:var(--ds-fg-subtle)">dark</span>
-<span style="font:var(--ds-type-caption);background:var(--ds-neutral-bg);color:var(--ds-neutral-fg);border:1px solid var(--ds-neutral-line);border-radius:var(--ds-radius-pill);padding:4px 12px">Стоянка</span><span style="font:var(--ds-type-caption);background:var(--ds-info-bg);color:var(--ds-info-fg);border:1px solid var(--ds-info-line);border-radius:var(--ds-radius-pill);padding:4px 12px">Некорректные данные</span><span style="font:var(--ds-type-caption);background:var(--ds-success-bg);color:var(--ds-success-fg);border:1px solid var(--ds-success-line);border-radius:var(--ds-radius-pill);padding:4px 12px">Движение</span><span style="font:var(--ds-type-caption);background:var(--ds-warning-bg);color:var(--ds-warning-fg);border:1px solid var(--ds-warning-line);border-radius:var(--ds-radius-pill);padding:4px 12px">Тревога</span><span style="font:var(--ds-type-caption);background:var(--ds-danger-bg);color:var(--ds-danger-fg);border:1px solid var(--ds-danger-line);border-radius:var(--ds-radius-pill);padding:4px 12px">Нет связи</span>
-</div></body></html>
+<html lang="ru"><head><meta charset="utf-8"><title>Цвета статусов</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+a:focus-visible,summary:focus-visible,select:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset);border-radius:var(--ds-radius-xs)}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.stage,.sample{border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);padding:24px;min-width:0;background:var(--ds-surface)}
+.ready-content{display:grid;gap:16px}.ready-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.choices{display:grid;grid-template-columns:170px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.controls{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:24px}.controls label{font:var(--ds-type-ui)}
+select{font:var(--ds-type-ui);background:var(--ds-surface);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md);padding:8px 12px;max-width:100%;min-height:var(--ds-control-h)}
+.surface-examples{display:grid;gap:24px}.surface-examples>div{min-width:0}.surface-examples p{margin-top:8px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.pair>*{min-width:0}
+.status-dot{display:inline-block;width:10px;height:10px;border-radius:var(--ds-radius-circle);margin-right:8px}
+.rules{margin:24px 0 0;padding-left:20px;max-width:74ch}.rules li+li{margin-top:12px}
+summary{cursor:pointer;font:var(--ds-type-ui)}details+details{margin-top:16px}.reference-content{margin-top:16px}
+.token-roles{display:grid;grid-template-columns:210px minmax(0,1fr);margin:0}.token-roles dt,.token-roles dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.token-roles dd{margin:0}
+.palette{display:grid;gap:20px}.palette-row{display:grid;grid-template-columns:100px minmax(0,1fr);gap:16px;align-items:center}.palette-samples{display:flex;flex-wrap:wrap;gap:8px}
+.palette-row p{margin-top:8px}.swatch{display:inline-block;width:24px;height:24px;border-radius:var(--ds-radius-xs);vertical-align:middle}
+@media(max-width:640px){main{padding:20px 0}.stage,.sample{padding:16px}.pair{grid-template-columns:minmax(0,1fr)}.choices,.token-roles{grid-template-columns:minmax(0,1fr)}.choices dt,.token-roles dt{border:0;padding-bottom:4px}.choices dd,.token-roles dd{padding-top:0}.palette-row{grid-template-columns:minmax(0,1fr);gap:8px}}
+</style></head><body><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Статусы в интерфейсе</h2>
+<p class="lead">Цвет помогает заметить состояние или результат действия. Вы выбираете смысл через <code>tone</code> и пишете понятную подпись; готовые компоненты сами подбирают фон, текст и иконку. Цвета адаптируются к светлому и тёмному оформлению, сохраняя смысл при смене бренда.</p>
+<div id="ready-interface" class="stage"></div>
+<p style="margin-top:16px">Плашка показывает состояние отчёта, сообщение объясняет результат. Вручную назначать им цвета не нужно. Токены ниже предназначены для собственной разметки.</p>
+</section>
+<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+<p class="lead">Начните с того, что произошло и требуется ли внимание пользователя.</p>
+<dl class="choices">
+<dt>Нейтральный · neutral</dt><dd>Фиксирует состояние без дополнительного акцента: «Черновик», «В очереди», «Не применимо».</dd>
+<dt>Информация · info</dt><dd>Привлекает внимание к изменению или текущему процессу без проблемы: «Маршрут обновлён», «Отчёт формируется».</dd>
+<dt>Успех · success</dt><dd>Действие удалось или всё в норме: «Отчёт готов», «На связи».</dd>
+<dt>Внимание · warning</dt><dd>Риск или приближение к порогу: «Топливо заканчивается», «Данные устаревают».</dd>
+<dt>Ошибка · danger</dt><dd>Сбой или критическое состояние: «Не удалось сохранить», «Нет связи».</dd>
+</dl>
+<p style="margin-top:16px">Цвет бренда, наведение и выбор элемента не обозначают статус.</p>
+</section>
+<section aria-labelledby="surfaces"><h2 id="surfaces" tabindex="-1">Статус в разных компонентах</h2>
+<p class="lead">Плашка обозначает состояние, сообщение поясняет его внутри страницы, тост сообщает о результате действия. Переключите статус, чтобы сравнить его оформление.</p>
+<div id="surface-demo" class="stage"></div>
+</section>
+<section aria-labelledby="guidelines"><h2 id="guidelines" tabindex="-1">Правила применения</h2>
+<div class="pair"><div class="sample"><h3>Рекомендуется: цвет и подпись</h3><p><span class="status-dot" style="background:var(--ds-danger-solid)" aria-hidden="true"></span>Нет связи</p><p class="caption">Состояние понятно даже без различения цветов.</p></div>
+<div class="sample"><h3>Избегайте: только цвет</h3><p><span class="status-dot" style="background:var(--ds-danger-solid)" aria-hidden="true"></span>МАЗ 5440</p><p class="caption">По цветной точке нельзя однозначно понять, что произошло.</p></div></div>
+<ul class="rules">
+<li>Сохраняйте значение статуса во всём продукте. Различайте предупреждение о риске и уже произошедшую ошибку.</li>
+<li>Выделяйте сам статус, а не весь текст или фон строки. Для обычного содержимого используйте <a href="../DsNeutrals/preview.html">нейтральные цвета</a>.</li>
+<li>Для ошибки объясняйте следующий шаг: «Проверьте соединение и попробуйте снова». Не ограничивайтесь словом «Ошибка».</li>
+<li>Важные изменения должны быть доступны пользователям экранных дикторов. Настройка объявлений описана в <a href="../DsBanner/preview.html">DsBanner</a> и <a href="../DsToast/preview.html">DsToast</a>; выбор цвета сам по себе её не задаёт.</li>
+<li>Для собственных стилей проверяйте контраст на реальном фоне в светлом и тёмном оформлении.</li>
+</ul>
+</section>
+<section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Справочник токенов</h2>
+<p class="lead">Для собственных стилей выбирайте семантическую группу и роль внутри неё. Подбор готовых компонентов показан выше.</p>
+<details id="status-roles"><summary>Показать роли цветов</summary><div class="reference-content">
+<dl class="token-roles"><dt><code>--ds-*-bg</code></dt><dd>Мягкая статусная подложка.</dd>
+<dt><code>--ds-*-fg</code></dt><dd>Статусный текст на обычной поверхности или мягкой подложке.</dd>
+<dt><code>--ds-*-line</code></dt><dd>Граница статусной плашки.</dd>
+<dt><code>--ds-*-solid</code></dt><dd>Насыщенная заливка или отдельный цветной маркер.</dd>
+<dt><code>--ds-on-solid</code></dt><dd>Текст и иконка на насыщенной заливке. Обычный <code>*-fg</code> для неё не подходит.</dd>
+<dt><code>--ds-*-fg-on-inverse</code></dt><dd>Статусная иконка на инверсной поверхности: info, success, warning, danger. Для нейтральной иконки и обычного текста — <code>--ds-fg-on-inverse</code>.</dd></dl>
+<p style="margin-top:16px">Вместо <code>*</code> подставьте neutral, info, success, warning или danger. DsBanner использует статусный цвет для заголовка, обычный цвет текста для пояснения и solid для иконки. DsToast использует инверсную поверхность и отдельный цвет статусной иконки.</p>
+</div></details>
+<details id="status-palette"><summary>Показать пять групп и образцы заливок</summary><p style="margin-top:16px">Насыщенная плашка <a href="../DsLozenge/preview.html">DsLozenge</a> с <code>solid</code> помогает отделить статус от цветного фона или карты.</p><div id="palette" class="reference-content palette"></div></details>
+<details id="status-custom"><summary>Для собственной разметки</summary><div class="reference-content">
+<p>Пример собственного стиля для статичной подписи «Отчёт готов»:</p>
+<pre style="overflow-x:auto"><code>.report-status {
+  display: inline-flex;
+  padding: 4px 10px;
+  font: var(--ds-type-caption);
+  color: var(--ds-success-fg);
+  background: var(--ds-success-bg);
+  border: 1px solid var(--ds-success-line);
+  border-radius: var(--ds-radius-pill);
+}</code></pre>
+<p>Для насыщенной заливки замените фон на <code>--ds-success-solid</code>, цвет текста — на <code>--ds-on-solid</code>. Объявление изменения состояния для экранных дикторов организуется отдельно.</p>
+</div></details>
+</section>
+</main>
+<script type="text/babel">
+const {DsPanel,DsLozenge,DsBanner,DsToast}=window.AuroraWebDesignSystem_96e210;
+const examples=[
+  {tone:'neutral',label:'В очереди',description:'Задача добавлена в очередь. Обработка ещё не началась.'},
+  {tone:'info',label:'Маршрут обновлён',description:'В маршрут добавлена остановка в Барановичах.'},
+  {tone:'success',label:'Отчёт готов',description:'Отчёт по маршруту Минск — Брест сформирован.'},
+  {tone:'warning',label:'Топливо заканчивается',description:'Уровень топлива ниже 15 %. Запланируйте заправку.'},
+  {tone:'danger',label:'Не удалось сохранить',description:'Проверьте соединение и попробуйте снова.'}
+];
+function ReadyInterface(){return <DsPanel title="Отчёт по маршруту" headingLevel="h3"><div className="ready-content"><div className="ready-row"><p>МАЗ 5440 · Минск — Брест</p><DsLozenge tone="success">Готов</DsLozenge></div><DsBanner tone="success" title="Отчёт сформирован" headingLevel="h4">Данные за 12 октября доступны в разделе отчётов.</DsBanner></div></DsPanel>;}
+function SurfaceDemo(){
+  const [tone,setTone]=React.useState('success'),item=examples.find(item=>item.tone===tone);
+  return <><div className="controls"><label htmlFor="status-tone">Пример статуса</label><select id="status-tone" value={tone} onChange={event=>setTone(event.target.value)}>{examples.map(item=><option key={item.tone} value={item.tone}>{item.tone} · {item.label}</option>)}</select></div>
+  <div className="surface-examples"><div><h3>Плашка: состояние</h3><div data-example-lozenge=""><DsLozenge tone={tone}>{item.label}</DsLozenge></div></div>
+  <div><h3>Сообщение: внутри страницы</h3><DsBanner tone={tone} title={item.label} headingLevel="h3">{item.description}</DsBanner></div>
+  <div><h3>Тост: результат действия</h3><DsToast tone={tone} announcement="off">{item.label}</DsToast><p className="caption">Здесь тост показан постоянно для сравнения цветов.</p></div></div></>;
+}
+function Palette(){return <>{examples.map(item=><div className="palette-row" data-status-tone={item.tone} key={item.tone}><code>{item.tone}</code><div><div className="palette-samples"><DsLozenge tone={item.tone}>{item.label}</DsLozenge><DsLozenge tone={item.tone} solid>{item.label}</DsLozenge><span className="swatch" aria-hidden="true" style={{background:'var(--ds-'+item.tone+'-solid)'}}/></div><p className="caption">Мягкая подложка · насыщенная заливка · цвет маркера</p></div></div>)}</>;}
+ReactDOM.createRoot(document.getElementById('ready-interface')).render(<ReadyInterface/>);
+ReactDOM.createRoot(document.getElementById('surface-demo')).render(<SurfaceDemo/>);
+ReactDOM.createRoot(document.getElementById('palette')).render(<Palette/>);
+</script></body></html>
