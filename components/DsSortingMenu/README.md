@@ -34,7 +34,7 @@ export function ObjectList(){
   return <div style={{display:'grid',gap:'var(--ds-gap-md)'}}>
     <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:'var(--ds-gap-sm)',flexWrap:'wrap'}}>
       <h3 style={{margin:0}}>Объекты · {sorted.length}</h3>
-      <DsFilterMenu label="Сортировать по" type="sort-by" value={order} options={OPTIONS}
+      <DsFilterMenu label="Сортировать по" type="sort-by" value={order} options={OPTIONS} width={300}
         onApply={setOrder} onClear={()=>setOrder({key:'added',dir:'desc'})}
         trigger={<DsButton tone="secondary" icon="sort" aria-haspopup="dialog" aria-label={'Сортировка: '+summary}>Сортировка</DsButton>}/>
     </div>
