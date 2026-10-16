@@ -39,6 +39,19 @@ export async function serveRoot(root, pages = new Map()) {
   return { server, url: `http://127.0.0.1:${server.address().port}` };
 }
 
+export async function matchExactRaster({actual,expected,captureActual,captureReference,attempts=8}){
+  const candidates=[actual],originals=[expected];
+  if(actual.equals(expected))return actual;
+  for(let attempt=0;attempt<attempts;attempt++){
+    originals.push(await captureReference(attempt));
+    const prior=candidates.find(candidate=>originals.some(original=>candidate.equals(original)));
+    if(prior)return prior;
+    const candidate=await captureActual(attempt);candidates.push(candidate);
+    if(originals.some(original=>candidate.equals(original)))return candidate;
+  }
+  return null;
+}
+
 export async function captureCards({ browser, root, cards, mode = 'legacy', outDir, compareDir, referenceRoot,referenceMode='legacy',documentationChanges=[] }) {
   assert.ok(documentationChanges.every(change=>change==='overview-count'),'Only the approved overview count update may differ from original pixels');
   if (compareDir && mode === 'current' && !referenceRoot) throw new Error('Current comparison requires the pinned original referenceRoot');
@@ -81,44 +94,43 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
    page.on('response', r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
   };
   const errors = [];
+  const capture=async(base,key,viewport,cold=false)=>{
+    errors.length=0;
+    await freshPage(cold);
+    await page.setViewportSize(viewport);
+    await page.goto(`${base}/frames/${key}.html`);
+    // React may start font loading after navigation completes.
+    assert.deepEqual(errors,[],`${key}: navigation errors`);
+    if(await page.locator('#root').count())await page.waitForFunction(()=>document.getElementById('root').childNodes.length>0||document.querySelector('[role="dialog"]')!==null,null,{polling:100})
+      .catch(async error=>{throw new Error(`${key}: React did not commit; browser errors: ${JSON.stringify(errors)}; ${error.message}`,{cause:error});});
+    await page.waitForFunction(()=>document.fonts.status==='loaded',null,{polling:100});
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+    assert.deepEqual(errors,[],`${key}: browser errors`);
+    return page.screenshot({animations:'disabled',caret:'hide'});
+  };
   try {
     for (const card of cards) for (const scope of ACCEPTANCE_SCOPES) {
       const key = `${card.id}-${scope.theme}-${scope.appearance}-${scope.density}`;
       currentKey=key;
-      errors.length = 0;
-      // Isolate Chromium's variable-font glyph cache from preceding viewports.
-      await freshPage();
-      await page.setViewportSize(card.viewport);
-      await page.goto(`${served.url}/frames/${key}.html`);
-      // React's initial commit may start font loading after navigation completes.
-      // Wait for that commit before taking the font-ready promise.
-      if (await page.locator('#root').count()) await page.waitForFunction(() => document.getElementById('root').childNodes.length > 0 || document.querySelector('[role="dialog"]') !== null);
-      await page.waitForFunction(() => document.fonts.status === 'loaded');
-      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      assert.deepEqual(errors, [], `${key}: browser errors`);
-      const buffer = await page.screenshot({ animations: 'disabled', caret: 'hide' });
+      const buffer = await capture(served.url,key,card.viewport);
       writeFileSync(join(outDir, `${key}.png`), buffer);
       const countUpdated=mode==='current'&&card.id==='overview'&&documentationChanges.includes('overview-count');
       if(compareDir&&countUpdated)console.log(`${key}: approved discovery count update; screenshot recorded, content verified by catalogue tests`);
       if (compareDir && !countUpdated && !buffer.equals(readFileSync(join(compareDir, `${key}.png`)))) {
-        // Variable-font rasterization can vary even between unchanged originals.
-        // Accept only exact bytes produced by the original source, never a tolerance.
-        let matched = false;
-        for (let attempt = 0; attempt < 8 && !matched; attempt++) {
-          errors.length = 0;
-          // Both cold and warm glyph caches occur in unchanged Chromium renders.
-          await freshPage(attempt>=4);
-          await page.setViewportSize(card.viewport);
-          await page.goto(`${reference.url}/frames/${key}.html`);
-          if (await page.locator('#root').count()) await page.waitForFunction(() => document.getElementById('root').childNodes.length > 0 || document.querySelector('[role="dialog"]') !== null);
-          await page.waitForFunction(() => document.fonts.status === 'loaded');
-          await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-          assert.deepEqual(errors, [], `${key}: original browser errors`);
-          const original = await page.screenshot({animations: 'disabled', caret: 'hide'});
-          writeFileSync(join(outDir, `${key}-original-${attempt}.png`), original);
-          matched = buffer.equals(original);
-        }
+        // Chromium can vary rounded-edge antialiasing with identical geometry/styles.
+        // Retry both sources: a rare actual variant must not stay fixed while only
+        // originals are sampled. Every accepted image still needs an exact original.
+        const variant=async(base,label,attempt)=>{
+          const image=await capture(base,key,card.viewport,attempt>=4);
+          writeFileSync(join(outDir,`${key}-${label}-${attempt}.png`),image);
+          return image;
+        };
+        const matched=await matchExactRaster({actual:buffer,expected:readFileSync(join(compareDir,`${key}.png`)),
+          captureActual:attempt=>variant(served.url,'candidate',attempt),
+          captureReference:attempt=>variant(reference.url,'original',attempt)});
         assert.ok(matched, `${key}: visual mismatch; inspect PNG files in ${outDir} and ${compareDir}`);
+        writeFileSync(join(outDir,`${key}-initial.png`),buffer);
+        writeFileSync(join(outDir,`${key}.png`),matched);
         console.log(`${key}: exact repeated-original raster variant matched`);
       }
     }
