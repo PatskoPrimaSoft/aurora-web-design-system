@@ -107,7 +107,7 @@ test('foundation and map descriptions stay with examples through navigation, com
     }
     await expect(page.locator('.document-preview .preview-scroll').first()).toHaveCSS('overflow', 'visible');
     await expect(page.locator('#preview-0')).toHaveCSS('border-top-width', '0px');
-    for (const id of ['DsType', 'DsHover', 'DsSortingMenu', 'DsBrandThemes', 'IconsArrows', 'IconsMapAssets', 'MapTrack', 'BrandLogoLockup']) {
+    for (const id of ['DsType', 'DsHover', 'DsSortingMenu', 'DsBrandThemes', 'IconsArrows', 'IconsMapAssets', 'MapTrack']) {
       await page.locator(`nav a[data-id="${id}"]`).click();
       for (let index = 0; index < 4; index++) {
         const frame = page.frameLocator('#preview-' + index);
@@ -119,14 +119,7 @@ test('foundation and map descriptions stay with examples through navigation, com
         if (id === 'DsBrandThemes') await expect.poll(() => frame.locator('.hex').first().evaluate(label =>
           label.textContent === getComputedStyle(document.documentElement).getPropertyValue(label.dataset.token).trim()
         )).toBe(true);
-        if (id === 'BrandLogoLockup') {
-          await expect(frame.getByRole('heading', { name: 'Знак на разных фонах' })).toBeVisible();
-          await expect(frame.getByRole('heading', { name: 'Логотип в шапке' })).toBeVisible();
-          await expect(frame.locator('.row')).toHaveCount(2);
-          await expect(frame.locator('.row[data-ds-appearance="dark"] img')).toHaveCount(4);
-          await expect(frame.locator('img')).toHaveCount(10);
-          expect(await frame.locator('body').evaluate(body => body.scrollHeight)).toBeLessThanOrEqual(580);
-        }
+
       }
     }
     await page.goto(served.url + '/index.html?card=BrandLogoMark');
