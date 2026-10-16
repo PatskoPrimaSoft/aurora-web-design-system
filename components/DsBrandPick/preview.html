@@ -1,6 +1,5 @@
-<!-- @dsCard name="Подбор цветов темы" group="2 · Основы" scopeMode="inherit" height=2200 subtitle="Калькулятор палитры из цветов бренда и акцента с проверкой контраста" page -->
-<!DOCTYPE html>
-<html lang="ru" data-ds-theme="DEFAULT" data-ds-appearance="light"><head><meta charset="utf-8"><title>Подбор цветов темы</title><style>html,body{margin:0}body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:20px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+<!-- @dsCard name="Подбор цветов темы" group="2 · Основы" scopeMode="inherit" subtitle="Как подобрать бренд и акцент и проверить палитру в двух оформлениях" page -->
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Подбор цветов темы</title><style>html,body{margin:0}body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);padding:20px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
 .mono{font:var(--ds-type-mono)}
 .cap{font:var(--ds-type-caption);color:var(--ds-fg-muted);text-wrap:pretty}
 .q{font:var(--ds-type-body-strong);color:var(--ds-fg-strong)}
@@ -49,79 +48,74 @@ ul.nos li{font:var(--ds-type-caption);color:var(--ds-fg-muted);text-wrap:pretty}
 .no{color:var(--ds-danger-fg)}
 a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
 body{background:var(--ds-bg);max-width:1120px;margin:0 auto;padding:22px 24px 26px}
-</style></head><body>
-<p class="q" style="margin:0 0 4px">Тенант даёт два цвета. Тема — это девять значений. Между ними порядок вывода, а не вкус.</p>
-<p class="cap" style="margin:0 0 14px;max-width:96ch">Логотипный цвет — <i>исходник</i>, а не токен. Оттенок исходника сохраняется на всех девяти значениях: двигается только светлота, а насыщенность — лишь настолько, насколько её вмещает sRGB на новой светлоте. Поставьте два цвета тенанта и смотрите, где порог не проходит.</p>
+
+*{box-sizing:border-box}body{background:var(--ds-surface);padding:0;margin:0;max-width:none}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);text-transform:none;color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);margin:0 0 12px}p{margin:0;max-width:74ch}p+p{margin-top:12px}.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.bar{padding:20px;gap:20px;margin-bottom:16px}.field{display:grid;gap:8px}.field>label{font:var(--ds-type-body-strong)}.inputs{display:flex;gap:8px}.lab{text-transform:none;letter-spacing:normal}
+.proof{margin:16px 0}.pane{min-width:0}.pane .pl{font:var(--ds-type-body-strong);text-transform:none;letter-spacing:normal}.dot{width:24px;height:24px;font:var(--ds-type-caption)}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{padding-left:20px;max-width:74ch;margin:0}.rules li+li{margin-top:12px}
+details{margin-top:20px}summary{cursor:pointer;font:var(--ds-type-ui);padding:10px 12px;border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md)}details>div,details>pre{margin-top:16px}
+:where(input,a,summary):focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+.table-scroll{overflow:auto}table{min-width:780px}.hex,.chk{font:var(--ds-type-caption)}.cap{margin-top:12px}.error{color:var(--ds-danger-fg)}
+@media(max-width:640px){main{padding:20px 0}.proof{grid-template-columns:minmax(0,1fr)}.bar{padding:16px}.choices{grid-template-columns:minmax(0,1fr)}.choices dt{padding-bottom:4px;border:0}.choices dd{padding-top:0}}
+.contrast-pairs{display:grid;gap:12px;margin-top:20px}.contrast-pair{display:grid;grid-template-columns:minmax(0,1fr) 150px 150px;gap:8px;padding:12px 0;border-bottom:1px solid var(--ds-divider)}.contrast-pair .cap{grid-column:1/-1;margin:0}.field .cap{margin:0}.warn.g{background:none;border:0;color:var(--ds-fg-muted);padding:0}@media(max-width:640px){.contrast-pair{grid-template-columns:minmax(0,1fr)}.contrast-pair .cap{grid-column:auto}}
+</style></head>
+<body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">Подбор на примере интерфейса</h2>
+<p class="lead">Выберите бренд и акцент. Ниже — результат для светлого и тёмного оформления.</p>
 <div class="bar">
-<label><span class="lab">бренд</span><input type="color" id="bs" value="#2b5f9e"><input type="text" id="bt" value="#2b5f9e" spellcheck="false"></label>
-<label><span class="lab">акцент</span><input type="color" id="as" value="#efd63c"><input type="text" id="at" value="#efd63c" spellcheck="false"></label>
-<label><span class="lab">имя</span><input type="text" id="nm" value="DEFAULT" spellcheck="false" style="width:104px"></label>
+<div class="field"><label for="bt">Цвет бренда</label><div class="inputs"><input type="color" id="bs" value="#2b5f9e" aria-label="Выбрать цвет бренда"><input type="text" id="bt" value="#2b5f9e" spellcheck="false" aria-describedby="brand-hint input-error"></div><p class="cap" id="brand-hint">Основные действия и выбор.</p></div>
+<div class="field"><label for="at">Цвет акцента</label><div class="inputs"><input type="color" id="as" value="#efd63c" aria-label="Выбрать цвет акцента"><input type="text" id="at" value="#efd63c" spellcheck="false" aria-describedby="accent-hint input-error"></div><p class="cap" id="accent-hint">Дополнительное выделение.</p></div>
 </div>
-<div class="warns" id="warns"></div>
-<table><colgroup><col class="tokc"><col><col class="swc"><col class="chkc"></colgroup>
+<p id="input-error" class="error" role="status"></p>
+<div class="proof" aria-label="Предварительный просмотр палитры">
+<div class="pane" id="pl" data-ds-appearance="light"><span class="pl">Светлое оформление</span><div class="row"><span id="p-btn"></span><span class="pill" id="p-pill">✓ Выбрано 4</span><a href="../DsBrandThemes/preview.html" id="p-link">Цветовые темы</a><span class="dot" id="p-dot" aria-label="7 непрочитанных">7</span></div><p class="cap" role="status" id="p-result">Отчёт ещё не построен.</p></div>
+<div class="pane" id="pd" data-ds-appearance="dark"><span class="pl">Тёмное оформление</span><div class="row"><span id="d-btn"></span><span class="pill" id="d-pill">✓ Выбрано 4</span><a href="../DsBrandThemes/preview.html" id="d-link">Цветовые темы</a><span class="dot" id="d-dot" aria-label="7 непрочитанных">7</span></div><p class="cap" role="status" id="d-result">Отчёт ещё не построен.</p></div>
+</div>
+<p class="cap">Нажмите «Построить отчёт», чтобы проверить кнопку. Для существующего бренда используйте <a href="../DsBrandThemes/preview.html">готовую тему</a>.</p>
+<p id="check-summary" role="status" style="margin-top:16px"></p><a href="#reference" id="check-link">Посмотреть проверки</a>
+</section>
+<section aria-labelledby="choosing"><h2 id="choosing" tabindex="-1">Краткая памятка</h2><dl class="choices">
+<dt>Светлый бренд</dt><dd>Калькулятор затемняет заливку, если белая подпись недостаточно контрастна.</dd>
+<dt>Второй цвет</dt><dd>Начните со второго фирменного цвета. Подсказки помогут заметить сходство с брендом и статусами.</dd>
+
+</dl></section>
+<section aria-labelledby="rules"><h2 id="rules" tabindex="-1">Что проверить перед применением</h2><ul class="rules">
+<li><b>Читайте подписи на реальном фоне.</b> Проверьте текст кнопки, ссылку и цифру счётчика. Светлый цвет логотипа может потребовать более тёмного варианта в интерфейсе.</li>
+<li><b>Сохраняйте смысл статусов.</b> Акцент не должен выглядеть как ошибка или успешное действие. Проверка близости оттенков — подсказка, а не гарантия различимости.</li>
+<li><b>Проверьте реальные экраны.</b> Список объектов, карту и диалог подтверждения — в обоих оформлениях. Расчёт отдельных пар цветов не подтверждает доступность всей темы.</li>
+</ul></section>
+<section aria-labelledby="reference"><h2 id="reference" tabindex="-1">Расчёт и проверка контраста</h2>
+<p>Сначала проверьте читаемость пар «текст — фон». Значимые метки проверяются отдельно. Эти результаты относятся к указанным парам цветов, а не ко всей теме.</p>
+<div id="contrast-pairs" class="contrast-pairs"></div><details id="color-advice"><summary>Рекомендации по палитре</summary><div class="warns" id="warns"></div><p class="cap">Дополнительные ориентиры подложек и оттенков — в технической таблице ниже.</p></details><details id="palette-reference"><summary>Токены и подробности расчёта</summary><div class="table-scroll" tabindex="0" role="region" aria-label="Расчёт токенов палитры"><table><colgroup><col class="tokc"><col><col class="swc"><col class="chkc"></colgroup>
 <tr><th>Токен</th><th>Что это и как выведено</th><th>Предложение</th><th>Проверка</th></tr>
-<tr class="grp"><td colspan="4"><span class="gn">LIGHT</span><span class="gd">девять значений — всё, что отличает одну тему от другой</span></td></tr>
-<tr><td><span class="tok">--ds-brand</span></td><td class="role"><b>Заливка главного действия</b>, активного таба, выбранного чекбокса. Обязана нести на себе белую подпись, поэтому исходник берётся как есть только если контраст к белому уже ≥ 4,5:1; иначе светлота опускается ровно до этой точки. Вверх — никогда: тёмный фирменный цвет остаётся тёмным.</td><td id="r-brand"></td><td id="c-brand"></td></tr>
-<tr><td><span class="tok">--ds-brand-subtle</span></td><td class="role"><b>Подложка выбранного</b>: строка списка, чип выбора, метка среды. Не отдельный цвет — заливка, подмешанная в поверхность на 8% в oklab. Подобранный «на глаз светлый» почти всегда уезжает в серый и перестаёт быть одного тона с заливкой.</td><td id="r-bsub"></td><td id="c-bsub"></td></tr>
-<tr><td><span class="tok">--ds-brand-border</span></td><td class="role"><b>Линия к этой подложке</b> — та же заливка на 28%. Она отделяет, а не сообщает, поэтому порог текста к ней не применяется; но она должна быть отличима от обычной <span class="mono">--ds-border</span>, иначе выбор не читается.</td><td id="r-bbor"></td><td id="c-bbor"></td></tr>
-<tr><td><span class="tok">--ds-brand-text</span></td><td class="role"><b>Брендовые чернила на светлом грунте</b>: ссылка, подпись активного таба. Считаются к <span class="mono">--ds-bg</span> — самому тёмному из светлых грунтов, а не к чистому белому. Если заливка проходит там, она же и берётся: так живут BLUE и PURPLE. Если нет — затемняется до порога.</td><td id="r-btxt"></td><td id="c-btxt"></td></tr>
-<tr><td><span class="tok">--ds-accent</span></td><td class="role"><b>Акцент тенанта</b>: счётчик непрочитанного, метка среды. Значит «здесь новое», а не «нажми» — поэтому расходится с брендом по оттенку минимум на 40° и не попадает в оттенки статусов. Берётся от второго фирменного цвета, а не выводится из первого.</td><td id="r-acc"></td><td id="c-acc"></td></tr>
-<tr><td><span class="tok">--ds-accent-on</span></td><td class="role"><b>Что кладётся на акцент.</b> Белое или тёмное того же оттенка — что даёт 4,5:1. На жёлтом это всегда тёмное, на красном белое, а в середине диапазона автовыбор ломается: поэтому значение задаётся руками, а не выводится.</td><td id="r-aon"></td><td id="c-aon"></td></tr>
-<tr><td><span class="tok">--ds-accent-subtle</span></td><td class="role"><b>Подложка акцента.</b> Тоже подмешивание, но процент выше: 8% бледного акцента в белом — всё ещё белый. Процент поднимается, пока подложка не отделится от поверхности — у жёлтого это около 20%, у тёмного бренда остаются те же 8%.</td><td id="r-asub"></td><td id="c-asub"></td></tr>
-<tr><td><span class="tok">--ds-accent-mark</span></td><td class="role"><b>Акцент в графической роли</b>: точка непрочитанного, бейдж. Это фигура, а не текст — порог 3:1 к грунту (WCAG 1.4.11). Жёлтый акцент его не держит, поэтому метка живёт отдельным затемнённым значением того же оттенка.</td><td id="r-amark"></td><td id="c-amark"></td></tr>
-<tr><td><span class="tok">--ds-accent-mark-on</span></td><td class="role"><b>Цифра на метке.</b> Считается к <span class="mono">--ds-accent-mark</span>, не к акценту: если метка затемнялась, подпись на ней другая.</td><td id="r-amon"></td><td id="c-amon"></td></tr>
-<tr class="grp"><td colspan="4"><span class="gn">DARK</span><span class="gd">шесть значений: <span class="mono">-mark</span> и <span class="mono">-mark-on</span> здесь равны акценту — на тёмном грунте он держит 3:1 сам</span></td></tr>
-<tr><td><span class="tok">--ds-brand</span></td><td class="role"><b>Перезажигается вверх по светлоте</b>, а не инвертируется: в oklch светлота поднимается в окно L ≈ 0,69 при сохранённом оттенке — там, где сидят все семь отгружаемых тёмных палитр. Из-за этого белая подпись меняется на тёмную <span class="mono">--ds-on-brand</span>.</td><td id="r-dbrand"></td><td id="c-dbrand"></td></tr>
-<tr><td><span class="tok">--ds-brand-subtle</span></td><td class="role"><b>Перестаёт быть краской.</b> Та же заливка с альфой 14% — вош, который совпадает с любым уровнем грунта: <span class="mono">bg</span>, <span class="mono">surface</span> и <span class="mono">surface-raised</span> в тёмном наборе разной светлоты.</td><td id="r-dbsub"></td><td id="c-dbsub"></td></tr>
-<tr><td><span class="tok">--ds-brand-border</span></td><td class="role"><b>Линия</b> — тот же цвет с альфой 34%, по той же причине.</td><td id="r-dbbor"></td><td id="c-dbbor"></td></tr>
-<tr><td><span class="tok">--ds-brand-text</span></td><td class="role"><b>Чернила светлее заливки</b>, не равны ей: окно L ≈ 0,82 при насыщенности около 0,6 от заливки. Порог 4,5:1 к тёмной поверхности мид-тон проходит и сам, но тогда текст и кнопка становятся одним цветом — поэтому значение задаётся окном, а не порогом.</td><td id="r-dbtxt"></td><td id="c-dbtxt"></td></tr>
-<tr><td><span class="tok">--ds-accent</span></td><td class="role"><b>Часто остаётся исходным</b>: светлый акцент на тёмном грунте уже держит 3:1. Поднимается только если не держит — тогда до L ≈ 0,75.</td><td id="r-dacc"></td><td id="c-dacc"></td></tr>
-<tr><td><span class="tok">--ds-accent-on</span></td><td class="role"><b>Подпись на акценте</b> — тёмное того же оттенка. В тёмном наборе белого варианта не бывает: акцент здесь всегда светлее подписи.</td><td id="r-daon"></td><td id="c-daon"></td></tr>
-</table>
-<h2>На чём это видно</h2>
-<div class="proof">
-<div class="pane" id="pl"><span class="pl">light</span>
-<div class="row"><span class="btn" id="p-btn">Построить отчёт</span><span class="pill" id="p-pill">выбрано 4</span><a href="#" id="p-link">Открыть объект</a><span class="dot" id="p-dot">7</span></div>
-</div>
-<div class="pane" id="pd"><span class="pl">dark</span>
-<div class="row"><span class="btn" id="d-btn">Построить отчёт</span><span class="pill" id="d-pill">выбрано 4</span><a href="#" id="d-link">Открыть объект</a><span class="dot" id="d-dot">7</span></div>
-</div>
-</div>
-<h2>CSS для предварительного просмотра</h2>
-<pre id="out"></pre>
-<div class="notes">
-<div class="note">
-<h3>Пороги, к которым всё считается</h3>
-<dl class="sfx">
-<dt>4,5:1</dt><dd>текст на своём фоне — подпись на заливке и брендовый текст на грунте</dd>
-<dt>3:1</dt><dd>крупный текст (от 24px или 19px полужирного) и <i>фигуры</i>: точка, бейдж, индикатор — WCAG 1.4.11</dd>
-<dt>к чему</dt><dd>подпись — к своей заливке; заливка и метка — к <span class="mono">--ds-bg</span>, самому тёмному из светлых грунтов, а не к чистому белому</dd>
-</dl>
-</div>
-<div class="note">
-<h3>Когда исходник брать нельзя</h3>
-<p>Светлый насыщённый цвет — жёлтый, салатовый, голубой — физически не может быть заливкой под белую подпись: <span class="mono">#F8D030</span> даёт к белому 1,7:1. Такой цвет уходит в акцент, а <span class="mono">--ds-brand</span> берётся как затемнённая версия того же оттенка. Ровно это произошло со старыми <span class="mono">#FF4081</span> и <span class="mono">#F8D030</span>.</p>
-<p>Насыщенность выше исходной не поднимаем: перегретая заливка звенит рядом с картой и статусными точками.</p>
-</div>
-<div class="note">
-<h3>Почему акцент проверяется против статусов</h3>
-<p>Статусы темонезависимы: офлайн красный, в движении зелёный, тревога янтарная у всех тенантов. Акцент тенанта, попавший в тот же оттенок, превращает счётчик непрочитанного в сообщение о состоянии объекта. Если у тенанта фирменный красный — он идёт в бренд, а акцент берётся от второго фирменного цвета либо уводится по оттенку.</p>
-</div>
-<div class="note">
-<h3>Что проверить руками после</h3>
-<p>Калькулятор ставит значения на пороги и в окна — это минимум, а не комфорт: отгружаемые палитры сидят на 0,03–0,05 светлоты глубже. Проверьте набор на трёх экранах: список объектов (много мелких чернил), карта (заливка поверх тайлов), диалог подтверждения (danger рядом с брендом) — в light и в dark.</p>
-</div>
-<div class="note">
-<h3>Четыре «не»</h3>
-<ul class="nos">
-<li><b class="no">Не</b> ставить логотипный hex в <span class="mono">--ds-brand</span> без проверки подписи.</li>
-<li><b class="no">Не</b> сочинять <span class="mono">-subtle</span> отдельным цветом — это подмешанный исходник.</li>
-<li><b class="no">Не</b> выводить тёмный набор инверсией светлого — заливка поднимается, а не переворачивается.</li>
-<li><b class="no">Не</b> добавлять <span class="mono">-hover</span> / <span class="mono">-active</span>: наведение и нажатие — универсальный оверлей 10% / 16%.</li>
-</ul>
-</div>
-</div>
-<script>
+<tr class="grp"><td colspan="4"><span class="gn">LIGHT</span><span class="gd">Основные роли светлой палитры</span></td></tr>
+<tr><td><span class="tok">--ds-brand</span></td><td class="role">Заливка основного действия и выбранных контролов. Если белая подпись не достигает 4,5:1, исходный цвет затемняется.</td><td id="r-brand"></td><td id="c-brand"></td></tr>
+<tr><td><span class="tok">--ds-brand-subtle</span></td><td class="role">Подложка выбранного элемента. Получается смешением бренда с поверхностью, начиная с 8%.</td><td id="r-bsub"></td><td id="c-bsub"></td></tr>
+<tr><td><span class="tok">--ds-brand-border</span></td><td class="role">Граница брендовой подложки. Получается смешением бренда с поверхностью, начиная с 28%.</td><td id="r-bbor"></td><td id="c-bbor"></td></tr>
+<tr><td><span class="tok">--ds-brand-text</span></td><td class="role">Цвет ссылки и брендового текста. Проверяется к фону --ds-bg и при необходимости затемняется.</td><td id="r-btxt"></td><td id="c-btxt"></td></tr>
+<tr><td><span class="tok">--ds-accent</span></td><td class="role">Дополнительный цвет бренда. Калькулятор предупреждает о близости к основному цвету и статусам.</td><td id="r-acc"></td><td id="c-acc"></td></tr>
+<tr><td><span class="tok">--ds-accent-on</span></td><td class="role">Подпись на акцентной заливке: белая либо тёмная. Проверяется контраст к акценту.</td><td id="r-aon"></td><td id="c-aon"></td></tr>
+<tr><td><span class="tok">--ds-accent-subtle</span></td><td class="role">Мягкая подложка акцента. Доля исходного цвета увеличивается, если подложка слишком близка к поверхности.</td><td id="r-asub"></td><td id="c-asub"></td></tr>
+<tr><td><span class="tok">--ds-accent-mark</span></td><td class="role">Значимая метка, например индикатор непрочитанного. Проверяется контраст 3:1 к фону.</td><td id="r-amark"></td><td id="c-amark"></td></tr>
+<tr><td><span class="tok">--ds-accent-mark-on</span></td><td class="role">Цифра на метке. Проверяется к цвету метки, который может отличаться от акцента.</td><td id="r-amon"></td><td id="c-amon"></td></tr>
+<tr class="grp"><td colspan="4"><span class="gn">DARK</span><span class="gd">Основные роли тёмной палитры: <span class="mono">-mark</span> и <span class="mono">-mark-on</span> здесь равны акценту — на тёмном грунте он держит 3:1 сам</span></td></tr>
+<tr><td><span class="tok">--ds-brand</span></td><td class="role">Заливка основного действия в тёмном оформлении. Исходный оттенок осветляется, подпись становится тёмной.</td><td id="r-dbrand"></td><td id="c-dbrand"></td></tr>
+<tr><td><span class="tok">--ds-brand-subtle</span></td><td class="role">Брендовая подложка: заливка с прозрачностью 14%.</td><td id="r-dbsub"></td><td id="c-dbsub"></td></tr>
+<tr><td><span class="tok">--ds-brand-border</span></td><td class="role">Брендовая граница: заливка с прозрачностью 34%.</td><td id="r-dbbor"></td><td id="c-dbbor"></td></tr>
+<tr><td><span class="tok">--ds-brand-text</span></td><td class="role">Брендовый текст на тёмной поверхности. Осветляется отдельно от заливки.</td><td id="r-dbtxt"></td><td id="c-dbtxt"></td></tr>
+<tr><td><span class="tok">--ds-accent</span></td><td class="role">Акцент на тёмной поверхности. Осветляется, если исходный цвет не достигает 3:1.</td><td id="r-dacc"></td><td id="c-dacc"></td></tr>
+<tr><td><span class="tok">--ds-accent-on</span></td><td class="role">Тёмная подпись на акценте. Проверяется контраст к акцентной заливке.</td><td id="r-daon"></td><td id="c-daon"></td></tr>
+</table></div></details>
+<details id="calculation"><summary>Как работает расчёт</summary><div><p>Для обычного текста проверяется контраст 4,5:1, для значимых графических элементов — 3:1 к их фону. Дополнительные проверки подложек и близости оттенков — внутренние ориентиры калькулятора.</p><p>Светлота подбирается в пространстве OKLCH; насыщенность уменьшается, если цвет выходит за диапазон sRGB. Подложки выводятся из основного цвета, а тёмная палитра рассчитывается отдельно. Наведение и нажатие оформляются общими оверлеями компонентов.</p></div></details>
+</section>
+<section aria-labelledby="export"><h2 id="export" tabindex="-1">Как перенести результат</h2><p>CSS ниже нужен для предварительного просмотра. После проверки внесите утверждённые значения в <code>tokens/source.json</code> и выполните <code>npm run build</code>. Готовые компоненты используют токены выбранной темы автоматически.</p>
+<details id="export-css"><summary>Показать CSS палитры</summary><div class="bar"><div class="field"><label for="nm">Имя темы в CSS</label><input type="text" id="nm" value="CUSTOM" spellcheck="false" aria-describedby="name-hint"></div><p id="name-hint" class="cap">Латинские буквы, цифры, дефис и подчёркивание.</p></div><pre id="out"><code id="out-code"></code></pre></details>
+</section>
+</main><script>
 const S=v=>v<=0.04045?v/12.92:Math.pow((v+0.055)/1.055,2.4),G=v=>v<=0.0031308?v*12.92:1.055*Math.pow(v,1/2.4)-0.055;
 function hex2rgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');return[parseInt(h.slice(0,2),16)/255,parseInt(h.slice(2,4),16)/255,parseInt(h.slice(4,6),16)/255]}
 function rgb2hex(r){return '#'+r.map(v=>Math.round(Math.min(1,Math.max(0,v))*255).toString(16).padStart(2,'0')).join('')}
@@ -156,7 +150,10 @@ function put(id,hex,label){el('r-'+id).innerHTML='<span class="sw" style="backgr
 function chk(id,parts){el('c-'+id).innerHTML=parts.filter(Boolean).map(p=>p[1]==null?'<span class="chk inf">'+p[0]+'</span>':'<span class="chk '+(p[1]?'ok':'bad')+'">'+(p[1]?'✓':'✗')+' '+p[0]+'</span>').join('')}
 function run(){
 const seed=el('bt').value.trim(),aseed=el('at').value.trim();
-if(!/^#[0-9a-f]{6}$/i.test(seed)||!/^#[0-9a-f]{6}$/i.test(aseed))return;
+const invalid=[['bt',seed],['at',aseed]].filter(([id,value])=>!/^#[0-9a-f]{6}$/i.test(value));
+for(const id of ['bt','at'])el(id).setAttribute('aria-invalid',String(invalid.some(([key])=>key===id)));
+el('input-error').textContent=invalid.length?'Введите цвет в формате #RRGGBB. Пока показан последний корректный результат.':'';
+if(invalid.length)return;
 const brand=cr(seed,SURF)>=4.5?seed:darkenTo(seed,SURF,4.5);
 const[bsub,bsubP]=tint(brand,SURF,0.08,1.06),[bbor,bborP]=tint(brand,SURF,0.28,1.45);
 const btxt=cr(brand,BG)>=4.5?brand:darkenTo(seed,BG,4.5);
@@ -167,30 +164,42 @@ const amark=cr(acc,BG)>=3?acc:darkenTo(aseed,BG,3),amon=cr(amark,'#ffffff')>=4.5
 const dbrand=lift(seed,0.69,ON_BRAND_D,4.5),dbtxt=lift(seed,0.82,D_SURF,4.5,0.6);
 const dacc=cr(aseed,D_SURF)>=3?aseed:lift(aseed,0.75,D_SURF,3);
 const dq=oklch(dacc),daon=fromLCH(0.24,Math.min(dq.C,0.06),dq.h);
-put('brand',brand);chk('brand',[['белая подпись '+cr(brand,SURF).toFixed(1)+':1',cr(brand,SURF)>=4.5],['к грунту '+cr(brand,BG).toFixed(1)+':1',cr(brand,BG)>=3],[brand===seed?'исходник подошёл как есть':'исходник затемнён с '+seed,null]]);
-put('bsub',bsub);chk('bsub',[['отделима от поверхности '+cr(bsub,SURF).toFixed(2)+':1',cr(bsub,SURF)>=1.06],['чернила на ней '+cr(btxt,bsub).toFixed(1)+':1',cr(btxt,bsub)>=4.5],['заливка '+bsubP+'% в поверхности',null]]);
+put('brand',brand);chk('brand',[['белая подпись '+cr(brand,SURF).toFixed(1)+':1',cr(brand,SURF)>=4.5],['к фону '+cr(brand,BG).toFixed(1)+':1',cr(brand,BG)>=3],[brand===seed?'исходник подошёл как есть':'исходник затемнён с '+seed,null]]);
+put('bsub',bsub);chk('bsub',[['отделима от поверхности '+cr(bsub,SURF).toFixed(2)+':1',cr(bsub,SURF)>=1.06],['текст на подложке '+cr(btxt,bsub).toFixed(1)+':1',cr(btxt,bsub)>=4.5],['заливка '+bsubP+'% в поверхности',null]]);
 put('bbor',bbor);chk('bbor',[['отличима от --ds-border '+cr(bbor,'#e2e5ec').toFixed(2)+':1',cr(bbor,'#e2e5ec')>=1.15],['оттенок сохранён '+Math.round(oklch(bbor).h)+'°',Math.abs(oklch(bbor).h-oklch(brand).h)<12],['заливка '+bborP+'% в поверхности',null]]);
 put('btxt',btxt);chk('btxt',[['к --ds-bg '+cr(btxt,BG).toFixed(1)+':1',cr(btxt,BG)>=4.5],[brand===btxt?'равен заливке — берём её':'заливка не прошла, затемнён',null]]);
 put('acc',acc);chk('acc',[['подпись '+(accWhite?'белая':'тёмная')+' '+cr(acc,aon).toFixed(1)+':1',cr(acc,aon)>=4.5]]);
 put('aon',aon);chk('aon',[[accWhite?'белое проходит':'белое не проходит — тёмное',null]]);
-put('asub',asub[0]);chk('asub',[['отделима от поверхности '+cr(asub[0],SURF).toFixed(2)+':1',cr(asub[0],SURF)>=1.06],['чернила на ней '+cr(btxt,asub[0]).toFixed(1)+':1',cr(btxt,asub[0])>=4.5],['акцент '+asub[1]+'% в поверхности'+(asub[1]>10?' — бледный исходник':''),null]]);
-put('amark',amark);chk('amark',[['фигура к грунту '+cr(amark,BG).toFixed(1)+':1',cr(amark,BG)>=3],[amark===acc?'равен акценту':'акцент светлее порога, затемнён',null]]);
+put('asub',asub[0]);chk('asub',[['отделима от поверхности '+cr(asub[0],SURF).toFixed(2)+':1',cr(asub[0],SURF)>=1.06],['текст на подложке '+cr(btxt,asub[0]).toFixed(1)+':1',cr(btxt,asub[0])>=4.5],['акцент '+asub[1]+'% в поверхности'+(asub[1]>10?' — бледный исходник':''),null]]);
+put('amark',amark);chk('amark',[['фигура к фону '+cr(amark,BG).toFixed(1)+':1',cr(amark,BG)>=3],[amark===acc?'равен акценту':'акцент светлее порога, затемнён',null]]);
 put('amon',amon);chk('amon',[['цифра на метке '+cr(amon,amark).toFixed(1)+':1',cr(amon,amark)>=4.5]]);
-put('dbrand',dbrand);chk('dbrand',[['тёмная подпись '+cr(dbrand,ON_BRAND_D).toFixed(1)+':1',cr(dbrand,ON_BRAND_D)>=4.5],['к грунту '+cr(dbrand,D_SURF).toFixed(1)+':1',cr(dbrand,D_SURF)>=3],['L '+oklch(dbrand).L.toFixed(2)+' против '+oklch(brand).L.toFixed(2)+' в light',null]]);
-put('dbsub',rgba(dbrand,0.14),rgba(dbrand,0.14));chk('dbsub',[['вош того же оттенка',null]]);
-put('dbbor',rgba(dbrand,0.34),rgba(dbrand,0.34));chk('dbbor',[['поверх любого грунта',null]]);
+put('dbrand',dbrand);chk('dbrand',[['тёмная подпись '+cr(dbrand,ON_BRAND_D).toFixed(1)+':1',cr(dbrand,ON_BRAND_D)>=4.5],['к фону '+cr(dbrand,D_SURF).toFixed(1)+':1',cr(dbrand,D_SURF)>=3],['L '+oklch(dbrand).L.toFixed(2)+' против '+oklch(brand).L.toFixed(2)+' в light',null]]);
+put('dbsub',rgba(dbrand,0.14),rgba(dbrand,0.14));chk('dbsub',[['полупрозрачная подложка',null]]);
+put('dbbor',rgba(dbrand,0.34),rgba(dbrand,0.34));chk('dbbor',[['полупрозрачная граница',null]]);
 put('dbtxt',dbtxt);chk('dbtxt',[['к --ds-surface '+cr(dbtxt,D_SURF).toFixed(1)+':1',cr(dbtxt,D_SURF)>=4.5],['отделим от заливки '+cr(dbtxt,dbrand).toFixed(2)+':1',cr(dbtxt,dbrand)>=1.35]]);
-put('dacc',dacc);chk('dacc',[['фигура к грунту '+cr(dacc,D_SURF).toFixed(1)+':1',cr(dacc,D_SURF)>=3],[dacc===aseed?'исходник подошёл как есть':'поднят по светлоте',null]]);
+put('dacc',dacc);chk('dacc',[['фигура к фону '+cr(dacc,D_SURF).toFixed(1)+':1',cr(dacc,D_SURF)>=3],[dacc===aseed?'исходник подошёл как есть':'поднят по светлоте',null]]);
 put('daon',daon);chk('daon',[['подпись на акценте '+cr(daon,dacc).toFixed(1)+':1',cr(daon,dacc)>=4.5]]);
 const bh=oklch(brand).h,ah=oklch(acc).h,dh=(x,y)=>{const d=Math.abs(x-y)%360;return d>180?360-d:d};
 const W=[];
 if(dh(bh,ah)<40)W.push(['w','Оттенки бренда и акцента расходятся на '+Math.round(dh(bh,ah))+'° — меньше 40°. «Новое» и «нажми» будут выглядеть одним цветом: уводите акцент по оттенку или берите второй фирменный цвет.']);
 for(const k in STATUS){const d=dh(ah,oklch(STATUS[k]).h);if(d<22)W.push(['w','Акцент лежит в '+Math.round(d)+'° от '+SN[k]+'. Счётчик непрочитанного будет читаться как состояние объекта.'])}
 if(cr(seed,SURF)<4.5)W.push(['w','Исходник бренда не несёт белую подпись ('+cr(seed,SURF).toFixed(1)+':1) — в --ds-brand идёт затемнённая версия того же оттенка, '+brand+'. Логотип при этом остаётся исходным цветом.']);
-if(!W.length)W.push(['g','Порогов не нарушено: исходники садятся в токены без правки оттенка, акцент разведён и с брендом, и со статусами.']);
+if(!W.length)W.push(['g','По оттенку акцент отличается от бренда и статусов. Проверьте контраст в справочнике и результат на реальных экранах.']);
 el('warns').innerHTML=W.map(w=>'<div class="warn '+w[0]+'">'+w[1]+'</div>').join('');
-const n=(el('nm').value.trim()||'NAME').toUpperCase();
-el('out').textContent='[data-ds-theme="'+n+'"]{\n'+
+const pairs=[
+ ['Подпись кнопки / заливка',cr(SURF,brand),cr(ON_BRAND_D,dbrand),4.5],
+ ['Ссылка / фон',cr(btxt,BG),cr(dbtxt,D_SURF),4.5],
+ ['Текст выбора / подложка',cr(btxt,bsub),cr(dbtxt,rgb2hex(hex2rgb(dbrand).map((v,i)=>v*0.14+hex2rgb(D_SURF)[i]*0.86))),4.5],
+ ['Подпись / акцент',cr(aon,acc),cr(daon,dacc),4.5],
+ ['Цифра / метка',cr(amon,amark),cr(daon,dacc),4.5],
+ ['Метка / фон',cr(amark,BG),cr(dacc,D_SURF),3]
+];
+const failures=pairs.reduce((n,p)=>n+Number(p[1]<p[3])+Number(p[2]<p[3]),0);
+const recommendations=W.filter(w=>w[0]==='w').length;
+el('check-summary').textContent='Контраст: '+(failures?'не пройдено проверок — '+failures:'показанные пары прошли проверку')+'. Рекомендации по палитре: '+recommendations+'.';
+el('contrast-pairs').innerHTML=pairs.map(p=>'<div class="contrast-pair"><strong>'+p[0]+'</strong><span>Светлое: '+(p[1]>=p[3]?'✓':'✗')+' '+p[1].toFixed(2)+':1</span><span>Тёмное: '+(p[2]>=p[3]?'✓':'✗')+' '+p[2].toFixed(2)+':1</span><span class="cap">Порог '+p[3]+':1</span></div>').join('');
+const n=(el('nm').value.trim().replace(/[^a-z0-9_-]/gi,'')||'NAME').toUpperCase();
+el('out-code').textContent='[data-ds-theme="'+n+'"]{\n'+
 '--ds-brand:'+brand+';--ds-brand-subtle:'+bsub+';--ds-brand-border:'+bbor+';--ds-brand-text:'+btxt+';\n'+
 '--ds-accent:'+acc+';--ds-accent-on:'+aon+';--ds-accent-subtle:'+asub[0]+';\n'+
 '--ds-accent-mark:'+amark+';--ds-accent-mark-on:'+amon+';\n}\n'+
@@ -199,19 +208,25 @@ el('out').textContent='[data-ds-theme="'+n+'"]{\n'+
 '--ds-accent:'+dacc+';--ds-accent-on:'+daon+';--ds-accent-subtle:'+rgba(dacc,0.16)+';\n'+
 '--ds-accent-mark:var(--ds-accent);--ds-accent-mark-on:var(--ds-accent-on);\n}';
 const L=el('pl'),D=el('pd');
-L.style.background=BG;L.style.borderColor='#e2e5ec';L.querySelector('.pl').style.color='#7e8697';
-el('p-btn').style.cssText+=';background:'+brand+';color:#fff';
+L.style.background=BG;L.style.borderColor='#e2e5ec';L.querySelector('.pl').style.color='var(--ds-fg-muted)';
+L.style.setProperty('--ds-brand',brand);L.style.setProperty('--ds-on-brand','#ffffff');
 el('p-pill').style.cssText+=';background:'+bsub+';border-color:'+bbor+';color:'+btxt;
 el('p-link').style.color=btxt;
 el('p-dot').style.cssText+=';background:'+amark+';color:'+amon;
-D.style.background=D_SURF;D.style.borderColor='#272d37';D.querySelector('.pl').style.color='#7e8697';
-el('d-btn').style.cssText+=';background:'+dbrand+';color:'+ON_BRAND_D;
+D.style.background=D_SURF;D.style.borderColor='#272d37';D.querySelector('.pl').style.color='var(--ds-fg-muted)';
+D.style.setProperty('--ds-brand',dbrand);D.style.setProperty('--ds-on-brand',ON_BRAND_D);
 el('d-pill').style.cssText+=';background:'+rgba(dbrand,0.14)+';border-color:'+rgba(dbrand,0.34)+';color:'+dbtxt;
 el('d-link').style.color=dbtxt;
 el('d-dot').style.cssText+=';background:'+dacc+';color:'+daon;
 }
-function link(c,t){c.addEventListener('input',()=>{t.value=c.value;run()});t.addEventListener('input',()=>{if(/^#[0-9a-f]{6}$/i.test(t.value.trim())){c.value=t.value.trim();run()}})}
+function link(c,t){c.addEventListener('input',()=>{t.value=c.value;run()});t.addEventListener('input',()=>{if(/^#[0-9a-f]{6}$/i.test(t.value.trim()))c.value=t.value.trim();run()})}
 link(el('bs'),el('bt'));link(el('as'),el('at'));el('nm').addEventListener('input',run);
+function syncDensity(){for(const pane of document.querySelectorAll('.pane'))pane.setAttribute('data-ds-density',document.documentElement.getAttribute('data-ds-density')||'cozy')}
+syncDensity();new MutationObserver(syncDensity).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-density']});
 run();
-</script>
-</body></html>
+for(const prefix of ['p','d']){
+ let count=0;
+ ReactDOM.createRoot(el(prefix+'-btn')).render(React.createElement(window.AuroraWebDesignSystem_96e210.DsButton,{onClick:()=>{el(prefix+'-result').textContent='Отчёт построен. Объектов: 4. Запуск: '+(++count)+'.';}},'Построить отчёт'));
+}
+el('check-link').addEventListener('click',()=>el('reference').focus());
+</script></body></html>
