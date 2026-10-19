@@ -20,10 +20,18 @@ test('foundation guides retain readable docs, scoped demos and usable interactio
     await expect(frame.locator('#demo')).toHaveAttribute('data-ds-appearance',appearance);
     await expect(frame.locator('#demo')).toHaveAttribute('data-ds-density',density);
     await expect(frame.locator('body')).toHaveAttribute('data-ds-appearance','light');
-    await expect(frame.locator('#demo').getByRole('button').or(frame.locator('#demo').getByRole('textbox')).first()).toBeVisible();
+    await expect(frame.locator('#demo').getByRole('button').or(frame.locator('#demo').getByRole('textbox')).or(frame.locator('#demo').getByRole('switch')).first()).toBeVisible();
+    if(id==='DsSpacing'){
+     const grouped=await frame.locator('[data-spacing-form]').evaluate(el=>parseFloat(getComputedStyle(el).gap));
+     await frame.getByRole('button',{name:'Всё на одинаковом расстоянии'}).click();
+     const uniform=await frame.locator('[data-spacing-form]').evaluate(el=>parseFloat(getComputedStyle(el).gap));
+     expect(grouped).toBeGreaterThan(uniform);
+     await expect(frame.getByRole('textbox',{name:'Название',exact:true})).toHaveValue('МАЗ 5440');
+    }
     if(id==='DsAccessibility'){
      await frame.getByRole('textbox',{name:'Название объекта'}).fill('Volvo');
-     await frame.getByRole('button',{name:'Сохранить',exact:true}).focus();
+     await page.keyboard.press('Tab');
+     await expect(frame.getByRole('button',{name:'Сохранить',exact:true})).toBeFocused();
      await page.keyboard.press('Enter');
      await expect(frame.getByRole('status')).toContainText('Volvo');
     }
@@ -32,6 +40,11 @@ test('foundation guides retain readable docs, scoped demos and usable interactio
      await expect(frame.getByRole('status')).toContainText('Не удалось загрузить');
     }
     if(id==='DsMotion'){
+     await frame.getByRole('switch').first().focus();
+     await page.keyboard.press('Space');
+     await expect(frame.getByRole('switch').last()).toBeChecked();
+     await expect(frame.locator('[data-motion-reduced] [data-ds-switch-thumb]')).toHaveCSS('transition-duration','0s');
+     await frame.getByText('Исключение: индикатор загрузки',{exact:true}).click();
      await frame.getByRole('button',{name:'Проверить загрузку'}).click();
      await expect(frame.getByRole('status')).toHaveText('Загружаем объекты…');
      await expect(frame.getByRole('status')).toHaveText('Объекты загружены.');
@@ -44,11 +57,21 @@ test('foundation guides retain readable docs, scoped demos and usable interactio
     await expect(frame.locator('#in-interface')).toBeVisible();
     await page.setViewportSize({width:390,height:844});
     expect(await frame.locator('body').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+    if(id!=='DsContent'){
+     const technical=page.locator('#card-description details');
+     await expect(technical).not.toHaveAttribute('open','');
+     await technical.locator('summary').click();
+     await expect(technical.locator('pre')).toBeVisible();
+     await expect(technical).not.toContainText('<details>');
+     await expect(technical).not.toContainText('<dl');
+    }
    }
    const results=await new AxeBuilder({page}).include('#preview').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
    expect(results.violations).toEqual([]);
   }
   await page.emulateMedia({reducedMotion:'reduce'});
+  await expect(page.frameLocator('#preview').locator('#demo [data-ds-switch-thumb]').first()).toHaveCSS('transition-duration','0s');
+  await page.frameLocator('#preview').getByText('Исключение: индикатор загрузки',{exact:true}).click();
   await page.frameLocator('#preview').getByRole('button',{name:'Проверить загрузку'}).click();
   await expect(page.frameLocator('#preview').locator('[data-ds-spinner-intro]')).toHaveCSS('animation-name','none');
   expect(errors).toEqual([]);
