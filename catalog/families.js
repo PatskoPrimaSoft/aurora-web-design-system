@@ -1,10 +1,10 @@
 export const families=[
  {id:'buttons',title:'Кнопки и иконки',cards:['DsButton','DsIconButton','DsFab','DsIcon'],aliases:['button','кнопка','иконка','примитивы']},
- {id:'selection',title:'Поля и выбор',cards:['DsField','DsSelect','DsCheckbox','DsSwitch','DsDuration'],aliases:['selection','form','формы','checkbox','чекбокс']},
- {id:'navigation',title:'Навигация',cards:['DsAppHeader','DsUserMenu','DsMenu','DsTabs','DsStepper','DsPagination'],aliases:['header','шапка','navigation']},
+ {id:'selection',title:'Поля и выбор',cards:['DsField','DsSelect','DsCheckbox','DsRadioGroup','DsSwitch','DsDatePicker','DsTimePicker','DsDateTimePicker','DsDateRangePicker','DsDuration'],aliases:['selection','form','формы','checkbox','чекбокс']},
+ {id:'navigation',title:'Навигация',cards:['DsAppHeader','DsUserMenu','DsLink','DsBreadcrumbs','DsMenu','DsTabs','DsStepper','DsPagination'],aliases:['header','шапка','navigation']},
  {id:'data',title:'Данные и фильтры',cards:['DsTable','DsListRow','DsTreeRow','DsChip','DsChipGroup','DsFilterMenu','DsBulkActionsBar','DsLozenge','DsStateIcon'],aliases:['data','filter','фильтр','таблица']},
- {id:'layout',title:'Контейнеры и окна',cards:['DsPageLayout','DsPanel','DsDialog'],aliases:['layout','раскладка','диалог','панель']},
- {id:'feedback',title:'Обратная связь',cards:['DsBanner','DsEmptyState','DsSkeleton','DsSpinner','DsToast','DsToastStack'],aliases:['feedback','загрузка','уведомления']},
+ {id:'layout',title:'Контейнеры и окна',cards:['DsPageLayout','DsPanel','DsDialog','DsPopover'],aliases:['layout','раскладка','диалог','панель']},
+ {id:'feedback',title:'Обратная связь',cards:['DsBanner','DsEmptyState','DsSkeleton','DsSpinner','DsProgressBar','DsTooltip','DsToast','DsToastStack'],aliases:['feedback','загрузка','уведомления']},
  {id:'charts',title:'Графики',cards:['DsChart','DsSparkline','DsScoreBar'],aliases:['chart','график']},
 ];
 export const familyFor=id=>families.find(family=>family.cards.includes(id))??null;

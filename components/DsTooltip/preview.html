@@ -1,0 +1,25 @@
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="tooltip|подсказка|наведение" group="5 · Компоненты · обратная связь" height=580 subtitle="Короткое дополнительное пояснение при наведении и фокусе" -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><style>
+.tooltip-row{display:flex;align-items:center;flex-wrap:wrap;gap:16px;padding-bottom:64px}
+.tooltip-row p{margin:0}
+</style></head><body data-ds-examples data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><div id="root"></div>
+<script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const {DsTooltip,DsButton,DsIconButton}=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+function App(){
+  const [saved,setSaved]=React.useState(false),[refreshes,setRefreshes]=React.useState(0),[help,setHelp]=React.useState(false);
+  return <LiveExamples>
+    <LiveExample id="supplementary-hint" title="Дополнительное пояснение" description="Наведите мышь или переведите фокус клавишей Tab. Подсказка объясняет, что именно будет сохранено.">
+      <div className="tooltip-row"><DsTooltip content="Сохранить текущий набор столбцов для следующих сеансов"><DsButton tone="secondary" onClick={()=>setSaved(true)}>Запомнить вид</DsButton></DsTooltip><p role="status">{saved?'Вид сохранён.':'Вид ещё не сохранён.'}</p></div>
+    </LiveExample>
+    <LiveExample id="icon-action" title="Кнопка с иконкой" description="У кнопки с иконкой подсказка уже встроена. Её текст берётся из доступного имени действия.">
+      <div className="tooltip-row"><DsIconButton icon="refresh" label="Обновить объекты" onClick={()=>setRefreshes(value=>value+1)}/><p role="status">Обновлений: {refreshes}</p></div>
+    </LiveExample>
+    <LiveExample id="preferred-placement" title="Сторона раскрытия" description="При нехватке места подсказка меняет сторону и остаётся в пределах окна. Указатель можно перевести на её текст.">
+      <div className="tooltip-row" style={{justifyContent:'flex-end',paddingTop:48}}><DsTooltip placement="top" content="Показать памятку по работе с клавиатурой"><DsButton tone="secondary" onClick={()=>setHelp(value=>!value)} aria-expanded={help}>Сочетания клавиш</DsButton></DsTooltip>{help?<p>Tab — следующее действие, Shift+Tab — предыдущее, Escape — закрыть подсказку.</p>:null}</div>
+    </LiveExample>
+  </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>

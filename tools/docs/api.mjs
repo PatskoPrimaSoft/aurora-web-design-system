@@ -70,7 +70,7 @@ function validateDefaults({root,files,program,options,defaults}){
   return `${entry?entry.name+'.'+entry.prop+': default incompatible with prop type':slash(d.file?.fileName??root)}: ${ts.flattenDiagnosticMessageText(d.messageText,' ')}`;
  }).join('\n'));
 }
-function forwarded(node){
+function forwarded(node,source,path,seen=new Set()){
  const parameter=node.parameters[0];if(!parameter||!ts.isObjectBindingPattern(parameter.name))return false;
  const rest=parameter.name.elements.find(e=>e.dotDotDotToken)?.name.text;if(!rest)return false;
  const aliases=new Set(),attributes=new Set([rest]);
@@ -85,9 +85,31 @@ function forwarded(node){
   ts.forEachChild(n,walkAlias);
  };
  ts.forEachChild(node,walkAlias);
+ const throughWrapper=name=>{
+  for(const statement of source.statements){
+   if(!ts.isImportDeclaration(statement)||!statement.moduleSpecifier.text.startsWith('.'))continue;
+   const imports=statement.importClause?.namedBindings;
+   if(!imports||!ts.isNamedImports(imports))continue;
+   const imported=imports.elements.find(item=>item.name.text===name);if(!imported)continue;
+   const target=join(dirname(path),statement.moduleSpecifier.text),exportName=imported.propertyName?.text??name,key=target+':'+exportName;
+   if(seen.has(key)||!existsSync(target))return false;
+   const nextSeen=new Set(seen);nextSeen.add(key);const nextSource=readSource(target);
+   for(const item of nextSource.statements){
+    if(!exported(item))continue;
+    if(ts.isFunctionDeclaration(item)&&item.name?.text===exportName)return forwarded(item,nextSource,target,nextSeen);
+    if(ts.isVariableStatement(item))for(const declaration of item.declarationList.declarations){
+     if(declaration.name.getText(nextSource)!==exportName)continue;
+     const init=declaration.initializer;
+     const wrapped=init&&ts.isCallExpression(init)&&ts.isPropertyAccessExpression(init.expression)&&init.expression.expression.getText(nextSource)==='React'&&init.expression.name.text==='forwardRef'?init.arguments[0]:init;
+     if(wrapped&&(ts.isFunctionExpression(wrapped)||ts.isArrowFunction(wrapped)))return forwarded(wrapped,nextSource,target,nextSeen);
+    }
+   }
+  }
+  return false;
+ };
  let found=false;
  const visit=n=>{
-  if((ts.isJsxOpeningElement(n)||ts.isJsxSelfClosingElement(n))&&ts.isIdentifier(n.tagName)&&/^[a-z]/.test(n.tagName.text)){
+  if((ts.isJsxOpeningElement(n)||ts.isJsxSelfClosingElement(n))&&ts.isIdentifier(n.tagName)&&(/^[a-z]/.test(n.tagName.text)||throughWrapper(n.tagName.text))){
    for(const attribute of n.attributes.properties)if(ts.isJsxSpreadAttribute(attribute)){
     const expr=attribute.expression;
     if(ts.isIdentifier(expr)&&attributes.has(expr.text))found=true;
@@ -125,7 +147,7 @@ export function extractApi({root}){
   const properties=checker.getPropertiesOfType(contract.parameterType);
   const declared=new Set(properties.map(p=>p.name));
   for(const nameOfProp of bindings.keys())if(!declared.has(nameOfProp))throw Error(`${slash(relative(root,contract.path))}: ${name}.${nameOfProp}: missing prop declaration`);
-  const forwarding=forwarded(implementation.node);
+  const forwarding=forwarded(implementation.node,implementation.source,implementation.path);
   const props=properties.map(symbol=>{
    const binding=bindings.get(symbol.name),declaration=symbol.valueDeclaration??symbol.declarations?.[0];
    const native=slash(declaration?.getSourceFile().fileName??'').includes('/@types/react/');

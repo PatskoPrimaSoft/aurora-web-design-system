@@ -1,0 +1,35 @@
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="popover|popup|всплывающая панель" group="5 · Компоненты · обратная связь" height=820 subtitle="Небольшая интерактивная панель рядом с управляющей кнопкой" -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><style>
+.popover-stack{display:flex;flex-direction:column;align-items:flex-start;gap:16px;min-width:0}
+.popover-stage{padding-bottom:180px;display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px}
+.popover-stack p{margin:0}
+</style></head><body data-ds-examples data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><div id="root"></div>
+<script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const {DsPopover,DsButton,DsCheckbox,DsDialog}=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+function App(){
+  const [active,setActive]=React.useState('unchecked'),[open,setOpen]=React.useState(false),[dialog,setDialog]=React.useState(false),[saved,setSaved]=React.useState(false);
+  return <LiveExamples>
+    <LiveExample id="object-filter" title="Фильтр объектов" description="Откройте панель, измените выбор и нажмите «Готово». Значение хранится после закрытия панели.">
+      <div className="popover-stack"><div className="popover-stage"><DsPopover label="Фильтр объектов" trigger={<DsButton tone="secondary" icon="filter_list">Фильтр</DsButton>}>
+        {({close})=><div className="popover-stack"><DsCheckbox label="Только активные" state={active} onChange={setActive}/><DsButton onClick={close}>Готово</DsButton></div>}
+      </DsPopover><DsButton tone="ghost" onClick={()=>setActive('unchecked')}>Сбросить фильтр</DsButton></div><p role="status">{active==='checked'?'Показаны только активные объекты.':'Показаны все объекты.'}</p></div>
+    </LiveExample>
+    <LiveExample id="controlled-panel" title="Управляемое раскрытие" description="Панель подходит для короткого действия. Завершение возвращает фокус на кнопку; клик снаружи закрывает панель.">
+      <div className="popover-stack"><div className="popover-stage" style={{alignSelf:'stretch',justifyContent:'flex-end'}}><DsPopover label="Вид списка" open={open} onOpenChange={setOpen} align="end" width={280} trigger={props=><DsButton {...props} tone="secondary">Вид списка</DsButton>}>
+        {({close})=><div className="popover-stack"><p>Запомнить текущий набор столбцов для следующих сеансов?</p><DsButton onClick={()=>{setSaved(true);close()}}>Запомнить</DsButton></div>}
+      </DsPopover></div><p role="status">{saved?'Вид сохранён.':open?'Панель открыта.':'Панель закрыта.'}</p></div>
+    </LiveExample>
+    <LiveExample id="inside-dialog" title="Внутри диалога" description="Панель остаётся доступной внутри диалога. Первый Escape закрывает панель, следующий — сам диалог.">
+      <DsButton tone="secondary" onClick={()=>setDialog(true)}>Настроить отчёт</DsButton>
+      <DsDialog open={dialog} title="Настройки отчёта" onClose={()=>setDialog(false)}>
+        <DsPopover label="Справка о периоде" trigger={<DsButton tone="secondary">Как выбрать период</DsButton>}>
+          {({close})=><div className="popover-stack"><p>Выберите период, за который нужно сравнить поездки объектов.</p><DsButton onClick={close}>Понятно</DsButton></div>}
+        </DsPopover>
+      </DsDialog>
+    </LiveExample>
+  </LiveExamples>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>

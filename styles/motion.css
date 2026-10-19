@@ -6,6 +6,10 @@
 
 @keyframes ds-spin{to{transform:rotate(360deg)}}
 
+@keyframes ds-progress-travel{0%{transform:translateX(-100%)}100%{transform:translateX(286%)}}
+[data-ds-progress-fill][data-indeterminate="true"]{animation:ds-progress-travel 1.6s linear infinite}
+@media(prefers-reduced-motion:reduce){[data-ds-progress-fill][data-indeterminate="true"]{animation:none}}
+
 @keyframes ds-pulse{0%,100%{opacity:1}50%{opacity:.45}}
 
 [data-ds-skeleton][data-animated="true"]{animation:ds-pulse 1.4s var(--ds-ease) infinite}

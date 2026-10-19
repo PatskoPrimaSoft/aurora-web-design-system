@@ -55,6 +55,10 @@ export interface DsStrings {
   };
   selectField: { selection: (labels: string) => string; placeholder: string; empty: string; noResults: string; loading: string; clear: string; search: string; required: string};
   field: {count: (used: number, max?: number) => string};
+  radio: {required: string};
+  progress: {percent: (percent: number) => string};
+  breadcrumbs: {label: string};
+  date: {date: string; time: string; dateTime: string; from: string; to: string; range: string; rangeInvalid: string; required: string; invalid: string; min: (value: string) => string; max: (value: string) => string; step: string; timeZone: (zone: string) => string};
   duration: Record<'days' | 'hours' | 'minutes' | 'd' | 'h' | 'm', string>;
   chart: Record<'zoom' | 'data' | 'invalid' | 'settings' | 'reset' | 'download', string>;
   score: Record<'label' | 'bad' | 'norm' | 'good' | 'best', string>;

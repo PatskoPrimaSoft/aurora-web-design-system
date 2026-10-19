@@ -1,0 +1,53 @@
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="time|дата|время|календарь" group="5 · Компоненты · формы" height=720 subtitle="Время суток без привязки к дате" -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"></head>
+<body data-ds-examples data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy">
+<div id="root"></div>
+<script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script>
+<script type="text/babel">
+const {DsTimePicker,DsButton}=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+const {useState}=React;
+
+function Example0() {
+  const [value, setValue] = useState('09:00');
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <DsTimePicker label="Начало смены" value={value} onChange={setValue} hint="Время в часовом поясе расписания: Europe/Minsk."/>
+    <output aria-live="polite">Выбрано: {value || 'не указано'}</output>
+  </div>;
+}
+
+
+function Example1() {
+  const [result, setResult] = useState('');
+  return <form style={{display:'flex',flexDirection:'column',gap:16}} onSubmit={event => {
+    event.preventDefault();
+    setResult('Сохранено: ' + new FormData(event.currentTarget).get('scheduled'));
+  }} onReset={() => setResult('')}>
+    <DsTimePicker label="Начало смены" name="scheduled" defaultValue="09:00"
+      required min="08:00" max="18:00"
+      hint="Допустимый интервал: 08:00 — 18:00."/>
+    <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+      <DsButton type="submit">Сохранить</DsButton>
+      <DsButton type="reset" tone="secondary">Сбросить</DsButton>
+    </div>
+    <span role="status">{result}</span>
+  </form>;
+}
+
+
+function Example2() {
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <DsTimePicker label="Подтверждённое значение" defaultValue="09:00" readOnly hint="Изменение доступно после отмены подтверждения."/>
+    <DsTimePicker label="Недоступное значение" defaultValue="09:00" disabled hint="Недостаточно прав для изменения."/>
+    <DsTimePicker label="Проверка сервером" defaultValue="09:00" error="Это время уже занято. Выберите другое."/>
+  </div>;
+}
+
+function App(){return <LiveExamples>
+  <LiveExample id="basic-example" title="Обычный ввод" description="Введите значение с клавиатуры или откройте встроенный выбор браузера."><Example0/></LiveExample>
+  <LiveExample id="form-validation" title="Ограничения и отправка формы" description="Оба способа ввода подчиняются одним границам. Ошибка появляется после выхода из поля или попытки отправки."><Example1/></LiveExample>
+  <LiveExample id="field-states" title="Только чтение, блокировка и ошибка" description="Поле только для чтения сохраняет фокус; недоступное поле пропускается при Tab."><Example2/></LiveExample>
+</LiveExamples>;}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>

@@ -1,0 +1,23 @@
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · обратная связь" aliases="progress|прогресс|экспорт|загрузка" subtitle="Ход длительной операции с известным или неизвестным объёмом" -->
+<!doctype html><html lang="ru"><head><meta charset="utf-8"></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+function Example0(){
+const [value,setValue]=React.useState(0),[running,setRunning]=React.useState(false);
+React.useEffect(()=>{if(!running)return;const timer=setInterval(()=>setValue(current=>Math.min(500,current+125)),400);return()=>clearInterval(timer);},[running]);
+React.useEffect(()=>{if(value===500)setRunning(false);},[value]);
+return <div style={{display:'grid',gap:16}}><S.DsProgressBar label="Экспорт объектов" value={value} max={500} valueText={value+' из 500 объектов'} tone={value===500?'success':'primary'}/><S.DsButton disabled={running} onClick={()=>{setValue(0);setRunning(true);}}>Начать экспорт</S.DsButton><p role="status" style={{margin:0}}>{value===500?'Экспорт завершён.':''}</p></div>;
+}
+function Example1(){
+const [done,setDone]=React.useState(false);
+return <div style={{display:'grid',gap:16}}><S.DsProgressBar label="Подготовка отчёта" value={done?100:undefined} valueText={done?'Готово':'Подготавливаем данные'} tone={done?'success':'primary'}/><S.DsButton tone="secondary" onClick={()=>setDone(current=>!current)}>{done?'Повторить пример':'Завершить подготовку'}</S.DsButton><p role="status" style={{margin:0}}>{done?'Данные готовы.':''}</p></div>;
+}
+function Example2(){
+return <div style={{display:'grid',gap:24}}><S.DsProgressBar label="Синхронизация: ещё не началась" value={0}/><S.DsProgressBar label="Синхронизация: обработка" value={62}/><S.DsProgressBar label="Синхронизация завершена" value={100} tone="success"/></div>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<LiveExamples>
+<LiveExample id="export" title="Экспорт объектов" description="Пример имитирует обработку 500 объектов. Завершение объявляется отдельно от промежуточных обновлений."><Example0/></LiveExample>
+<LiveExample id="indeterminate" title="Подготовка без известного объёма" description="Проценты не показываются, пока объём работы неизвестен. При уменьшении движения полоса остаётся неподвижной."><Example1/></LiveExample>
+<LiveExample id="states" title="Начало, обработка и завершение"><Example2/></LiveExample>
+</LiveExamples>);
+</script></body></html>

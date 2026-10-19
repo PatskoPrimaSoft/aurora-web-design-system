@@ -1,0 +1,23 @@
+<!-- @dsCard layout="component" scopeMode="inherit" group="5 · Компоненты · формы" aliases="radio|радиогруппа|один вариант" subtitle="Выбор одного значения из группы с общей подписью и проверкой формы" -->
+<!doctype html><html lang="ru"><head><meta charset="utf-8"></head><body data-ds-examples><div id="root"></div><script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const S=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+function Example0(){
+const [value,setValue]=React.useState('important');
+return <S.DsRadioGroup label="Какие уведомления получать" value={value} onChange={setValue} options={[{value:'all',label:'Все события'},{value:'important',label:'Только важные',description:'Тревоги и потеря связи'},{value:'none',label:'Не получать'}]}/>;
+}
+function Example1(){
+const [result,setResult]=React.useState('');
+return <form onSubmit={event=>{event.preventDefault();setResult('Выбран формат: '+new FormData(event.currentTarget).get('format'));}} onReset={()=>setResult('')} style={{display:'grid',gap:16}}>
+<S.DsRadioGroup label="Формат отчёта" name="format" required options={[{value:'CSV',label:'CSV',description:'Для обработки в других программах'},{value:'XLSX',label:'XLSX',description:'Для работы с электронной таблицей'}]}/>
+<div style={{display:'flex',flexWrap:'wrap',gap:8}}><S.DsButton type="submit">Выбрать формат</S.DsButton><S.DsButton type="reset" tone="secondary">Сбросить</S.DsButton></div><p role="status" style={{margin:0}}>{result}</p></form>;
+}
+function Example2(){
+return <S.DsRadioGroup label="Область отчёта" defaultValue="own" orientation="horizontal" options={[{value:'own',label:'Объекты моего подразделения'},{value:'all',label:'Все объекты северо-западного подразделения и связанных организаций',description:'Недоступно для вашей роли',disabled:true}]}/>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<LiveExamples>
+<LiveExample id="basic" title="Выбор режима уведомления" description="Все варианты видны сразу. Нажмите на подпись или переключите выбор стрелками."><Example0/></LiveExample>
+<LiveExample id="required-form" title="Обязательный выбор в форме" description="Отправка без выбора показывает ошибку. Сброс возвращает форму к исходному состоянию."><Example1/></LiveExample>
+<LiveExample id="unavailable" title="Недоступный вариант и длинная подпись" description="Причина ограничения остаётся видимой. Подписи переносятся на узком экране."><Example2/></LiveExample>
+</LiveExamples>);
+</script></body></html>

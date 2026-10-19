@@ -1,0 +1,46 @@
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="хлебные крошки|breadcrumbs|путь" group="5 · Компоненты · навигация" height=560 subtitle="Положение текущей страницы в иерархии и переходы к её родителям" -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"></head><body data-ds-examples><div id="root"></div>
+<script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script>
+<script type="text/babel">
+const {DsBreadcrumbs}=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+const {useState}=React;
+
+function Demo0() {
+  const pageUrl = typeof window === 'undefined' ? '' : window.location.href.split('#')[0];
+  return <div style={{display: 'grid', gap: 16}}>
+    <DsBreadcrumbs aria-label="Положение в каталоге" items={[
+      {label: 'Автопарк', href: pageUrl + '#fleet-destination'},
+      {label: 'Грузовые автомобили', href: pageUrl + '#trucks-destination'},
+      {label: 'МАЗ 5440'},
+    ]}/>
+    <section id="fleet-destination" tabIndex={-1} aria-label="Автопарк"><strong>Автопарк</strong><p style={{margin: '8px 0 0'}}>148 объектов в 12 группах.</p></section>
+    <section id="trucks-destination" tabIndex={-1} aria-label="Грузовые автомобили"><strong>Грузовые автомобили</strong><p style={{margin: '8px 0 0'}}>МАЗ 5440, Volvo FH16 и Scania R450.</p></section>
+  </div>;
+}
+
+function Demo1() {
+  const pageUrl = typeof window === 'undefined' ? '' : window.location.href.split('#')[0];
+  return <div style={{display: 'grid', gap: 16, minWidth: 0}}>
+    <DsBreadcrumbs items={[
+      {label: 'Региональные подразделения', href: pageUrl + '#regions-destination'},
+      {label: 'Северо-западное подразделение международных перевозок', href: pageUrl + '#northwest-destination'},
+      {label: 'MAZ_5440_REGIONAL_FLEET_2026_MONITORING_OBJECT'},
+    ]}/>
+    <section id="regions-destination" tabIndex={-1} aria-label="Региональные подразделения">Подразделения: северо-западное, центральное и южное.</section>
+    <section id="northwest-destination" tabIndex={-1} aria-label="Северо-западное подразделение">Северо-западное подразделение: 32 объекта.</section>
+  </div>;
+}
+
+function Demo2() {
+  return <DsBreadcrumbs items={[{label: 'Автопарк'}]}/>;
+}
+
+function App(){return <LiveExamples>
+    <LiveExample id="object-path" title="Путь к объекту" description="Предки открываются по ссылкам; название текущего объекта не создаёт лишнего перехода."><Demo0/></LiveExample>
+    <LiveExample id="long-path" title="Длинные названия уровней" description="На узком экране уровни переносятся, сохраняя полный путь."><Demo1/></LiveExample>
+    <LiveExample id="single-level" title="Единственный уровень"><Demo2/></LiveExample>
+  </LiveExamples>;}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script></body></html>

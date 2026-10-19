@@ -78,7 +78,7 @@ reduction on the v1 side comes from v1 encoding variants as separate components.
 | `FormField` | `DsField` | 1:1 | Floating label → static label (`labelMode="notch"` restores the `mat-form-field` outline notch where parity is needed). `errors[]` → one `error`; several simultaneous messages were never readable. |
 | `SelectField` | `DsField` | folded in | `as="select"` + `options`. |
 | `Search` | `DsField` | folded in | Use `<DsField icon="search">` with an accessible search label. Compose the surrounding actions in the screen. |
-| `TimePicker` | `DsDuration` | 1:1 | Rebuilt on the shared field tokens; the `дд d чч : мм` mask is now translatable unit labels. |
+| `TimePicker` (прежний ввод длительности) | `DsDuration` | Legacy | Прежняя маска длительности `дд d чч : мм` перенесена в `DsDuration`, который теперь устарел. Новый `DsTimePicker` вводит время суток и не заменяет длительность. Для нового ввода длительности используйте числовые поля с явными единицами. |
 | `Checkbox` | `DsCheckbox` | 1:1 | Selected state is brand, not accent. |
 | `RadioButton` | `DsCheckbox` | folded in | `radio` flag. |
 | `SlideToggle` | `DsSwitch` | 1:1 | — |

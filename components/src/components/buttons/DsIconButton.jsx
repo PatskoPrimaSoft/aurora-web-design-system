@@ -1,5 +1,5 @@
 import React from 'react';
-import { createPortal } from 'react-dom';
+import { DsTooltip } from '../overlays/DsTooltip.jsx';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
 import { usePress } from './DsButton.jsx';
 const Ds_OVERLAY=(ink,depth)=>{const c='color-mix(in oklab,'+ink+' '+depth+',transparent)';return 'linear-gradient(0deg,'+c+','+c+')'};
@@ -8,33 +8,7 @@ const DsIB_SIZE={sm:'var(--ds-control-h-sm)',md:'var(--ds-control-h)',lg:'var(--
 /** Square icon-only button with an accessible name and system tooltip. */
 export function DsIconButton({icon,label,tone='ghost',size='md',active,loading=false,disabled=false,dot=false,rotate,onClick,type='button',...rest}){
   const off=disabled||loading;
-  const buttonRef=React.useRef(null),tipRef=React.useRef(null);
-  const [tip,setTip]=React.useState(null);
-  const tipId=React.useId();
-  const hideTip=()=>setTip(null);
-  function showTip(){
-    if(off||!label)return;
-    const r=buttonRef.current.getBoundingClientRect();
-    setTip({left:r.left,top:r.bottom+4,above:r.top-4});
-  }
   const {hover:h,pressed:p,handlers,rest:own}=usePress(off,rest);
-  React.useEffect(()=>{hideTip();},[off,label]);
-  React.useLayoutEffect(()=>{
-    if(!tip||!tipRef.current)return;
-    const el=tipRef.current,r=el.getBoundingClientRect();
-    el.style.left=Math.max(4,Math.min(tip.left,window.innerWidth-r.width-4))+'px';
-    el.style.top=(tip.top+r.height<=window.innerHeight-4?tip.top:Math.max(4,tip.above-r.height))+'px';
-  },[tip]);
-  React.useEffect(()=>{
-    if(!tip)return;
-    const dismiss=e=>{if(e.key==='Escape'){e.preventDefault();hideTip();}};
-    document.addEventListener('keydown',dismiss,true);
-    window.addEventListener('scroll',showTip,true);window.addEventListener('resize',showTip);
-    return ()=>{
-      document.removeEventListener('keydown',dismiss,true);
-      window.removeEventListener('scroll',showTip,true);window.removeEventListener('resize',showTip);
-    };
-  },[tip]);
   const iconSize=size==='sm'?'var(--ds-icon-sm)':'var(--ds-icon)';
   let bg='transparent',fg='var(--ds-fg-muted)',bd='1px solid transparent';
   if(tone==='secondary'){bg='var(--ds-surface)';bd='1px solid var(--ds-border-field)';fg='var(--ds-fg)'}
@@ -55,13 +29,9 @@ export function DsIconButton({icon,label,tone='ghost',size='md',active,loading=f
      задан — кнопка объявляет aria-pressed; не задан — это обычная кнопка. */
   function activate(e){
     if(off){e.preventDefault();e.stopPropagation();return;}
-    hideTip();onClick?.(e);
+    onClick?.(e);
   }
-  return <><button {...own} {...handlers} ref={buttonRef} type={type} aria-label={undefined} title={undefined}
-    onFocus={e=>{showTip();own.onFocus?.(e);}} onBlur={e=>{hideTip();handlers.onBlur(e);}}
-    onPointerEnter={e=>{handlers.onPointerEnter(e);if(e.pointerType==='mouse')showTip();}}
-    onPointerLeave={e=>{handlers.onPointerLeave(e);if(!e.relatedTarget?.nodeType||!tipRef.current?.contains(e.relatedTarget))hideTip();}}
-    aria-describedby={[own['aria-describedby'],tip?tipId:undefined].filter(Boolean).join(' ')||undefined}
+  return <DsTooltip content={label} disabled={off}><button {...own} {...handlers} type={type} aria-label={undefined} title={undefined}
     disabled={disabled} aria-disabled={loading||own['aria-disabled']} aria-busy={loading||own['aria-busy']} onClick={activate}
     aria-pressed={active==null?undefined:!!active}
     style={{boxSizing:'border-box',display:'inline-flex',alignItems:'center',justifyContent:'center',flex:'none',
@@ -74,11 +44,5 @@ export function DsIconButton({icon,label,tone='ghost',size='md',active,loading=f
     </span>:null}
     {dot&&!off?<span aria-hidden="true" style={{position:'absolute',top:5,right:5,width:7,height:7,borderRadius:'50%',
       background:'var(--ds-accent-mark)',border:'1px solid '+(bg==='transparent'?'var(--ds-surface)':bg)}}/>:null}
-  </button>
-  {tip?createPortal(<span ref={tipRef} id={tipId} role="tooltip"
-    onPointerLeave={e=>{if(!e.relatedTarget?.nodeType||!buttonRef.current?.contains(e.relatedTarget))hideTip();}}
-    style={{position:'fixed',left:tip.left,top:tip.top,zIndex:1000,maxWidth:'min(320px, calc(100vw - 8px))',
-      padding:'var(--ds-pad-tight) var(--ds-pad-sm)',borderRadius:'var(--ds-radius-sm)',background:'var(--ds-surface-inverse)',color:'var(--ds-fg-on-inverse)',
-      font:'var(--ds-type-caption)',overflowWrap:'anywhere',boxShadow:'var(--ds-shadow-sm)'}}>{label}</span>,document.body):null}
-  </>;
+  </button></DsTooltip>;
 }

@@ -1,0 +1,40 @@
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="ссылка|link|переход" group="5 · Компоненты · навигация" height=560 subtitle="Переход к странице, разделу или файлу средствами браузера" -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"></head><body data-ds-examples><div id="root"></div>
+<script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script>
+<script type="text/babel">
+const {DsLink}=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+const {useState}=React;
+
+function Demo0() {
+  const pageUrl = typeof window === 'undefined' ? '' : window.location.href.split('#')[0];
+  return <div style={{display: 'grid', gap: 16}}>
+    <p style={{margin: 0}}>Задайте получателей и частоту доставки. <DsLink href={pageUrl + '#notification-settings'}>К настройкам уведомлений</DsLink></p>
+    <section id="notification-settings" tabIndex={-1} aria-label="Настройки уведомлений">
+      <strong>Настройки уведомлений</strong>
+      <p style={{margin: '8px 0 0'}}>События доставляются дежурному диспетчеру по электронной почте.</p>
+    </section>
+  </div>;
+}
+
+function Demo1() {
+  const csv = 'name,status\nMAZ 5440,online\nVolvo FH16,offline\n';
+  return <DsLink href={'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)} download="objects.csv">Скачать список объектов (CSV)</DsLink>;
+}
+
+function Demo2() {
+  const pageUrl = typeof window === 'undefined' ? '' : window.location.href.split('#')[0];
+  return <div style={{display: 'grid', gap: 16, minWidth: 0}}>
+    <DsLink href={pageUrl + '#regional-settings'}>Настройки уведомлений для объектов северо-западного регионального подразделения — REGIONAL_FLEET_NOTIFICATION_SETTINGS_2026</DsLink>
+    <section id="regional-settings" tabIndex={-1} aria-label="Региональные настройки">Получатели региона: диспетчер и руководитель смены.</section>
+  </div>;
+}
+
+function App(){return <LiveExamples>
+    <LiveExample id="inline-navigation" title="Переход внутри страницы" description="Ссылка сохраняет нативный переход к существующему разделу. Enter открывает назначение с клавиатуры."><Demo0/></LiveExample>
+    <LiveExample id="download-file" title="Скачивание файла" description="Атрибут download передаёт скачивание браузеру. Пример содержит небольшой CSV с объектами."><Demo1/></LiveExample>
+    <LiveExample id="long-link" title="Длинное название назначения" description="Название переносится целиком, в том числе без пробелов."><Demo2/></LiveExample>
+  </LiveExamples>;}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script></body></html>

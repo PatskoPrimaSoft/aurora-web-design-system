@@ -1,0 +1,98 @@
+<!-- @dsCard layout="component" scopeMode="inherit" aliases="period|date range|период|интервал|даты" group="5 · Компоненты · формы" height=1100 subtitle="Начало и конец периода с проверкой порядка границ" -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"></head>
+<body data-ds-examples data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><div id="root"></div>
+<script type="application/json" id="example-code-sources" data-ds-example-sources="examples.json"></script><script type="text/babel">
+const {DsDateRangePicker,DsButton}=window.AuroraWebDesignSystem_96e210;
+const {LiveExamples,LiveExample}=window.DsLiveExamples;
+const {useState}=React;
+
+function Example0() {
+  const [period, setPeriod] = useState({from:'2026-10-12',to:'2026-10-19'});
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <DsDateRangePicker label="Период отчёта" value={period} onChange={setPeriod}
+      fromLabel="Первый день" toLabel="Последний день" timeZone="Europe/Minsk"/>
+    <output aria-live="polite">{period.from || '…'} — {period.to || '…'}</output>
+  </div>;
+}
+
+
+function Example1() {
+  // В продукте эту календарную дату определяет приложение в Europe/Minsk.
+  const calendarToday = '2026-10-19';
+  function previousCalendarDay(date) {
+    let [year, month, day] = date.split('-').map(Number);
+    day -= 1;
+    if (day === 0) {
+      month -= 1;
+      if (month === 0) { month = 12; year -= 1; }
+      const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+      day = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+    }
+    return [String(year).padStart(4, '0'), String(month).padStart(2, '0'), String(day).padStart(2, '0')].join('-');
+  }
+  const yesterday = previousCalendarDay(calendarToday);
+  const [period, setPeriod] = useState({from:calendarToday,to:calendarToday});
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <DsDateRangePicker label="Быстрый период" value={period} onChange={setPeriod}
+      timeZone="Europe/Minsk" hint="Опорная дата примера: 19 октября 2026 года."
+      presets={[
+        {id:'today',label:'Сегодня',value:{from:calendarToday,to:calendarToday}},
+        {id:'yesterday',label:'Вчера',value:{from:yesterday,to:yesterday}}
+      ]}/>
+    <output aria-live="polite">{period.from || '…'} — {period.to || '…'}</output>
+  </div>;
+}
+
+
+function Example2() {
+  const [result, setResult] = useState('');
+  return <form style={{display:'flex',flexDirection:'column',gap:16}} onSubmit={event => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    setResult('Отчёт: ' + data.get('report.from') + ' — ' + data.get('report.to'));
+  }} onReset={() => setResult('')}>
+    <DsDateRangePicker label="Даты отчёта" name="report" required
+      defaultValue={{from:'2026-10-12',to:'2026-10-19'}}
+      min="2026-10-01" max="2026-10-31" timeZone="Europe/Minsk"
+      hint="Обе даты включительно: с 1 по 31 октября 2026 года."/>
+    <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+      <DsButton type="submit">Построить отчёт</DsButton>
+      <DsButton type="reset" tone="secondary">Сбросить</DsButton>
+    </div>
+    <span role="status">{result}</span>
+  </form>;
+}
+
+
+function Example3() {
+  const [period, setPeriod] = useState({from:'2026-10-19T23:00',to:'2026-10-20T07:00'});
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <DsDateRangePicker label="Ночная смена" granularity="datetime" value={period}
+      onChange={setPeriod} timeZone="Europe/Minsk" step={60}
+      fromLabel="Начало смены" toLabel="Конец смены"/>
+    <output aria-live="polite">{period.from || '…'} — {period.to || '…'}</output>
+  </div>;
+}
+
+
+function Example4() {
+  const period = {from:'2026-10-12',to:'2026-10-19'};
+  const presets = [{id:'week',label:'Неделя',value:period}];
+  return <div style={{display:'flex',flexDirection:'column',gap:16}}>
+    <DsDateRangePicker label="Подтверждённый период" defaultValue={period} readOnly
+      timeZone="Europe/Minsk" presets={presets} hint="Сначала отмените подтверждение."/>
+    <DsDateRangePicker label="Недоступный период" defaultValue={period} disabled
+      timeZone="Europe/Minsk" presets={presets} hint="Недостаточно прав для изменения."/>
+  </div>;
+}
+
+function App(){return <LiveExamples>
+  <LiveExample id="basic-example" title="Период отчёта" description="Две календарные даты задают включительные границы отчёта; приложение определяет семантику отправки на сервер."><Example0/></LiveExample>
+  <LiveExample id="calendar-presets" title="Сегодня и вчера" description="Для воспроизводимости в примере сегодня — 19 октября 2026 года в Europe/Minsk. Календарные дни вычисляет приложение."><Example1/></LiveExample>
+  <LiveExample id="form-validation" title="Проверка периода в форме" description="Конечная дата не может быть раньше начальной. Обе границы должны попадать в октябрь."><Example2/></LiveExample>
+  <LiveExample id="local-date-time" title="Период с точным временем" description="Значения задают местное время. Часовой пояс подписан явно; преобразование для сервера выполняет приложение."><Example3/></LiveExample>
+  <LiveExample id="field-states" title="Подтверждённый и недоступный период" description="В подтверждённом периоде можно сфокусировать поля; изменение границ и готовых периодов заблокировано."><Example4/></LiveExample>
+</LiveExamples>;}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script></body></html>
