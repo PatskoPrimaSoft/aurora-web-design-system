@@ -3,7 +3,7 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Policy: [Versions and publishing](docs/release.md#versioning).
 
-## [Unreleased]
+## [5.1.0] — 2026-10-19
 
 - Добавлены RadioGroup, выбор даты, времени и периода, Tooltip, ProgressBar, Breadcrumbs, Link и Popover: клавиатурное управление, нативные формы, локализация и адаптивные живые примеры по основам Aurora. Даты и время хранятся без неявного преобразования в UTC; период показывает часовой пояс приложения.
 
