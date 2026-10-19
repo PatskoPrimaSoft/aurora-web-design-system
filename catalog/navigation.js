@@ -10,7 +10,7 @@ return function drawNavigation(state){
  for(const root of navigationStatusRoots)root.unmount();navigationStatusRoots=[];nav.replaceChildren();
  const tokens=document.createElement('a'),tokensUrl=new URL('api/tokens.html',base);
  for(const[name,value]of Object.entries(state.scope))tokensUrl.searchParams.set(name,value);
- tokens.href=tokensUrl;tokens.textContent='Токены';tokens.className='catalog-tokens-link';if(tokensActive)tokens.setAttribute('aria-current','page');nav.append(tokens);
+ tokens.href=tokensUrl;tokens.textContent='Токены';tokens.className='catalog-tokens-link';if(tokensActive)tokens.setAttribute('aria-current','page');
  document.getElementById('search-empty').hidden=found.length>0;
  for(const group of navigationGroups(found)){
   const groupElement=document.createElement('section');groupElement.dataset.navigationGroup=group.id;nav.append(groupElement);
@@ -24,6 +24,8 @@ return function drawNavigation(state){
    link.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;if(onSelect){event.preventDefault();onSelect(card);}});groupElement.append(link);}
   }
  }
+ const start=nav.querySelector('[data-navigation-group="start"]');
+ if(start)start.after(tokens);else nav.prepend(tokens);
 }
 
 }

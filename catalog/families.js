@@ -10,10 +10,11 @@ export const families=[
 export const familyFor=id=>families.find(family=>family.cards.includes(id))??null;
 
 export const foundationSections=[
+ {title:'Общие правила',cards:['DsAccessibility','DsContent']},
  {title:'Визуальный язык',cards:['DsType','DsNeutrals','DsShape','DsStatus']},
  {title:'Режимы интерфейса',cards:['DsAppearance','DsDensity']},
- {title:'Состояния контролов',cards:['DsHover','DsFocus']},
- {title:'Компоновка и данные',cards:['DsBreakpoints','DsSortingMenu','DsCharts']},
+ {title:'Состояния контролов',cards:['DsHover','DsFocus','DsMotion']},
+ {title:'Компоновка и данные',cards:['DsSpacing','DsBreakpoints','DsSortingMenu','DsCharts']},
  {title:'Бренд и темы',cards:['DsBrandThemes','DsBrandPick','BrandLogoLockup']},
 ];
 export const foundationSectionFor=card=>['2 · Основы','4 · Бренд (общее)'].includes(card.group)

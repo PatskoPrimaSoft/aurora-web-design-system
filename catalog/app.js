@@ -3,7 +3,7 @@ import {createCatalogueNavigation} from './navigation.js';
 import {parseState,stateUrl} from './state.js';
 import {enhanceCodeBlocks,createPageContents} from './documentation.js';
 const cards=await(await fetch('cards.json')).json();
-const foundationGuides=new Set(['overview','DsType','DsNeutrals','DsShape','DsStatus','DsBrandThemes','DsAppearance','DsDensity','DsHover','DsFocus','DsBreakpoints','DsSortingMenu','DsCharts','DsChart','DsBrandPick','BrandLogoLockup']);
+const foundationGuides=new Set(['DsSpacing','DsAccessibility','DsContent','DsMotion','overview','DsType','DsNeutrals','DsShape','DsStatus','DsBrandThemes','DsAppearance','DsDensity','DsHover','DsFocus','DsBreakpoints','DsSortingMenu','DsCharts','DsChart','DsBrandPick','BrandLogoLockup']);
 let state=parseState(new URL(location.href),cards),renderedKey=null,frames=[];
 let disposeContents=()=>{};
 const {DsMenu,DsButton}=window.AuroraWebDesignSystem_96e210;
