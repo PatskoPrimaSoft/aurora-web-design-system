@@ -16,7 +16,7 @@ export interface DsButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElem
   disabled?: boolean;
   /** Растягивает кнопку на ширину родителя. */
   fullWidth?: boolean;
-  /** Подпись действия; длинный текст сокращается визуально, доступное имя остаётся полным. */
+  /** Подпись действия; длинный текст переносится, высота кнопки растёт вместе с подписью. */
   children?: React.ReactNode;
   /** Вызывается при активации доступной кнопки мышью или клавиатурой. */
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;

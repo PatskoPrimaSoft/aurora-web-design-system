@@ -21,7 +21,8 @@ export function DsScoreBar({value,min=0,max=100,bands:bandsProp,unit,label,showV
         {band?<span style={{font:'var(--ds-type-eyebrow)',letterSpacing:'var(--ds-tracking-eyebrow)',color:Ds_BAND_C[band.tone]}}>{band.label}</span>:null}
       </span>:null}
     </div>:null}
-    <div role="meter" aria-valuenow={has?value:undefined} aria-valuemin={min} aria-valuemax={max} aria-label={label||S.score.label}
+    <div role={has?'meter':'img'} aria-valuenow={has?value:undefined} aria-valuemin={has?min:undefined} aria-valuemax={has?max:undefined}
+      aria-label={has?(label||S.score.label):(label||S.score.label)+': '+S.noData}
       style={{position:'relative',height,borderRadius:'var(--ds-radius-pill)',overflow:'hidden',display:'flex',gap:1,
         background:'var(--ds-surface-active)'}}>
       {bands.map((b,i)=><span key={b.label} aria-hidden="true" style={{width:(pc(b.to)-pc(i?bands[i-1].to:min))+'%',

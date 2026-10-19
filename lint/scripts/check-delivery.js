@@ -70,11 +70,13 @@ export function checkDelivery(root) {
       }
     }
     if (rel.endsWith('.html')) {
+      // overview публикуется в корне site и ссылается на собранные страницы.
+      const linkBase = rel === 'overview.html' ? join(root, 'site') : dirname(abs);
       for (const m of text.matchAll(/\b(?:href|src)="([^"]*)"/g)) {
         const url = m[1];
         // внешние, якоря, data:, и адреса, собираемые в скрипте ('+x+', {{x}}, ${x})
         if (!url || /^(?:[a-z]+:|\/\/|#)/i.test(url) || /['+{}$]/.test(url)) continue;
-        const target = normalize(join(dirname(abs), url.split(/[?#]/)[0]));
+        const target = normalize(join(linkBase, url.split(/[?#]/)[0]));
         if (!existsSync(target)) {
           problems.push({ file: rel, line: lineOf(text, m.index), code: 'broken-link', message: `нет файла: ${url}` });
         }

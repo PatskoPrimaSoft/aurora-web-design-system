@@ -13,7 +13,9 @@ test('all catalogue pages render from local files without runtime errors',async(
   await expect(page.locator('[data-navigation-group=components] h3')).toHaveText(['Кнопки и иконки','Поля и выбор','Навигация','Данные и фильтры','Контейнеры и окна','Обратная связь','Графики']);
   expect(await page.locator('nav a[data-id]').evaluateAll(links=>new Set(links.map(link=>link.dataset.id)).size)).toBe(cards.length);
   await expect(page.locator('[data-navigation-group=components] a[data-id]').first()).toHaveText('Button');
-  await expect(page.locator('#subtitle')).toContainText(`${cards.length} карточек`);await expect(page.frameLocator('#preview').locator('body')).toContainText(`${cards.length} карточек`);
+  await expect(page.locator('#subtitle')).toHaveText(cards.find(card=>card.id==='overview').subtitle);
+  await expect(page.frameLocator('#preview').getByRole('heading',{name:'Собирайте интерфейс из готовых компонентов',exact:true})).toBeVisible();
+  await expect(page.frameLocator('#preview').getByRole('searchbox',{name:'Поиск объекта'})).toBeVisible();
   await page.locator('nav a[data-id="DsButton"]').click();await expect(page.locator('h1')).toHaveText('Button');
   await chooseCatalogueScope(page,'theme','RED2');await expect(page.frameLocator('#preview').locator('html')).toHaveAttribute('data-ds-theme','RED2');
   for(const card of cards){await page.setViewportSize(card.viewport);await page.goto(served.url+'/'+card.previewPath);await page.evaluate(()=>document.fonts.ready);

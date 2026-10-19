@@ -10,7 +10,7 @@
 | `ds-pad-sm` | Вертикальные отступы подвала |
 | `ds-gap-sm` | Интервалы между содержимым шапки и её действиями, элементами подвала |
 | `ds-bg` | Поверхность подвала |
-| `ds-type-section`, `ds-fg-strong`, `ds-tracking-tight` | Типографика и цвет заголовка |
+| `ds-type-title`, `ds-fg-strong`, `ds-tracking-tight` | Типографика и цвет заголовка |
 | `ds-type-eyebrow`, `ds-fg-subtle`, `ds-tracking-eyebrow` | Типографика и цвет категории над заголовком |
 
 | `ds-focus-width`, `ds-focus-color` | Видимое кольцо клавиатурного фокуса области прокрутки внутри границ тела |

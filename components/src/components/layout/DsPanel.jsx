@@ -13,7 +13,7 @@ export function DsPanel({title,eyebrow,actions,children,footer,padding=true,scro
       minHeight:'var(--ds-toolbar-h)',padding:'var(--ds-pad-sm) var(--ds-pad-md)',borderBottom:'1px solid var(--ds-border)'}}>
       <div style={{minWidth:0,flex:'1 1 200px',display:'flex',flexDirection:'column',gap:1}}>
         {eyebrow?<span style={{font:'var(--ds-type-eyebrow)',letterSpacing:'var(--ds-tracking-eyebrow)',textTransform:'uppercase',color:'var(--ds-fg-subtle)'}}>{eyebrow}</span>:null}
-        {title?<Heading id={titleId} style={{margin:0,font:'var(--ds-type-section)',color:'var(--ds-fg-strong)',letterSpacing:'var(--ds-tracking-tight)',overflowWrap:'anywhere'}}>{title}</Heading>:null}
+        {title?<Heading id={titleId} style={{margin:0,font:'var(--ds-type-title)',color:'var(--ds-fg-strong)',letterSpacing:'var(--ds-tracking-tight)',overflowWrap:'anywhere'}}>{title}</Heading>:null}
       </div>
       {s.actions?<div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',flexWrap:'wrap',maxWidth:'100%'}}>{s.actions}</div>:null}
     </header>:null}

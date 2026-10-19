@@ -15,15 +15,15 @@ export function DsChip({children,icon,selected=false,removable=false,onRemove,on
     role={removable?'group':undefined} aria-label={label?label+(filter&&count!=null?' '+count:''):undefined}
     aria-pressed={filter?selected:undefined} onClick={interactive?onClick:undefined}
     onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
-    style={{display:'inline-flex',alignItems:'center',gap:6,flex:'0 1 auto',minWidth:0,maxWidth:'min(100%, '+maxWidth+'px)',height:'var(--ds-control-h-sm)',
-      padding:removable?'0 4px 0 10px':'0 10px',font:'var(--ds-type-ui)',whiteSpace:'nowrap',
+    style={{boxSizing:'border-box',display:'inline-flex',alignItems:'center',gap:6,flex:'0 1 auto',minWidth:0,maxWidth:'min(100%, '+maxWidth+'px)',minHeight:'var(--ds-control-h-sm)',
+      padding:removable?'1px 4px 1px 10px':'1px 10px',font:'var(--ds-type-ui)',whiteSpace:'normal',
       background:disabled?'var(--ds-surface-disabled)':selected?'var(--ds-brand-subtle)':h&&interactive?'var(--ds-surface-hover)':'var(--ds-surface)',
       backgroundImage:selected&&h&&interactive?Ds_OVERLAY('var(--ds-brand-text)','var(--ds-overlay-hover)'):undefined,
       color:disabled?'var(--ds-fg-disabled)':selected?'var(--ds-brand-text)':'var(--ds-fg)',
       border:'1px solid '+(disabled?'var(--ds-border)':selected?'var(--ds-brand-border)':'var(--ds-border)'),
       borderRadius:'var(--ds-radius-pill)',cursor:interactive?'pointer':'default',transition:'var(--ds-transition-control)'}}>
     {leading?<Icon name={leading} size="var(--ds-icon-sm)"/>:null}
-    <span title={label} style={{minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{children}</span>
+    <span style={{minWidth:0,overflowWrap:'anywhere',whiteSpace:'normal'}}>{children}</span>
     {count!=null?<span style={{font:'var(--ds-type-ui)',fontVariantNumeric:'tabular-nums',flex:'none',background:disabled?'var(--ds-surface-disabled)':'var(--ds-neutral-bg)',color:disabled?'var(--ds-fg-disabled)':'var(--ds-neutral-fg)',borderRadius:'var(--ds-radius-pill)',padding:'1px 6px'}}>{count}</span>:null}
     {removable?<button type="button" data-ds-chip-remove="" disabled={disabled} aria-label={label?S.removeItem(label):S.remove}
       onClick={e=>{e.stopPropagation();if(!disabled)onRemove&&onRemove()}}

@@ -302,6 +302,31 @@ const cliCases = [];
     rmSync(root, { recursive: true, force: true });
   }
 }
+// Стартовая страница ссылается на результат сборки, а не на HTML в исходниках.
+{
+  const root = mkdtempSync(join(tmpdir(), 'aurora каталог '));
+  try {
+    mkdirSync(join(root, 'site', 'docs'), { recursive: true });
+    writeFileSync(join(root, 'site', 'index.html'), '<p>catalogue</p>');
+    writeFileSync(join(root, 'site', 'docs', 'guide.html'), '<p>guide</p>');
+    writeFileSync(join(root, 'source-only.html'), '<p>not delivered</p>');
+    writeFileSync(join(root, 'overview.html'),
+      '<a href="index.html?card=DsButton">component</a>' +
+      '<a href="docs/guide.html#usage">guide</a>' +
+      '<a href="missing.html">missing</a><a href="source-only.html">not delivered</a>' +
+      '<script>window.' + 'V2' + 'Button</script>');
+    const got = checkDelivery(root).map(p => `${p.code}: ${p.message}`).sort();
+    const want = [
+      'broken-link: нет файла: missing.html',
+      'broken-link: нет файла: source-only.html',
+      'legacy: компонент V2*: ' + 'V2' + 'Button',
+    ].sort();
+    cliCases.push({ title: 'поставка: ссылки overview разрешаются в site; битые ссылки и старые имена не скрываются',
+      ok: JSON.stringify(got) === JSON.stringify(want), got: JSON.stringify(got) });
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
 // …и в самой поставке нарушений нет.
 {
   const problems = checkDelivery(fileURLToPath(new URL('../..', import.meta.url)));

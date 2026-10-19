@@ -30,7 +30,7 @@ test('DsButton keeps loading geometry, focus and form safety in every mode',asyn
         const before=await button.evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return {width:r.width,height:r.height,bg:s.backgroundColor,color:s.color};});
         expect(before.width).toBeLessThanOrEqual(200);
         const label=button.locator('[data-ds-button-label]');
-        expect(await label.evaluate(el=>el.scrollWidth>el.clientWidth)).toBe(true);
+        expect(await label.evaluate(el=>el.scrollWidth<=el.clientWidth&&el.scrollHeight<=el.clientHeight)).toBe(true);
         await expect(button).toHaveAccessibleName('Сохранить все изменения выбранных объектов');
         await frame.locator('#root').evaluate((el,args)=>window.buttonFixture.render(true,...args),[size,icons]);
         await expect(button).toBeFocused();

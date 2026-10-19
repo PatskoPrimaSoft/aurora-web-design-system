@@ -18,7 +18,7 @@ export interface DsChipProps {
   count?: number;
   /** Полная подпись для скринридера и кнопки удаления. Обязательна, если children не текст. */
   ariaLabel?: string;
-  /** Максимальная ширина в px; длинная подпись сокращается многоточием. Ширина также ограничена родителем. */
+  /** Максимальная ширина в px; длинная подпись переносится, высота чипа растёт. Ширина также ограничена родителем. */
   maxWidth?: number;
 }
 export declare function DsChip(props: DsChipProps): JSX.Element;

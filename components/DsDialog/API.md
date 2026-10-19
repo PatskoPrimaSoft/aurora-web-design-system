@@ -8,7 +8,7 @@
 | ds-border | Граница окна и разделители заголовка и действий |
 | ds-radius-xl | Скругление окна |
 | ds-shadow-lg | Тень над затемнением |
-| ds-fg-strong, ds-type-section, ds-tracking-tight | Цвет, шрифт и межбуквенный интервал заголовка |
+| ds-fg-strong, ds-type-title, ds-tracking-tight | Цвет, шрифт и межбуквенный интервал заголовка |
 | ds-fg-muted, ds-type-body | Описание и цвет кнопки закрытия |
 | ds-{tone}-bg, ds-{tone}-solid | Подложка и символ статуса в заголовке |
 | ds-icon | Размер символов статуса и закрытия |

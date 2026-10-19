@@ -17,14 +17,14 @@ test('foundation and map descriptions stay with examples through navigation and 
   try {
     await page.goto(served.url + '/index.html?card=DsBreakpoints');
     await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText([
-      'Визуальный язык', 'Режимы интерфейса', 'Состояния контролов',
+      'Общие правила', 'Визуальный язык', 'Режимы интерфейса', 'Состояния контролов',
       'Компоновка и данные', 'Бренд и темы',
     ]);
     const foundationLinks = page.locator('[data-navigation-group=foundations] a[data-id]');
     expect(await foundationLinks.evaluateAll(links => links.map(link => link.dataset.id))).toEqual([
-      'DsType', 'DsNeutrals', 'DsShape', 'DsStatus',
-      'DsAppearance', 'DsDensity', 'DsHover', 'DsFocus',
-      'DsBreakpoints', 'DsSortingMenu', 'DsCharts', 'DsBrandThemes', 'DsBrandPick', 'BrandLogoLockup',
+      'DsAccessibility', 'DsContent', 'DsType', 'DsNeutrals', 'DsShape', 'DsStatus',
+      'DsAppearance', 'DsDensity', 'DsHover', 'DsFocus', 'DsMotion',
+      'DsSpacing', 'DsBreakpoints', 'DsSortingMenu', 'DsCharts', 'DsBrandThemes', 'DsBrandPick', 'BrandLogoLockup',
     ]);
     await page.locator('#search').fill('сортировка');
     await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText(['Режимы интерфейса', 'Компоновка и данные']);
@@ -138,7 +138,7 @@ test('foundation and map descriptions stay with examples through navigation and 
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
     await page.goto(served.url + '/api/tokens.html?theme=RED2&appearance=dark&density=compact');
     await page.getByRole('button', { name: 'Навигация', exact: true }).click();
-    await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveCount(5);
+    await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveCount(6);
     await page.locator('#search').fill('бренд и темы');
     await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText(['Режимы интерфейса','Бренд и темы']);
     await expect(foundationLinks).toHaveText(['Светлый и тёмный режим','Цветовые темы','Подбор цветов темы','Логотип бренда']);

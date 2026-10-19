@@ -18,7 +18,7 @@ export interface DsSparklineProps {
   tone?: 'brand' | 'series' | 'success' | 'warning' | 'danger' | 'muted';
   /** Explicit colour — use to match a line in the full chart above it. */
   color?: string;
-  /** 14% fill under the line. Turn off in a dense table where many rows have one. */
+  /** 14% fill between the line and zero; includes zero in the domain. Turn off for a data-fitted line in a dense table. */
   area?: boolean;
   /** Dot on the last known value. */
   dot?: boolean;

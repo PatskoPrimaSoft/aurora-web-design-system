@@ -75,7 +75,7 @@ export function DsDialog({open=true,title,description,children,actions,onClose,s
           width:32,height:32,borderRadius:'var(--ds-radius-md)',background:'var(--ds-'+tone+'-bg)',color:'var(--ds-'+tone+'-solid)'}}>
           <Icon name={tone==='danger'?'error':tone==='warning'?'warning':'info'} size="var(--ds-icon)"/></span>:null}
         <div style={{flex:1,minWidth:0,display:'flex',flexDirection:'column',gap:3}}>
-          <h2 id={titleId} style={{margin:0,font:'var(--ds-type-section)',color:'var(--ds-fg-strong)',letterSpacing:'var(--ds-tracking-tight)'}}>{title}</h2>
+          <h2 id={titleId} style={{margin:0,font:'var(--ds-type-title)',color:'var(--ds-fg-strong)',letterSpacing:'var(--ds-tracking-tight)'}}>{title}</h2>
           {description?<p id={descId} style={{margin:0,font:'var(--ds-type-body)',color:'var(--ds-fg-muted)',textWrap:'pretty'}}>{description}</p>:null}
         </div>
         {onClose?<button type="button" aria-label={S.close} onClick={onClose} style={{flex:'none',display:'flex',

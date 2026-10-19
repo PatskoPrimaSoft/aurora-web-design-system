@@ -112,12 +112,12 @@ function MenuItem({it,hasIcons,onSelect}){
     tabIndex={-1} disabled={it.disabled} onClick={it.disabled?undefined:onSelect}
     onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)} onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}
     style={{display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',width:'100%',textAlign:'left',
-      minHeight:'var(--ds-control-h)',padding:'0 var(--ds-pad-sm)',border:'none',borderRadius:'var(--ds-radius-sm)',
+      minHeight:'var(--ds-control-h)',padding:'var(--ds-pad-tight) var(--ds-pad-sm)',border:'none',borderRadius:'var(--ds-radius-sm)',
       background:(hover||focus)&&!it.disabled?(danger?'var(--ds-danger-bg)':'var(--ds-surface-hover)'):'transparent',
       color:it.disabled?'var(--ds-fg-disabled)':danger?'var(--ds-danger-fg)':'var(--ds-fg)',font:'var(--ds-type-ui)',cursor:it.disabled?'not-allowed':'pointer'}}>
     {hasIcons?<span data-ds-menu-icon-slot="" aria-hidden="true" style={{display:'inline-flex',flex:'none',width:'var(--ds-icon)',height:'var(--ds-icon)'}}>
       {it.icon?<Icon name={it.icon} size="var(--ds-icon)" style={{color:it.disabled||danger?undefined:'var(--ds-fg-muted)'}}/>:null}</span>:null}
-    <span ref={labelRef} style={{flex:1,minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{it.label}</span>
+    <span ref={labelRef} style={{flex:1,minWidth:0,overflowWrap:'anywhere',whiteSpace:'normal'}}>{it.label}</span>
     {it.shortcut?<span style={{flex:'none',font:'var(--ds-type-caption)',fontFamily:'var(--ds-font-mono)',color:it.disabled?'var(--ds-fg-disabled)':'var(--ds-fg-subtle)'}}>{it.shortcut}</span>:null}
     {choice||it.checked?<span aria-hidden="true" style={{display:'inline-flex',flex:'none',width:'var(--ds-icon-sm)',height:'var(--ds-icon-sm)'}}>
       {it.checked?<Icon name="check" size="var(--ds-icon-sm)" style={{color:it.disabled?'var(--ds-fg-disabled)':'var(--ds-brand)'}}/>:null}</span>:null}

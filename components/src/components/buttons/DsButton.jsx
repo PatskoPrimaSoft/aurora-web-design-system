@@ -46,8 +46,8 @@ export function DsButton({tone='primary',size='md',icon,iconRight,loading=false,
   const {hover:h,pressed:a,handlers,rest:own}=usePress(off,rest);
   const iconSize=size==='sm'?'var(--ds-icon-sm)':'var(--ds-icon)';
   const style={boxSizing:'border-box',position:'relative',display:'inline-flex',alignItems:'center',justifyContent:'center',
-    minWidth:0,maxWidth:'100%',height:DsBTN_H[size],padding:size==='sm'?'0 10px':'0 var(--ds-control-pad-x)',width:fullWidth?'100%':'auto',
-    font:size==='lg'?'var(--ds-type-body-strong)':'var(--ds-type-ui)',whiteSpace:'nowrap',
+    minWidth:0,maxWidth:'100%',minHeight:DsBTN_H[size],padding:size==='sm'?'2px 10px':'2px var(--ds-control-pad-x)',width:fullWidth?'100%':'auto',
+    font:size==='lg'?'var(--ds-type-body-strong)':'var(--ds-type-ui)',whiteSpace:'normal',
     borderRadius:'var(--ds-radius-md)',border:t.border,background:disabled?'var(--ds-surface-disabled)':(t.overlay?t.background:(a?t.active:h?t.hover:t.background)),
     backgroundImage:!off&&t.overlay&&(a||h)?Ds_OVERLAY(t.color,a?'var(--ds-overlay-press)':'var(--ds-overlay-hover)'):undefined,
     color:disabled?'var(--ds-fg-disabled)':t.color,cursor:disabled?'not-allowed':loading?'progress':'pointer',transition:'var(--ds-transition-control)'};
@@ -58,9 +58,9 @@ export function DsButton({tone='primary',size='md',icon,iconRight,loading=false,
   }
   return <button type={type} {...own} style={{...style,...own.style}} {...handlers}
     disabled={disabled} aria-disabled={loading||own['aria-disabled']} aria-busy={loading||own['aria-busy']} onClick={activate}>
-    <span data-ds-button-content="" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',gap:'var(--ds-gap-sm)',minWidth:0,maxWidth:'100%',overflow:'hidden',opacity:loading?0:1}}>
+    <span data-ds-button-content="" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',gap:'var(--ds-gap-sm)',minWidth:0,maxWidth:'100%',opacity:loading?0:1}}>
       {icon?<Icon name={icon} size={iconSize}/>:null}
-      {children!=null?<span data-ds-button-label="" style={{minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{children}</span>:null}
+      {children!=null?<span data-ds-button-label="" style={{minWidth:0,overflowWrap:'anywhere',whiteSpace:'normal'}}>{children}</span>:null}
       {iconRight?<Icon name={iconRight} size={iconSize}/>:null}
     </span>
     {loading?<span data-ds-button-spinner="" aria-hidden="true" style={{position:'absolute',left:'50%',top:'50%',width:iconSize,height:iconSize,transform:'translate(-50%,-50%)',display:'grid',placeItems:'center'}}>

@@ -56,7 +56,17 @@ test('foundation guides retain readable docs, scoped demos and usable interactio
     await page.reload();
     await expect(frame.locator('#in-interface')).toBeVisible();
     await page.setViewportSize({width:390,height:844});
-    expect(await frame.locator('body').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+    // DsPageLayout applies its responsive mode through ResizeObserver + React.
+    // Before that commit the 280px sidebar leaves the iframe only 70px.
+    await expect(page.getByRole('complementary',{name:'Навигация',exact:true})).toBeHidden();
+    await expect(page.getByRole('button',{name:'Навигация',exact:true})).toBeVisible();
+    await expect.poll(()=>page.locator('#preview').evaluate(el=>({
+     viewport:el.contentWindow.innerWidth===el.clientWidth,
+     body:el.contentDocument.body.scrollWidth<=el.clientWidth,
+     document:el.contentDocument.documentElement.scrollWidth<=el.clientWidth,
+     height:el.contentDocument.body.scrollHeight<=el.clientHeight,
+    })),{message:`${id} ${theme}/${appearance}/${density}: responsive preview fits at 390px`})
+     .toEqual({viewport:true,body:true,document:true,height:true});
     if(id!=='DsContent'){
      const technical=page.locator('#card-description details');
      await expect(technical).not.toHaveAttribute('open','');
