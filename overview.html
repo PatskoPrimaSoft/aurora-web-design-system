@@ -1,317 +1,56 @@
-<!-- @dsCard group="1 · Начало" viewport="1180x900" name="Прочитать первым" subtitle="Карта системы: {{cardCount}} карточек, три скоупа и правила, из которых следует всё остальное." -->
+<!-- @dsCard group="1 · Начало" viewport="1180x900" name="Прочитать первым" subtitle="С чего начать работу с Aurora и как найти нужный компонент или правило." page -->
 <!DOCTYPE html>
-<html lang="ru"><head><meta charset="utf-8"><title>Aurora — дизайн-система</title><link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="tokens/scoped.css"><link rel="stylesheet" href="components/bundle.css">
-<style>html,body{margin:0}*{box-sizing:border-box}
-body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-bg);padding:22px 24px 26px;-webkit-font-smoothing:antialiased}
-#root{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
-.eb{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle)}
-h1{margin:0;font:var(--ds-type-display);letter-spacing:var(--ds-tracking-tight)}
-h2{margin:0;font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight)}
-p{margin:0;font:var(--ds-type-body);color:var(--ds-fg-muted);text-wrap:pretty;max-width:78ch}
-.mono{font:var(--ds-type-mono)}
-a{color:var(--ds-brand-text)}a:hover{color:var(--ds-brand)}
-.stage{border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);background:var(--ds-surface);overflow:hidden}
-table.diff{width:100%;border-collapse:collapse;font:var(--ds-type-body)}
-table.diff th{font:var(--ds-type-eyebrow);letter-spacing:var(--ds-tracking-eyebrow);text-transform:uppercase;color:var(--ds-fg-subtle);text-align:left;padding:8px 12px;border-bottom:1px solid var(--ds-border);background:var(--ds-bg)}
-table.diff td{padding:9px 12px;border-bottom:1px solid var(--ds-divider);vertical-align:top}
-table.diff td.k{font:var(--ds-type-body-strong);white-space:nowrap}
-.rule{display:grid;grid-template-columns:250px minmax(0,1fr);gap:24px;padding:16px;border-bottom:1px solid var(--ds-divider);align-items:center}
-.rule:last-child{border-bottom:none}
-.rule-d{display:flex;flex-wrap:wrap;gap:12px;align-items:center;min-width:0}
-.cover{overflow:hidden;padding-bottom:16px}
-.cover svg{display:block;width:100%;height:112px;margin-bottom:28px}
-.cover h1{font-family:var(--ds-font-sans);font-weight:var(--ds-weight-semibold);font-size:64px;line-height:1;letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin-bottom:12px}
-.cover p{font:var(--ds-type-body);color:var(--ds-fg-muted)}
-@media(max-width:640px){.cover h1{font-size:40px}}
-</style>
-<script src="components/lib/react.production.min.js"></script>
-<script src="components/lib/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script src="components/bundle.js"></script></head><body><div id="root"></div>
-<script type="text/babel">
-const NSX = window.AuroraWebDesignSystem_96e210;
-const { DsAppHeader, DsTabs, DsIconButton, DsButton, DsField, DsTable, DsLozenge, DsBanner, DsChip, DsChipGroup, DsPanel } = NSX;
-const ROWS=[
-{id:1,name:'MAZ 5440',plate:'AB 1234-7',speed:'62',state:'moving',last:'14:32:07'},
-{id:2,name:'Volvo FH16',plate:'AC 8871-2',speed:'0',state:'parked',last:'14:31:55'},
-{id:3,name:'Scania R450',plate:'AB 3390-6',speed:'78',state:'alarm',last:'14:32:06'},
-{id:4,name:'Renault T',plate:'AK 1120-5',speed:'0',state:'offline',last:'09:14:22'}];
-const LABEL={moving:'Движение',parked:'Стоянка',offline:'Нет связи',alarm:'Тревога'};
-const TONE={moving:'success',parked:'neutral',offline:'danger',alarm:'warning'};
-
-function Stage({theme,appearance,density}){
-  const [q,setQ]=React.useState('');
-  const [sort,setSort]=React.useState({key:'name',dir:'asc'});
-  const [chips,setChips]=React.useState([{id:'g',label:'Группа',value:'Грузовики'},{id:'s',label:'Состояние',value:'Движение, Тревога'}]);
-  const cols=[{key:'name',label:'Объект',sortable:true,strong:true,width:150},
-    {key:'plate',label:'Номер',mono:true,width:110},
-    {key:'speed',label:'Скорость',mono:true,align:'right',sortable:true,width:90,render:r=>r.speed+' км/ч'},
-    {key:'state',label:'Состояние',width:130,render:r=><DsLozenge tone={TONE[r.state]} dot>{LABEL[r.state]}</DsLozenge>},
-    {key:'last',label:'Последнее сообщение',mono:true,muted:true,align:'right',width:120}];
-  const rows=ROWS.filter(r=>!q||r.name.toLowerCase().includes(q.toLowerCase())||r.plate.toLowerCase().includes(q.toLowerCase()));
-  return <div data-ds-theme={theme} data-ds-appearance={appearance} data-ds-density={density} style={{background:'var(--ds-bg)',color:'var(--ds-fg)'}}>
-    <DsAppHeader product="Aurora" env="DEV" logoSrc="components/assets/logo/AuroraWhite.png" user="a.ivanov"
-      actions={<><DsIconButton icon="help" label="Справка" tone="onHeader"/><DsIconButton icon="settings" label="Настройки" tone="onHeader"/></>}>
-      <DsTabs tone="onHeader" active="mon" onChange={()=>{}} items={[{id:'mon',label:'Мониторинг',icon:'map'},
-        {id:'rep',label:'Отчёты',icon:'assessment'},{id:'not',label:'Уведомления',icon:'notifications',badge:3}]}/>
-    </DsAppHeader>
-    <div style={{padding:'var(--ds-pad-md)',display:'flex',flexDirection:'column',gap:'var(--ds-gap-md)'}}>
-      <div style={{display:'flex',flexWrap:'wrap',alignItems:'flex-end',gap:'var(--ds-gap-md)'}}>
-        <div style={{flex:'1 1 220px',minWidth:0}}><DsField label="Поиск объекта или номера" type="search" value={q} onChange={e=>setQ(e.target.value)} placeholder="Название или номер"/></div>
-        <span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>{rows.length} из {ROWS.length}</span>
-      </div>
-      <DsChipGroup ariaLabel="Применённые фильтры" onClearAll={()=>setChips([])}>
-        {chips.map(chip=><DsChip key={chip.id} removable onRemove={()=>setChips(current=>current.filter(c=>c.id!==chip.id))}>{chip.label}: {chip.value}</DsChip>)}
-      </DsChipGroup>
-      <DsTable ariaLabel="Объекты" columns={cols} rows={rows} activeId={2} sortKey={sort.key} sortDir={sort.dir} onSort={(k,d)=>setSort({key:k,dir:d})} onRowClick={()=>{}}
-        footer={<><span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>1–4 из 148</span>
-          <span style={{marginLeft:'auto',display:'flex',gap:'var(--ds-gap-sm)'}}>
-            <DsIconButton icon="chevron_left" label="Назад" size="sm" disabled/><DsIconButton icon="chevron_right" label="Вперёд" size="sm"/></span></>}/>
-      <DsPanel eyebrow="Объект" title="Volvo FH16 · AC 8871-2"
-        actions={<><DsLozenge tone="neutral" dot>Стоянка</DsLozenge><DsIconButton icon="more_vert" label="Ещё"/></>}
-        footer={<span style={{marginLeft:'auto',display:'flex',gap:'var(--ds-gap-sm)'}}>
-          <DsButton size="sm" tone="secondary">Отмена</DsButton><DsButton size="sm" icon="save">Сохранить</DsButton></span>}>
-        <div style={{display:'flex',flexDirection:'column',gap:'var(--ds-gap-md)'}}>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(3,minmax(0,1fr))',gap:'var(--ds-gap-md)'}}>
-            <DsField label="Название объекта" defaultValue="Volvo FH16"/>
-            <DsField label="Норма расхода топлива" placeholder="0" suffix="л/100км" mono/>
-            <DsField label="Макс. скорость" defaultValue="" suffix="км/ч" error="Не может быть пустым"/></div>
-          <div style={{display:'flex',gap:'var(--ds-gap-sm)',flexWrap:'wrap'}}>
-            <DsChip removable onRemove={()=>{}}>Грузовики</DsChip><DsChip removable onRemove={()=>{}}>Минская база</DsChip>
-            <DsChip icon="local_shipping" selected count={3} onClick={()=>{}}>Движение</DsChip></div>
-          <DsBanner tone="warning" title="Калибровка датчика устарела">Пока датчик не перекалиброван, значения расхода топлива могут быть неверными.</DsBanner>
-        </div></DsPanel>
-    </div></div>;
+<html lang="ru"><head><meta charset="utf-8"><title>Прочитать первым</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;margin:0;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.sample{border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);padding:24px;background:var(--ds-surface);color:var(--ds-fg)}
+.sample ul{list-style:none;margin:16px 0 0;padding:0}.sample li{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0;border-top:1px solid var(--ds-divider)}
+.sample li span:first-child{font:var(--ds-type-body-strong)}
+.choices{display:grid;grid-template-columns:180px minmax(0,1fr);margin:0}.choices dt,.choices dd{padding:16px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{margin:0;padding-left:20px;max-width:74ch}.rules li+li{margin-top:12px}
+@media(max-width:640px){main{padding:20px 0}.sample{padding:16px}.choices{grid-template-columns:minmax(0,1fr)}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}.sample li{flex-wrap:wrap;gap:8px}}
+</style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="in-interface">
+<h2 id="in-interface" tabindex="-1">Собирайте интерфейс из готовых компонентов</h2>
+<p class="lead">Aurora — компоненты и правила для интерфейсов мониторинга. Готовые компоненты уже используют согласованные шрифты, цвета и состояния. Вы выбираете подходящий компонент и задаёте данные и действия.</p>
+<div id="demo" class="sample" aria-label="Пример поиска объектов"></div>
+<p style="margin-top:16px">Попробуйте найти объект по названию. Поле и метки состояния взяты из системы; поиск по данным настроен в примере.</p>
+</section>
+<section aria-labelledby="start"><h2 id="start" tabindex="-1">С чего начать</h2>
+<dl class="choices">
+<dt>Собрать экран</dt><dd>Найдите компонент в меню слева или через поиск. Начните с его живого примера и правил применения: например, <a href="index.html?card=DsButton" target="_top">Button</a>, <a href="index.html?card=DsField" target="_top">Field</a> или <a href="index.html?card=DsTable" target="_top">Table</a>.</dd>
+<dt>Оформить свою разметку</dt><dd>Начните со страниц <a href="index.html?card=DsType" target="_top">Типографика</a> и <a href="index.html?card=DsNeutrals" target="_top">Нейтральные цвета</a>. Используйте токены по назначению — например, цвет текста или поверхности.</dd>
+<dt>Подключить в проект</dt><dd>Откройте <a href="docs/source/docs/usage.html" target="_top">руководство по подключению</a>: установка пакета, стили и использование в Angular. Для React — <a href="docs/README.html" target="_top">обзор пакета с примером подключения</a>.</dd>
+</dl></section>
+<section aria-labelledby="catalogue"><h2 id="catalogue" tabindex="-1">Как пользоваться каталогом</h2>
+<ul class="rules">
+<li><strong>Проверяйте поведение в живых примерах.</strong> На странице компонента рядом находятся правила, код и параметры.</li>
+<li><strong>Меняйте настройки в шапке.</strong> Бренд, светлый или тёмный режим и плотность меняют демонстрацию. Текст руководства остаётся на светлой поверхности.</li>
+<li><strong>Переходите к подробностям по задаче.</strong> <a href="index.html?card=DsBrandThemes" target="_top">Цветовые темы</a> отвечают за бренд, <a href="index.html?card=DsAppearance" target="_top">светлый и тёмный режимы</a> — за оформление, <a href="index.html?card=DsDensity" target="_top">плотность</a> — за отступы и высоты элементов.</li>
+</ul></section>
+<section aria-labelledby="check"><h2 id="check" tabindex="-1">Перед передачей в разработку</h2>
+<p>Проверьте экран с реальными данными: длинными названиями, пустым списком и ошибкой. Убедитесь, что им удобно пользоваться с клавиатуры и на нужной ширине окна.</p>
+<p>Для этого пригодятся <a href="index.html?card=DsFocus" target="_top">правила фокуса</a> и <a href="index.html?card=DsBreakpoints" target="_top">адаптивность и брейкпоинты</a>. Готовый компонент помогает с оформлением и взаимодействием, а поведение всего экрана проверяет команда продукта.</p>
+</section>
+</main><script type="text/babel">
+const {DsField,DsLozenge}=window.AuroraWebDesignSystem_96e210;
+const objects=[{name:'МАЗ 5440',state:'Движение',tone:'success'},{name:'Volvo FH16',state:'Стоянка',tone:'neutral'},{name:'Scania R450',state:'Нет связи',tone:'danger'}];
+function Example(){
+ const [query,setQuery]=React.useState('');
+ const rows=objects.filter(row=>row.name.toLocaleLowerCase('ru').includes(query.trim().toLocaleLowerCase('ru')));
+ return <><DsField label="Поиск объекта" type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Например, Volvo"/>
+ <p role="status" style={{marginTop:12,font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>Найдено: {rows.length} из {objects.length}</p>
+ {rows.length?<ul aria-label="Объекты">{rows.map(row=><li key={row.name}><span>{row.name}</span><DsLozenge tone={row.tone} dot>{row.state}</DsLozenge></li>)}</ul>:<p style={{marginTop:16}}>Объекты не найдены. Измените запрос.</p>}</>;
 }
-
-const RAMP=[
- ['--ds-n-0','#ffffff','--ds-surface','карточка, панель, строка таблицы, поле ввода, шапка'],
- ['--ds-n-25','#fbfcfd','—','запас между поверхностью и фоном, если нужен третий слой'],
- ['--ds-n-50','#f6f7f9','--ds-bg · --ds-surface-hover','фон страницы; hover строки таблицы и пункта меню'],
- ['--ds-n-100','#eef0f4','--ds-bg-sunken · --ds-surface-active · --ds-divider · --ds-surface-disabled','шапка таблицы и вложенные области; нажатое состояние; линия между строками; фон disabled'],
- ['--ds-n-200','#e2e5ec','--ds-border','граница панели, карточки, чипа, тулбара — основная линия системы'],
- ['--ds-n-300','#cdd2dc','--ds-border-strong · --ds-border-field','рамка поля ввода и селекта, ось графика'],
- ['--ds-n-400','#a7aebd','--ds-border-field-hover · --ds-fg-disabled','рамка поля под курсором; текст и глиф disabled'],
- ['--ds-n-500','#7e8697','--ds-fg-subtle','надзаголовок (eyebrow), плейсхолдер, подпись оси'],
- ['--ds-n-600','#5e6676','--ds-fg-muted','подпись поля, вторичный текст, служебные цифры в футере'],
- ['--ds-n-700','#454c5a','--ds-neutral-fg','ink нейтрального бейджа («Стоянка»)'],
- ['--ds-n-800','#2d3340','—','резерв: тёмные заливки, которым мало n-900'],
- ['--ds-n-900','#1d222c','--ds-fg · --ds-surface-inverse','основной текст; фон тултипа и тоста'],
- ['--ds-n-950','#12151c','--ds-fg-strong','заголовки h1/h2, числа в KPI'],
-];
-
-const BRAND=[
- ['--ds-brand','заливка','кнопка primary, индикатор активной вкладки, плашка логотипа, чекбокс и радио во включённом состоянии'],
- ['--ds-brand-subtle','подсветка','фон выбранной строки таблицы (--ds-surface-selected), выбранный чип, плашка окружения DEV'],
- ['--ds-brand-border','линия','граница выбранной карточки и чипа, вкладка-контур'],
- ['--ds-brand-text','чернила','брендовый текст и ссылки на светлой поверхности, подпись активной вкладки — темнее заливки, чтобы пройти AA'],
-];
-
-const Sw=({c,l,w=34})=><span style={{display:'flex',flexDirection:'column',gap:4,alignItems:'center'}}>
-  <span style={{width:w,height:26,borderRadius:'var(--ds-radius-xs)',background:c,border:'1px solid var(--ds-border)'}}></span>
-  <span className="mono" style={{fontSize:9,color:'var(--ds-fg-subtle)'}}>{l}</span></span>;
-const Cap=({children})=><span style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-subtle)'}}>{children}</span>;
-const Box=({r,l,sh})=><span style={{display:'flex',flexDirection:'column',gap:4,alignItems:'center'}}>
-  <span style={{width:64,height:40,borderRadius:r,background:'var(--ds-surface)',border:'1px solid var(--ds-border)',boxShadow:sh}}></span>
-  <span className="mono" style={{fontSize:9,color:'var(--ds-fg-subtle)'}}>{l}</span></span>;
-const Gl=({n})=><span style={{display:'flex',flexDirection:'column',gap:4,alignItems:'center',minWidth:62}}>
-  <span className="material-symbols-outlined" style={{fontSize:'var(--ds-icon-lg)',color:'var(--ds-fg)'}}>{n}</span>
-  <span className="mono" style={{fontSize:9,color:'var(--ds-fg-subtle)',textAlign:'center'}}>{n}</span></span>;
-
-const RULES=[
- ['Радиусы','кнопки и поля 8 · контейнеры 12 · диалоги 16 · чипы и бейджи pill',
-  <><Box r="var(--ds-radius-control)" l="control 8"/><Box r="var(--ds-radius-container)" l="container 12"/><Box r="var(--ds-radius-dialog)" l="dialog 16"/><Box r="var(--ds-radius-pill)" l="chip pill"/></>],
- ['Разделение слоёв','панель держится на границе 1px, а не на тени; shadow — только у того, что парит',
-  <><span style={{padding:'10px 14px',borderRadius:'var(--ds-radius-panel)',background:'var(--ds-surface)',border:'1px solid var(--ds-border)',font:'var(--ds-type-caption)'}}>панель · border, без тени</span>
-   <span style={{padding:'10px 14px',borderRadius:'var(--ds-radius-md)',background:'var(--ds-surface)',border:'1px solid var(--ds-border)',boxShadow:'var(--ds-shadow-md)',font:'var(--ds-type-caption)'}}>меню · --ds-shadow-md</span>
-   <Cap>диалог и тост — --ds-shadow-lg</Cap></>],
- ['Шапка','нейтральный хром — бренд живёт в плашке логотипа и активной вкладке, а не в залитой полосе',
-  <span style={{width:'100%',display:'flex',alignItems:'stretch',height:44,background:'var(--ds-header-bg)',border:'1px solid var(--ds-header-border)',borderRadius:'var(--ds-radius-md)',overflow:'hidden'}}>
-    <span style={{width:36,background:'var(--ds-header-plate)',display:'flex',alignItems:'center',justifyContent:'center',color:'var(--ds-on-brand)',font:'var(--ds-type-eyebrow)'}}>A</span>
-    <span style={{display:'flex',alignItems:'center',gap:14,padding:'0 14px',font:'var(--ds-type-ui)'}}>
-      <span style={{display:'flex',alignItems:'center',height:'100%',borderBottom:'2px solid var(--ds-header-indicator)',color:'var(--ds-header-tab-fg-active)'}}>Мониторинг</span>
-      <span style={{color:'var(--ds-header-fg-muted)'}}>Отчёты</span></span></span>],
- ['Нейтрали','одна холодная рампа из 13 шагов, --ds-n-0 → --ds-n-950 — произвольные серые не используются',
-  <><span style={{display:'flex'}}>{RAMP.map(([t,hex])=><span key={t} title={t} style={{width:26,height:26,background:hex,border:'1px solid var(--ds-border)',marginLeft:-1}}></span>)}</span>
-   <Cap>разбор по ролям — в таблице «Нейтрали в работе» ниже</Cap></>],
- ['Типографика','Inter Tight, 9 ролевых токенов; JetBrains Mono — только цифры телеметрии',
-  <span style={{display:'flex',flexDirection:'column',gap:2}}>
-    <span style={{font:'var(--ds-type-title)',letterSpacing:'var(--ds-tracking-tight)'}}>Volvo FH16 <Cap>type-title 20</Cap></span>
-    <span style={{font:'var(--ds-type-body)'}}>Норма расхода топлива <Cap>type-body 14</Cap></span>
-    <span><span className="eb">ОБЪЕКТ</span> <Cap>type-eyebrow 11</Cap></span>
-    <span style={{font:'var(--ds-type-mono)'}}>62 км/ч · 14:32:07 <Cap>type-mono 13</Cap></span></span>],
- ['Бренд','три роли на тему: заливка, подсветка, линия — плюс отдельный токен для брендового текста',
-  <><Sw c="var(--ds-brand)" l="brand"/><Sw c="var(--ds-brand-subtle)" l="subtle"/><Sw c="var(--ds-brand-border)" l="border"/><Sw c="var(--ds-brand-text)" l="text"/>
-   <Cap>разбор по ролям — в таблице «Бренд в работе» ниже</Cap></>],
- ['Выделение','выбранное — всегда бренд; акцент остаётся счётчику уведомлений и точке непрочитанного',
-  <span style={{width:'100%',display:'flex',flexDirection:'column',gap:8}}>
-    <span style={{display:'flex',flexDirection:'column',border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-md)',overflow:'hidden',font:'var(--ds-type-body)'}}>
-      <span style={{padding:'7px 12px',background:'var(--ds-surface)'}}>MAZ 5440</span>
-      <span style={{padding:'7px 12px',background:'var(--ds-surface-selected)',color:'var(--ds-brand-text)',borderTop:'1px solid var(--ds-brand-border)',borderBottom:'1px solid var(--ds-brand-border)'}}>Volvo FH16 — выбрана</span>
-      <span style={{padding:'7px 12px',background:'var(--ds-surface)'}}>Scania R450</span></span>
-    <Cap>фон --ds-surface-selected · линия --ds-brand-border · текст --ds-brand-text</Cap></span>],
- ['Поля','подпись статичная, сверху — никаких плавающих label; высота из --ds-field-h',
-  <><span style={{width:200}}><DsField label="Макс. скорость" defaultValue="90" suffix="км/ч" mono/></span>
-   <Cap>40px cozy · 32px compact</Cap></>],
- ['Фильтры','применённое видно и снимается одним кликом — а не прячется в контрол в ячейке заголовка',
-  <><DsChip removable onRemove={()=>{}}>Группа: Грузовики</DsChip><DsChip removable onRemove={()=>{}}>Состояние: Движение</DsChip>
-   <Cap>в DsChipGroup над таблицей</Cap></>],
- ['Иконки','Material Symbols Outlined, размер из --ds-icon*; других иконочных шрифтов в системе нет',
-  <><Gl n="map"/><Gl n="local_shipping"/><Gl n="notifications"/><Gl n="filter_alt"/><Gl n="more_vert"/>
-   <Cap>16 · 20 · 24px</Cap></>],
- ['Единицы','только px. Никаких rem — трюк 1rem = 10px из Angular-продукта на v2 не действует',
-  <span className="mono" style={{fontSize:11,display:'flex',flexDirection:'column',gap:3}}>
-    <span style={{color:'var(--ds-success-fg)'}}>✓ padding: var(--ds-pad-md) · font-size: var(--ds-text-14)</span>
-    <span style={{color:'var(--ds-danger-fg)'}}>✕ padding: 1.6rem · font-size: 1.4rem</span></span>],
- ['Disabled','выключенное состояние — пара токенов, а не opacity: прозрачность на карте даёт непредсказуемый результат',
-  <><DsButton disabled>Сохранить</DsButton><span style={{width:150}}><DsField label="IMEI" defaultValue="357073" disabled mono/></span>
-   <Cap>--ds-surface-disabled + --ds-fg-disabled</Cap></>],
- ['Отступы','переиспользуемый компонент не задаёт себе внешние отступы — расстояниями владеет родитель через gap',
-  <><span style={{display:'flex',gap:'var(--ds-gap-md)',padding:'var(--ds-pad-sm)',border:'1px dashed var(--ds-border-strong)',borderRadius:'var(--ds-radius-md)'}}>
-     <DsButton size="sm" tone="secondary">Отмена</DsButton><DsButton size="sm">Сохранить</DsButton></span>
-   <Cap>родитель: gap var(--ds-gap-md) · кнопки: margin 0</Cap></>]
-];
-
-const DOCS=[
- ['2 · Основы','tokens.css · components/Ds*/','Токены и доктрины: на что ссылаться в макете и в SCSS.',[
-  ['Типографика','index.html?card=DsType'],
-  ['Нейтральные цвета','index.html?card=DsNeutrals'],
-  ['Цветовые темы','index.html?card=DsBrandThemes'],
-  ['Подбор цветов темы','index.html?card=DsBrandPick'],
-  ['Цвета статусов','index.html?card=DsStatus'],
-  ['Светлый и тёмный режим','index.html?card=DsAppearance'],
-  ['Плотность интерфейса','index.html?card=DsDensity'],
-  ['Форма и глубина','index.html?card=DsShape'],
-  ['Хром шапки','index.html?card=DsAppHeader'],
-  ['Наведение и нажатие','index.html?card=DsHover'],
-  ['Фокус','index.html?card=DsFocus'],
-  ['Адаптивность и брейкпоинты','index.html?card=DsBreakpoints'],
-  ['Цвета и оформление графиков','index.html?card=DsCharts'],
-  ['Сортировка вне таблицы','index.html?card=DsSortingMenu']]],
- ['3 · Миграция','docs/migration.md','Старое имя Angular → имя в системе. Для передачи в инженерию, не для проектирования.',[
-  ['Брейкпоинты: решения по миграции','components/DsBreakpointsDecisions/preview.html']]],
- ['4 · Бренд (общее)','components/assets/','Знак и его композиция с названием.',[
-  ['Логотип бренда','index.html?card=BrandLogoLockup']]],
- ['5 · Компоненты','components/*/','Внешний вид и пропсы. Контракт — .d.ts рядом с компонентом.',[
-  ['Иконка','components/DsIcon/preview.html'],
-  ['Кнопки','components/DsButton/preview.html'],
-  ['FAB','components/DsFab/preview.html'],
-  ['Формы','components/DsField/preview.html'],
-  ['Редакторы фильтров и длительность','components/DsFilterMenu/preview.html'],
-  ['Таблица, фильтры, чипы и бейджи','components/DsTable/preview.html'],
-  ['Список объектов','components/DsListRow/preview.html'],
-  ['Массовые действия','index.html?card=DsBulkActionsBar'],
-  ['Баннеры','components/DsBanner/preview.html'],
-  ['Загрузка, пустые состояния, тосты','components/DsEmptyState/preview.html'],
-  ['Графики','components/DsChart/preview.html'],
-  ['Панели','components/DsPanel/preview.html'],
-  ['Диалоги','components/DsDialog/preview.html'],
-  ['Шапка приложения и вкладки','components/DsAppHeader/preview.html'],
-  ['Пошаговая навигация','components/DsStepper/preview.html']]],
- ['6 · Карта','components/MapTrack/','Направление движения, маркеры и треки.',[
-  ['Стрелки направления','index.html?card=IconsArrows'],
-  ['Маркеры и значки карты','index.html?card=IconsMapAssets'],
-  ['Трек на карте','index.html?card=MapTrack']]],
- ['7 · Эталонные экраны','components/Monitoring · Admin · AppShell/','Собранные экраны целиком — источник раскладки; копируемых шаблонов нет.',[
-  ['Экран мониторинга','components/Monitoring/preview.html'],
-  ['Экран администрирования','components/Admin/preview.html'],
-  ['Каркас приложения (пустой)','components/AppShell/preview.html']]]
-];
-
-function App(){
-  const [theme,setTheme]=React.useState('DEFAULT');
-  const [appearance,setAppearance]=React.useState('light');
-  const [density,setDensity]=React.useState('cozy');
-  const selCss={height:26,border:'1px solid var(--ds-border-field)',borderRadius:'var(--ds-radius-xs)',background:'var(--ds-surface)',color:'var(--ds-fg)',font:'var(--ds-type-caption)'};
-  return <>
-    <header className="cover">
-      <svg viewBox="0 0 960 112" preserveAspectRatio="xMinYMin slice" aria-hidden="true">
-        <defs><clipPath id="cover-slab"><rect x="0" y="-12" width="432" height="124" rx="12"/></clipPath></defs>
-        {[['--ds-brand',0,432],['--ds-surface-inverse',440,192],['--ds-accent',640,120],['--ds-brand-border',768,120],['--ds-state-moving',896,76]].map(([token,x,width])=><rect key={token} x={x} y="-12" width={width} height="124" rx="12" fill={'var('+token+')'}/>)}
-        <g clipPath="url(#cover-slab)" fill="none" stroke="var(--ds-accent)" strokeWidth="8" strokeLinecap="round">
-          <path d="M 336 112 A 24 24 0 0 1 384 112"/>
-          <path d="M 312 112 A 48 48 0 0 1 408 112"/>
-          <path d="M 288 112 A 72 72 0 0 1 432 112"/>
-        </g>
-        <circle cx="360" cy="112" r="8" fill="var(--ds-accent)"/>
-      </svg>
-      <h1>Aurora Web<br/>Design System</h1>
-      <p>Плотный интерфейс GPS-мониторинга автопарка.</p>
-    </header>
-    <header style={{display:'flex',flexDirection:'column',gap:10}}>
-      <span className="eb">Aurora · дизайн-система</span>
-      <h2>Один слой, одна таблица стилей</h2>
-      <p>Всё здесь — система 2026 года. Легаси-слой, воспроизводивший выпущенный Angular-продукт, удалён: остался ровно один набор токенов, один набор компонентов и один способ собрать экран. Подключите <span className="mono">tokens.css</span>, <span className="mono">tokens/scoped.css</span> и <span className="mono">components/bundle.css</span> и берите компоненты из <span className="mono">components/bundle.js</span>.</p>
-      <p>Старые имена Angular-компонентов и токенов всё ещё живут в исходниках продукта. Они сопоставлены один в один в <span className="mono">docs/migration.md</span> и в карточке <b style={{color:'var(--ds-fg)'}}>Миграция</b> — она нужна при передаче макета в инженерию, а не при проектировании.</p>
-    </header>
-    <section style={{display:'flex',flexDirection:'column',gap:10}}>
-      <h2>Разделы системы</h2>
-      <p>Эта страница — только вход. Ниже — полный состав: {window.__DS_CARD_COUNT__} карточек. <span className="mono">README.md</span> поможет выбрать руководство по использованию, дизайн-правилам или разработке.</p>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',gap:'var(--ds-gap-md)',alignItems:'start'}}>
-        {DOCS.map(([g,path,note,items])=><div key={g} style={{border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-lg)',background:'var(--ds-surface)',padding:16,display:'flex',flexDirection:'column',gap:10,minWidth:0}}>
-          <div style={{display:'flex',alignItems:'baseline',gap:8,flexWrap:'wrap'}}>
-            <span className="eb">{g}</span>
-            <span className="mono" style={{fontSize:10,color:'var(--ds-fg-subtle)',marginLeft:'auto'}}>{path}</span></div>
-          <Cap>{note}</Cap>
-          <div style={{display:'flex',flexDirection:'column',gap:5,borderTop:'1px solid var(--ds-divider)',paddingTop:10}}>
-            {items.map(([n,href])=><a key={href} href={href} target={href.startsWith('index.html?card=')?'_top':undefined} style={{display:'flex',alignItems:'center',gap:8,font:'var(--ds-type-body)',textDecoration:'none',minWidth:0}}>
-              <span className="material-symbols-outlined" style={{fontSize:'var(--ds-icon-xs)',color:'var(--ds-fg-subtle)',flex:'none'}}>chevron_right</span>
-              <span style={{minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{n}</span></a>)}</div>
-        </div>)}
-      </div>
-      <p>Компоненты и токены системы носят префикс <span className="mono">Ds</span> / <span className="mono">--ds-</span>. Прежние имена с префиксом V2 и старые имена Angular сопоставлены в <span className="mono">docs/migration.md</span>.</p>
-    </section>
-    <section style={{display:'flex',flexDirection:'column',gap:10}}>
-      <div style={{display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}>
-        <h2>Три скоупа</h2>
-        <span style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:8,font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>
-          <label style={{display:'flex',alignItems:'center',gap:5}}>тема
-            <select value={theme} onChange={e=>setTheme(e.target.value)} style={selCss}>
-              {['DEFAULT','RED2'].map(t=><option key={t}>{t}</option>)}</select></label>
-          <label style={{display:'flex',alignItems:'center',gap:5}}>оформление
-            <select value={appearance} onChange={e=>setAppearance(e.target.value)} style={selCss}><option>light</option><option>dark</option></select></label>
-          <label style={{display:'flex',alignItems:'center',gap:5}}>плотность
-            <select value={density} onChange={e=>setDensity(e.target.value)} style={selCss}><option>cozy</option><option>compact</option></select></label>
-        </span>
-      </div>
-      <p><span className="mono">data-ds-theme</span> · <span className="mono">data-ds-appearance</span> · <span className="mono">data-ds-density</span> независимы и наследуются, поэтому любое поддерево может их переопределить. Проверяйте каждый экран в темах DEFAULT и RED2, в light и dark, в двух плотностях — четыре рендера, и это критерий приёмки.</p>
-      <div className="stage"><Stage theme={theme} appearance={appearance} density={density}/></div>
-    </section>
-    <section style={{display:'flex',flexDirection:'column',gap:10}}>
-      <h2>Правила, из которых следует всё остальное</h2>
-      <div data-ds-theme={theme} style={{border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-lg)',overflow:'hidden',background:'var(--ds-surface)'}}>
-        {RULES.map(([k,a,demo])=><div key={k} className="rule">
-          <div><div style={{font:'var(--ds-type-body-strong)'}}>{k}</div>
-            <div style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)',marginTop:3,textWrap:'pretty'}}>{a}</div></div>
-          <div className="rule-d">{demo}</div></div>)}</div>
-    </section>
-    <section style={{display:'flex',flexDirection:'column',gap:10}}>
-      <h2>Нейтрали в работе</h2>
-      <p>Компоненты никогда не читают рампу напрямую — только семантический токен. Рампа отвечает на вопрос «какой серый», семантика — на вопрос «для чего он»; менять в макете и в коде нужно второй столбец, а не первый.</p>
-      <div style={{border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-lg)',overflow:'hidden',background:'var(--ds-surface)'}}>
-        <table className="diff"><thead><tr><th style={{width:130}}>Шаг</th><th style={{width:300}}>Семантический токен</th><th>Где это видно</th></tr></thead>
-          <tbody>{RAMP.map(([step,hex,sem,use])=><tr key={step}>
-            <td className="mono" style={{fontSize:11,whiteSpace:'nowrap'}}>
-              <span style={{display:'flex',alignItems:'center',gap:8}}>
-                <span style={{width:16,height:16,flex:'0 0 auto',borderRadius:'var(--ds-radius-xs)',background:hex,border:'1px solid var(--ds-border)'}}></span>{step}</span></td>
-            <td className="mono" style={{fontSize:11,color:sem==='—'?'var(--ds-fg-subtle)':'var(--ds-fg)'}}>{sem}</td>
-            <td style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>{use}</td></tr>)}</tbody></table></div>
-      <p>В dark значения рампы и семантики переназначаются вместе, поэтому роль сохраняется: <span className="mono">--ds-surface</span> остаётся поверхностью, <span className="mono">--ds-border</span> — линией. Именно поэтому в макете ссылаться нужно на роль.</p>
-    </section>
-    <section style={{display:'flex',flexDirection:'column',gap:10}}>
-      <h2>Бренд в работе</h2>
-      <p>Две темы — DEFAULT и RED2 — меняют только эти значения. Свотчи ниже живут в теме, выбранной выше.</p>
-      <div data-ds-theme={theme} style={{border:'1px solid var(--ds-border)',borderRadius:'var(--ds-radius-lg)',overflow:'hidden',background:'var(--ds-surface)'}}>
-        <table className="diff"><thead><tr><th style={{width:210}}>Токен</th><th style={{width:120}}>Роль</th><th>Где это видно</th></tr></thead>
-          <tbody>{BRAND.map(([tok,role,use])=><tr key={tok}>
-            <td className="mono" style={{fontSize:11,whiteSpace:'nowrap'}}>
-              <span style={{display:'flex',alignItems:'center',gap:8}}>
-                <span style={{width:16,height:16,flex:'0 0 auto',borderRadius:'var(--ds-radius-xs)',background:'var('+tok+')',border:'1px solid var(--ds-border)'}}></span>{tok}</span></td>
-            <td>{role}</td>
-            <td style={{font:'var(--ds-type-caption)',color:'var(--ds-fg-muted)'}}>{use}</td></tr>)}</tbody></table></div>
-      <p>Hover и press не имеют брендовых значений: это универсальная накладка в собственных чернилах контрола (<span className="mono">--ds-overlay-hover</span> 10% · <span className="mono">--ds-overlay-press</span> 16%), поэтому залитому тону нужен один цвет, а не три. Акцент (<span className="mono">--ds-accent</span>) — не бренд: он живёт только в счётчике уведомлений и точке непрочитанного.</p>
-    </section>
-  </>;
-}
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+const demo=document.getElementById('demo');
+function syncScope(){for(const key of ['theme','appearance','density'])demo.setAttribute('data-ds-'+key,document.documentElement.getAttribute('data-ds-'+key)||({theme:'DEFAULT',appearance:'light',density:'cozy'}[key]));}
+syncScope();new MutationObserver(syncScope).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density']});
+ReactDOM.createRoot(demo).render(<Example/>);
 </script></body></html>
