@@ -7,13 +7,13 @@ import {fileURLToPath} from 'node:url';
 export async function buildReact({root=fileURLToPath(new URL('..',import.meta.url))}={}) {
   const output=join(root,'dist/react');
   mkdirSync(output,{recursive:true});
-  await build({entryPoints:[join(root,'components/src/index.js')],outfile:join(output,'index.mjs'),bundle:true,
+  await build({entryPoints:[join(root,'design-system/components/src/index.js')],outfile:join(output,'index.mjs'),bundle:true,
     format:'esm',platform:'neutral',packages:'external',target:'es2022',charset:'utf8'});
-  const entry=readFileSync(join(root,'components/src/index.js'),'utf8');
+  const entry=readFileSync(join(root,'design-system/components/src/index.js'),'utf8');
   const declarations=[];
   for(const [,source] of entry.matchAll(/export \* from '([^']+)'/g)) {
     const name=basename(source,'.jsx');
-    let contract=readFileSync(join(root,'components',name,name+'.d.ts'),'utf8');
+    let contract=readFileSync(join(root,'design-system/components',name,name+'.d.ts'),'utf8');
     // Старые контракты карточек использовали глобальный React namespace.
     if(!/import .*React.* from 'react'/.test(contract))contract="import type * as React from 'react';\n"+contract;
     writeFileSync(join(output,name+'.d.ts'),contract);

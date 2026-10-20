@@ -2,7 +2,7 @@ import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js/lib/common';
 import {readFileSync} from 'node:fs';
 import {join,posix} from 'node:path';
-import {scopeOptions,applyQueryScope} from '../../catalog/state.js';
+import {scopeOptions,applyQueryScope} from '../../design-system/catalog/state.js';
 export const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function renderMarkdown({root,path,knownRoutes=new Map()}){
  const md=new MarkdownIt({html:false,linkify:false,typographer:false,

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {readCards} from '../tools/catalog/index.mjs';
-import {searchCards} from '../catalog/search.js';
-import {families,familyFor,navigationGroups} from '../catalog/families.js';
-import {parseState,stateUrl} from '../catalog/state.js';
+import {searchCards} from '../design-system/catalog/search.js';
+import {families,familyFor,navigationGroups} from '../design-system/catalog/families.js';
+import {parseState,stateUrl} from '../design-system/catalog/state.js';
 import {fileURLToPath} from 'node:url';
 import {fixtureRoot} from './helpers/build-root.js';
 import {mkdirSync,writeFileSync,rmSync} from 'node:fs';
@@ -23,8 +23,8 @@ assert.equal(familyFor('DsBulkActionsBar').id,'data');
 assert.equal(new Set(families.flatMap(f=>f.cards)).size,families.flatMap(f=>f.cards).length);
 const fixture=fixtureRoot();
 try{
- mkdirSync(join(fixture,'components/NewCard'));
- writeFileSync(join(fixture,'components/NewCard/preview.html'),'<!-- @dsCard layout="component" group="New" name="New discovery" aliases="fresh|новая" --><html><head></head><body>new</body></html>');
+ mkdirSync(join(fixture,'design-system/components/NewCard'));
+ writeFileSync(join(fixture,'design-system/components/NewCard/preview.html'),'<!-- @dsCard layout="component" group="New" name="New discovery" aliases="fresh|новая" --><html><head></head><body>new</body></html>');
  const discovered=readCards(fixture);assert.equal(discovered.length,3);assert.equal(searchCards(discovered,'новая')[0].id,'NewCard');assert.equal(familyFor('NewCard'),null);
  assert.equal(discovered.find(card=>card.id==='NewCard').layout,'component');
 }finally{rmSync(fixture,{recursive:true,force:true});}

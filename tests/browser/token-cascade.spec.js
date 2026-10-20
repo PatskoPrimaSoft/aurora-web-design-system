@@ -56,7 +56,7 @@ test('deep independent scopes, local brand and typography aliases remain live', 
   expect(values.brand).toBe('#b9b6b7');expect(values.height).toBe('30px');expect(values.focus).toBe('#123456');expect(values.body).toMatch(/^700 /);
 });
 test('changing a brand changes frozen values and dependent focus', async ({page}) => {
-  const source=JSON.parse(readFileSync(`${root}/tokens/source.json`));
+  const source=JSON.parse(readFileSync(`${root}/design-system/tokens/source.json`));
   source.color.tokens.find(t=>t.name==='ds-brand').value['ds-appearance-light-ds-red2']='#ff00ff';
   await page.setContent(`<style>${renderTokenCss(readTokenModel(source))}</style><div id="scope" data-ds-theme="RED2"></div>`);
   const values=await page.locator('#scope').evaluate(el=>{const s=getComputedStyle(el);return [s.getPropertyValue('--ds-brand').trim(),s.getPropertyValue('--ds-focus-color').trim()];});

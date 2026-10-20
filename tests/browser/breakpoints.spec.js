@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {readFileSync} from 'node:fs';
 
 test('documented layout CSS switches columns at 960px without losing content',async({page})=>{
-  const readme=readFileSync(new URL('../../components/DsBreakpoints/README.md',import.meta.url),'utf8');
+  const readme=readFileSync(new URL('../../design-system/components/DsBreakpoints/README.md',import.meta.url),'utf8');
   const css=readme.match(/```css\r?\n([\s\S]*?)```/)[1].replace(/^@import[^\n]+/m,'');
   await page.setContent(`<style>:root{--ds-gap-md:16px}${css}</style><div class="workspace"><div class="object-list">Объекты</div><div class="object-details">МАЗ 5440 · полуприцеп-рефрижератор · AB 1234-7</div></div>`);
   for(const [width,sideBySide] of [[320,false],[360,false],[390,false],[719,false],[720,false],[959,false],[960,true],[1139,true],[1140,true],[1440,true]]) {

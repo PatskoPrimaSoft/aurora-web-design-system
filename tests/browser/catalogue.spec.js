@@ -36,7 +36,7 @@ test('merged header keeps legacy links and both navigation examples in four scop
    if(suffix.startsWith('?')){await expect(page.locator('#theme')).toContainText('RED2');await expect(page.locator('#viewports iframe')).toHaveCount(1);}
   }
   for(const[path,destination]of [
-   ['components/DsHeader/preview.html','/index.html'],
+   ['design-system/components/DsHeader/preview.html','/index.html'],
    ['docs/cards/DsHeader.html','/docs/cards/DsAppHeader.html'],
    ['api/components/DsHeader.html','/api/components/DsAppHeader.html'],
   ]){
@@ -47,7 +47,7 @@ test('merged header keeps legacy links and both navigation examples in four scop
   }
   await page.goto(served.url+'/index.html?card=DsAppHeader&compare=1');
   await expect(page.locator('nav a[data-id="DsHeaderChip"]')).toHaveCount(0);
-  for(const path of ['components/DsHeaderChip/preview.html','docs/cards/DsHeaderChip.html','api/components/DsHeaderChip.html'])
+  for(const path of ['design-system/components/DsHeaderChip/preview.html','docs/cards/DsHeaderChip.html','api/components/DsHeaderChip.html'])
    expect((await page.request.get(served.url+'/'+path)).status()).toBe(404);
   const scopes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
   for(const scope of scopes){
@@ -70,10 +70,10 @@ test('merged header keeps legacy links and both navigation examples in four scop
 test('direct dev preview displays failed builds and reloads after recovery',async({page})=>{
  const fixture=fixtureRoot();let dev;
  try{
-  dev=await startDev({root:fixture,port:0});await page.goto(dev.url+'/components/Example/preview.html');await expect(page.locator('#root')).toHaveText('hello');
-  const path=join(fixture,'tokens/source.json'),original=readFileSync(path,'utf8');writeFileSync(path,'invalid JSON');
+  dev=await startDev({root:fixture,port:0});await page.goto(dev.url+'/design-system/components/Example/preview.html');await expect(page.locator('#root')).toHaveText('hello');
+  const path=join(fixture,'design-system/tokens/source.json'),original=readFileSync(path,'utf8');writeFileSync(path,'invalid JSON');
   await expect(page.locator('[role="alert"]')).toBeVisible();await expect(page.locator('#root')).toHaveText('hello');
-  const example=join(fixture,'components/Example/preview.html');writeFileSync(example,readFileSync(example,'utf8').replace('hello','recovered'));writeFileSync(path,original);
+  const example=join(fixture,'design-system/components/Example/preview.html');writeFileSync(example,readFileSync(example,'utf8').replace('hello','recovered'));writeFileSync(path,original);
   // Восстановление включает полную сборку каталога; на CI она может занять больше 5 секунд.
   await expect(page.locator('#root')).toHaveText('recovered',{timeout:15000});await expect(page.locator('[role="alert"]')).toHaveCount(0);
  }finally{await test.step('leave preview',()=>page.goto('about:blank'));if(dev)await test.step('close dev server',()=>dev.close());rmSync(fixture,{recursive:true,force:true});}
@@ -114,7 +114,7 @@ test('API references use real declarations, defaults and token source',async({pa
 
 test('token reference filters categories and switches paired theme values',async({page})=>{
  await buildCatalogue({root,outDir:`${root}/site`});const served=await serveRoot(`${root}/site`);
- const tokenCount=readTokenModel(JSON.parse(readFileSync(join(root,'tokens/source.json'),'utf8'))).names.length;
+ const tokenCount=readTokenModel(JSON.parse(readFileSync(join(root,'design-system/tokens/source.json'),'utf8'))).names.length;
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  try{
   await page.goto(served.url+'/api/tokens.html?appearance=dark&density=compact');

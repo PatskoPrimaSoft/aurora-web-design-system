@@ -36,13 +36,13 @@ function implementations(root){
    }
   }
  };
- visit(join(root,'components/src/index.js'));
+ visit(join(root,'design-system/components/src/index.js'));
  return result;
 }
 function declarationFiles(root){
  const result=[];
  const visit=path=>{for(const entry of readdirSync(path,{withFileTypes:true})){if(['src','lib','node_modules'].includes(entry.name))continue;const file=join(path,entry.name);if(entry.isDirectory())visit(file);else if(file.endsWith('.d.ts'))result.push(file);}};
- visit(join(root,'components'));return result;
+ visit(join(root,'design-system/components'));return result;
 }
 function literal(node){
  return ts.isStringLiteral(node)||ts.isNumericLiteral(node)||[ts.SyntaxKind.TrueKeyword,ts.SyntaxKind.FalseKeyword,ts.SyntaxKind.NullKeyword].includes(node.kind)

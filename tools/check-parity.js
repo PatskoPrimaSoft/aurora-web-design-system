@@ -1,5 +1,5 @@
 /**
- * Паритет копий токенов в components/bundle.css с tokens.css.
+ * Паритет копий токенов в design-system/components/bundle.css с tokens.css.
  * bundle.css несёт свои копии значений tokens.css, и в каскаде они работают (сборка их не вырезает):
  * - `[data-ds-appearance="light"|"dark"]` — цветовые токены светлости, сверяются с DEFAULT·light / DEFAULT·dark;
  * - `[data-ds-theme="DEFAULT"|"RED2"]` — входы механизма бренда `--ds-_X--light|dark`, сверяются с `--ds-X`
@@ -73,7 +73,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = new URL('..', import.meta.url);
   const { mismatches, compared, kinds } = checkParity(
     readFileSync(new URL('tokens.css', root), 'utf8'),
-    readFileSync(new URL('components/bundle.css', root), 'utf8'),
+    readFileSync(new URL('design-system/components/bundle.css', root), 'utf8'),
   );
   for (const m of mismatches) console.error(`FAIL паритет: ${m}`);
   const detail = Object.entries(kinds).map(([k, n]) => `${k} ${n}`).join(', ');

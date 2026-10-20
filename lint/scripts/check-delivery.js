@@ -16,15 +16,15 @@ import { fileURLToPath } from 'node:url';
 import { isDirectRun } from './check-names.js';
 
 export const EXCLUDE = [
-  { path: 'assets/notes/', why: 'история миграции — законно называет старые имена' },
-  { path: 'templates/leadership-deck/', why: 'стартер сохранён как есть до собственной миграции (README, раздел Starters)' },
+  { path: 'design-system/assets/notes/', why: 'история миграции — законно называет старые имена' },
+  { path: 'design-system/templates/leadership-deck/', why: 'стартер сохранён как есть до собственной миграции (README, раздел Starters)' },
   { path: 'lint/scripts/check-delivery.js', why: 'сам содержит шаблоны старых имён' },
   { path: 'lint/test/', why: 'фикстуры проверок' },
   { path: 'node_modules/', why: 'зависимости' },
   { path: 'ng-ui-kit/tests/consumers/', why: 'шаблоны приложений: пути проверяет AOT и браузер после установки tarball' },
   { path: 'site/', why: 'генерируемый каталог проверяется в браузере' },
   { path: 'dist/', why: 'генерируемая поставка проверяется отдельно' },
-  { path: 'catalog/index.html', why: 'HTML-шаблон: ссылки разрешаются в site/, проверяется браузером' },
+  { path: 'design-system/catalog/index.html', why: 'HTML-шаблон: ссылки разрешаются в site/, проверяется браузером' },
 ];
 
 const CODE = /\.(html|js|mjs|cjs|jsx|ts|css|json)$/;
@@ -62,7 +62,7 @@ export function checkDelivery(root) {
       }
     }
     // Локальные изображения допускаются: проверяем достижимый файл, включая query/hash.
-    if (/^components\/[^/]+\/preview\.html$/.test(rel)) {
+    if (/^design-system\/components\/[^/]+\/preview\.html$/.test(rel)) {
       for (const m of text.matchAll(/(?:\bsrc|logoSrc|avatarSrc)\s*[=:]\s*["']([^"']+\.(?:png|jpe?g|gif|webp|svg)(?:[?#][^"']*)?)["']/gi)) {
         if (/^(?:data:|https?:)/i.test(m[1])) continue;
         const target = normalize(join(dirname(abs), m[1].split(/[?#]/)[0]));
@@ -71,7 +71,7 @@ export function checkDelivery(root) {
     }
     if (rel.endsWith('.html')) {
       // overview публикуется в корне site и ссылается на собранные страницы.
-      const linkBase = rel === 'overview.html' ? join(root, 'site') : dirname(abs);
+      const linkBase = rel === 'design-system/overview.html' ? join(root, 'site/design-system') : dirname(abs);
       for (const m of text.matchAll(/\b(?:href|src)="([^"]*)"/g)) {
         const url = m[1];
         // внешние, якоря, data:, и адреса, собираемые в скрипте ('+x+', {{x}}, ${x})

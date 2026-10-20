@@ -10,7 +10,7 @@ test('disabled selection stays legible and mixed selection selects all with the 
   try {
     for (const [theme, appearance, density] of [['DEFAULT', 'light', 'cozy'], ['DEFAULT', 'dark', 'compact'], ['RED2', 'light', 'cozy'], ['RED2', 'dark', 'compact']]) {
       const query = `theme=${theme}&appearance=${appearance}&density=${density}`;
-      await page.goto(`${served.url}/components/DsCheckbox/preview.html?${query}`);
+      await page.goto(`${served.url}/design-system/components/DsCheckbox/preview.html?${query}`);
       await page.getByRole('region',{name:'Обычный выбор',exact:true}).waitFor();
       const checks = await page.locator('#root').evaluate(root => {
         const luminance = color => {
@@ -97,7 +97,7 @@ test('native selection does not submit forms or activate table and tree rows',as
   await buildCatalogue({root,outDir:`${root}/site`});
   const served=await serveRoot(`${root}/site`);
   try {
-    await page.goto(`${served.url}/components/DsCheckbox/preview.html`);
+    await page.goto(`${served.url}/design-system/components/DsCheckbox/preview.html`);
     await page.evaluate(()=>{
       const {React,ReactDOM}=window,h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
       window.selectionEvents={submit:0,open:0,expand:0,select:0};

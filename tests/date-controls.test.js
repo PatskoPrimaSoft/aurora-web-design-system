@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isRangeReversed } from '../components/src/components/forms/dateValues.js';
+import { isRangeReversed } from '../design-system/components/src/components/forms/dateValues.js';
 
 test('calendar ranges compare boundaries without timezone conversion', () => {
   assert.equal(isRangeReversed({ from: '2026-10-19', to: '2026-10-18' }), true);

@@ -27,7 +27,7 @@ export function validateLinks({root,siteRoot}){
   }
  }
  for(const path of readdirSync(root).filter(p=>p.endsWith('.md')&&!['CHANGELOG.md','SYNC.md'].includes(p)))check(root,path,path,true);
- if(existsSync(join(root,'overview.html')))for(const card of readCards(root))if(card.readmePath)check(root,card.readmePath,card.readmePath,true);
+ if(existsSync(join(root,'design-system/overview.html')))for(const card of readCards(root))if(card.readmePath)check(root,card.readmePath,card.readmePath,true);
  if(siteRoot&&existsSync(siteRoot)){const walk=(folder,prefix='')=>{for(const entry of readdirSync(folder,{withFileTypes:true})){const path=prefix+entry.name;if(entry.isDirectory())walk(join(folder,entry.name),path+'/');else if(entry.name.endsWith('.html'))check(siteRoot,path,'site/'+path);}};walk(siteRoot);}
  return problems;
 }

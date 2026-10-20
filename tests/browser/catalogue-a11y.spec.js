@@ -26,7 +26,7 @@ test('six interactive examples introduce no AXE violations beyond the original',
  for(const card of selected)pages.set('/'+card.id+'.html',await renderPreview({root:baseline.root,card,mode:'legacy',scope:{theme:'DEFAULT',appearance:'light',density:'cozy'}}));
  const original=await serveRoot(baseline.root,pages),current=await serveRoot(root+'/site'),classified=[];
  try{
-  for(const card of selected){const results=[];for(const url of [original.url+'/'+card.id+'.html',current.url+'/'+card.previewPath]){
+  for(const card of selected){const results=[];for(const url of [original.url+'/'+card.id+'.html',current.url+'/design-system/'+card.previewPath]){
    await page.goto(url);if(await page.locator('#root').count())await expect.poll(()=>page.locator('#root').evaluate(el=>el.childNodes.length)).toBeGreaterThan(0);await page.evaluate(()=>document.fonts.ready);results.push(signature(await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze()));
   }
   expect(results[1],card.id+': current WCAG accessibility violations').toEqual([]);classified.push({card:card.id,existingViolations:results[0]});

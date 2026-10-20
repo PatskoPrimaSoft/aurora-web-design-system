@@ -14,12 +14,12 @@ test.beforeAll(async()=>{
   served=await serveRoot(`${root}/site`);
 });
 
-test('copied example code renders without missing state, helpers or layout styles',async({page})=>{
+test('copied example code renders without missing state, helpers or layout design-system/styles',async({page})=>{
   const errors=[];
   page.on('pageerror',error=>errors.push(error.message));
-  await page.goto(`${served.url}/components/DsCheckbox/preview.html`);
+  await page.goto(`${served.url}/design-system/components/DsCheckbox/preview.html`);
   for(const card of components){
-    const sources=JSON.parse(readFileSync(`${root}/components/${card.id}/examples.json`,'utf8'));
+    const sources=JSON.parse(readFileSync(`${root}/design-system/components/${card.id}/examples.json`,'utf8'));
     for(const [id,source] of Object.entries(sources)){
       const code=source
         .replace(/^import \* as React from 'react';/m,'const React = window.React;')

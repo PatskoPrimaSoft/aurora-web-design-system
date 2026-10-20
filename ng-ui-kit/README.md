@@ -48,5 +48,5 @@ mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
 
 - [Правила разработки](docs/development.md)
 - [Кнопка DsButtonComponent](src/components/button/README.md)
-- [Подключение к приложению](../docs/usage.md)
+- [Подключение к приложению](../design-system/docs/usage.md)
 - [Разработка дизайн-системы](../CONTRIBUTING.md)

@@ -23,7 +23,7 @@ check('подстановка шрифта сохраняет пробел ме�
 });
 
 check('паритет репозитория чистый', () => {
-  const { mismatches, compared, kinds } = checkParity(read('tokens.css'), read('components/bundle.css'));
+  const { mismatches, compared, kinds } = checkParity(read('tokens.css'), read('design-system/components/bundle.css'));
   assert.deepEqual(mismatches, []);
   console.log(`     паритет: ${compared} копий`);
 });

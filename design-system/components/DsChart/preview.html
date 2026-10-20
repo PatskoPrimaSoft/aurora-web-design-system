@@ -1,0 +1,48 @@
+<!-- @dsCard name="Интеграция ECharts" scopeMode="inherit" aliases="график|chart|echarts|легенда|legend|подсказка|tooltip" group="5 · Компоненты · графики" subtitle="Как подключить ECharts к токенам, настроить легенду и подсказку" page -->
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8"><title>Интеграция ECharts</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface);-webkit-font-smoothing:antialiased}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+h2{font:var(--ds-type-title);letter-spacing:var(--ds-tracking-tight);color:var(--ds-fg-strong);margin:0 0 12px}
+h3{font:var(--ds-type-section);color:var(--ds-fg-strong);margin:0 0 12px}
+p{margin:0;max-width:74ch;text-wrap:pretty}p+p{margin-top:12px}
+code{font:var(--ds-type-mono);overflow-wrap:anywhere}
+a{color:var(--ds-brand-text);text-underline-offset:3px}a:hover{color:var(--ds-brand)}
+.lead{color:var(--ds-fg-muted);margin-bottom:24px}
+.scene{padding:24px;background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
+.speed-chart path[stroke="var(--ds-series-2)"]{stroke-dasharray:6 4}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.choices{display:grid;grid-template-columns:160px minmax(0,1fr);margin:0}
+.choices dt,.choices dd{padding:12px 0;border-bottom:1px solid var(--ds-divider)}.choices dt{font:var(--ds-type-body-strong)}.choices dd{margin:0}
+.rules{padding-left:20px;max-width:74ch;margin:24px 0 0}.rules li+li{margin-top:12px}
+summary{cursor:pointer;font:var(--ds-type-ui);padding:10px 12px;border:1px solid var(--ds-border-field);border-radius:var(--ds-radius-md);background:var(--ds-surface)}
+summary:hover{background:var(--ds-surface-hover)}summary:focus-visible,a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+details{margin-top:24px}details>div{margin-top:24px}.reference-content{display:grid;gap:24px}
+@media(max-width:640px){main{padding:20px 0}.choices{grid-template-columns:minmax(0,1fr)}.scene{padding:16px}.choices dt{border:0;padding-bottom:4px}.choices dd{padding-top:0}}
+
+.palette{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:16px}.swatch{height:32px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-sm);margin-bottom:8px}
+.table-scroll{overflow-x:auto;margin-top:16px}table{border-collapse:collapse;width:100%;font:var(--ds-type-mono)}th,td{padding:8px;border-bottom:1px solid var(--ds-divider);text-align:right;white-space:nowrap}th{font:var(--ds-type-caption);color:var(--ds-fg-muted)}th:first-child,td:first-child{text-align:left}
+@media(max-width:640px){.palette{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head>
+<body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="in-interface"><h2 id="in-interface" tabindex="-1">График в приложении</h2>
+<p class="lead">ECharts отвечает за построение и взаимодействие. Дизайн-система предоставляет токены и адаптер <code>dsEChartsTheme()</code>.</p>
+<p class="caption" style="margin-bottom:12px">Легенда работает мышью и клавишами Enter и Пробел. Наведите курсор на график, чтобы увидеть значения.</p>
+<div class="scene" id="ready-interface"></div><p class="caption" style="margin-top:12px">В 11:00 нет данных МАЗ — линия прерывается.</p>
+<details id="chart-data"><summary>Показать данные графика</summary><div class="table-scroll"><table><caption>Скорость объектов, км/ч</caption><thead><tr><th scope="col">Время</th><th scope="col">МАЗ 5440</th><th scope="col">Volvo FH16</th></tr></thead><tbody id="data-rows"></tbody></table></div></details></section>
+<section aria-labelledby="responsibility"><h2 id="responsibility" tabindex="-1">Как подключить</h2><ol class="rules">
+<li><strong>Подготовьте контейнер.</strong> Выделите графику место и задайте высоту.</li>
+<li><strong>Подключите оформление.</strong> Адаптер дизайн-системы задаст палитру, шрифты, оси, сетку и подсказку.</li>
+<li><strong>Передайте данные.</strong> Укажите серии, единицы измерения и шкалу. Рядом предоставьте таблицу точных значений.</li>
+</ol><p style="margin-top:16px">Полный код показанного графика — в разделе «Код этого примера» ниже.</p></section>
+<section aria-labelledby="legend"><h2 id="legend" tabindex="-1">Легенда</h2><p>Нажатие на название скрывает или возвращает линию. Скрытая серия остаётся в легенде, чтобы её можно было включить снова. Цвет объекта сохраняется при переключении.</p><p>В примере кнопки доступны с клавиатуры: Tab переводит фокус, Enter и Пробел переключают серию.</p>
+<details id="legend-details"><summary>Как связать легенду с ECharts</summary><div><p>Обычная легенда настраивается через <code>legend</code>. Здесь используется внешняя HTML-легенда: кнопки с <code>aria-pressed</code> вызывают <code>dispatchAction({type: 'legendToggleSelect', name})</code>, встроенная легенда скрыта. При нескольких способах управления синхронизируйте состояние через <code>legendselectchanged</code>.</p></div></details></section>
+<section aria-labelledby="tooltip"><h2 id="tooltip" tabindex="-1">Подсказка</h2><p>При наведении показывайте время и значения видимых серий с единицами измерения. Различайте пропуск и ноль. Подсказка должна помещаться внутри графика.</p><p>Таблица под графиком позволяет прочитать точные значения с клавиатуры и без наведения.</p>
+<details id="tooltip-details"><summary>Как настроить подсказку</summary><div><p>Используйте <code>tooltip</code> с <code>trigger: 'axis'</code>, <code>confine: true</code> и оформлением адаптера. Единицы добавляйте через <code>valueFormatter</code>. В собственном HTML-форматировании экранируйте значения из данных.</p></div></details></section>
+<section aria-labelledby="lifecycle"><h2 id="lifecycle" tabindex="-1">Тема, размер и состояния</h2><ul class="rules">
+<li>Задайте контейнеру высоту до <code>echarts.init()</code>. Следите за его размером через <code>ResizeObserver</code> и вызывайте <code>chart.resize()</code>.</li>
+<li>При изменении темы, оформления или плотности на контейнере либо его предках заново читайте адаптер. Сохраняйте выбранные серии и диапазон масштаба.</li>
+<li>При загрузке показывайте скелетон, при пустом наборе — понятное сообщение. При удалении графика отключайте наблюдателей и вызывайте <code>chart.dispose()</code>.</li>
+</ul><details><summary>Совместимость с прежними компонентами</summary><div><p>DsChart, DsChartLegend и DsChartTooltip сохранены в публичных экспортах для существующих экранов. Для новых графиков используйте ECharts. Легенда и подсказка больше не представлены как самостоятельные страницы каталога.</p></div></details></section>
+</main><script src="../../../node_modules/echarts/dist/echarts.min.js"></script><script src="../src/components/charts/echartsTheme.js"></script><script src="echarts-example.js"></script></body></html>

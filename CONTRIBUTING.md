@@ -1,7 +1,7 @@
 # Contributing
 
-Start with the relevant [design rules](docs/design.md) and component card.
-Consumer setup belongs in [the usage guide](docs/usage.md); this file describes
+Start with the relevant [design rules](design-system/docs/design.md) and component card.
+Consumer setup belongs in [the usage guide](design-system/docs/usage.md); this file describes
 changes to the design system itself.
 
 Angular UI kit development follows [its component rules](ng-ui-kit/docs/development.md).
@@ -22,12 +22,13 @@ The catalogue runs at http://127.0.0.1:5173 and rebuilds when sources change.
 
 | Source | Purpose |
 |---|---|
-| `tokens/source.json` | Token values, roles and scopes; follow the [naming rules](docs/tokens.md) |
-| `styles/` | Shared styles |
-| `components/src/` | Component implementations |
+| `design-system/tokens/source.json` | Token values, roles and scopes; follow the [naming rules](design-system/docs/tokens.md) |
+| `design-system/styles/` | Shared styles |
+| `design-system/components/src/` | Component implementations |
 | `ng-ui-kit/src/` | Angular integration and future standalone UI components |
-| `components/<Name>/` | Declarations, README and preview with `@dsCard` metadata |
-| `docs/` | Usage, design, token naming, migration and release guides |
+| `design-system/components/<Name>/` | Declarations, README and preview with `@dsCard` metadata |
+| `design-system/docs/` | Usage, design, token naming and migration guides |
+| `docs/` | Release guide and implementation plans |
 
 The catalogue discovers previews automatically and derives API props from public
 sources and declarations. A prop change updates the implementation, `.d.ts` and
@@ -53,9 +54,9 @@ For Angular alone: `mise exec -- npm run build`, then
 `mise exec -- npm run check:angular` to check the built tarball.
 `npm run check:names` checks token names, ladders, status slots and uniqueness.
 
-For every affected example, apply the [screen acceptance criteria](docs/usage.md#приёмка-экрана):
+For every affected example, apply the [screen acceptance criteria](design-system/docs/usage.md#приёмка-экрана):
 four theme/appearance/density combinations, AXE, keyboard focus and loading states.
-Use the [copy rules](docs/design.md#язык-и-тексты) as well.
+Use the [copy rules](design-system/docs/design.md#язык-и-тексты) as well.
 
 ## Dependency security
 
@@ -124,7 +125,7 @@ Follow [versions and publishing](docs/release.md). Agent restrictions are in
 
 ## Documentation
 
-New and reworked component pages follow the [component page standard](docs/component-pages.md),
+New and reworked component pages follow the [component page standard](design-system/docs/component-pages.md),
 with `DsCheckbox` as the reference and `layout="component"` in `@dsCard`.
 The shared catalogue renders examples, usage, one code example, generated props
 and component tokens on the same page. Do not duplicate API tables in README files.
@@ -135,5 +136,5 @@ generated API pages show checked props. Keep guide links and package documentati
 in sync when moving files.
 
 Completed plans live in `docs/plans/` and `docs/superpowers/`; migration notes are
-in `assets/notes/`. The historical presentation is in `templates/leadership-deck/`.
+in `design-system/assets/notes/`. The historical presentation is in `design-system/templates/leadership-deck/`.
 These record past decisions; current instructions are the guides linked above.

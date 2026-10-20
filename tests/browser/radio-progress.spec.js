@@ -9,7 +9,7 @@ test.afterAll(async()=>{served?.server.closeAllConnections();if(served)await new
 const scopes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
 for(const [theme,appearance,density] of scopes)test(`radio and progress preserve native interaction and narrow layout: ${theme}/${appearance}/${density}`,async({page})=>{
   await page.setViewportSize({width:390,height:844});
-  await page.goto(served.url+'/components/DsRadioGroup/preview.html?'+new URLSearchParams({theme,appearance,density}));
+  await page.goto(served.url+'/design-system/components/DsRadioGroup/preview.html?'+new URLSearchParams({theme,appearance,density}));
   const basic=page.locator('section[aria-labelledby="basic"]');
   await expect(basic.getByRole('radio',{name:'Только важные'})).toBeChecked();
   await basic.getByRole('radio',{name:'Только важные'}).focus();await page.keyboard.press('ArrowDown');
@@ -25,7 +25,7 @@ for(const [theme,appearance,density] of scopes)test(`radio and progress preserve
   await expect(form.getByRole('status')).toHaveText('');
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
   expect((await new AxeBuilder({page}).include('[data-ds-example-demo]').analyze()).violations).toEqual([]);
-  await page.goto(served.url+'/components/DsProgressBar/preview.html?'+new URLSearchParams({theme,appearance,density}));
+  await page.goto(served.url+'/design-system/components/DsProgressBar/preview.html?'+new URLSearchParams({theme,appearance,density}));
   const bar=page.getByRole('progressbar',{name:'Экспорт объектов',exact:true});
   await expect(bar).toHaveAttribute('aria-valuenow','0');
   await page.getByRole('button',{name:'Начать экспорт'}).click();

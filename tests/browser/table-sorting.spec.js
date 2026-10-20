@@ -45,7 +45,7 @@ test('table owns sorting guidance and legacy links preserve preview settings',as
       await page.screenshot({path:testInfo.outputPath(`sorting-${theme}-${appearance}.png`),fullPage:true});
       await page.setViewportSize({width:1440,height:1000});
     }
-    await page.goto(`${served.url}/components/DsSorting/preview.html?theme=RED2&appearance=dark&density=compact`);
+    await page.goto(`${served.url}/design-system/components/DsSorting/preview.html?theme=RED2&appearance=dark&density=compact`);
     await expect(page.locator('#title')).toHaveText('Table');
     await expect(page.locator('#theme')).toContainText('RED2');
     await expect(page.locator('#appearance')).toContainText('Тёмное');

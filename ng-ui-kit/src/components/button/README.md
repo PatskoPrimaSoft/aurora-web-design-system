@@ -1,9 +1,9 @@
 # DsButtonComponent
 
 Standalone-кнопка для Angular 19.2.25 и 20.3.34. Общие правила применения и тоны —
-в [карточке DsButton](../../../../components/DsButton/README.md).
+в [карточке DsButton](../../../../design-system/components/DsButton/README.md).
 
-Подключите пакетный `styles.css` и `provideAurora` по [руководству](../../../../docs/usage.md).
+Подключите пакетный `styles.css` и `provideAurora` по [руководству](../../../../design-system/docs/usage.md).
 Компонент импортируется из `@primasoftllc/design-system/angular` и применяется
 к нативному `<button>`. Вложенные интерактивные элементы в подписи недопустимы.
 

@@ -5,6 +5,9 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ## [Unreleased]
 
+- Исходники основ, React-компонентов, каталога и руководств собраны в
+  `design-system/` рядом с `ng-ui-kit/`; публичные пути npm-пакета сохранены сборкой.
+
 - Исходники, документация и проверки Angular UI kit собраны в `ng-ui-kit/`.
   Публичные импорты и совместимые пути пакета сохранены.
 
@@ -448,7 +451,7 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 - Документация объединена по задачам: краткий README ведёт к подключению,
   дизайн-правилам и разработке. Руководства находятся в `docs/`; в корне осталось
   пять MD-файлов. В npm-пакете инструкции подключения, Angular, линтера и миграции
-  теперь доступны как `docs/usage.md` и `docs/migration.md`.
+  теперь доступны как `design-system/docs/usage.md` и `design-system/docs/migration.md`.
 
 - Каталог группирует семейства, ищет по именам, aliases, описаниям и props;
   сохраняет выбранные скоупы в URL и сравнивает четыре режима без изменения
@@ -465,7 +468,7 @@ Policy: [Versions and publishing](docs/release.md#versioning).
   Базовое подключение обходится без ECharts и алиаса TypeScript; провайдер выставляет
   скоупы при bootstrap. Старые пути адаптеров, сервис, InjectionToken и SCSS сохранены.
   Три независимых приложения проверяют production AOT и поведение установленного tarball.
-  Инструкция подключения сведена в [docs/usage.md](docs/usage.md).
+  Инструкция подключения сведена в [docs/usage.md](design-system/docs/usage.md).
 
 - Токены и стили генерируются из одной модели в репозитории, React-превью и UI-тесты
   собираются из актуальных исходников. `npm run dev` запускает локальный каталог
@@ -494,8 +497,8 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 - Пакет называется `@nikolaynn/design-system` и ставится из GitHub Packages
   (`@nikolaynn:registry=https://npm.pkg.github.com`). `styles.css` и `tokens.css` — собранные файлы из `dist/`
-  (`@nikolaynn/design-system/styles.css`, `…/tokens.css`), а не `components/bundle.css` и корневой `tokens.css`.
-  Angular-слой подключается алиасом `@nikolaynn/design-system/angular` в `tsconfig.json` (templates/angular/README.md).
+  (`@nikolaynn/design-system/styles.css`, `…/tokens.css`), а не `design-system/components/bundle.css` и корневой `tokens.css`.
+  Angular-слой подключается алиасом `@nikolaynn/design-system/angular` в `tsconfig.json` (design-system/templates/angular/README.md).
 - `react`, `react-dom` — необязательные peer-зависимости: приложению на Angular они не нужны.
 - `DsTable`: `onToggleAll` устарел — `onToggleVisible(visibleIds, next)`.
   Старый проп работает (получает `next`) и пишет одно предупреждение в консоль.
@@ -522,7 +525,7 @@ Policy: [Versions and publishing](docs/release.md#versioning).
   оставалось синим в теме RED2.
 
 - Значения плотности `compact` (28 токенов) перенесены в `tokens.json`, тема
-  `ds-density-compact`. До этого они жили только в `components/bundle.css`, и
+  `ds-density-compact`. До этого они жили только в `design-system/components/bundle.css`, и
   правка размера в редакторе токенов меняла cozy, но не compact.
 - Приложения подключают `dist/styles.css`, собранный в репозитории из
   `tokens.css` (`ANGULAR.md`). Темы, светлость и плотность в нём адресуются
@@ -602,11 +605,11 @@ Policy: [Versions and publishing](docs/release.md#versioning).
   проверив. Прямой запуск определяет `isDirectRun` по путям файловой системы.
 - `lint/tokens.allowed.json` разошёлся с `tokens.json` (не было `--ds-map-ground`,
   `--ds-map-point`); пересобран.
-- Поставка после миграции: `overview.html` ссылался на несуществующие
+- Поставка после миграции: `design-system/overview.html` ссылался на несуществующие
   `styles.css`, `_ds_bundle.js` и 38 страниц `guidelines/v2-*.html`; шесть
   preview ссылались на старые имена страниц. Ссылки ведут на
-  `components/<Имя>/preview.html`, подключения — на `tokens.css`,
-  `tokens/scoped.css`, `components/bundle.*`. Упоминания `v2-` в действующих
+  `design-system/components/<Имя>/preview.html`, подключения — на `tokens.css`,
+  `design-system/tokens/scoped.css`, `design-system/components/bundle.*`. Упоминания `v2-` в действующих
   файлах заменены.
 - `docs/_ds_bundle.js` и `docs/_ds_manifest.json` со старыми именами `V2*`
   выведены из поставки. Хранилище артефакта не удаляет файлы, поэтому оба
@@ -625,8 +628,8 @@ Policy: [Versions and publishing](docs/release.md#versioning).
   `--ds-fg-action-on-inverse`.
 - Проверка контраста токенов во всех наборах (`lint/lib/contrast.js`,
   `lint/test/run.js`) и тест `tests/a11y-tokens.test.js` на собранном бандле.
-- `tokens/scoped.css` — цветовые наборы на `data-ds-theme` / `data-ds-appearance`
-  для страниц вне каталога (`overview.html`, выгруженная поставка): в `tokens.css`
+- `design-system/tokens/scoped.css` — цветовые наборы на `data-ds-theme` / `data-ds-appearance`
+  для страниц вне каталога (`design-system/overview.html`, выгруженная поставка): в `tokens.css`
   артефакта наборы адресованы атрибутом рамки. Собирается
   `lint/scripts/build-scoped-tokens.js`; расхождение ловит `lint/test/run.js`.
 - `lint/scripts/check-delivery.js` — проверка поставки: старые идентификаторы
@@ -643,7 +646,7 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 ## [1.1.0] — 2026-09-17
 
 ### Added
-- `templates/angular/` — the Angular consumption layer: `AuroraThemeService` (the three
+- `design-system/templates/angular/` — the Angular consumption layer: `AuroraThemeService` (the three
   scopes on `<body>`, appearance and density persisted), `[auroraScope]` for
   per-subtree overrides, a typed ECharts bridge with a scope watcher,
   `_aurora.scss` mixins, and an `ng-package.json` for building it as a library.
@@ -668,7 +671,7 @@ First tagged release. Extracted from the design tool into this repository.
   `data-ds-theme` / `data-ds-appearance` / `data-ds-density`.
 - 44 React components across `primitives`, `buttons`, `forms`, `data`, `feedback`,
   `charts`, `layout`, `navigation` — each with a `.d.ts` contract.
-- `components/charts/echartsTheme.js` — the token → `EChartsOption` bridge.
+- `design-system/components/charts/echartsTheme.js` — the token → `EChartsOption` bridge.
 - Guideline cards, the two reference screens (`ui_kits/`) and the empty shell
   (`copy-a-screen/`).
 - `readme.md` (the system), `MIGRATION.md` (old Angular name → system name),
@@ -676,4 +679,4 @@ First tagged release. Extracted from the design tool into this repository.
 
 ### Removed
 - The v1 legacy recreation (`--color-*` tokens, `Button`/`FormField`/`Card`, the two
-  portal recreations) and the three `templates/` folders — September 2026.
+  portal recreations) and the three `design-system/templates/` folders — September 2026.

@@ -11,7 +11,7 @@ test.beforeAll(async()=>{await buildCatalogue({root,outDir:root+'/.tmp/foundatio
 test.afterAll(async()=>{served?.server.closeAllConnections();if(served)await new Promise(r=>served.server.close(r));});
 async function fixture(page,scope,kind){
   const [theme,appearance,density]=scope;
-  await page.goto(`${served.url}/components/DsButton/preview.html?theme=${theme}&appearance=${appearance}&density=${density}`);
+  await page.goto(`${served.url}/design-system/components/DsButton/preview.html?theme=${theme}&appearance=${appearance}&density=${density}`);
   await page.locator('#root button').first().waitFor();
   await page.evaluate(({kind,scope})=>{
     const h=React.createElement,S=window.AuroraWebDesignSystem_96e210;

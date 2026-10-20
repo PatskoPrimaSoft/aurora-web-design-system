@@ -9,7 +9,7 @@ test.beforeAll(async()=>{served=await serveRoot(fileURLToPath(new URL('../../sit
 test.afterAll(async()=>{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));});
 
 test('navigation exports exist before the catalogue examples mount',async({page})=>{
-  await page.goto(served.url+'/components/DsCheckbox/preview.html');
+  await page.goto(served.url+'/design-system/components/DsCheckbox/preview.html');
   await expect.poll(()=>page.evaluate(()=>{
     const S=window.AuroraWebDesignSystem_96e210;
     return ['DsLink','DsBreadcrumbs'].filter(name=>!!S?.[name]);
@@ -17,10 +17,10 @@ test('navigation exports exist before the catalogue examples mount',async({page}
 });
 
 test('links preserve native navigation, download, modified clicks and external safety',async({page})=>{
-  await page.goto(served.url+'/components/DsLink/preview.html');
+  await page.goto(served.url+'/design-system/components/DsLink/preview.html');
   const link=exampleDemo(page,'Переход внутри страницы').getByRole('link',{name:'К настройкам уведомлений'});
   await expect(link).toHaveAttribute('href',/\/components\/DsLink\/preview\.html#notification-settings$/);
-  expect(await link.evaluate(element=>new URL(element.href).pathname)).toBe('/components/DsLink/preview.html');
+  expect(await link.evaluate(element=>new URL(element.href).pathname)).toBe('/design-system/components/DsLink/preview.html');
   await link.focus();await expect(link).toHaveCSS('outline-style','solid');
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#notification-settings$/);
@@ -59,7 +59,7 @@ test('links and breadcrumbs wrap, retain semantics and work in four modes',async
     await expect(nav.locator('a[aria-current]')).toHaveCount(0);
     await expect(nav.locator('[data-ds-breadcrumb-separator][aria-hidden="true"]')).toHaveCount(2);
     const parent=nav.getByRole('link',{name:'Автопарк',exact:true});
-    expect(await parent.evaluate(element=>new URL(element.href).pathname)).toBe('/components/DsBreadcrumbs/preview.html');
+    expect(await parent.evaluate(element=>new URL(element.href).pathname)).toBe('/design-system/components/DsBreadcrumbs/preview.html');
     await parent.focus();
     await page.keyboard.press('Enter');
     await expect.poll(()=>frame.locator('body').evaluate(()=>location.hash)).toBe('#fleet-destination');
@@ -70,7 +70,7 @@ test('links and breadcrumbs wrap, retain semantics and work in four modes',async
 });
 
 test('breadcrumbs use the translated accessible name',async({page})=>{
-  await page.goto(served.url+'/components/DsBreadcrumbs/preview.html');
+  await page.goto(served.url+'/design-system/components/DsBreadcrumbs/preview.html');
   await page.evaluate(()=>{
     const S=window.AuroraWebDesignSystem_96e210,h=React.createElement;
     document.body.innerHTML='<main id="fixture"></main>';

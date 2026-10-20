@@ -252,7 +252,7 @@ const cliCases = [];
   const cfg = JSON.parse(readFileSync(fileURLToPath(new URL('../naming.config.json', import.meta.url)), 'utf8'));
   const root = fileURLToPath(new URL('../..', import.meta.url));
   const read = (f) => readFileSync(join(root, f), 'utf8');
-  const bundleCss = read('components/bundle.css'), tokensCss = read('tokens.css'), bundleJs = read('components/bundle.js');
+  const bundleCss = read('design-system/components/bundle.css'), tokensCss = read('tokens.css'), bundleJs = read('design-system/components/bundle.js');
   for (const { old, new: next } of cfg.aliases ?? []) {
     const decl = new RegExp('--' + old + ':\\s*([^;]+);', 'g');
     const values = [...(bundleCss + tokensCss).matchAll(decl)].map((m) => m[1].trim());
@@ -263,12 +263,12 @@ const cliCases = [];
   }
 }
 
-// Поставка: tokens/scoped.css собран из текущего tokens.css.
+// Поставка: design-system/tokens/scoped.css собран из текущего tokens.css.
 {
   const fresh = buildScopedTokens(readFileSync(tokensCssPath, 'utf8'));
   let onDisk = '';
   try { onDisk = readFileSync(scopedCssPath, 'utf8'); } catch {}
-  cliCases.push({ title: 'tokens/scoped.css совпадает с tokens.css', ok: fresh === onDisk,
+  cliCases.push({ title: 'design-system/tokens/scoped.css совпадает с tokens.css', ok: fresh === onDisk,
     got: 'разошёлся — запустите node lint/scripts/build-scoped-tokens.js' });
 }
 
@@ -276,25 +276,25 @@ const cliCases = [];
 {
   const root = mkdtempSync(join(tmpdir(), 'aurora поставка '));
   try {
-    mkdirSync(join(root, 'components', 'A'), { recursive: true });
-    mkdirSync(join(root, 'components', 'B'), { recursive: true });
-    mkdirSync(join(root, 'assets', 'notes'), { recursive: true });
-    writeFileSync(join(root, 'components', 'B', 'preview.html'), '<p>ok</p>');
-    writeFileSync(join(root, 'components', 'A', 'preview.html'),
+    mkdirSync(join(root, 'design-system/components', 'A'), { recursive: true });
+    mkdirSync(join(root, 'design-system/components', 'B'), { recursive: true });
+    mkdirSync(join(root, 'design-system/assets', 'notes'), { recursive: true });
+    writeFileSync(join(root, 'design-system/components', 'B', 'preview.html'), '<p>ok</p>');
+    writeFileSync(join(root, 'design-system/components', 'A', 'preview.html'),
       '<a href="../B/preview.html">ok</a><a href="./gone.html">x</a><a href="https://e.x/">ext</a>' +
       '<img src="\'+src+\'"><script src="../../' + '_ds_' + 'bundle.js"></script>');
-    writeFileSync(join(root, 'components', 'A', 'x.js'), 'window.NS.' + 'V2' + 'Button; var(--' + 'v2-gap);');
-    mkdirSync(join(root, 'components', 'assets'), { recursive: true });
-    writeFileSync(join(root, 'components', 'assets', 'logo.png'), 'x');
-    mkdirSync(join(root, 'components', 'C'), { recursive: true });
-    writeFileSync(join(root, 'components', 'C', 'preview.html'),
+    writeFileSync(join(root, 'design-system/components', 'A', 'x.js'), 'window.NS.' + 'V2' + 'Button; var(--' + 'v2-gap);');
+    mkdirSync(join(root, 'design-system/components', 'assets'), { recursive: true });
+    writeFileSync(join(root, 'design-system/components', 'assets', 'logo.png'), 'x');
+    mkdirSync(join(root, 'design-system/components', 'C'), { recursive: true });
+    writeFileSync(join(root, 'design-system/components', 'C', 'preview.html'),
       '<img src="../assets/logo.png"><img src="data:image/png;base64,AA=="><script>h(X,{logoSrc:"../assets/logo.png"})</script>');
-    writeFileSync(join(root, 'assets', 'notes', 'history.js'), 'V2' + 'Table');
+    writeFileSync(join(root, 'design-system/assets', 'notes', 'history.js'), 'V2' + 'Table');
     writeFileSync(join(root, 'README.md'), 'V2' + 'Table в прозе не проверяется');
     const got = checkDelivery(root).map((p) => `${p.file}:${p.code}`).sort();
     const want = [
-      'components/A/preview.html:broken-link', 'components/A/preview.html:broken-link',
-      'components/A/preview.html:legacy', 'components/A/x.js:legacy', 'components/A/x.js:legacy',
+      'design-system/components/A/preview.html:broken-link', 'design-system/components/A/preview.html:broken-link',
+      'design-system/components/A/preview.html:legacy', 'design-system/components/A/x.js:legacy', 'design-system/components/A/x.js:legacy',
     ].sort();
     cliCases.push({ title: 'поставка: ловит старые имена и битые ссылки; разрешает существующие локальные ресурсы, историю и прозу',
       ok: JSON.stringify(got) === JSON.stringify(want), got: JSON.stringify(got) });
@@ -306,11 +306,12 @@ const cliCases = [];
 {
   const root = mkdtempSync(join(tmpdir(), 'aurora каталог '));
   try {
-    mkdirSync(join(root, 'site', 'docs'), { recursive: true });
-    writeFileSync(join(root, 'site', 'index.html'), '<p>catalogue</p>');
-    writeFileSync(join(root, 'site', 'docs', 'guide.html'), '<p>guide</p>');
+    mkdirSync(join(root, 'design-system'), { recursive: true });
+    mkdirSync(join(root, 'site', 'design-system', 'docs'), { recursive: true });
+    writeFileSync(join(root, 'site', 'design-system', 'index.html'), '<p>catalogue</p>');
+    writeFileSync(join(root, 'site', 'design-system', 'docs', 'guide.html'), '<p>guide</p>');
     writeFileSync(join(root, 'source-only.html'), '<p>not delivered</p>');
-    writeFileSync(join(root, 'overview.html'),
+    writeFileSync(join(root, 'design-system/overview.html'),
       '<a href="index.html?card=DsButton">component</a>' +
       '<a href="docs/guide.html#usage">guide</a>' +
       '<a href="missing.html">missing</a><a href="source-only.html">not delivered</a>' +

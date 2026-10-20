@@ -141,7 +141,7 @@ test('example link buttons copy the current scope and open the exact example',as
   expect(exampleLink.searchParams.get('theme')).toBe('RED2');
   expect(exampleLink.searchParams.get('appearance')).toBe('dark');
   expect(exampleLink.searchParams.get('density')).toBe('compact');
-  await page.goto(served.url+'/components/DsCheckbox/preview.html?theme=RED2&appearance=dark&density=compact');
+  await page.goto(served.url+'/design-system/components/DsCheckbox/preview.html?theme=RED2&appearance=dark&density=compact');
   await page.getByRole('button',{name:'Копировать ссылку на пример «Обычный выбор»',exact:true}).click();
   await expect(page.locator('.example-link-status').first()).toHaveText('Ссылка скопирована');
   const standalone=new URL(await page.evaluate(()=>navigator.clipboard.readText()));
@@ -149,7 +149,7 @@ test('example link buttons copy the current scope and open the exact example',as
   expect(standalone.searchParams.get('card')).toBe('DsCheckbox');
   expect(standalone.searchParams.get('appearance')).toBe('dark');
   expect(standalone.hash).toBe('#example-basic-example');
-  await page.goto(served.url+'/components/DsCheckbox/preview.html');
+  await page.goto(served.url+'/design-system/components/DsCheckbox/preview.html');
   await page.locator('html').evaluate(node=>{for(const name of ['theme','appearance','density'])node.removeAttribute('data-ds-'+name);});
   await page.getByRole('button',{name:'Копировать ссылку на пример «Обычный выбор»',exact:true}).click();
   await expect(page.locator('.example-link-status').first()).toHaveText('Ссылка скопирована');
@@ -181,7 +181,7 @@ test('each live example has collapsible highlighted code that copies its source 
   await page.goto(served.url+'/index.html?card=DsCheckbox');
   const preview=page.frameLocator('#preview');
   await expect(preview.locator('.example-code')).toHaveCount(6);
-  const sources=JSON.parse(readFileSync(root+'/components/DsCheckbox/examples.json','utf8'));
+  const sources=JSON.parse(readFileSync(root+'/design-system/components/DsCheckbox/examples.json','utf8'));
   for(const [id,source]of Object.entries(sources)){
     const example=preview.locator('section').filter({has:preview.locator('#'+id)});
     const disclosure=example.locator('.example-code summary');
@@ -211,7 +211,7 @@ test('each live example has collapsible highlighted code that copies its source 
   expect(await preview.locator('body').evaluate(node=>node.scrollWidth)).toBeLessThanOrEqual(350);
   await first.locator('pre').focus();await expect(first.locator('pre')).toBeFocused();
   await page.screenshot({path:testInfo.outputPath('example-code-mobile.png')});
-  await page.goto(served.url+'/components/DsCheckbox/preview.html');
+  await page.goto(served.url+'/design-system/components/DsCheckbox/preview.html');
   await page.locator('.example-code summary').first().click();
   await expect(page.locator('.example-code pre').first()).toBeVisible();
 });
@@ -233,7 +233,7 @@ test('copy writes the exact highlighted source, including whitespace, to the cli
   await page.goto(served.url+'/index.html?card=DsCheckbox');
   const block=page.locator('.code-block').first();
   await expect(block).toBeVisible();
-  const expected=readFileSync(root+'/components/DsCheckbox/README.md','utf8').match(/```jsx\r?\n([\s\S]*?)```/)[1].replaceAll('\r\n','\n');
+  const expected=readFileSync(root+'/design-system/components/DsCheckbox/README.md','utf8').match(/```jsx\r?\n([\s\S]*?)```/)[1].replaceAll('\r\n','\n');
   expect(await block.locator('code').textContent()).toBe(expected);
   expect(await block.locator('code span').count()).toBeGreaterThan(0);
   await block.getByRole('button',{name:'Копировать код',exact:true}).click();

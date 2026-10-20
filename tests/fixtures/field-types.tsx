@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {DsField,DsFieldProps} from '../../components/DsField/DsField';
+import {DsField,DsFieldProps} from '../../design-system/components/DsField/DsField';
 const input=React.createRef<HTMLInputElement>();
 const select=React.createRef<HTMLSelectElement>();
 const textarea=React.createRef<HTMLTextAreaElement>();

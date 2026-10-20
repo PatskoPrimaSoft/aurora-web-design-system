@@ -63,7 +63,7 @@ test('ECharts integration preserves series selection, theme, sizing and legacy r
     for(let i=0;i<1;i++)await expect(page.frameLocator('#preview').locator('#echarts-plot svg')).toHaveCount(1);
     for(const name of ['DsSparkline','DsScoreBar'])await expect(page.locator('nav a[data-id="'+name+'"]')).toHaveCount(1);
     // Execute the copyable documentation as a consumer, independently of the preview script.
-    const readme=readFileSync(root+'/components/DsChart/README.md','utf8');
+    const readme=readFileSync(root+'/design-system/components/DsChart/README.md','utf8');
     const markup=readme.match(/```html\n([\s\S]*?)\n```/)[1];
     const source=readme.match(/```js\n([\s\S]*?)\n```/)[1];
     const bundle=await build({stdin:{contents:source,resolveDir:root,loader:'js'},bundle:true,write:false,format:'iife',loader:{'.css':'empty'}});

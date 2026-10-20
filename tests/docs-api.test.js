@@ -10,7 +10,7 @@ import {readTokenModel} from '../tools/tokens/model.mjs';
 import {JSDOM} from 'jsdom';
 const fixture=fileURLToPath(new URL('./fixtures/api/',import.meta.url));
 const api=extractApi({root:fixture}),demo=api.find(c=>c.name==='DsDemo');
-assert.equal(api.length,3,'helpers must not become components');
+assert.equal(api.length,3,'helpers must not become design-system/components');
 assert.equal(api.find(c=>c.name==='DsArrow').props[0].type,'number');
 assert.equal(demo.forwardsNativeAttributes,true);
 assert.equal(demo.props.find(p=>p.name==='tone').defaultValue,"'primary'");
@@ -28,12 +28,12 @@ for(const [transform,expected] of [
  [s=>s.replace('/** Цветовой вариант. */',"/** @default 'secondary' */"),/DsDemo.*tone.*default/],
 ]){
  const root=mkdtempSync(join(tmpdir(),'aurora-api-'));
- try{copy(fixture,root);const path=join(root,'components/Contracts/Contracts.d.ts');writeFileSync(path,transform(readFileSync(path,'utf8')));assert.throws(()=>extractApi({root}),expected);}finally{rmSync(root,{recursive:true,force:true});}
+ try{copy(fixture,root);const path=join(root,'design-system/components/Contracts/Contracts.d.ts');writeFileSync(path,transform(readFileSync(path,'utf8')));assert.throws(()=>extractApi({root}),expected);}finally{rmSync(root,{recursive:true,force:true});}
 }
 const actualRoot=fileURLToPath(new URL('../',import.meta.url)),actual=extractApi({root:actualRoot});
 assert.ok(!actual.some(c=>c.name==='DsHeaderChip'));
 assert.ok(!actual.find(c=>c.name==='DsAppHeader').props.some(p=>p.name==='user'));
-assert.equal(actual.find(c=>c.name==='DsCheckbox').declarationPath,'components/DsCheckbox/DsCheckbox.d.ts');
+assert.equal(actual.find(c=>c.name==='DsCheckbox').declarationPath,'design-system/components/DsCheckbox/DsCheckbox.d.ts');
 assert.ok(!actual.some(c=>['DsCheck','DsCheckButton','DsSelectBox'].includes(c.name)));
 assert.ok(actual.find(c=>c.name==='DsTabPanel').props.some(p=>p.name==='idBase'));
 assert.equal(actual.find(c=>c.name==='DsField').forwardsNativeAttributes,true);
@@ -78,7 +78,7 @@ try{
  assert.ok(folded.querySelector('details pre code'));
  assert.equal(folded.querySelector('[onclick],img'),null);
 }finally{rmSync(scratch,{recursive:true,force:true});}
-const model=readTokenModel(JSON.parse(readFileSync(join(actualRoot,'tokens/source.json'),'utf8'))),reference=renderTokenReference(model);
+const model=readTokenModel(JSON.parse(readFileSync(join(actualRoot,'design-system/tokens/source.json'),'utf8'))),reference=renderTokenReference(model);
 assert.equal(reference.entries.length,model.names.length);assert.deepEqual(reference.entries.find(e=>e.name==='--ds-brand').aliases,model.aliases['--ds-brand']);
 const tokenDocument=new JSDOM(reference.html).window.document;
 assert.equal(tokenDocument.querySelectorAll('[data-token-row]').length,model.names.length,'all public tokens remain available');

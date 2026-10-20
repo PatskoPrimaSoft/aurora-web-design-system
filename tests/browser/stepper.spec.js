@@ -42,7 +42,7 @@ test('DsStepper keeps the current step visible without scrolling the page or ste
  const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));
  try{
   await page.setViewportSize({width:390,height:700});
-  await page.goto(served.url+'/components/DsStepper/preview.html');
+  await page.goto(served.url+'/design-system/components/DsStepper/preview.html');
   await page.evaluate(()=>{
    const S=window[Object.keys(window).find(k=>k.startsWith('AuroraWebDesignSystem_'))],h=React.createElement;
    document.body.innerHTML='<div id="scroll-fixture"></div>';

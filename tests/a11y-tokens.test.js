@@ -33,7 +33,7 @@ box = render(h(NS.DsSwitch, { checked: false, label: 'Показывать тр�
 const track = box.querySelector('span[aria-hidden="true"]');
 ok(track.style.border.includes('var(--ds-border-control)') && track.style.background.includes('var(--ds-border-control)'),
   'DsSwitch off: трек — ds-border-control (граница и заливка)');
-ok(!fs.readFileSync(path.join(ROOT, 'components/src/components/forms/DsCheckbox.jsx'), 'utf8').includes('border-field'),
+ok(!fs.readFileSync(path.join(ROOT, 'design-system/components/src/components/forms/DsCheckbox.jsx'), 'utf8').includes('border-field'),
   'DsCheckbox больше не использует ds-border-field');
 
 // №2 — действие в тосте

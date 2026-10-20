@@ -5,16 +5,18 @@ import { readCards } from './index.mjs';
 import { renderPreview } from './preview.mjs';
 import { previewAssets, assetPath, copyAsset } from './assets.mjs';
 import { buildComponents } from '../build-components.mjs';
+import { buildCompatibility } from '../build-compatibility.mjs';
 import { writeTokenOutputs } from '../tokens/build.mjs';
 import {readTokenModel} from '../tokens/model.mjs';
 import {extractApi} from '../docs/api.mjs';
 import {renderMarkdown,renderProps,renderComponentProps,documentPage} from '../docs/markdown.mjs';
 import {renderTokenReference} from '../docs/tokens.mjs';
 import {validateLinks} from '../docs/links.mjs';
-import {cardRedirects} from '../../catalog/state.js';
+import {cardRedirects} from '../../design-system/catalog/state.js';
 const hasInlineDescription = card => card.layout === 'component' || card.id === 'DsChart' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
 export async function buildCatalogue({ root, outDir }) {
   if (resolve(root) === resolve(outDir)) throw new Error('Catalogue output must not replace source root');
+  buildCompatibility({root});
   const cards = readCards(root);
   const css = writeTokenOutputs({ root });
   const api=extractApi({root}),knownRoutes=new Map();
@@ -23,8 +25,8 @@ export async function buildCatalogue({ root, outDir }) {
   for(const card of cards){knownRoutes.set(card.previewPath,'/'+card.previewPath);if(card.readmePath)knownRoutes.set(card.readmePath,hasInlineDescription(card)?`/index.html?card=${card.id}`:`/docs/cards/${card.id}.html`);}
   const redirects=Object.entries(cardRedirects).filter(([,target])=>cards.some(card=>card.id===target));
   for(const[old,target]of redirects){
-    knownRoutes.set(`components/${old}/README.md`,knownRoutes.get(`components/${target}/README.md`)??`/index.html?card=${target}`);
-    knownRoutes.set(`components/${old}/preview.html`,`/index.html?card=${target}`);
+    knownRoutes.set(`design-system/components/${old}/README.md`,knownRoutes.get(`design-system/components/${target}/README.md`)??`/index.html?card=${target}`);
+    knownRoutes.set(`design-system/components/${old}/preview.html`,`/index.html?card=${target}`);
   }
   const apiDescriptions=cards.map(card=>join(dirname(card.previewPath),'API.md')).filter(path=>existsSync(join(root,path)));
   const documents=[...guides,...cards.map(card=>card.readmePath).filter(Boolean),...apiDescriptions],documentAssets=new Set();
@@ -40,7 +42,7 @@ export async function buildCatalogue({ root, outDir }) {
   for(const path of documents.filter(path=>!guides.includes(path)&&knownRoutes.get(path)?.startsWith('/docs/source/'))){const document=renderMarkdown({root,path,knownRoutes});writePage(knownRoutes.get(path).slice(1),documentPage({title:path,html:document.html}));}
   for(const path of documentAssets)if(path){const target=join(outDir,'source',path);mkdirSync(dirname(target),{recursive:true});writeFileSync(target,readFileSync(join(root,path)));}
   for(const doc of api){
-    const card=cards.find(card=>card.id===doc.name)??cards.find(card=>card.id===doc.declarationPath.split('/')[1]);
+    const card=cards.find(card=>card.id===doc.name)??cards.find(card=>card.id===doc.declarationPath.split('/').at(-2));
     const readme=card?.readmePath;
     const markdown=readme?renderMarkdown({root,path:readme,knownRoutes}):null;
     const apiDescription=card?join(dirname(card.previewPath),'API.md'):null;
@@ -50,14 +52,14 @@ export async function buildCatalogue({ root, outDir }) {
     writePage(`api/components/${doc.name}.html`,documentPage({title:doc.name,html:content,back:card?`/index.html?card=${card.id}`:'/index.html'}));
   }
   const reference=renderTokenReference(readTokenModel(css.source));
-  const tokenPage=readFileSync(new URL('../../catalog/index.html',import.meta.url),'utf8')
+  const tokenPage=readFileSync(new URL('../../design-system/catalog/index.html',import.meta.url),'utf8')
     .replace('<title>Aurora Design</title>','<title>Дизайн-токены · Aurora</title>')
     .replace('src="app.js"','src="token-page.js"')
     .replace(/(href|src)="(?![a-z]+:|\/|#)([^"]+)"/g,'$1="/$2"')
     .replace(/<main>[\s\S]*?<\/main>/,'<main><h1>Дизайн-токены</h1>'+reference.html.replace('<script type="module" src="/token-reference.js"></script>','')+'</main>');
   writePage('api/tokens.html',tokenPage);
   for(const card of cards){
-    const contracts=api.filter(doc=>doc.name===card.id||(doc.declarationPath.split('/')[1]===card.id&&!cards.some(own=>own.id===doc.name))).sort((a,b)=>Number(b.name===card.id)-Number(a.name===card.id));
+    const contracts=api.filter(doc=>doc.name===card.id||(doc.declarationPath.split('/').at(-2)===card.id&&!cards.some(own=>own.id===doc.name))).sort((a,b)=>Number(b.name===card.id)-Number(a.name===card.id));
     card.apiPaths=contracts.map(doc=>({name:doc.name,path:`api/components/${doc.name}.html`}));
     if(card.id==='DsChart')card.apiPaths=[];
     if(card.layout==='component'){
@@ -89,7 +91,7 @@ export async function buildCatalogue({ root, outDir }) {
     writeFileSync(join(outDir, card.previewPath), html);
   }
   for(const[old,target]of redirects)for(const[path,destination]of [
-    [`components/${old}/preview.html`,'index.html'],
+    [`design-system/components/${old}/preview.html`,'index.html'],
     [`docs/cards/${old}.html`,`docs/cards/${target}.html`],
     [`api/components/${old}.html`,api.some(doc=>doc.name===target)?`api/components/${target}.html`:'index.html'],
   ]){
@@ -98,9 +100,9 @@ export async function buildCatalogue({ root, outDir }) {
     const href=posix.relative(posix.dirname(path),destination);
     writePage(path,`<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Открыть ${target}</title></head><body><a href="${href}?card=${target}">Открыть ${target}</a><script>const target=new URL(${JSON.stringify(href)},location.href);target.search=location.search;target.searchParams.set('card',${JSON.stringify(target)});location.replace(target.href);</script></body></html>`);
   }
-  for (const path of assets) if (path && !['dist/styles.css', 'components/bundle.js', 'components/lib/react.production.min.js', 'components/lib/react-dom.production.min.js'].includes(path.replaceAll('\\','/'))) copyAsset({ root, outDir, path });
+  for (const path of assets) if (path && !['dist/styles.css', 'design-system/components/bundle.js', 'design-system/components/lib/react.production.min.js', 'design-system/components/lib/react-dom.production.min.js'].includes(path.replaceAll('\\','/'))) copyAsset({ root, outDir, path });
   writeFileSync(join(outDir, 'cards.json'), JSON.stringify(cards, null, 2) + '\n');
-  for (const file of ['index.html', 'app.js', 'styles.css','code-blocks.css','search.js','families.js','state.js','documentation.js','token-reference.css','token-reference.js','token-page.js','shell.js','navigation.js']) writeFileSync(join(outDir, file), readFileSync(new URL(`../../catalog/${file}`, import.meta.url)));
+  for (const file of ['index.html', 'app.js', 'styles.css','code-blocks.css','search.js','families.js','state.js','documentation.js','token-reference.css','token-reference.js','token-page.js','shell.js','navigation.js']) writeFileSync(join(outDir, file), readFileSync(new URL(`../../design-system/catalog/${file}`, import.meta.url)));
   const problems=validateLinks({root,siteRoot:outDir});
   if(problems.length)throw Error(problems.map(p=>`${p.source}: ${p.target}: ${p.reason}`).join('\n'));
   return cards;

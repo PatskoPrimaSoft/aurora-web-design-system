@@ -1,4 +1,4 @@
-"""Собирает шесть woff2 для tokens/webfonts-selfhost.css из вариативных TTF Google Fonts.
+"""Собирает шесть woff2 для design-system/tokens/webfonts-selfhost.css из вариативных TTF Google Fonts.
 
 Разово, результат коммитится. Запуск из корня репозитория:
     python -m venv .tmp/fonts-venv
@@ -10,7 +10,7 @@
     .tmp/fonts-venv/bin/pip install -r tools/fonts/requirements.txt
     .tmp/fonts-venv/bin/python tools/fonts/build_fonts.py          # сборка + проверка
     .tmp/fonts-venv/bin/python tools/fonts/build_fonts.py --verify # только проверка
-Сабсет: латиница + кириллица в одном файле на начертание (assets/fonts/README.md).
+Сабсет: латиница + кириллица в одном файле на начертание (design-system/assets/fonts/README.md).
 """
 import hashlib
 import io
@@ -23,7 +23,7 @@ from fontTools.ttLib import TTFont
 from fontTools.varLib import instancer
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-OUT = ROOT / "assets" / "fonts"
+OUT = ROOT / "design-system" / "assets" / "fonts"
 GF = "https://raw.githubusercontent.com/google/fonts/main/ofl"
 
 FAMILIES = [

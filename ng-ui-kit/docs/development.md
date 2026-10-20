@@ -1,6 +1,6 @@
 # Правила Angular UI kit
 
-[Начало](../README.md) · [Подключение](../../docs/usage.md) · [Дизайн-правила](../../docs/design.md)
+[Начало](../README.md) · [Подключение](../../design-system/docs/usage.md) · [Дизайн-правила](../../design-system/docs/design.md)
 
 UI kit разрабатывается в этом репозитории и поставляется как библиотека через
 `@primasoftllc/design-system/angular`. Приложения устанавливают пакет и импортируют

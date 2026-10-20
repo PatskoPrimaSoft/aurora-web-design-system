@@ -13,3 +13,14 @@ site/
 /components/bundle.js
 /runtime.js
 /components.js
+/design-system/tokens/scoped.css
+/design-system/components/bundle.css
+/design-system/components/bundle.js
+/components/
+/fonts/
+/assets/fonts/
+/templates/angular/
+/docs/usage.md
+/docs/design.md
+/docs/tokens.md
+/docs/migration.md

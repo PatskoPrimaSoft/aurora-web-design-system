@@ -19,8 +19,8 @@ for(const name of ['DsLozenge','DsBulkActionsBar','DsChipGroup','DsListRow','DsC
 dom.window.close();baseline.window.close();
 const fixture=mkdtempSync(join(tmpdir(),'aurora components пробел '));
 try {
- mkdirSync(join(fixture,'components/src'),{recursive:true});
- const src=join(fixture,'components/src/index.js');
+ mkdirSync(join(fixture,'design-system/components/src'),{recursive:true});
+ const src=join(fixture,'design-system/components/src/index.js');
  writeFileSync(src,'import React from "react"; import {createPortal} from "react-dom"; export const sameReact=React; export const samePortal=createPortal; export const label="before";');
  const first=load(await buildComponents({root:fixture,outDir:join(fixture,'out')}));
  assert.equal(first.window.AuroraWebDesignSystem_96e210.sameReact,first.window.React);

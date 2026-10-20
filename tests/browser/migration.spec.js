@@ -30,7 +30,7 @@ test('repeated original renders never accept an intentionally changed preview',a
  const referenceRoot=mkdtempSync(`${root}/.tmp/migration/current-reference-`);
  cpSync(`${root}/site`,referenceRoot,{recursive:true});
  const outDir=`${root}/.tmp/migration/negative-old`;
- const path=`${root}/site/components/Admin/preview.html`,original=readFileSync(path,'utf8');
+ const path=`${root}/site/design-system/components/Admin/preview.html`,original=readFileSync(path,'utf8');
  try{
   await captureCards({browser,root:referenceRoot,cards,mode:'current',outDir});
   writeFileSync(path,original.replace('</head>','<style>#root{opacity:.5!important}</style></head>'));

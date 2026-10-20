@@ -17,10 +17,10 @@ const checker=program.getTypeChecker();
 const symbol=checker.getSymbolAtLocation(program.getSourceFile(join(root,'dist/react/index.d.ts')));
 const declared=checker.getExportsOfModule(symbol).map(s=>s.flags&ts.SymbolFlags.Alias?checker.getAliasedSymbol(s):s).filter(s=>s.flags&ts.SymbolFlags.Value).map(s=>s.name).sort();
 assert.deepEqual(Object.keys(runtime).sort(),declared,'Every runtime export must have a declaration');
-const entry=readFileSync(join(root,'components/src/index.js'),'utf8');
+const entry=readFileSync(join(root,'design-system/components/src/index.js'),'utf8');
 const sourceNames=[];
 for(const [,path] of entry.matchAll(/export \* from '([^']+)'/g)){
-  const source=readFileSync(join(root,'components/src',path),'utf8');
+  const source=readFileSync(join(root,'design-system/components/src',path),'utf8');
   sourceNames.push(...[...source.matchAll(/export (?:function|const) (\w+)/g)].map(m=>m[1]));
   assert.ok(readFileSync(join(root,'dist/react',basename(path,'.jsx')+'.d.ts'),'utf8'));
 }

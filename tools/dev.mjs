@@ -51,7 +51,7 @@ export async function startDev({root,port=5173}){
   }catch{res.writeHead(404);res.end();}
  });
  await new Promise(r=>server.listen(port,'127.0.0.1',r));
- const excluded=/^(?:\.git|node_modules|dist|site|\.tmp|\.worktrees|\.superpowers)(?:\/|$)|^(?:tokens\.json|tokens\.css|tokens\/scoped\.css|components\/bundle\.(?:js|css)|lint\/tokens.allowed.json|runtime\.js|components\.js)$/;
+ const excluded=/^(?:\.git|node_modules|dist|site|\.tmp|\.worktrees|\.superpowers|components|fonts|assets|templates)(?:\/|$)|(?:^|\/)(?:node_modules|\.angular)(?:\/|$)|^(?:tokens\.json|tokens\.css|design-system\/tokens\/scoped\.css|design-system\/components\/bundle\.(?:js|css)|docs\/(?:usage|design|tokens|migration)\.md|lint\/tokens.allowed.json|runtime\.js|components\.js)$/;
  const watcher=watch(root,{recursive:true},(_,filename)=>{if(!filename||closed)return;const name=String(filename).replaceAll('\\','/');if(excluded.test(name))return;clearTimeout(timer);timer=setTimeout(()=>{rebuild().catch(error=>{lastError=error.message;});},80);});
  return{url:`http://127.0.0.1:${server.address().port}`,close:async()=>{closed=true;clearTimeout(timer);watcher.close();while(running)await new Promise(r=>setTimeout(r,20));await new Promise(r=>{server.close(r);server.closeAllConnections();});}};
 }

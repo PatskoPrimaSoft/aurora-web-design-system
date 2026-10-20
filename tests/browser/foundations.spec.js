@@ -118,7 +118,7 @@ test('foundation and map descriptions stay with examples through navigation and 
     await expect(page.locator('#title')).toHaveText('Логотип бренда');
     await expect(description).toBeVisible();
     await expect(page.locator('nav a[data-id="BrandLogoMark"]')).toHaveCount(0);
-    await page.goto(served.url + '/components/BrandLogoMark/preview.html?theme=RED2&appearance=dark');
+    await page.goto(served.url + '/design-system/components/BrandLogoMark/preview.html?theme=RED2&appearance=dark');
     await expect(page.locator('#title')).toHaveText('Логотип бренда');
     await expect(page.locator('#theme')).toContainText('RED2');
     await expect(page.locator('#appearance')).toContainText('Тёмное');

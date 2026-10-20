@@ -102,7 +102,7 @@ Environment `github-pages` должен разрешать master, develop (ру
 
 ## Доступ потребителей
 
-Локальный доступ и настройка CI приложения описаны в [руководстве по использованию](usage.md).
+Локальный доступ и настройка CI приложения описаны в [руководстве по использованию](../design-system/docs/usage.md).
 
 ## Лицензия
 
@@ -111,7 +111,7 @@ Git-эталон в установленном Playwright Chromium и устан
 offline-каталог. `site/`, исходники каталога и инструменты браузерных тестов не
 поставляются потребителю. `prepack` создаёт совместимые файлы из исходников.
 
-`UNLICENSED` — внутренний пакет. Шрифты — SIL OFL 1.1 (`assets/fonts/*/OFL.txt`).
+`UNLICENSED` — внутренний пакет. Шрифты — SIL OFL 1.1 (`design-system/assets/fonts/*/OFL.txt`).
 
 ## Versioning
 
@@ -142,7 +142,7 @@ and reference screens are documentation — they never drive the number alone.
 
 - A colour, size or duration corrected inside an existing token role.
 - A bug fix, an accessibility fix, a contrast fix that keeps the API.
-- Docs, cards, reference screens, `docs/migration.md`.
+- Docs, cards, reference screens, `design-system/docs/migration.md`.
 
 ### Rules
 

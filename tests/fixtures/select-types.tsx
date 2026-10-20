@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {DsSelect,DsSelectProps} from '../../components/DsSelect/DsSelect';
+import {DsSelect,DsSelectProps} from '../../design-system/components/DsSelect/DsSelect';
 const ref=React.createRef<HTMLButtonElement>();
 const props:DsSelectProps={label:'Group',options:['One',{value:'two',label:'Two',disabled:true}],value:'One',onChange:(value,option)=>{const chosen:string=value;const label:string|undefined=option?.label;},name:'group',required:true,ref};
 <DsSelect {...props} />;

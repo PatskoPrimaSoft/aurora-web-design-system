@@ -93,7 +93,7 @@ font:  var(--font-ds-type-body);   /* Токена --font-ds-type-body нет в
 ## Проверка имён токенов
 
 `node lint/scripts/check-names.js` — отдельная проверка, не stylelint: она
-читает `tokens.json` и сверяет имена с регламентом ([имена токенов](../docs/tokens.md)) —
+читает `tokens.json` и сверяет имена с регламентом ([имена токенов](../design-system/docs/tokens.md)) —
 форма, лестницы ступеней, четвёрка слотов у статусов, уникальность, чернила без
 парной заливки, безсуффиксное имя рядом с `-md`.
 
@@ -123,4 +123,4 @@ node lint/test/run.js                  # тесты правил, имён и с
 Предупреждает о ссылке на устаревшее имя, пока оно живёт алиасом. Список и версия
 удаления — `aliases` в `lint/naming.config.json`; сейчас список пуст.
 В готовом конфиге — `severity: warning`. Удалённые в 4.0.0 `--ds-gap`, `--ds-pad`
-и `--ds-fresh-on` отклоняет `aurora/known-token`; замены описаны в `docs/migration.md`.
+и `--ds-fresh-on` отклоняет `aurora/known-token`; замены описаны в `design-system/docs/migration.md`.

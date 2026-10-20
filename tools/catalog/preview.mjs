@@ -3,7 +3,7 @@ import { join, resolve, relative, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse, parseFragment, serialize } from 'parse5';
 import { transform,build } from 'esbuild';
-import {scopeOptions,applyQueryScope} from '../../catalog/state.js';
+import {scopeOptions,applyQueryScope} from '../../design-system/catalog/state.js';
 import {readCards} from './index.mjs';
 import hljs from 'highlight.js/lib/common';
 import {vendorAssets} from './assets.mjs';
@@ -43,7 +43,7 @@ export async function renderPreview({ root, card, mode = 'legacy', scope, standa
         continue;
       }
       const path = decodeURIComponent(url.pathname).slice(1);
-      const linkedCard = /^components\/([\w-]+)\/preview\.html$/.exec(path);
+      const linkedCard = /^(?:design-system\/)?components\/([\w-]+)\/preview\.html$/.exec(path);
       if (node.tagName === 'a' && ['2 · Основы', '3 · Миграция', '4 · Бренд (общее)', '6 · Карта'].includes(card.group) && linkedCard) {
         if (!existsSync(join(root,path))) throw new Error(`${card.previewPath}: missing linked card ${path}`);
         a.value = posix.relative(posix.dirname(card.previewPath), 'index.html') + '?card=' + linkedCard[1];
@@ -71,8 +71,8 @@ export async function renderPreview({ root, card, mode = 'legacy', scope, standa
   }
   if(examplesBody){
     for(const [name,value]of Object.entries({theme:'DEFAULT',appearance:'light',density:'cozy'}))setAttr(examplesBody,'data-ds-'+name,value);
-    const template=await build({entryPoints:[fileURLToPath(new URL('../../catalog/live-examples.jsx',import.meta.url))],bundle:true,write:false,format:'iife',globalName:'DsLiveExamples',target:'es2020',logLevel:'silent'});
-    const styles=['live-examples.css','code-blocks.css'].map(file=>readFileSync(new URL('../../catalog/'+file,import.meta.url),'utf8')).join('\n');
+    const template=await build({entryPoints:[fileURLToPath(new URL('../../design-system/catalog/live-examples.jsx',import.meta.url))],bundle:true,write:false,format:'iife',globalName:'DsLiveExamples',target:'es2020',logLevel:'silent'});
+    const styles=['live-examples.css','code-blocks.css'].map(file=>readFileSync(new URL('../../design-system/catalog/'+file,import.meta.url),'utf8')).join('\n');
     const shared=parseFragment(`<style>${styles}</style><script>${template.outputFiles[0].text.replace(/<\/script/gi,'<\\/script')}</script>`).childNodes;
     for(const node of shared)node.parentNode=head;
     head.childNodes.push(...shared);

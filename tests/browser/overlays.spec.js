@@ -9,7 +9,7 @@ test.beforeAll(async()=>{await buildCatalogue({root,outDir:root+'/site'});served
 test.afterAll(async()=>{served?.server.closeAllConnections();if(served)await new Promise(resolve=>served.server.close(resolve))});
 
 async function mount(page,theme='DEFAULT',appearance='light',density='cozy',initialDialog=false,firstHint=''){
-  await page.goto(served.url+`/components/DsPopover/preview.html`);
+  await page.goto(served.url+`/design-system/components/DsPopover/preview.html`);
   // The catalogue preview is the actual shipped runtime, with a deterministic fixture.
   await page.waitForFunction(()=>window.AuroraWebDesignSystem_96e210?.DsPopover);
   await page.evaluate(({theme,appearance,density,initialDialog,firstHint})=>{
