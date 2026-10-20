@@ -73,9 +73,10 @@ jobs:
 
       - name: Prepare Angular consumer caches
         run: |
-          npm ci --prefix tests/consumers/angular-base
-          npm ci --prefix tests/consumers/angular-charts
-          npm ci --prefix tests/consumers/angular-legacy
+          npm ci --prefix ng-ui-kit/tests/consumers/angular-19
+          npm ci --prefix ng-ui-kit/tests/consumers/angular-base
+          npm ci --prefix ng-ui-kit/tests/consumers/angular-charts
+          npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
 
       - name: Install browser engines
         run: npx playwright install --with-deps chromium firefox webkit

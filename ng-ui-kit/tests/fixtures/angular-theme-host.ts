@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {ApplicationInitStatus, type Provider} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {TestBed} from '@angular/core/testing';
-import {provideAurora,AuroraThemeService,type AuroraScopes} from '../../dist/angular/core.mjs';
+import {provideAurora,AuroraThemeService,type AuroraScopes} from '../../../dist/angular/core.mjs';
 
 export async function checkTheme(doc:Document,config:Partial<AuroraScopes>,expected:AuroraScopes) {
   const providers:Provider[]=provideAurora(config);

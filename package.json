@@ -23,6 +23,10 @@
     "tokens.json",
     "CHANGELOG.md",
     "docs/usage.md",
+    "ng-ui-kit/README.md",
+    "ng-ui-kit/docs/development.md",
+    "ng-ui-kit/src/components/button/README.md",
+    "components/DsButton/README.md",
     "docs/design.md",
     "docs/tokens.md",
     "docs/migration.md",
@@ -52,7 +56,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "check:angular": "node tools/check-angular.mjs",
+    "check:angular": "node ng-ui-kit/tools/check-angular.mjs",
     "test": "npm run test:lint && npm run test:ui",
     "test:lint": "node lint/test/run.js",
     "test:ui": "node tests/DsFilterMenu.test.js && node tests/a11y-tokens.test.js && node tests/checkbox.test.js && node tests/radio-progress.test.js && node tests/date-controls.test.js && node tests/switch.test.js && node tests/rows-buttons.test.js && node tests/nav-dialog-i18n.test.js && node tests/page-layout.test.js && node tests/field.test.js && node tests/select.test.js && node tests/guard-command.test.js && node tests/release-check.test.js && node tests/package.test.js && node tests/fonts.test.js && node tests/changelog-section.test.js && node tests/react-build.test.mjs && node tests/verification-plan.test.js",
@@ -70,8 +74,8 @@
     "build:catalog": "node tools/catalog/build.mjs"
   },
   "peerDependencies": {
-    "@angular/common": ">=20.3.34",
-    "@angular/core": ">=20.3.34",
+    "@angular/common": "^19.2.25 || >=20.3.34",
+    "@angular/core": "^19.2.25 || >=20.3.34",
     "echarts": "^6.1.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
@@ -98,12 +102,12 @@
     }
   },
   "devDependencies": {
-    "@angular/common": "20.3.34",
-    "@angular/compiler": "20.3.34",
-    "@angular/compiler-cli": "20.3.34",
-    "@angular/core": "20.3.34",
-    "@angular/platform-browser": "20.3.34",
-    "@angular/platform-browser-dynamic": "20.3.34",
+    "@angular/common": "19.2.25",
+    "@angular/compiler": "19.2.25",
+    "@angular/compiler-cli": "19.2.25",
+    "@angular/core": "19.2.25",
+    "@angular/platform-browser": "19.2.25",
+    "@angular/platform-browser-dynamic": "19.2.25",
     "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "@types/react": "18.3.31",
@@ -119,7 +123,7 @@
     "react-dom": "18.3.1",
     "rxjs": "7.8.2",
     "stylelint": "^16.10.0",
-    "typescript": "5.9.3",
+    "typescript": "5.8.3",
     "zone.js": "0.15.1"
   },
   "engines": {

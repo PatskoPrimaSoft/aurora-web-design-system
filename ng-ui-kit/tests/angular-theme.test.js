@@ -1,5 +1,5 @@
 import{JSDOM}from'jsdom';import{build}from'esbuild';import{fileURLToPath,pathToFileURL}from'node:url';import{join}from'node:path';import{mkdirSync}from'node:fs';
-const root=fileURLToPath(new URL('../',import.meta.url));
+const root=fileURLToPath(new URL('../../',import.meta.url));
 const environment=new JSDOM('<html><body></body></html>',{url:'https://aurora.test/'});
 // Патчим таймеры Node до подключения отдельного window из jsdom.
 await import('zone.js');await import('zone.js/testing');
@@ -9,7 +9,7 @@ try{
  const{TestBed}=await import('@angular/core/testing');const{BrowserDynamicTestingModule,platformBrowserDynamicTesting}=await import('@angular/platform-browser-dynamic/testing');
  TestBed.initTestEnvironment(BrowserDynamicTestingModule,platformBrowserDynamicTesting());
  mkdirSync(join(root,'.tmp'),{recursive:true});const output=join(root,'.tmp/angular-theme-host.mjs');
- await build({entryPoints:[join(root,'tests/fixtures/angular-theme-host.ts')],outfile:output,bundle:true,packages:'external',platform:'node',format:'esm',target:'es2022'});
+ await build({entryPoints:[join(root,'ng-ui-kit/tests/fixtures/angular-theme-host.ts')],outfile:output,bundle:true,packages:'external',platform:'node',format:'esm',target:'es2022'});
  const{checkTheme,checkMissingBody}=await import(pathToFileURL(output));
  for(const scenario of [
   {name:'config',config:{theme:'RED2'},expected:{theme:'RED2',appearance:'light',density:'cozy'}},

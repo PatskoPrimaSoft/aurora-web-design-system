@@ -14,6 +14,9 @@
 
 ## Пример кода
 
+Ниже — React. Angular-реализация `button[dsButton]` описана в
+[руководстве DsButtonComponent](../../ng-ui-kit/src/components/button/README.md).
+
 ```jsx
 import { useState } from 'react';
 import { DsButton } from '@primasoftllc/design-system';

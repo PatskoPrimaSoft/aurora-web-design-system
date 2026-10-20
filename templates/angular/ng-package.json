@@ -1,5 +1,5 @@
 {
-  "$comment": "Archived precompiled-entrypoint experiment. Not used by the package build; use npm run build (tools/build-angular.mjs).",
+  "$comment": "Archived precompiled-entrypoint experiment. Not used by the package build; use npm run build (ng-ui-kit/tools/build-angular.mjs).",
   "dest": "../../dist/aurora-ds",
   "assets": ["./_aurora.scss"],
   "lib": { "entryFile": "../../components/src/templates/angular/index.ts" }

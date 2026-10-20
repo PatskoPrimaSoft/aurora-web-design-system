@@ -4,6 +4,11 @@ Start with the relevant [design rules](docs/design.md) and component card.
 Consumer setup belongs in [the usage guide](docs/usage.md); this file describes
 changes to the design system itself.
 
+Angular UI kit development follows [its component rules](ng-ui-kit/docs/development.md).
+The library compiler is Angular 19.2.25 with TypeScript 5.8.3. Installed consumers
+verify Angular 19.2.25 and 20.3.34. Do not expand compatibility by changing peer
+dependencies alone; add a real tarball/AOT consumer check.
+
 ## Development
 
 Use Node 22 through mise. Run commands from the repository root:
@@ -20,6 +25,7 @@ The catalogue runs at http://127.0.0.1:5173 and rebuilds when sources change.
 | `tokens/source.json` | Token values, roles and scopes; follow the [naming rules](docs/tokens.md) |
 | `styles/` | Shared styles |
 | `components/src/` | Component implementations |
+| `ng-ui-kit/src/` | Angular integration and future standalone UI components |
 | `components/<Name>/` | Declarations, README and preview with `@dsCard` metadata |
 | `docs/` | Usage, design, token naming, migration and release guides |
 
@@ -36,9 +42,10 @@ consumer caches (this preparation uses the network):
 
 ```bash
 mise exec -- npx playwright install chromium firefox webkit
-mise exec -- npm ci --prefix tests/consumers/angular-base
-mise exec -- npm ci --prefix tests/consumers/angular-charts
-mise exec -- npm ci --prefix tests/consumers/angular-legacy
+mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-19
+mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-base
+mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-charts
+mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
 mise exec -- npm run verify
 ```
 
@@ -52,8 +59,8 @@ Use the [copy rules](docs/design.md#язык-и-тексты) as well.
 
 ## Dependency security
 
-The root and all three Angular consumer locks are audited separately. Consumer
-fixtures use Angular 20.3.34 and ECharts 6.1.0; their development toolchains are part
+The root and all four Angular consumer locks are audited separately. Consumer
+fixtures use Angular 19.2.25 / 20.3.34 and ECharts 6.1.0; their development toolchains are part
 of the audit too. Update fixtures together with the package and check real tarball
 installation/AOT compilation, not just dependency resolution.
 

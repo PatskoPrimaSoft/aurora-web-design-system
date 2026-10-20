@@ -21,7 +21,7 @@ export const EXCLUDE = [
   { path: 'lint/scripts/check-delivery.js', why: 'сам содержит шаблоны старых имён' },
   { path: 'lint/test/', why: 'фикстуры проверок' },
   { path: 'node_modules/', why: 'зависимости' },
-  { path: 'tests/consumers/', why: 'шаблоны приложений: пути проверяет AOT и браузер после установки tarball' },
+  { path: 'ng-ui-kit/tests/consumers/', why: 'шаблоны приложений: пути проверяет AOT и браузер после установки tarball' },
   { path: 'site/', why: 'генерируемый каталог проверяется в браузере' },
   { path: 'dist/', why: 'генерируемая поставка проверяется отдельно' },
   { path: 'catalog/index.html', why: 'HTML-шаблон: ссылки разрешаются в site/, проверяется браузером' },
