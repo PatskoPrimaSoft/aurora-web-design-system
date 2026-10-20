@@ -1,12 +1,12 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import { test, expect } from '@playwright/test';
-import { buildCatalogue } from '../../tools/catalog/build.mjs';
 import { serveRoot } from '../../tools/baseline/render.mjs';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 test('disabled selection stays legible and mixed selection selects all with the keyboard', async ({ page }, testInfo) => {
-  await buildCatalogue({ root, outDir: `${root}/site` });
-  const served = await serveRoot(`${root}/site`);
+
+  const served = await serveRoot(siteRoot());
   try {
     for (const [theme, appearance, density] of [['DEFAULT', 'light', 'cozy'], ['DEFAULT', 'dark', 'compact'], ['RED2', 'light', 'cozy'], ['RED2', 'dark', 'compact']]) {
       const query = `theme=${theme}&appearance=${appearance}&density=${density}`;
@@ -94,8 +94,7 @@ test('disabled selection stays legible and mixed selection selects all with the 
 });
 
 test('native selection does not submit forms or activate table and tree rows',async({page})=>{
-  await buildCatalogue({root,outDir:`${root}/site`});
-  const served=await serveRoot(`${root}/site`);
+  const served=await serveRoot(siteRoot());
   try {
     await page.goto(`${served.url}/design-system/components/DsCheckbox/preview.html`);
     await page.evaluate(()=>{

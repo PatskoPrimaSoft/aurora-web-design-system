@@ -1,7 +1,7 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {fileURLToPath} from 'node:url';
 import {readCards} from '../../tools/catalog/index.mjs';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {readFileSync} from 'node:fs';
 import {transform} from 'esbuild';
@@ -10,8 +10,7 @@ const root=fileURLToPath(new URL('../../',import.meta.url));
 const components=readCards(root).filter(card=>card.layout==='component');
 let served;
 test.beforeAll(async()=>{
-  await buildCatalogue({root,outDir:`${root}/site`});
-  served=await serveRoot(`${root}/site`);
+  served=await serveRoot(siteRoot());
 });
 
 test('copied example code renders without missing state, helpers or layout design-system/styles',async({page})=>{

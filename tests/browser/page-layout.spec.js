@@ -1,7 +1,8 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../site',import.meta.url));
+let root;
+test.beforeAll(() => { root = siteRoot(); });
 const html=`<!doctype html><html data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><head><link rel="stylesheet" href="/dist/styles.css"><style>body{margin:0}#r{height:400px;width:100%}p{margin:0;padding:12px}</style><script src="/runtime.js"></script><script src="/components.js"></script></head><body><div id="r"></div><script>
 var h=React.createElement,S=window.AuroraWebDesignSystem_96e210;
 window.render=function(props){ReactDOM.flushSync(function(){window.root.render(h(S.DsPageLayout,Object.assign({responsive:true,scroll:'regions',leftLabel:'Объекты',rightLabel:'Сведения',header:h('header',null,'Шапка'),left:h('input',{'aria-label':'Поиск объектов',defaultValue:'Черновик'}),right:h('button',null,'Действие панели')},props),Array.from({length:40},function(_,i){return h('p',{key:i},'Запись '+i)})))})};

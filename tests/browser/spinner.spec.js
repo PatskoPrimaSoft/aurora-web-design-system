@@ -1,10 +1,10 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 const modes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
-test('spinner reserves space during delay and keeps rotation with reduced motion',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));
+test('spinner reserves space during delay and keeps rotation with reduced motion',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot());
  try{await page.clock.install();page.setDefaultTimeout(3000);
  for(const [theme,appearance,density] of modes){
  await page.emulateMedia({reducedMotion:'no-preference'});
@@ -26,8 +26,8 @@ test('spinner reserves space during delay and keeps rotation with reduced motion
  }
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
-test('refresh and retry examples retain geometry, content and focus',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url))),errors=[];page.on('pageerror',e=>errors.push(e.message));
+test('refresh and retry examples retain geometry, content and focus',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot()),errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{await page.clock.install();page.setDefaultTimeout(3000);
  for(const [theme,appearance,density] of modes)for(const width of [390,1280]){
  await page.setViewportSize({width,height:900});await page.goto(`${served.url}/index.html?card=DsSpinner&theme=${theme}&appearance=${appearance}&density=${density}`);
@@ -49,7 +49,7 @@ test('refresh and retry examples retain geometry, content and focus',async({page
  await expect(retry.getByText('Отчёт: 24 объекта.',{exact:true})).toBeVisible();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  expect(await f.locator('body').evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
- await page.screenshot({path:`.tmp/spinner-final-${width}-${theme}-${appearance}.png`,fullPage:true});
+ await page.screenshot({path:testInfo.outputPath(`spinner-final-${width}-${theme}-${appearance}.png`),fullPage:true});
  }expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });

@@ -1,8 +1,7 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 import {readFileSync} from 'node:fs';
 
 test('documented layout CSS switches columns at 960px without losing content',async({page})=>{
@@ -19,9 +18,7 @@ test('documented layout CSS switches columns at 960px without losing content',as
 });
 
 test('breakpoint guide preserves selection and actions when switching layout in every mode',async({page},testInfo)=>{
-  const root=fileURLToPath(new URL('../../',import.meta.url));
-  await buildCatalogue({root,outDir:root+'/site'});
-  const served=await serveRoot(root+'/site');
+  const served=await serveRoot(siteRoot());
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   try {
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]) {

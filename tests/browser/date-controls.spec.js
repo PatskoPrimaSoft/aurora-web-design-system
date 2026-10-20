@@ -1,7 +1,7 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { serveRoot } from '../../tools/baseline/render.mjs';
-import { fileURLToPath } from 'node:url';
 
 let served;
 const html = `<!doctype html><html lang="ru" data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><head><meta charset="utf-8"><link rel="stylesheet" href="/styles.css"><script src="/runtime.js"></script><script src="/components.js"></script></head><body><div id="root"></div><script>
@@ -12,7 +12,7 @@ window.render=function(component,props,controlled=false,english=false){
  h(S[component],{...props,...(controlled?{value,defaultValue:undefined}:{}),ref:inputRef,onChange:(next)=>{changes.push(next);if(controlled)setValue(next)}}),h('button',{type:'submit'},'Save'),h('button',{type:'reset'},'Reset'))}
  ReactDOM.flushSync(()=>root.render(h(S.DsStringsProvider,{strings:english?S.dsStringsEn:S.dsStringsRu},h(App,{key:Math.random()}))));
 };</script></body></html>`;
-test.beforeAll(async () => { served = await serveRoot(fileURLToPath(new URL('../../site/', import.meta.url)), new Map([['/date-test.html', html]])); });
+test.beforeAll(async () => { served = await serveRoot(siteRoot(), new Map([['/date-test.html', html]])); });
 test.afterAll(async () => { served.server.closeAllConnections(); await new Promise(resolve => served.server.close(resolve)); });
 
 for (const [component, initial, next, type] of [

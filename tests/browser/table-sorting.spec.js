@@ -1,13 +1,11 @@
+import {catalogueCards, siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
-const root=fileURLToPath(new URL('../../',import.meta.url));
 test('table owns sorting guidance and legacy links preserve preview settings',async({page},testInfo)=>{
-  const cards=await buildCatalogue({root,outDir:`${root}/site`});
+  const cards=catalogueCards();
   expect(cards.some(card=>card.id==='DsSorting')).toBe(false);
-  const served=await serveRoot(`${root}/site`);
+  const served=await serveRoot(siteRoot());
   try{
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]){
       await page.goto(`${served.url}/index.html?card=DsSorting&theme=${theme}&appearance=${appearance}&density=${density}`);

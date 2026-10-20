@@ -1,12 +1,11 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 test('DsButton keeps loading geometry, focus and form safety in every mode',async({page})=>{
-  await buildCatalogue({root,outDir:root+'/site'});
-  const served=await serveRoot(root+'/site');
+  const served=await serveRoot(siteRoot());
   try{
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
       await page.setViewportSize({width,height:900});
@@ -60,8 +59,7 @@ test('DsButton keeps loading geometry, focus and form safety in every mode',asyn
 });
 
 test('DsButton action groups validate, cancel and delete independently',async({page})=>{
-  await buildCatalogue({root,outDir:root+'/site'});
-  const served=await serveRoot(root+'/site');
+  const served=await serveRoot(siteRoot());
   try{
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
       await page.setViewportSize({width,height:900});

@@ -1,9 +1,9 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
-import {serveRoot} from '../../tools/baseline/render.mjs';import {fileURLToPath} from 'node:url';
-let served;const html=`<!doctype html><html data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><head><meta charset="utf-8"><link rel="stylesheet" href="/styles.css"><script src="/runtime.js"></script><script src="/components.js"></script></head><body><p id="extra">External description</p><div id="root" style="max-width:400px"></div><script>
+import {serveRoot} from '../../tools/baseline/render.mjs';let served;const html=`<!doctype html><html data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><head><meta charset="utf-8"><link rel="stylesheet" href="/styles.css"><script src="/runtime.js"></script><script src="/components.js"></script></head><body><p id="extra">External description</p><div id="root" style="max-width:400px"></div><script>
 var h=React.createElement,S=window.AuroraWebDesignSystem_96e210,root=ReactDOM.createRoot(document.getElementById('root')),events=[],fieldRef=React.createRef();
 window.render=function(props){ReactDOM.flushSync(function(){root.render(h(S.DsField,Object.assign({label:'Значение',hint:'Подсказка',suffix:'км/ч',ref:fieldRef,onFocus:function(){events.push('focus')},onBlur:function(){events.push('blur')}},props)))})};render({});</script></body></html>`;
-test.beforeAll(async()=>{served=await serveRoot(fileURLToPath(new URL('../../site/',import.meta.url)),new Map([['/field-test.html',html]]))});test.afterAll(async()=>{served.server.closeAllConnections();await new Promise(r=>served.server.close(r))});
+test.beforeAll(async()=>{served=await serveRoot(siteRoot(),new Map([['/field-test.html',html]]))});test.afterAll(async()=>{served.server.closeAllConnections();await new Promise(r=>served.server.close(r))});
 test('native ref and external descriptions preserve field hint and unit',async({page})=>{
 await page.goto(served.url+'/field-test.html');await page.evaluate(()=>render({'aria-describedby':'extra'}));const input=page.getByRole('textbox');await expect(input).toHaveAccessibleDescription('External description Подсказка км/ч');
 await page.evaluate(()=>fieldRef.current.focus());await expect(input).toBeFocused();const id=await input.getAttribute('id');await page.evaluate(()=>render({error:'Ошибка','aria-describedby':'extra'}));expect(await input.getAttribute('id')).toBe(id);await expect(input).toHaveAccessibleDescription('External description Ошибка км/ч');

@@ -1,13 +1,11 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test, expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
-const root = fileURLToPath(new URL('../../', import.meta.url));
 test('appearance examples follow scope, preserve interaction and remain accessible', async ({page}, testInfo) => {
-  await buildCatalogue({root, outDir:root+'/site'});
-  const served = await serveRoot(root+'/site');
+
+  const served = await serveRoot(siteRoot());
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   try {

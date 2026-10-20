@@ -1,11 +1,12 @@
-﻿import {test,expect} from '@playwright/test';import {fileURLToPath} from 'node:url';import {join} from 'node:path';import {readFileSync,writeFileSync,readdirSync,mkdirSync,rmSync} from 'node:fs';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';import {serveRoot} from '../../tools/baseline/render.mjs';import {fixtureRoot} from '../helpers/build-root.js';import {startDev} from '../../tools/dev.mjs';
+import {siteRoot, catalogueCards} from '../helpers/browser-snapshot.mjs';
+import {test,expect} from '@playwright/test';import {fileURLToPath} from 'node:url';import {join} from 'node:path';import {readFileSync,writeFileSync,readdirSync,mkdirSync,rmSync} from 'node:fs';
+import {serveRoot} from '../../tools/baseline/render.mjs';import {fixtureRoot} from '../helpers/build-root.js';import {startDev} from '../../tools/dev.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 test('complete generated site and four-way comparison work without external requests',async({page})=>{
- test.setTimeout(120000);const cards=await buildCatalogue({root,outDir:root+'/site'}),served=await serveRoot(root+'/site'),errors=[],external=[];
+ test.setTimeout(120000);const cards=catalogueCards(),served=await serveRoot(siteRoot()),errors=[],external=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
  await page.route('**/*',route=>{const url=route.request().url();if(url.startsWith(served.url+'/')||/^(?:data:|blob:)/.test(url))return route.continue();external.push(url);return route.abort();});
- const paths=[];const walk=(folder,prefix='')=>{for(const entry of readdirSync(folder,{withFileTypes:true})){const path=prefix+entry.name;if(entry.isDirectory())walk(join(folder,entry.name),path+'/');else if(path.endsWith('.html'))paths.push(path);}};walk(root+'/site');
+ const paths=[];const walk=(folder,prefix='')=>{for(const entry of readdirSync(folder,{withFileTypes:true})){const path=prefix+entry.name;if(entry.isDirectory())walk(join(folder,entry.name),path+'/');else if(path.endsWith('.html'))paths.push(path);}};walk(siteRoot());
  try{
   for(const path of paths){await page.goto(served.url+'/'+path);if(await page.locator('#root').count())await expect.poll(()=>page.locator('#root').evaluate(el=>el.childNodes.length)).toBeGreaterThan(0);await page.evaluate(()=>document.fonts.ready);expect(errors,path).toEqual([]);}
   await page.goto(served.url+'/index.html?card=DsButton&compare=1');await expect(page.locator('#viewports iframe')).toHaveCount(1);

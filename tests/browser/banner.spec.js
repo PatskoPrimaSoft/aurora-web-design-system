@@ -1,10 +1,10 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
-test('DsBanner keeps explicit announcements, standard dismissal and narrow layout in every mode',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url))),errors=[];
+test('DsBanner keeps explicit announcements, standard dismissal and narrow layout in every mode',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
@@ -50,8 +50,8 @@ test('DsBanner keeps explicit announcements, standard dismissal and narrow layou
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 
-test('DsBanner examples retry with loading, keep navigation as a link and omit optional titles',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));
+test('DsBanner examples retry with loading, keep navigation as a link and omit optional titles',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot());
  try{
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
   await page.setViewportSize({width,height:900});await page.goto(served.url+`/index.html?card=DsBanner&theme=${theme}&appearance=${appearance}&density=${density}`);
@@ -70,7 +70,7 @@ test('DsBanner examples retry with loading, keep navigation as a link and omit o
   await long.getByRole('button',{name:'Закрыть пояснение',exact:true}).click();await expect(link).toBeFocused();await expect(long.locator('#storage-help')).toBeHidden();
   await long.getByRole('button',{name:'Выбрать 30 дней',exact:true}).click();await expect(long).toContainText('Период соответствует сроку хранения');
   const noTitle=exampleDemo(f,'Без заголовка');await expect(noTitle.locator('[data-ds-banner]')).toContainText('Автоматическое обновление отключено');await expect(noTitle.locator('[data-ds-banner] h1,[data-ds-banner] h2,[data-ds-banner] h3,[data-ds-banner] h4,[data-ds-banner] h5,[data-ds-banner] h6')).toHaveCount(0);
-  await page.locator('#preview').screenshot({path:`.tmp/banner-final-${width}-${theme}-${appearance}.png`});
+  await page.locator('#preview').screenshot({path:testInfo.outputPath(`banner-final-${width}-${theme}-${appearance}.png`)});
   }
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });

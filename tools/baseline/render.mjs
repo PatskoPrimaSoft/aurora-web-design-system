@@ -11,8 +11,8 @@ import { renderPreview } from '../catalog/preview.mjs';
 export const SCOPES = ['DEFAULT', 'RED2'].flatMap(theme => ['light', 'dark'].flatMap(appearance => ['cozy', 'compact'].map(density => ({ theme, appearance, density }))));
 export const ACCEPTANCE_SCOPES = [SCOPES[0], SCOPES[3], SCOPES[4], SCOPES[7]];
 
-export async function prepareBaseline(root) {
-  const baseline = await exportBaseline({ root, ref: '8bf5c4d', outDir: join(root, '.tmp/migration/original') });
+export async function prepareBaseline(root, {outDir = join(root, '.tmp/migration/original')} = {}) {
+  const baseline = await exportBaseline({ root, ref: '8bf5c4d', outDir });
   const { buildDist } = await import(pathToFileURL(join(baseline.root, 'tools/build.js')));
   const { styles, tokens } = buildDist({ root: baseline.root });
   mkdirSync(join(baseline.root, 'dist'), { recursive: true });

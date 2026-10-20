@@ -1,13 +1,10 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {exampleDemo} from './helpers/live-example.js';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../',import.meta.url));
 
 test('icon examples keep token sizes, readable surface colors and keyboard interactions across modes',async({page},testInfo)=>{
- await buildCatalogue({root,outDir:`${root}/site`});
- const served=await serveRoot(`${root}/site`),errors=[];
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',error=>errors.push(error.message));
  try{
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]){

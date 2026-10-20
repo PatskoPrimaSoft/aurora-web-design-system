@@ -1,11 +1,11 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 const modes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
 
-test('skeleton supports static rendering and reduced motion across themes',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));
+test('skeleton supports static rendering and reduced motion across themes',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot());
  try{
   for(const [theme,appearance,density] of modes){
    await page.emulateMedia({reducedMotion:'no-preference'});
@@ -33,8 +33,8 @@ test('skeleton supports static rendering and reduced motion across themes',async
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 
-test('loading resolves automatically without moving rows or keyboard focus',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url))),errors=[];
+test('loading resolves automatically without moving rows or keyboard focus',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
   page.setDefaultTimeout(5000);
@@ -64,7 +64,7 @@ test('loading resolves automatically without moving rows or keyboard focus',asyn
    await expect(live.getByRole('status')).toHaveText('Загружено 3 пользователя.');
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
    expect(await page.locator('#preview').evaluate(el=>el.contentDocument.documentElement.scrollWidth<=el.clientWidth)).toBe(true);
-   await page.screenshot({path:`.tmp/skeleton-ready-${width}-${theme}-${appearance}.png`,fullPage:true});
+   await page.screenshot({path:testInfo.outputPath(`skeleton-ready-${width}-${theme}-${appearance}.png`),fullPage:true});
   }
   expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}

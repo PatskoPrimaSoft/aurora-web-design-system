@@ -19,6 +19,7 @@ export const verificationSteps=[
  ['raster-match',['tests/raster-match.test.js']],
  ['radio-progress',['tests/radio-progress.test.js']],
  ['date-controls',['tests/date-controls.test.js']],
+ ['browser-snapshot',['tests/browser-snapshot.test.js']],
  ...['verification-plan','DsFilterMenu','a11y-tokens','checkbox','switch','page-layout','field','select','rows-buttons','nav-dialog-i18n','guard-command','guard-hook','ci-toolchain','package','fonts','changelog-section','migration-baseline','token-model','component-build','build','catalog-build','dev-server','clean-build','deterministic-build'].map(name=>[name,[`tests/${name}.test.js`]]),
  ['browser',['node_modules/@playwright/test/cli.js','test']],
  ['pack',['tools/check-pack.js']],

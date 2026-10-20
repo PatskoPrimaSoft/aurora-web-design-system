@@ -1,13 +1,11 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
-const root=fileURLToPath(new URL('../../',import.meta.url));
 const scopes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
 let served;
-test.beforeAll(async()=>{await buildCatalogue({root,outDir:root+'/.tmp/foundations-fix/site'});served=await serveRoot(root+'/.tmp/foundations-fix/site');});
+test.beforeAll(async()=>{served=await serveRoot(siteRoot());});
 test.afterAll(async()=>{served?.server.closeAllConnections();if(served)await new Promise(r=>served.server.close(r));});
 async function fixture(page,scope,kind){
   const [theme,appearance,density]=scope;

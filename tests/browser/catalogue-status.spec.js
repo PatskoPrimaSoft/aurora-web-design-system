@@ -1,7 +1,7 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-let served;test.beforeAll(async()=>{served=await serveRoot(fileURLToPath(new URL('../../site/',import.meta.url)))});
+let served;test.beforeAll(async()=>{served=await serveRoot(siteRoot())});
 test.afterAll(async()=>{served.server.closeAllConnections();await new Promise(r=>served.server.close(r))});
 test('deprecated status appears next to navigation title and page title and clears on navigation',async({page},testInfo)=>{
 const errors=[];page.on('pageerror',e=>errors.push(e.message));

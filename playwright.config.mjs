@@ -1,5 +1,5 @@
 import { defineConfig } from '@playwright/test';
-export default defineConfig({ projects: [
+export default defineConfig({ globalSetup: './tests/browser/global-setup.mjs', projects: [
   {name: 'catalogue', testDir: './tests/browser'},
   {name: 'angular', testDir: './ng-ui-kit/tests/browser'},
 ], workers: 1, timeout: 120000,

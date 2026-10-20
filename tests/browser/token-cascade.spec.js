@@ -1,5 +1,6 @@
+import {preparedBaseline} from '../helpers/browser-snapshot.mjs';
 import { test, expect } from '@playwright/test';
-import { prepareBaseline, serveRoot, SCOPES } from '../../tools/baseline/render.mjs';
+import { serveRoot, SCOPES } from '../../tools/baseline/render.mjs';
 import { buildDist } from '../../tools/build.js';
 import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
@@ -8,7 +9,7 @@ import { renderTokenCss } from '../../tools/tokens/css.mjs';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const clean = props => Object.fromEntries(Object.entries(props).filter(([n]) => !n.startsWith('--ds-_')).map(([n,v]) => [n, v.trim().toLowerCase().replace(/\s+/g,' ')]));
 test('current tokens resolve identically in flat and nested scopes across eight combinations', async ({ page }) => {
-  const baseline = await prepareBaseline(root);
+  const baseline = preparedBaseline();
   const current = buildDist({ root });
   const fixture = readFileSync(`${baseline.root}/tests/fixtures/cascade.html`, 'utf8');
   const served = await serveRoot(baseline.root, new Map());

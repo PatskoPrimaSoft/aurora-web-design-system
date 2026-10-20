@@ -1,8 +1,9 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../site',import.meta.url));
+let root;
+test.beforeAll(() => { root = siteRoot(); });
 async function mount(page,url,useExplicitReturn=true){
  await page.goto(url+'/index.html?card=DsToastStack');
  const f=page.frameLocator('#preview');await f.locator('body').waitFor();
@@ -20,7 +21,7 @@ async function mount(page,url,useExplicitReturn=true){
   ReactDOM.createRoot(el).render(h(App));
  },useExplicitReturn);return f;
 }
-test('stack queues without mounting pending toasts and manages keyboard focus through dismissal',async({page})=>{
+test('stack queues without mounting pending toasts and manages keyboard focus through dismissal',async({page},testInfo)=>{
  const served=await serveRoot(root);try{
  const f=await mount(page,served.url);
  const stack=f.getByRole('region',{name:'Exports'});await expect(stack).toBeVisible();
@@ -40,7 +41,7 @@ test('stack queues without mounting pending toasts and manages keyboard focus th
  await expect(stack).toHaveCount(0);await expect(f.getByRole('button',{name:'Order',exact:true})).toBeFocused();
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
-test('pending toast timer starts on admission and background removals never steal focus',async({page})=>{
+test('pending toast timer starts on admission and background removals never steal focus',async({page},testInfo)=>{
  const served=await serveRoot(root);try{
  await page.clock.install();const f=await mount(page,served.url,false);const stack=f.getByRole('region',{name:'Exports'});
  await expect(stack.locator('[data-ds-toast]')).toHaveCount(3);
@@ -60,7 +61,7 @@ test('pending toast timer starts on admission and background removals never stea
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 
-test('stack examples support overflow, order, portal and dialog keyboard access in all modes',async({page})=>{
+test('stack examples support overflow, order, portal and dialog keyboard access in all modes',async({page},testInfo)=>{
  const served=await serveRoot(root),errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
  await page.setViewportSize({width,height:900});await page.goto(`${served.url}/index.html?card=DsToastStack&theme=${theme}&appearance=${appearance}&density=${density}`);
@@ -74,7 +75,7 @@ test('stack examples support overflow, order, portal and dialog keyboard access 
  await expect(group.locator('[data-ds-toast-body]').last()).toHaveText('Экспорт 4 готов к скачиванию.');
  await q.getByRole('button',{name:'Закрыть уведомление 1',exact:true}).click();await expect(group.locator('[data-ds-toast-body]').last()).toContainText('всех подразделений');
  await page.mouse.move(0,0);await q.getByRole('button',{name:'Добавить уведомление'}).focus();await page.waitForTimeout(250);
- await page.locator('#preview').screenshot({path:`.tmp/toast-stack-queue-${width}-${theme}-${appearance}.png`});
+ await page.locator('#preview').screenshot({path:testInfo.outputPath(`toast-stack-queue-${width}-${theme}-${appearance}.png`)});
  const portal=exampleDemo(f,'Portal за пределами обрезающего контейнера');await portal.getByRole('button',{name:'Показать через portal'}).click();
  const toast=portal.locator('[data-ds-toast]');await expect(toast).toBeVisible();
  expect(await toast.evaluate(e=>!!e.closest('[data-ds-toast-stack]').parentElement.classList.contains('demo'))).toBe(true);

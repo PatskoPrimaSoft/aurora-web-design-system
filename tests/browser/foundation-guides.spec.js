@@ -1,14 +1,12 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../',import.meta.url));
 
 test('foundation guides retain readable docs, scoped demos and usable interactions',async({page})=>{
  test.setTimeout(120000);
- await buildCatalogue({root,outDir:`${root}/site`});
- const served=await serveRoot(`${root}/site`),errors=[];
+
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',error=>errors.push(error.message));
  try{
   for(const id of ['DsSpacing','DsAccessibility','DsContent','DsMotion']){

@@ -1,11 +1,11 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 import {exampleDemo} from './helpers/live-example.js';
 
 const modes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
 let served;
-test.beforeAll(async()=>{served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));});
+test.beforeAll(async()=>{served=await serveRoot(siteRoot());});
 test.afterAll(async()=>{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));});
 
 test('navigation exports exist before the catalogue examples mount',async({page})=>{

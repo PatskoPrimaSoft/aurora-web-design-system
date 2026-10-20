@@ -1,8 +1,9 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../site',import.meta.url));
+let root;
+test.beforeAll(() => { root = siteRoot(); });
 const modes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
 async function fixture(page,served){
  await page.goto(served.url+'/index.html?card=DsToast');
@@ -14,7 +15,7 @@ async function fixture(page,served){
   toastRoot.render(h(S.DsToastStack,null,h(S.DsToast,{key:'timer',autoDismiss:8000,onClose:()=>{window.dismissCount++;toastRoot.render(h(S.DsToastStack));}},'Готово')));
  });return f;
 }
-test('toast timer pauses for hover and focus, preserves remaining time and animates removal',async({page})=>{
+test('toast timer pauses for hover and focus, preserves remaining time and animates removal',async({page},testInfo)=>{
  const served=await serveRoot(root);try{
  await page.clock.install({time:new Date('2026-01-01T00:00:00Z')});await page.clock.pauseAt(new Date('2026-01-01T00:00:01Z'));const f=await fixture(page,served),toast=f.locator('#fixture [data-ds-toast]');
  await expect(toast).toHaveAttribute('role','status');await expect(toast).toHaveAttribute('aria-atomic','true');
@@ -31,7 +32,7 @@ test('toast timer pauses for hover and focus, preserves remaining time and anima
  await f.locator('body').evaluate(()=>toastRoot.unmount());await page.clock.fastForward(20000);expect(await f.locator('body').evaluate(()=>dismissCount)).toBe(1);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
-test('toast handles long content, inverse controls and responsive stacks in every mode',async({page})=>{
+test('toast handles long content, inverse controls and responsive stacks in every mode',async({page},testInfo)=>{
  const served=await serveRoot(root);try{for(const [theme,appearance,density] of modes)for(const width of [390,1280]){
  await page.setViewportSize({width,height:900});await page.goto(`${served.url}/index.html?card=DsToast&theme=${theme}&appearance=${appearance}&density=${density}`);
  const f=page.frameLocator('#preview');await f.getByRole('button',{name:'Архивировать объект'}).waitFor();
@@ -47,7 +48,7 @@ test('toast handles long content, inverse controls and responsive stacks in ever
  } }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 
-test('toast live examples support undo, retry, queue dismissal and modal keyboard access',async({page})=>{
+test('toast live examples support undo, retry, queue dismissal and modal keyboard access',async({page},testInfo)=>{
  const served=await serveRoot(root);const errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{await page.clock.install();for(const [theme,appearance,density] of modes)for(const width of [390,1280]){
  await page.setViewportSize({width,height:900});await page.goto(`${served.url}/index.html?card=DsToast&theme=${theme}&appearance=${appearance}&density=${density}`);
@@ -61,6 +62,6 @@ test('toast live examples support undo, retry, queue dismissal and modal keyboar
  const close=dialog.getByRole('button',{name:'Закрыть',exact:true}).last();await close.focus();await page.keyboard.press('Tab');await expect(dialog.getByRole('button',{name:'Закрыть',exact:true}).first()).toBeFocused();await close.focus();await page.keyboard.press('Enter');await page.clock.fastForward(250);await expect(dialog.getByRole('status')).toHaveCount(0);await expect(dialog.getByRole('button',{name:'Сохранить в диалоге'})).toBeFocused();await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);
  await expect.poll(()=>page.locator('#preview').evaluate(iframe=>Math.abs(iframe.getBoundingClientRect().height-iframe.contentDocument.body.getBoundingClientRect().height))).toBeLessThanOrEqual(3);
  expect(await f.locator('html').evaluate(el=>el.scrollWidth>el.clientWidth)).toBe(false);expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
- await page.locator('#preview').screenshot({path:`.tmp/toast-final-${width}-${theme}-${appearance}.png`});
+ await page.locator('#preview').screenshot({path:testInfo.outputPath(`toast-final-${width}-${theme}-${appearance}.png`)});
  }expect(errors).toEqual([]);}finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });

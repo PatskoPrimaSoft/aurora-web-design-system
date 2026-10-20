@@ -1,10 +1,9 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../',import.meta.url));let served;
-test.beforeAll(async()=>{await buildCatalogue({root,outDir:root+'/site'});served=await serveRoot(root+'/site');});
+let served;
+test.beforeAll(async()=>{served=await serveRoot(siteRoot());});
 test.afterAll(async()=>{served?.server.closeAllConnections();if(served)await new Promise(r=>served.server.close(r));});
 const scopes=[['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']];
 for(const [theme,appearance,density] of scopes)test(`radio and progress preserve native interaction and narrow layout: ${theme}/${appearance}/${density}`,async({page})=>{

@@ -1,13 +1,10 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../',import.meta.url));
 
 test('DsIconButton separates indicators and provides live object actions',async({page})=>{
-  await buildCatalogue({root,outDir:root+'/site'});
-  const served=await serveRoot(root+'/site');
+  const served=await serveRoot(siteRoot());
   try{
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
       await page.setViewportSize({width,height:900});
@@ -45,8 +42,7 @@ test('DsIconButton separates indicators and provides live object actions',async(
 });
 
 test('DsIconButton tooltip and loading work in every mode and size',async({page})=>{
-  await buildCatalogue({root,outDir:root+'/site'});
-  const served=await serveRoot(root+'/site'),errors=[];
+  const served=await serveRoot(siteRoot()),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   try{
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){

@@ -1,11 +1,11 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test, expect} from '@playwright/test';
-import {fileURLToPath} from 'node:url';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {chooseCatalogueScope} from '../browser/helpers/catalogue-scope.js';
 
 let served;
 test.beforeAll(async () => {
-  served = await serveRoot(fileURLToPath(new URL('../../site/', import.meta.url)));
+  served = await serveRoot(siteRoot());
 });
 test.afterAll(async () => {
   served.server.closeAllConnections();

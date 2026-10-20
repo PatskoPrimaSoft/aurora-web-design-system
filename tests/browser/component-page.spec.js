@@ -1,13 +1,10 @@
+import {catalogueCards, siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 import {chooseCatalogueScope} from './helpers/catalogue-scope.js';
 
-const root=fileURLToPath(new URL('../../',import.meta.url));
 test('preview settings preserve the light documentation shell and interactive state',async({page})=>{
-  await buildCatalogue({root,outDir:`${root}/site`});
-  const served=await serveRoot(`${root}/site`);
+  const served=await serveRoot(siteRoot());
   try{
     await page.goto(`${served.url}/index.html?card=DsCheckbox`);
     const frame=page.frameLocator('#preview');
@@ -45,9 +42,9 @@ test('preview settings preserve the light documentation shell and interactive st
 });
 
 test('component page keeps one reading order, inline reference and responsive preview',async({page},testInfo)=>{
-  const cards=await buildCatalogue({root,outDir:`${root}/site`});
+  const cards=catalogueCards();
   expect(cards.find(card=>card.id==='DsCheckbox').layout).toBe('component');
-  const served=await serveRoot(`${root}/site`),errors=[];
+  const served=await serveRoot(siteRoot()),errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   try{
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]){
@@ -90,7 +87,7 @@ test('component page keeps one reading order, inline reference and responsive pr
 });
 
 test('tabs page groups both contracts before a single token reference',async()=>{
-  const cards=await buildCatalogue({root,outDir:`${root}/site`});
+  const cards=catalogueCards();
   const card=cards.find(card=>card.id==='DsTabs');
   expect(card.layout).toBe('component');
   expect(card.apiHtml.match(/<h2\b/g)).toHaveLength(2);
@@ -103,7 +100,7 @@ test('tabs page groups both contracts before a single token reference',async()=>
 
 
 test('components with separate pages do not duplicate contracts from shared declarations',async()=>{
-  const cards=await buildCatalogue({root,outDir:`${root}/site`});
+  const cards=catalogueCards();
   const spinner=cards.find(card=>card.id==='DsSpinner');
   const skeleton=cards.find(card=>card.id==='DsSkeleton');
   expect(spinner.apiPaths.map(entry=>entry.name)).toEqual(['DsSpinner']);

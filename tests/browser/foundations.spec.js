@@ -1,16 +1,14 @@
+import {catalogueCards, siteRoot} from '../helpers/browser-snapshot.mjs';
 import {chooseCatalogueScope} from './helpers/catalogue-scope.js';
 import { test, expect } from '@playwright/test';
-import { buildCatalogue } from '../../tools/catalog/build.mjs';
 import { serveRoot } from '../../tools/baseline/render.mjs';
-import { fileURLToPath } from 'node:url';
 
-const root = fileURLToPath(new URL('../../', import.meta.url));
 test.use({ actionTimeout: 10000 });
 
 test('foundation and map descriptions stay with examples through navigation and scoped links', async ({ page }, testInfo) => {
-  const cards = await buildCatalogue({ root, outDir: `${root}/site` });
+  const cards = catalogueCards();
   const foundations = cards.filter(card => ['2 · Основы', '3 · Миграция', '4 · Бренд (общее)', '6 · Карта'].includes(card.group));
-  const served = await serveRoot(`${root}/site`);
+  const served = await serveRoot(siteRoot());
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });

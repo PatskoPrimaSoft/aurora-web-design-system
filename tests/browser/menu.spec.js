@@ -1,7 +1,8 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../site',import.meta.url));
+let root;
+test.beforeAll(() => { root = siteRoot(); });
 
 test('DsMenu supports selection, names, keyboard search and responsive placement',async({page})=>{
  const served=await serveRoot(root),errors=[];page.on('pageerror',e=>errors.push(e.stack));

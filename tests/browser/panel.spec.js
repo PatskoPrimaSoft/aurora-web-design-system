@@ -1,7 +1,8 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../../site/',import.meta.url));
+let root;
+test.beforeAll(() => { root = siteRoot(); });
 const html=`<!doctype html><html data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><head><meta charset="utf-8"><link rel="stylesheet" href="/styles.css"><script src="/runtime.js"></script><script src="/components.js"></script></head><body style="margin:0"><div id="root"></div><script>
 var h=React.createElement,S=window.AuroraWebDesignSystem_96e210,root=ReactDOM.createRoot(document.getElementById('root'));
 window.render=function(props){ReactDOM.flushSync(function(){root.render(h(S.DsPanel,Object.assign({title:'История',scroll:true,height:280},props),Array.from({length:30},function(_,i){return h('p',{key:i},'Событие '+i)})))})};render({});

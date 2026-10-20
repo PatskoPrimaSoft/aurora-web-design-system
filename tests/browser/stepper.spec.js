@@ -1,10 +1,10 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
 test('DsStepper exposes step states, completion and keyboard/pointer feedback in every mode',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url))),errors=[];
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
@@ -39,7 +39,7 @@ test('DsStepper exposes step states, completion and keyboard/pointer feedback in
 });
 
 test('DsStepper keeps the current step visible without scrolling the page or stealing focus',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));
+ const served=await serveRoot(siteRoot());
  try{
   await page.setViewportSize({width:390,height:700});
   await page.goto(served.url+'/design-system/components/DsStepper/preview.html');

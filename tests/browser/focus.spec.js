@@ -1,9 +1,8 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { buildDist } from '../../tools/build.js';
-import { buildCatalogue } from '../../tools/catalog/build.mjs';
 import { serveRoot } from '../../tools/baseline/render.mjs';
-import { fileURLToPath } from 'node:url';
 
 test('standalone fields and all keyboard controls share the token focus outline', async ({ page }) => {
   const { styles } = buildDist();
@@ -34,9 +33,8 @@ test('standalone fields and all keyboard controls share the token focus outline'
 });
 
 test('focus guide supports keyboard forms and navigation in every mode', async ({page}, testInfo) => {
-  const root=fileURLToPath(new URL('../../',import.meta.url));
-  await buildCatalogue({root,outDir:root+'/site'});
-  const served=await serveRoot(root+'/site');
+
+  const served=await serveRoot(siteRoot());
   const errors=[];page.on('pageerror',error=>errors.push(error.message));
   try {
     for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]) {

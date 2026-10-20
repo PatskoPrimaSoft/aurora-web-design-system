@@ -1,14 +1,14 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
 import {chooseCatalogueScope} from './helpers/catalogue-scope.js';
 
 const root=fileURLToPath(new URL('../../',import.meta.url));
 let served;
-test.beforeAll(async()=>{await buildCatalogue({root,outDir:root+'/site'});served=await serveRoot(root+'/site');});
+test.beforeAll(async()=>{served=await serveRoot(siteRoot());});
 test.afterAll(async()=>{served?.server.closeAllConnections();if(served)await new Promise(resolve=>served.server.close(resolve));});
 
 test('contents navigate sections, follow scrolling and restore a shared section link',async({page},testInfo)=>{

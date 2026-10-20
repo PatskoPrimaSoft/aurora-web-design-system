@@ -1,10 +1,10 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
-test('empty state keeps semantic headings, optional visuals and narrow actions across modes',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url))),errors=[];
+test('empty state keeps semantic headings, optional visuals and narrow actions across modes',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
@@ -42,14 +42,14 @@ test('empty state keeps semantic headings, optional visuals and narrow actions a
    await expect.poll(()=>page.locator('#preview').evaluate(el=>Math.abs(el.getBoundingClientRect().height-el.contentDocument.body.getBoundingClientRect().height))).toBeLessThanOrEqual(3);
    expect(await page.locator('#preview').evaluate(el=>el.contentDocument.documentElement.scrollWidth<=el.clientWidth)).toBe(true);
    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-   await page.screenshot({path:`.tmp/empty-state-improved-${width}-${theme}-${appearance}.png`,fullPage:true});
+   await page.screenshot({path:testInfo.outputPath(`empty-state-improved-${width}-${theme}-${appearance}.png`),fullPage:true});
   }
   expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 
-test('retry preserves focus while busy, prevents duplicates and reveals loaded content',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));
+test('retry preserves focus while busy, prevents duplicates and reveals loaded content',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot());
  try{
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
   await page.setViewportSize({width,height:900});

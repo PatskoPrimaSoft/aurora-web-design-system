@@ -1,15 +1,13 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test, expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
-const root = fileURLToPath(new URL('../../', import.meta.url));
 const scopes = [['DEFAULT', 'light', 'cozy'], ['DEFAULT', 'dark', 'compact'], ['RED2', 'light', 'cozy'], ['RED2', 'dark', 'compact']];
 
 test('typography stays readable and reveals full text with the keyboard in every scope', async ({page}, testInfo) => {
-  await buildCatalogue({root, outDir: root + '/site'});
-  const served = await serveRoot(root + '/site');
+
+  const served = await serveRoot(siteRoot());
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   try {

@@ -1,10 +1,10 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-test('switch keeps focus, density targets, descriptions and value during loading',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));const errors=[];page.on('pageerror',e=>errors.push(e.message));
- 
+test('switch keeps focus, density targets, descriptions and value during loading',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot());const errors=[];page.on('pageerror',e=>errors.push(e.message));
+
  try{
  for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]){
  await page.goto(`${served.url}/index.html?card=DsSwitch&theme=${theme}&appearance=${appearance}&density=${density}`);
@@ -25,7 +25,7 @@ test('switch keeps focus, density targets, descriptions and value during loading
  await expect(page.getByRole('table',{name:'Параметры DsSwitch'})).toContainText('loading');
  for(const width of [390,1280]){await page.setViewportSize({width,height:900});await expect.poll(()=>page.locator('#preview').evaluate(el=>el.contentDocument.documentElement.scrollWidth<=el.clientWidth)).toBe(true);expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);}
  }
- await page.screenshot({path:'.tmp/switch-updated.png',fullPage:true});
+ await page.screenshot({path:testInfo.outputPath('switch-updated.png'),fullPage:true});
  expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });

@@ -1,9 +1,9 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {exampleDemo} from './helpers/live-example.js';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
-test('filter dropdown supports grouped and flat draft selection in every mode',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url))),errors=[];page.on('pageerror',e=>errors.push(e.message));
+test('filter dropdown supports grouped and flat draft selection in every mode',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot()),errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
  for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]){
  await page.setViewportSize({width:390,height:900});await page.goto(`${served.url}/index.html?card=DsFilterMenu&theme=${theme}&appearance=${appearance}&density=${density}`);
@@ -44,13 +44,13 @@ test('filter dropdown supports grouped and flat draft selection in every mode',a
  await text.getByRole('button',{name:'Очистить: Название объекта',exact:true}).focus();await page.keyboard.press('Space');await expect(textTrigger).toBeFocused();await expect(textTrigger).toHaveAccessibleName('Название объекта');await expect(text.getByRole('dialog')).toHaveCount(0);
  const range=exampleDemo(f,'Числовой диапазон');await expect(range.locator('[data-ds-filter-trigger]')).toContainText('От 60');await range.getByRole('button',{name:'Очистить: Скорость, км/ч',exact:true}).click();await expect(range.locator('[data-ds-filter-trigger]')).toHaveAccessibleName('Скорость, км/ч');
  }
- await page.setViewportSize({width:1280,height:900});const f=page.frameLocator('#preview'),trigger=exampleDemo(f,'Выбор с группами').locator('[data-ds-filter-trigger]');await trigger.evaluate(el=>el.scrollIntoView({block:'start'}));await trigger.click();await page.screenshot({path:'.tmp/filter-grouped.png'});
+ await page.setViewportSize({width:1280,height:900});const f=page.frameLocator('#preview'),trigger=exampleDemo(f,'Выбор с группами').locator('[data-ds-filter-trigger]');await trigger.evaluate(el=>el.scrollIntoView({block:'start'}));await trigger.click();await page.screenshot({path:testInfo.outputPath('filter-grouped.png')});
  expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(resolve=>served.server.close(resolve));}
 });
 
-test('filter editor searches, validates, handles keyboard and escapes clipped containers',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));
+test('filter editor searches, validates, handles keyboard and escapes clipped containers',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot());
  try{
  for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']]){
  await page.setViewportSize({width:390,height:900});await page.goto(`${served.url}/index.html?card=DsFilterMenu&theme=${theme}&appearance=${appearance}&density=${density}`);

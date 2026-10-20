@@ -1,11 +1,9 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
-import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
-const root=fileURLToPath(new URL('../../',import.meta.url));
 let served;
-test.beforeAll(async()=>{await buildCatalogue({root,outDir:root+'/site'});served=await serveRoot(root+'/site')});
+test.beforeAll(async()=>{served=await serveRoot(siteRoot())});
 test.afterAll(async()=>{served?.server.closeAllConnections();if(served)await new Promise(resolve=>served.server.close(resolve))});
 
 async function mount(page,theme='DEFAULT',appearance='light',density='cozy',initialDialog=false,firstHint=''){

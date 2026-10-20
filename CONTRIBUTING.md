@@ -36,6 +36,24 @@ sources and declarations. A prop change updates the implementation, `.d.ts` and
 
 ## Checks
 
+Browser tests prepare one catalogue in a unique `.tmp/migration/browser-run-*`
+directory per Playwright invocation. They do not require an existing root `site/`.
+Use `siteRoot()` and `catalogueCards()` from `tests/helpers/browser-snapshot.mjs`
+for scenarios that read the catalogue. Do not build it again inside those tests.
+Teardown checks that the shared sources, site and pinned baseline stayed unchanged.
+
+Tests that edit a generated page must copy it with `copyTree()` into
+`testInfo.outputPath(...)`; use that location for screenshots and other diagnostics
+as well. Dev-server tests keep independent `fixtureRoot()` source trees because
+rebuilding and recovery are the behaviour under test.
+
+For example, run a single scenario with
+`mise exec -- npx playwright test tests/browser/menu.spec.js`.
+The compatibility configuration prepares its own catalogue:
+`mise exec -- npx playwright test --config=playwright.compat.config.mjs`.
+The default remains one worker. Isolated scenarios can also be checked with
+`--workers=2`; do not restore writes into shared paths when adding tests.
+
 `npm test` builds the project and runs lint, UI, package and release-guard checks.
 `npm run verify` also checks the catalogue, documentation links, browser CSS cascade
 and installed tarball consumers. Before the first full run, prepare the browser engines and

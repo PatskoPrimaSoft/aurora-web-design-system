@@ -1,9 +1,9 @@
+import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
-import {fileURLToPath} from 'node:url';
 
-test('DsTabs preserves drafts, exposes feedback and reveals selected tabs in every mode',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url))),errors=[];
+test('DsTabs preserves drafts, exposes feedback and reveals selected tabs in every mode',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
  try{
   for(const [theme,appearance,density] of [['DEFAULT','light','cozy'],['DEFAULT','dark','compact'],['RED2','light','cozy'],['RED2','dark','compact']])for(const width of [390,1280]){
@@ -54,14 +54,14 @@ test('DsTabs preserves drafts, exposes feedback and reveals selected tabs in eve
    await expect.poll(()=>page.locator('#preview').evaluate(iframe=>Math.abs(iframe.getBoundingClientRect().height-iframe.contentDocument.body.getBoundingClientRect().height))).toBeLessThanOrEqual(3);
    expect(await f.locator('body').evaluate(el=>el.scrollWidth>innerWidth+1)).toBe(false);
    expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
-   await page.screenshot({path:`.tmp/tabs-updated-${width}-${theme}-${appearance}.png`,fullPage:true});
+   await page.screenshot({path:testInfo.outputPath(`tabs-updated-${width}-${theme}-${appearance}.png`),fullPage:true});
   }
   expect(errors).toEqual([]);
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 
-test('DsTabs moves one indicator, follows resizing and respects reduced motion',async({page})=>{
- const served=await serveRoot(fileURLToPath(new URL('../../site',import.meta.url)));
+test('DsTabs moves one indicator, follows resizing and respects reduced motion',async({page},testInfo)=>{
+ const served=await serveRoot(siteRoot());
  try{
   for(const reducedMotion of ['no-preference','reduce']){
    await page.emulateMedia({reducedMotion});

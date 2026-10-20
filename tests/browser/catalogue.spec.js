@@ -1,10 +1,11 @@
+import {catalogueCards, siteRoot} from '../helpers/browser-snapshot.mjs';
 import {chooseCatalogueScope} from './helpers/catalogue-scope.js';
-import{test,expect}from'@playwright/test';import{buildCatalogue}from'../../tools/catalog/build.mjs';import{serveRoot}from'../../tools/baseline/render.mjs';import{fileURLToPath}from'node:url';
+import{test,expect}from'@playwright/test';import{serveRoot}from'../../tools/baseline/render.mjs';import{fileURLToPath}from'node:url';
 import{startDev}from'../../tools/dev.mjs';import{fixtureRoot}from'../helpers/build-root.js';import{readFileSync,writeFileSync,rmSync}from'node:fs';import{join}from'node:path';
 import{readTokenModel}from'../../tools/tokens/model.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 test('all catalogue pages render from local files without runtime errors',async({page})=>{
- const cards=await buildCatalogue({root,outDir:`${root}/site`});const served=await serveRoot(`${root}/site`);
+ const cards=catalogueCards();const served=await serveRoot(siteRoot());
  const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
  await page.route('**/*',r=>r.request().url().startsWith(served.url+'/')?r.continue():r.abort('blockedbyclient'));
  try{
@@ -25,7 +26,7 @@ test('all catalogue pages render from local files without runtime errors',async(
  }finally{served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}
 });
 test('merged header keeps legacy links and both navigation examples in four scopes',async({page})=>{
- await buildCatalogue({root,outDir:`${root}/site`});const served=await serveRoot(`${root}/site`),errors=[];
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',error=>errors.push(error.message));
  page.on('response',response=>{if(response.status()>=400)errors.push(response.url());});
  try{
@@ -97,7 +98,7 @@ test('multiple dev catalogue tabs can finish loading and refresh without exhaust
  }finally{for(const page of pages)await page.close();if(dev)await dev.close();rmSync(fixture,{recursive:true,force:true});}
 });
 test('API references use real declarations, defaults and token source',async({page})=>{
- await buildCatalogue({root,outDir:`${root}/site`});const served=await serveRoot(`${root}/site`),errors=[];
+ const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
  await page.route('**/*',r=>r.request().url().startsWith(served.url+'/')?r.continue():r.abort());
  try{
@@ -113,7 +114,7 @@ test('API references use real declarations, defaults and token source',async({pa
 });
 
 test('token reference filters categories and switches paired theme values',async({page})=>{
- await buildCatalogue({root,outDir:`${root}/site`});const served=await serveRoot(`${root}/site`);
+ const served=await serveRoot(siteRoot());
  const tokenCount=readTokenModel(JSON.parse(readFileSync(join(root,'design-system/tokens/source.json'),'utf8'))).names.length;
  const errors=[];page.on('pageerror',error=>errors.push(error.message));
  try{
@@ -185,7 +186,7 @@ test('token reference filters categories and switches paired theme values',async
 });
 
 test('search, URL history and scope selection preserve preview contracts',async({page})=>{
- const cards=await buildCatalogue({root,outDir:`${root}/site`}),served=await serveRoot(`${root}/site`);
+ const cards=catalogueCards(),served=await serveRoot(siteRoot());
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  try{
   await page.goto(served.url+'/index.html#DsButton');await expect(page.locator('#title')).toHaveText('Button');
