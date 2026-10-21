@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import { exportBaseline } from './export.mjs';
 import { readCards } from '../catalog/index.mjs';
 import { renderPreview } from '../catalog/preview.mjs';
+import {sourceAsset} from '../catalog/assets.mjs';
 
 export const SCOPES = ['DEFAULT', 'RED2'].flatMap(theme => ['light', 'dark'].flatMap(appearance => ['cozy', 'compact'].map(density => ({ theme, appearance, density }))));
 export const ACCEPTANCE_SCOPES = [SCOPES[0], SCOPES[3], SCOPES[4], SCOPES[7]];
@@ -32,7 +33,7 @@ export async function serveRoot(root, pages = new Map()) {
       const rel = relative(base, file);
       if (rel === '..' || rel.startsWith(`..${sep}`) || rel.includes('.git') || rel.includes('node_modules')) { res.writeHead(403); res.end(); return; }
       res.setHeader('Content-Type', MIME[extname(file)] ?? 'application/octet-stream');
-      res.end(readFileSync(file));
+      res.end(readFileSync(sourceAsset(base, rel)));
     } catch { res.writeHead(404); res.end(); }
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -90,8 +91,9 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
    page=await context.newPage();
    page.setDefaultTimeout(30000);
    page.setDefaultNavigationTimeout(30000);
-   page.on('pageerror', e => errors.push(e.message));
+   page.on('pageerror', e => errors.push(e.stack ?? e.message));
    page.on('response', r => { if (r.status() >= 400) errors.push(`${r.status()} ${r.url()}`); });
+   page.on('requestfailed', request => errors.push(`${request.failure()?.errorText}: ${request.url()}`));
   };
   const errors = [];
   const capture=async(base,key,viewport,cold=false)=>{

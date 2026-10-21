@@ -24,7 +24,7 @@ const check = async (name, fn) => { await fn(); console.log(`ok   пакет-п�
 
 const work = mkdtempSync(join(tmpdir(), 'ds-pack-'));
 try {
-  const packed = JSON.parse(sh(['pack', '--json', '--ignore-scripts', '--pack-destination', work], root))[0];
+  const packed = JSON.parse(sh(['pack', '--json', '--ignore-scripts', '--pack-destination', work], join(root,'.tmp/package')))[0];
   assert.equal(packed.files.some(f=>f.path!=='design-system/lint/README.md'&&/^(?:design-system\/(?:tests|tools|lint)|site|catalog|tests|tools|\.tmp)\//.test(f.path)),false,'catalogue and build/test tooling must not ship');
   assert.ok(packed.files.some(f=>f.path==='design-system/lint/README.md'),'canonical lint guide linked from usage documentation must ship');
   for(const path of ['dist/styles.css','dist/tokens.css','tokens.json','dist/react/index.mjs','dist/react/index.d.ts','dist/angular/core.mjs','dist/angular/core.d.mts','dist/angular/echarts.mjs','dist/angular/echarts.d.mts'])assert.ok(packed.files.some(f=>f.path===path),path);
@@ -42,7 +42,7 @@ try {
   symlinkSync(join(root, 'node_modules/stylelint'), join(work, 'node_modules/stylelint'), 'junction');
 
   await check('входы резолвятся', () => {
-    for (const entry of ['styles.css', 'tokens.css', 'stylelint-config', 'tokens.json', 'package.json','angular','angular/echarts']) {
+    for (const entry of ['styles.css', 'tokens.css', 'stylelint-config', 'tokens.json', 'package.json','echarts-theme','angular','angular/echarts']) {
       assert.ok(existsSync(req.resolve(`@primasoftllc/design-system/${entry}`)), entry);
     }
   });

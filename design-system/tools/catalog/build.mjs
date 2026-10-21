@@ -5,7 +5,6 @@ import { readCards } from './index.mjs';
 import { renderPreview } from './preview.mjs';
 import { previewAssets, assetPath, copyAsset } from './assets.mjs';
 import { buildComponents } from '../build-components.mjs';
-import { buildCompatibility } from '../../../tools/build-compatibility.mjs';
 import { writeTokenOutputs } from '../tokens/build.mjs';
 import {readTokenModel} from '../tokens/model.mjs';
 import {extractApi} from '../docs/api.mjs';
@@ -18,7 +17,6 @@ export async function buildCatalogue({ root, outDir }) {
   if (resolve(root) === resolve(outDir)) throw new Error('Catalogue output must not replace source root');
   const cards = readCards(root);
   const css = writeTokenOutputs({ root });
-  buildCompatibility({root});
   const api=extractApi({root}),knownRoutes=new Map();
   const guides=readdirSync(root).filter(name=>name.endsWith('.md'));
   for(const guide of guides)knownRoutes.set(guide,`/docs/${guide.slice(0,-3)}.html`);

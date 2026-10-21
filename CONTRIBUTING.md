@@ -135,8 +135,14 @@ in `.tmp/browser-compat-results/`, included in CI failure artifacts.
 
 ## Generated files
 
-`npm run build` creates `dist/`, `site/`, compatible token CSS/JSON, scoped CSS
-and component bundles. Edit their source files, never generated copies.
+`npm run build` creates `dist/`, `site/`, scoped CSS, component bundles and the
+complete npm package in `.tmp/package/`. Compatibility paths exist only inside
+that staging directory. Edit source files, never generated copies.
+
+Use `npm run pack` to build and create a tarball in the repository root, or
+`npm pack ./.tmp/package --ignore-scripts` to pack an already built package.
+Packing the repository directly is rejected to prevent incomplete packages.
+CI publishes the verified staging directory with lifecycle scripts disabled.
 
 ## Releasing
 

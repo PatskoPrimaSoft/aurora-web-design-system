@@ -2,6 +2,10 @@ import { readFileSync, copyFileSync, mkdirSync, existsSync } from 'node:fs';
 import { resolve, relative, dirname, isAbsolute, sep } from 'node:path';
 import { parse } from 'parse5';
 export const vendorAssets = {'vendor/echarts.min.js':'node_modules/echarts/dist/echarts.min.js'};
+export function sourceAsset(root, path) {
+  const file = resolve(root, path);
+  return !existsSync(file) && /^(?:fonts|assets\/fonts)\//.test(path.replaceAll('\\','/')) ? resolve(root, 'design-system', path) : file;
+}
 export function assetPath(root, from, url) {
   if (/^(?:data:|blob:|#)/.test(url)) return null;
   const u = new URL(url, `http://aurora.local/${from}`);
@@ -10,7 +14,7 @@ export function assetPath(root, from, url) {
   const path = resolve(root, vendorAssets[requested] ?? requested);
   const rel = relative(resolve(root), path);
   if (rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel)) throw new Error(`${from}: unsafe asset ${url}`);
-  if (!existsSync(path)) throw new Error(`${from}: missing asset ${url}`);
+  if (!existsSync(sourceAsset(root, rel))) throw new Error(`${from}: missing asset ${url}`);
   return rel;
 }
 export function previewAssets(root, from, html, ignoredPaths = []) {
@@ -22,7 +26,7 @@ export function previewAssets(root, from, html, ignoredPaths = []) {
     if (!path || refs.has(path)) return;
     refs.add(path);
     if (/\.css$/i.test(path)) {
-      const text=readFileSync(resolve(root,path),'utf8');
+      const text=readFileSync(sourceAsset(root,path),'utf8');
       urls(text,path.replaceAll('\\','/'));
       for(const match of text.matchAll(/@import\s+['"]([^'"]+)['"]/g)) add(match[1],path.replaceAll('\\','/'));
     }
@@ -46,5 +50,5 @@ export function copyAsset({ root, outDir, path }) {
   const rel = relative(resolve(outDir), target);
   if (rel.startsWith('..') || isAbsolute(rel)) throw new Error(`Unsafe output asset ${path}`);
   mkdirSync(dirname(target), { recursive: true });
-  copyFileSync(resolve(root, path), target);
+  copyFileSync(sourceAsset(root, path), target);
 }

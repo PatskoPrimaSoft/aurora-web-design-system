@@ -9,7 +9,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { customPropertiesFromTokens } from '../lib/tokens.js';
 
-const tokensPath = fileURLToPath(new URL('../../../tokens.json', import.meta.url));
+const tokensPath = fileURLToPath(new URL('../../../dist/tokens.json', import.meta.url));
 const outPath = fileURLToPath(new URL('../tokens.allowed.json', import.meta.url));
 
 const tokens = JSON.parse(readFileSync(tokensPath, 'utf8'));

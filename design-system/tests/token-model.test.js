@@ -6,7 +6,7 @@ const source = JSON.parse(readFileSync(new URL('../tokens/source.json', import.m
 const model = readTokenModel(source);
 assert.equal(model.density.cozy['--ds-control-h'], '36px');
 assert.equal(model.density.compact['--ds-control-h'], '30px');
-const delivered = JSON.parse(readFileSync(new URL('../../tokens.json', import.meta.url)));
+const delivered = JSON.parse(readFileSync(new URL('../../dist/tokens.json', import.meta.url)));
 assert.deepEqual(JSON.parse(serializePublicTokens(source)), delivered);
 assert.equal(delivered.runtime,undefined,'internal runtime must not leak into public design-system/tokens');
 assert.equal(new Set(model.names).size,model.names.length);

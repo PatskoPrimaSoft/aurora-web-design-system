@@ -117,7 +117,7 @@ for (const testCase of cases) {
 
 // --- предсобранный список не разошёлся с tokens.json ----------------------
 const tokens = JSON.parse(
-  readFileSync(fileURLToPath(new URL('../../../tokens.json', import.meta.url)), 'utf8'),
+  readFileSync(fileURLToPath(new URL('../../../dist/tokens.json', import.meta.url)), 'utf8'),
 );
 const baked = JSON.parse(
   readFileSync(fileURLToPath(new URL('../tokens.allowed.json', import.meta.url)), 'utf8'),
@@ -218,7 +218,7 @@ const cliCases = [];
 // она фиксирует решение владельца по ds-border-field и не даёт незаметно
 // «починить» проверку, если кто-то заменит ds-border-control на ds-border-field.
 {
-  const sets = parseSets(readFileSync(fileURLToPath(new URL('../../../tokens.css', import.meta.url)), 'utf8'));
+  const sets = parseSets(readFileSync(fileURLToPath(new URL('../../../dist/legacy-tokens.css', import.meta.url)), 'utf8'));
   const rules = [
     ...['ds-surface', 'ds-bg', 'ds-surface-hover', 'ds-surface-selected'].map((bg) => ['ds-border-control', bg, 3]),
     ...['ds-surface', 'ds-bg'].map((bg) => ['ds-border-control-hover', bg, 3]),
@@ -240,7 +240,7 @@ const cliCases = [];
 // Каталог определяет светлость темы только по её имени (/dark|night/i): тема
 // «DEFAULT · тёмная» считалась светлой, и превью в ней лежали на светлом столе.
 {
-  const themes = JSON.parse(readFileSync(fileURLToPath(new URL('../../../tokens.json', import.meta.url)), 'utf8')).color.themes;
+  const themes = JSON.parse(readFileSync(fileURLToPath(new URL('../../../dist/tokens.json', import.meta.url)), 'utf8')).color.themes;
   const wrong = themes.filter((t) => /dark/.test(t.id) !== /dark|night/i.test(t.name));
   cliCases.push({ title: 'имена тем: тёмные называются dark, светлые — нет', ok: wrong.length === 0,
     got: wrong.map((t) => `${t.id} «${t.name}»`).join(', ') });
@@ -252,7 +252,7 @@ const cliCases = [];
   const cfg = JSON.parse(readFileSync(fileURLToPath(new URL('../naming.config.json', import.meta.url)), 'utf8'));
   const root = fileURLToPath(new URL('../../..', import.meta.url));
   const read = (f) => readFileSync(join(root, f), 'utf8');
-  const bundleCss = read('design-system/components/bundle.css'), tokensCss = read('tokens.css'), bundleJs = read('design-system/components/bundle.js');
+  const bundleCss = read('design-system/components/bundle.css'), tokensCss = read('dist/legacy-tokens.css'), bundleJs = read('design-system/components/bundle.js');
   for (const { old, new: next } of cfg.aliases ?? []) {
     const decl = new RegExp('--' + old + ':\\s*([^;]+);', 'g');
     const values = [...(bundleCss + tokensCss).matchAll(decl)].map((m) => m[1].trim());

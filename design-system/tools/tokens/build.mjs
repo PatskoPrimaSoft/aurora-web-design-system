@@ -25,8 +25,8 @@ export function writeTokenOutputs({ root, outDir = join(root, 'dist') }) {
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, 'styles.css'), output.styles);
   writeFileSync(join(outDir, 'tokens.css'), output.tokens);
-  writeFileSync(join(root, 'tokens.json'), serializePublicTokens(output.source));
-  writeFileSync(join(root, 'tokens.css'), output.legacy);
+  writeFileSync(join(outDir, 'tokens.json'), serializePublicTokens(output.source));
+  writeFileSync(join(outDir, 'legacy-tokens.css'), output.legacy);
   writeFileSync(join(root, 'design-system/tokens/scoped.css'), output.native);
   writeFileSync(join(root, 'design-system/components/bundle.css'), output.styles);
   mkdirSync(join(root, 'design-system/lint'), {recursive: true});

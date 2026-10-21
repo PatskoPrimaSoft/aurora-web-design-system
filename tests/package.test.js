@@ -2,7 +2,7 @@
  * Манифест пакета: имя, реестр, входы, состав и отсутствие старого имени в поставке.
  * Запуск: `node tests/package.test.js`, часть `npm run test:ui`.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
@@ -47,6 +47,12 @@ check('состав пакета', () => {
     assert.ok(pkg.files.includes(entry), `files: ${entry}`);
   }
   assert.ok(pkg.files.includes('!lint/test/'), 'фикстуры линтера не публикуются');
+});
+check('staging сохраняет контракт и не создаёт копии в корне', () => {
+  const staged = JSON.parse(readFileSync(join(root, '.tmp/package/package.json'), 'utf8'));
+  for (const key of ['name','version','exports','main','types','peerDependencies','peerDependenciesMeta','publishConfig','files']) assert.deepEqual(staged[key], pkg[key], key);
+  assert.equal(staged.scripts, undefined, 'published package must not execute repository hooks');
+  for (const path of ['fonts','assets/fonts','components','lint','templates/angular','tokens.json','tokens.css','docs/usage.md','docs/design.md','docs/tokens.md','docs/migration.md']) assert.equal(existsSync(join(root,path)),false,`generated root copy: ${path}`);
 });
 check('старого имени нет в коде и документах', () => {
   const skip = ['node_modules', '.git', '.tmp', '.worktrees', 'site', 'assets/notes', 'dist', 'docs/plans', '.superpowers'];

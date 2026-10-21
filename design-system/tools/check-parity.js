@@ -72,7 +72,7 @@ export function checkParity(tokensCss, bundleCss) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = new URL('../..', import.meta.url);
   const { mismatches, compared, kinds } = checkParity(
-    readFileSync(new URL('tokens.css', root), 'utf8'),
+    readFileSync(new URL('dist/legacy-tokens.css', root), 'utf8'),
     readFileSync(new URL('design-system/components/bundle.css', root), 'utf8'),
   );
   for (const m of mismatches) console.error(`FAIL паритет: ${m}`);

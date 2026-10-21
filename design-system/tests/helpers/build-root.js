@@ -9,7 +9,8 @@ export function fixtureRoot(){
   const folder=join(source,'design-system/components',entry.name);
   for(const file of readdirSync(folder).filter(name=>name.endsWith('.d.ts'))){mkdirSync(join(root,'design-system/components',entry.name),{recursive:true});copyFileSync(join(folder,file),join(root,'design-system/components',entry.name,file));}
  }
- mkdirSync(join(root,'lint'));mkdirSync(join(root,'design-system/components/Example'));
+ copyFileSync(join(source,'package.json'),join(root,'package.json'));
+ mkdirSync(join(root,'design-system/components/Example'));
  writeFileSync(join(root,'design-system/overview.html'),'<!-- @dsCard group="Start" --><html><head></head><body>overview</body></html>');
  writeFileSync(join(root,'design-system/components/Example/preview.html'),'<!-- @dsCard group="Examples" height=180 --><html><head></head><body><div id="root"></div><script>ReactDOM.flushSync(()=>ReactDOM.createRoot(document.getElementById("root")).render(React.createElement("p",null,"hello")));</script></body></html>');
  return root;

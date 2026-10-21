@@ -6,13 +6,12 @@ import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, renameSync, rmSync
 import { buildCatalogue } from '../design-system/tools/catalog/build.mjs';
 import { buildAngular } from '../ng-ui-kit/tools/build-angular.mjs';
 import { buildReact } from '../design-system/tools/build-react.mjs';
-import { buildCompatibility } from './build-compatibility.mjs';
+import { buildPackage } from './build-package.mjs';
 export function buildDist({root = fileURLToPath(new URL('..', import.meta.url))} = {}) {
   const {styles, tokens} = buildTokens({root});
   return {styles, tokens};
 }
 export async function buildAll({root = fileURLToPath(new URL('..', import.meta.url))} = {}) {
-  buildCompatibility({root});
   await buildReact({root});
   if(existsSync(join(root,'ng-ui-kit/tsconfig.lib.json')))await buildAngular({root});
   const temporary = join(root,'.tmp');mkdirSync(temporary,{recursive:true});
@@ -27,7 +26,8 @@ export async function buildAll({root = fileURLToPath(new URL('..', import.meta.u
     for(const name of ['runtime.js','components.js'])writeFileSync(join(runtime,name),readFileSync(join(root,'site',name)));
     writeFileSync(join(root,'design-system/components/bundle.js'),readFileSync(join(runtime,'components.js')));
   } finally { rmSync(stage,{recursive:true,force:true}); }
-  return {cards};
+  const packageRoot = buildPackage({root});
+  return {cards, packageRoot};
 }
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = fileURLToPath(new URL('..', import.meta.url));

@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { exportBaseline } from '../tools/baseline/export.mjs';
 const root = fileURLToPath(new URL('../../', import.meta.url));
-const current = join(root, 'tokens.json');
+const current = join(root, 'dist/tokens.json');
 const bytes = readFileSync(current);
 let baseline;
 try {

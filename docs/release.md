@@ -12,6 +12,9 @@ CHANGELOG, переводит `master` fast-forward на релизный ком
 `/aurora-release` в develop ([AGENTS.md](../AGENTS.md), раздел «Релиз»). Push в master запускает `.github/workflows/ci.yml`:
 проверки, `npm publish`, тег `v<version>`, GitHub Release из раздела CHANGELOG. Секреты не нужны — `GITHUB_TOKEN`.
 Руками теги не ставятся и `npm publish` не запускается.
+CI публикует проверенную staging-директорию командой
+`npm publish ./.tmp/package --ignore-scripts`: повторная сборка при публикации не нужна.
+Для локального tarball используется `npm run pack`; упаковка самого корня запрещена.
 
 ### Каталог на GitHub Pages
 

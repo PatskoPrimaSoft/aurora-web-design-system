@@ -28,9 +28,9 @@ mise exec -- npm run verify
 Общие точки запуска `tools/build.js` и `tools/verify.mjs`, проверки поставки,
 CI/релиза/Pages, npm-зависимости и инфраструктура чистой/воспроизводимой сборки
 находятся в корне.
-Сборка создаёт `dist/`, `site/` и копии для прежних путей npm-пакета
+Сборка создаёт `dist/`, `site/` и staging `.tmp/package/` для прежних путей npm-пакета
 (`components/src/`, `fonts/`, `assets/fonts/`, `templates/angular/`, `lint/` и руководства).
-Эти копии не редактируются и не хранятся в Git.
+Эти копии находятся только внутри staging, не редактируются и не хранятся в Git.
 
 - [Подключение](docs/usage.md)
 - [Дизайн-правила](docs/design.md)

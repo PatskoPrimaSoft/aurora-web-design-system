@@ -105,7 +105,7 @@ jobs:
           if [ "$registry_state" = present ]; then
             echo "::notice::@primasoftllc/design-system@$VERSION is already in GitHub Packages — resuming a partial release, skipping npm publish."
           else
-            npm publish
+            npm publish ./.tmp/package --ignore-scripts
           fi
           git tag "v$VERSION"
           git push origin "v$VERSION"

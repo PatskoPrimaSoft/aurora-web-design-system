@@ -65,7 +65,7 @@ test('ECharts integration preserves series selection, theme, sizing and legacy r
     const readme=readFileSync(root+'/design-system/components/DsChart/README.md','utf8');
     const markup=readme.match(/```html\n([\s\S]*?)\n```/)[1];
     const source=readme.match(/```js\n([\s\S]*?)\n```/)[1];
-    const bundle=await build({stdin:{contents:source,resolveDir:root,loader:'js'},bundle:true,write:false,format:'iife',loader:{'.css':'empty'}});
+    const bundle=await build({stdin:{contents:source,resolveDir:root+'/.tmp/package',loader:'js'},bundle:true,write:false,format:'iife',loader:{'.css':'empty'}});
     await page.route('**/copied-chart.html',route=>route.fulfill({contentType:'text/html',body:'<!doctype html><html lang="ru"><head><link rel="stylesheet" href="/dist/styles.css"></head><body>'+markup+'<script>'+bundle.outputFiles[0].text+'</script></body></html>'}));
     await page.goto(served.url+'/copied-chart.html');
     await expect(page.locator('#echarts-plot svg')).toHaveCount(1);

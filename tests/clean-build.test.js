@@ -4,7 +4,8 @@ const root=fixtureRoot();try{
  assert.equal(existsSync(join(root,'design-system/components/bundle.js')),false);
  assert.equal(existsSync(join(root,'tokens.json')),false);
  await buildAll({root});
- for(const file of ['dist/styles.css','dist/tokens.css','tokens.json','site/index.html','site/cards.json','site/runtime.js','.tmp/runtime/components.js','design-system/components/bundle.js'])assert.ok(existsSync(join(root,file)),file);
+ for(const file of ['dist/styles.css','dist/tokens.css','.tmp/package/package.json','.tmp/package/tokens.json','.tmp/package/fonts/MaterialSymbolsOutlined.woff2','.tmp/package/assets/fonts/inter-tight/InterTight-Regular.woff2','site/index.html','site/cards.json','site/runtime.js','.tmp/runtime/components.js','design-system/components/bundle.js'])assert.ok(existsSync(join(root,file)),file);
+ for(const file of ['tokens.json','tokens.css','fonts','assets','components','templates','lint','docs/usage.md'])assert.equal(existsSync(join(root,file)),false,`generated copy in source root: ${file}`);
  assert.equal(JSON.parse(readFileSync(join(root,'site/cards.json'))).length,2);
 }finally{rmSync(root,{recursive:true,force:true});}
 console.log('clean-build: sources in a spaced/Cyrillic path produce package and catalogue without saved bundles');

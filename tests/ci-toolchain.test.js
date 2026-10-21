@@ -8,4 +8,5 @@ assert.match(workflow,/\[ "\$tag_status" -ne 2 \]/,'only Git exit 2 means missin
 assert.match(workflow,/node tools\/release-check\.mjs > \/dev\/null/,'CI must verify lock versions and release notes');
 assert.match(workflow,/registry_state=\$\(node tools\/release-check\.mjs registry "\$VERSION"\)/,'registry failures must stop publication');
 assert.match(workflow,/if \[ "\$registry_state" = present \]; then[\s\S]*else\s+npm publish/,'existing package must skip publication');
+assert.match(workflow,/npm publish \.\/\.tmp\/package --ignore-scripts/,'CI must publish the verified staging directory without rebuilding');
 console.log('ci-toolchain: configured hook runtime installed before verification');

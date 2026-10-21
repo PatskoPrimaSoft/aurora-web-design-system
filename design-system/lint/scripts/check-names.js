@@ -154,7 +154,7 @@ export function isDirectRun(moduleUrl, argvPath = process.argv[1]) {
 // Запуск напрямую: node design-system/lint/scripts/check-names.js [путь к tokens.json]
 if (isDirectRun(import.meta.url)) {
   const tokensPath =
-    process.argv[2] ?? fileURLToPath(new URL('../../../tokens.json', import.meta.url));
+    process.argv[2] ?? fileURLToPath(new URL('../../../dist/tokens.json', import.meta.url));
   const tokens = JSON.parse(readFileSync(tokensPath, 'utf8'));
   const all = checkNames(tokens);
   const open = checkOpen(tokens);

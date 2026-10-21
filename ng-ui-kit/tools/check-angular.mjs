@@ -20,7 +20,7 @@ export async function checkAngular({root=toolRoot,tarball,workRoot}={}){
  const close=async()=>{for(const served of servers){served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}const rel=relative(parent,resolve(work));if(rel==='..'||rel.startsWith('..')||isAbsolute(rel)||!rel.startsWith('aurora-angular-'))throw Error('Unsafe Angular consumer cleanup');rmSync(work,{recursive:true,force:true});};
  try{
   const logRoot=join(root,'.tmp/migration/angular');mkdirSync(logRoot,{recursive:true});
-  if(!tarball){const packed=JSON.parse(npm(['pack','--json','--ignore-scripts','--pack-destination',work],root))[0];tarball=join(work,packed.filename);}
+  if(!tarball){const packed=JSON.parse(npm(['pack','--json','--ignore-scripts','--pack-destination',work],join(root,'.tmp/package')))[0];tarball=join(work,packed.filename);}
   const result={close,work};
   for(const name of ['19','base','charts','legacy']){
    const consumer=join(work,name);copy(join(root,'ng-ui-kit/tests/consumers/angular-'+name),consumer);

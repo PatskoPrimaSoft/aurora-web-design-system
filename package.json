@@ -71,11 +71,12 @@
     "build": "node tools/build.js",
     "check:parity": "node design-system/tools/check-parity.js",
     "check:pack": "node tools/check-pack.js",
-    "prepack": "npm run build",
+    "prepack": "node tools/pack.mjs --reject-root",
     "verify": "node tools/verify.mjs",
     "pretest": "npm run build",
     "dev": "node design-system/tools/dev.mjs",
-    "build:catalog": "node design-system/tools/catalog/build.mjs"
+    "build:catalog": "node design-system/tools/catalog/build.mjs",
+    "pack": "npm run build && node tools/pack.mjs"
   },
   "peerDependencies": {
     "@angular/common": "^19.2.25 || >=20.3.34",

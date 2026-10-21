@@ -23,7 +23,7 @@ check('подстановка шрифта сохраняет пробел ме�
 });
 
 check('паритет репозитория чистый', () => {
-  const { mismatches, compared, kinds } = checkParity(read('tokens.css'), read('design-system/components/bundle.css'));
+  const { mismatches, compared, kinds } = checkParity(read('dist/legacy-tokens.css'), read('design-system/components/bundle.css'));
   assert.deepEqual(mismatches, []);
   console.log(`     паритет: ${compared} копий`);
 });
@@ -63,9 +63,10 @@ check('нет Google Fonts и рамочных селекторов артефа
   assert.doesNotMatch(tokens, /\[data-theme=/);
 });
 check('каждый url() ведёт к файлу пакета', () => {
+  assert.equal(read('.tmp/package/dist/styles.css'), styles, 'staged CSS must match the current build');
   const urls = [...styles.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)].map((m) => m[1]);
   assert.ok(urls.length >= 7, 'шесть шрифтов и иконки');
-  for (const url of urls) assert.ok(existsSync(join(root, 'dist', url)), `битый url(${url})`);
+  for (const url of urls) assert.ok(existsSync(join(root, '.tmp/package/dist', url)), `битый url(${url})`);
 });
 check('шрифты и иконки объявлены', () => {
   const faces = [];

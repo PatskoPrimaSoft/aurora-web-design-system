@@ -3,7 +3,8 @@
     "target": "ES2022", "module": "ES2022", "moduleResolution": "bundler",
     "rootDir": "src", "outDir": "../dist/angular/esm",
     "declaration": true, "strict": true, "experimentalDecorators": true,
-    "skipLibCheck": false, "types": [], "lib": ["ES2022", "DOM"]
+    "skipLibCheck": false, "types": [], "lib": ["ES2022", "DOM"],
+    "paths": {"@primasoftllc/design-system/echarts-theme": ["../design-system/components/src/components/charts/echartsTheme.d.mts"]}
   },
   "angularCompilerOptions": {"compilationMode": "partial", "strictTemplates": true},
   "include": ["src/**/*.ts"]

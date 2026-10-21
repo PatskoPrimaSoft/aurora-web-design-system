@@ -3,14 +3,14 @@ import {dirname, join, posix} from 'node:path';
 
 // Published source and asset paths predate the repository directory layout.
 // These copies are generated; the editable originals live in design-system/.
-export function buildCompatibility({root}) {
+export function buildCompatibility({root, outDir}) {
   const entries = ['fonts', 'assets/fonts', 'components/src', 'components/DsButton/README.md',
     'templates/angular', 'docs/usage.md', 'docs/design.md', 'docs/tokens.md', 'docs/migration.md',
     'lint/config.js', 'lint/index.js', 'lint/lib', 'lint/rules', 'lint/scripts', 'lint/naming.config.json',
     'lint/README.md', 'lint/tokens.allowed.json'];
-  const publicPath = path => path.replace(/^design-system\//, '');
+  const publicPath = path => path === 'dist/tokens.json' ? 'tokens.json' : path.replace(/^design-system\//, '');
   const copy = (source, destination) => {
-    const from = join(root, source), to = join(root, destination);
+    const from = join(root, source), to = join(outDir, destination);
     mkdirSync(dirname(to), {recursive: true});
     const copyFiles = (sourcePath, targetPath) => {
       if (statSync(sourcePath).isDirectory()) {
@@ -40,7 +40,7 @@ export function buildCompatibility({root}) {
         (_, before, target, after) => before + relative(target) + after);
       text = text.replace(/(\]\()(\.[^\s)#]+)([^)]*\))/g,
         (_, before, target, after) => before + relative(target) + after);
-      writeFileSync(join(root, dst), text);
+      writeFileSync(join(outDir, dst), text);
     };
     if (/\.[^/]+$/.test(source)) fix(source, destination);
     else rewrite(source, destination);
