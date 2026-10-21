@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
 import {captureCards} from '../../tools/baseline/render.mjs';
-import {readFileSync, writeFileSync} from 'node:fs';
+import {readFileSync, writeFileSync, existsSync} from 'node:fs';
 import {join} from 'node:path';
 import {siteRoot, catalogueCards, preparedBaseline, copyTree} from '../helpers/browser-snapshot.mjs';
 
@@ -18,6 +18,10 @@ test('current catalogue renders all discovered pages in four scopes after approv
   expect(cards.some(card => card.id === 'DsCheckbox')).toBe(true);
   expect(cards.some(card => ['DsBadge', 'DsFilterBar', 'DsObjectRow', 'DsSelectionBar'].includes(card.id))).toBe(false);
   await captureCards({browser, root: siteRoot(), cards, mode: 'current', outDir: testInfo.outputPath('full-new')});
+  for (const id of ['AngularSetup', 'AngularComponents']) {
+    expect(cards.find(card => card.id === id)?.layout).toBe('guide');
+    expect(existsSync(testInfo.outputPath('full-new', `${id}-DEFAULT-light-cozy.png`))).toBe(true);
+  }
 });
 
 test('repeated original renders never accept an intentionally changed preview', async ({browser}, testInfo) => {

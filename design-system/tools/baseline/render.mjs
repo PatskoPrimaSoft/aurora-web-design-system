@@ -60,7 +60,10 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
   const pages = new Map();
   for (const card of cards) for (const scope of ACCEPTANCE_SCOPES) {
     const key = `${card.id}-${scope.theme}-${scope.appearance}-${scope.density}`;
-    pages.set(`/frames/${key}.html`, await renderPreview({ root, card, mode, scope }));
+    const html = mode === 'current' && card.layout === 'guide'
+      ? readFileSync(join(root, card.previewPath), 'utf8')
+      : await renderPreview({ root, card, mode, scope });
+    pages.set(`/frames/${key}.html`, html);
   }
   const served = await serveRoot(root, pages);
   let reference = served;
@@ -72,12 +75,12 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
     }
     reference = await serveRoot(referenceRoot, originals);
   }
-  let context, page, coldBrowser, currentKey='setup';
+  let context, page, coldBrowser, captureBrowser, currentKey='setup';
   const freshPage=async(cold=false)=>{
    if(context)await context.close();
    if(coldBrowser){await coldBrowser.close();coldBrowser=null;}
    if(cold)coldBrowser=await browser.browserType().launch();
-   context=await (coldBrowser??browser).newContext();
+   context=await (coldBrowser??captureBrowser).newContext();
    await context.addInitScript(() => {
     const RealDate = Date;
     window.Date = class extends RealDate { constructor(...args) { super(...(args.length ? args : [1760000000000])); } static now() { return 1760000000000; } };
@@ -111,6 +114,9 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
     return page.screenshot({animations:'disabled',caret:'hide'});
   };
   try {
+    // A capture can create hundreds of contexts; keep its network service isolated
+    // from the worker's browser and release it when this batch finishes.
+    captureBrowser=await browser.browserType().launch();
     for (const card of cards) for (const scope of ACCEPTANCE_SCOPES) {
       const key = `${card.id}-${scope.theme}-${scope.appearance}-${scope.density}`;
       currentKey=key;
@@ -159,6 +165,7 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
     // A timed-out test may already have closed the browser; preserve the capture error.
     if(context)await context.close().catch(()=>{});
     if(coldBrowser)await coldBrowser.close().catch(()=>{});
+    if(captureBrowser)await captureBrowser.close().catch(()=>{});
     if(reference !== served){reference.server.closeAllConnections();await new Promise(resolve => reference.server.close(resolve));}
     served.server.closeAllConnections();
     await new Promise(resolve => served.server.close(resolve));

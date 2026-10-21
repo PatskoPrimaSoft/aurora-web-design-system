@@ -16,7 +16,18 @@ test('sorting guide applies real ordering and keeps documentation neutral',async
         const list=scene.getByRole('list',{name:'Объекты с сортировкой'});
         await expect(list.getByRole('listitem').first()).toContainText('Volvo FH16');
         const trigger=scene.getByRole('button',{name:/^Сортировка:/});
-        await trigger.press('Enter');
+        const openMenu=async key=>{
+          await trigger.press(key);
+          await expect(frame.getByRole('dialog')).toBeVisible();
+          await expect(frame.getByRole('radio',{name:'Дате добавления',exact:true})).toBeFocused();
+        };
+        const chooseSpeed=async()=>{
+          const speed=frame.getByRole('radio',{name:'Скорости',exact:true});
+          await speed.check();
+          await expect(speed).toBeChecked();
+          await expect(frame.getByRole('button',{name:'Сначала больше',exact:true})).toBeVisible();
+        };
+        await openMenu('Enter');
         await expect(scene.locator('[data-ds-filter-clear]')).toHaveCount(0);
         const directions=frame.getByRole('dialog').locator('button');
         for(const button of await directions.all())expect(await button.locator('[data-ds-button-label]').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
@@ -28,16 +39,18 @@ test('sorting guide applies real ordering and keeps documentation neutral',async
         await frame.getByRole('button',{name:'Применить',exact:true}).click();
         await expect(list.getByRole('listitem').first()).toContainText('ГАЗ Next');
         await expect(trigger).toBeFocused();
-        await trigger.press('Space');
-        await frame.getByRole('radio',{name:'Скорости',exact:true}).check();
+        await openMenu('Space');
+        await chooseSpeed();
         await page.keyboard.press('Escape');
+        await expect(frame.getByRole('dialog')).toHaveCount(0);
+        await expect(trigger).toBeFocused();
         await expect(list.getByRole('listitem').first()).toContainText('ГАЗ Next');
-        await trigger.press('Enter');
-        await frame.getByRole('radio',{name:'Скорости',exact:true}).check();
+        await openMenu('Enter');
+        await chooseSpeed();
         await frame.getByRole('button',{name:'Сначала больше',exact:true}).click();
         await frame.getByRole('button',{name:'Применить',exact:true}).click();
         await expect(list.getByRole('listitem').first()).toContainText('МАЗ 5440');
-        await trigger.press('Enter');
+        await openMenu('Enter');
         await frame.getByRole('button',{name:'Сбросить порядок',exact:true}).click();
         await expect(list.getByRole('listitem').first()).toContainText('Volvo FH16');
         await expect(list.getByRole('listitem')).toHaveCount(4);
