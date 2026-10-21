@@ -26,12 +26,17 @@ Node 22.12+ (в проекте 22.23.2), доступ к GitHub.
 
 ## 1. Доступ к пакету
 
-Пакет `@primasoftllc/design-system` приватный и лежит в GitHub Packages.
+Репозиторий `PrimaSoftLLC/aurora-web-design-system` публичный: для чтения
+исходников отдельный доступ не нужен. Пакет `@primasoftllc/design-system`
+распространяется через GitHub Packages.
 
-1. Попросите владельца выдать вам доступ к репозиторию `PrimaSoftLLC/aurora-web-design-system`.
-2. Создайте PAT **classic** со scope `read:packages` (GitHub → Settings → Developer settings → Personal access
+Для установки npm-пакетов GitHub Packages требует авторизацию даже при публичной
+видимости пакета. Публичность исходников и права на пакет — разные настройки;
+подробнее — [документация GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
+
+1. Создайте PAT **classic** со scope `read:packages` (GitHub → Settings → Developer settings → Personal access
    tokens → Tokens (classic)). Fine-grained токен GitHub Packages не принимает.
-3. Положите токен в переменную окружения `NODE_AUTH_TOKEN` (в профиль оболочки, не в репозиторий).
+2. Положите токен в переменную окружения `NODE_AUTH_TOKEN` (в профиль оболочки, не в репозиторий).
 
 ## 2. `.npmrc` в корне приложения
 
@@ -240,7 +245,8 @@ export class SaveExample {
 
 ## 11. CI приложения
 
-1. Владелец пакета: Package settings → Manage Actions access → добавить репозиторий приложения с ролью Read.
+1. Если workflow приложения не имеет доступа к пакету, владелец выдаёт его через
+   Package settings → Manage Actions access → репозиторий приложения → Read.
 2. Workflow приложения:
 
 ```yaml
@@ -500,7 +506,7 @@ CSS-путь, имена токенов и SCSS-партиал сохраняю�
 
 | Симптом | Причина |
 |---|---|
-| `npm i` — 401/403 от `npm.pkg.github.com` | нет `NODE_AUTH_TOKEN`, токен fine-grained или без `read:packages`, нет доступа к репозиторию системы |
+| `npm i` — 401/403 от `npm.pkg.github.com` | проверьте `NODE_AUTH_TOKEN`, PAT classic со scope `read:packages` и права на пакет; публичность исходников не отменяет авторизацию npm |
 | `npm i` — ERESOLVE по `echarts` или `stylelint` | проверьте диапазоны: echarts 6.1+, stylelint 16–17 |
 | `Cannot find module 'echarts'` при сборке | установите ECharts при использовании `/angular/echarts` |
 | Не найден `/angular` | проверьте установленную версию и оставшийся старый `paths` |

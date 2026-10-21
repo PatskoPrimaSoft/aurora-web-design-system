@@ -83,8 +83,11 @@ function render({restoreSection=false}={}){
  renderControls();
  search.value=state.query;drawNavigation();
  const card=cards.find(card=>card.id===state.cardId),error=document.getElementById('card-error');error.hidden=!!card;
- document.querySelector('.catalog-content').classList.toggle('component-page',card?.layout==='component');
- document.querySelector('.catalog-content').classList.toggle('contents-page',card?.layout==='component'||foundationGuides.has(card?.id));
+ const guide=card?.layout==='guide';
+ previewControls.hidden=guide;viewports.hidden=guide;
+ document.querySelector('.catalog-content').classList.toggle('guide-page',guide);
+ document.querySelector('.catalog-content').classList.toggle('component-page',card?.layout==='component'||guide);
+ document.querySelector('.catalog-content').classList.toggle('contents-page',card?.layout==='component'||guide||foundationGuides.has(card?.id));
  examplesHeading.hidden=card?.layout!=='component';
  if(card?.layout==='component')viewports.setAttribute('aria-labelledby',examplesHeading.id);else viewports.removeAttribute('aria-labelledby');
  titleStatus.hidden=card?.status!=='deprecated';renderStatus(titleStatusRoot,card);
@@ -95,7 +98,10 @@ function render({restoreSection=false}={}){
  const key=card.id;
  const documentPreview=['overview','DsBreakpointsDecisions'].includes(card.id)||foundationGuides.has(card.id);
  const responsivePreview=documentPreview||card.layout==='component';
- if(key!==renderedKey){
+ if(guide){
+  for(const record of frames)record.disposeResize?.();
+  viewports.replaceChildren();frames=[];renderedKey=key;
+ }else if(key!==renderedKey){
   for(const record of frames)record.disposeResize?.();
   viewports.replaceChildren();frames=[];viewports.className='single-preview';
   for(const[index,fixed]of [state.scope].entries()){
@@ -133,7 +139,7 @@ function render({restoreSection=false}={}){
   renderedKey=key;
  }
  for(const record of frames)scopeFrame(record);
- disposeContents=card.layout==='component'||foundationGuides.has(card.id)?createPageContents({
+ disposeContents=card.layout==='component'||guide||foundationGuides.has(card.id)?createPageContents({
   container:document.querySelector('.catalog-content'),
   headings:[...(card.layout==='component'?[examplesHeading]:[]),...document.querySelectorAll('#card-description h2')],
   previewSectionsSelector:foundationGuides.has(card.id)?'main > section > h2[id]':null,

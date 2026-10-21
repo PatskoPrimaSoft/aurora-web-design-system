@@ -55,5 +55,18 @@ const fixture=fixtureRoot();try{
  writeFileSync(path,original.replace('</body>','<img src="missing.svg"></body>'));await assert.rejects(buildCatalogue({root:fixture,outDir:join(fixture,'site')}),/missing.*missing.svg/);
  writeFileSync(path,original.replace('height=180','viewport="bad"'));assert.throws(()=>readCards(fixture),/invalid viewport/);
  writeFileSync(path,original.replace('height=180','id="overview"'));assert.throws(()=>readCards(fixture),/duplicate/i);
+ writeFileSync(path,original);
+ mkdirSync(join(fixture,'design-system/guides'),{recursive:true});mkdirSync(join(fixture,'design-system/docs'),{recursive:true});
+ const guide=join(fixture,'design-system/guides/setup.html'),source=join(fixture,'design-system/docs/setup.md');
+ const metadata='<!-- @dsCard id="Setup" group="1 · Начало" layout="guide" source="design-system/docs/setup.md" --><html><head></head><body></body></html>';
+ writeFileSync(guide,metadata);writeFileSync(source,'# Setup\n\n## Install\n\nCurrent instructions');
+ const guideCards=await buildCatalogue({root:fixture,outDir:join(fixture,'site')});
+ assert.match(guideCards.find(card=>card.id==='Setup').documentationHtml,/Current instructions/);
+ assert.match(readFileSync(join(fixture,'site/design-system/guides/setup.html'),'utf8'),/Current instructions/);
+ writeFileSync(source,'# Setup\n\n## Install\n\nUpdated instructions');
+ await buildCatalogue({root:fixture,outDir:join(fixture,'site')});
+ assert.match(readFileSync(join(fixture,'site/design-system/guides/setup.html'),'utf8'),/Updated instructions/);
+ assert.match(readFileSync(join(fixture,'site/docs/source/design-system/docs/setup.html'),'utf8'),/Updated instructions/);
+ writeFileSync(guide,metadata.replace('design-system/docs/setup.md','../outside.md'));assert.throws(()=>readCards(fixture),/outside repository/);
 }finally{rmSync(fixture,{recursive:true,force:true});}
 console.log('catalog-build: discovery, metadata, assets with query/hash, empty docs and errors passed');

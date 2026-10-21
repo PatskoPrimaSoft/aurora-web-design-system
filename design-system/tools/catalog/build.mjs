@@ -12,7 +12,7 @@ import {renderMarkdown,renderProps,renderComponentProps,documentPage} from '../d
 import {renderTokenReference} from '../docs/tokens.mjs';
 import {validateLinks} from '../docs/links.mjs';
 import {cardRedirects} from '../../catalog/state.js';
-const hasInlineDescription = card => card.layout === 'component' || card.id === 'DsChart' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
+const hasInlineDescription = card => ['component','guide'].includes(card.layout) || card.id === 'DsChart' || ['2 · Основы','3 · Миграция','4 · Бренд (общее)','6 · Карта'].includes(card.group);
 export async function buildCatalogue({ root, outDir }) {
   if (resolve(root) === resolve(outDir)) throw new Error('Catalogue output must not replace source root');
   const cards = readCards(root);
@@ -20,7 +20,7 @@ export async function buildCatalogue({ root, outDir }) {
   const api=extractApi({root}),knownRoutes=new Map();
   const guides=readdirSync(root).filter(name=>name.endsWith('.md'));
   for(const guide of guides)knownRoutes.set(guide,`/docs/${guide.slice(0,-3)}.html`);
-  for(const card of cards){knownRoutes.set(card.previewPath,'/'+card.previewPath);if(card.readmePath)knownRoutes.set(card.readmePath,hasInlineDescription(card)?`/index.html?card=${card.id}`:`/docs/cards/${card.id}.html`);}
+  for(const card of cards){knownRoutes.set(card.previewPath,'/'+card.previewPath);if(card.readmePath)knownRoutes.set(card.readmePath,card.layout==='guide'?'/'+card.previewPath:hasInlineDescription(card)?`/index.html?card=${card.id}`:`/docs/cards/${card.id}.html`);}
   const redirects=Object.entries(cardRedirects).filter(([,target])=>cards.some(card=>card.id===target));
   for(const[old,target]of redirects){
     knownRoutes.set(`design-system/components/${old}/README.md`,knownRoutes.get(`design-system/components/${target}/README.md`)??`/index.html?card=${target}`);
@@ -82,6 +82,13 @@ export async function buildCatalogue({ root, outDir }) {
   const assets = new Set();
   for (const m of css.styles.matchAll(/url\(\s*['"]?([^)'"\s]+)['"]?\s*\)/g)) assets.add(assetPath(root, 'dist/styles.css', m[1]));
   for (const card of cards) {
+    if(card.layout==='guide'){
+      const html=documentPage({title:card.title,html:card.documentationHtml,back:'/index.html?card='+card.id,fixedScope:true});
+      writePage(card.previewPath,html);
+      // Preserve existing links to the previously standalone guide.
+      writePage('docs/source/'+card.readmePath.replace(/\.md$/,'.html'),html);
+      continue;
+    }
     const html = await renderPreview({ root, card, mode: 'current', standalone: true,
       scope: { theme: 'DEFAULT', appearance: 'light', density: 'cozy' } });
     for (const path of previewAssets(root, card.previewPath, html, ['dist/styles.css','runtime.js','components.js'])) assets.add(path);

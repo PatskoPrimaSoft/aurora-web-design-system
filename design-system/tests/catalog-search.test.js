@@ -50,7 +50,16 @@ for(const theme of ['DEFAULT','RED2'])for(const appearance of ['light','dark'])f
 console.log('catalog-search: aliases, AND/NFKC search, discovery, all eight URL scopes and invalid inputs passed');
 
 const groups=navigationGroups(cards);
-assert.deepEqual(groups.map(group=>group.title),['Начало','Основы','Компоненты','Карта','Примеры экранов','Миграция']);
+const connection=cards.find(card=>card.id==='AngularSetup');
+assert.ok(connection,'connection guide must be discoverable in the catalogue');
+assert.equal(connection.layout,'guide');
+assert.equal(connection.readmePath,'design-system/docs/usage.md');
+assert.equal(searchCards(cards,'подключение angular')[0]?.id,'AngularSetup');
+assert.deepEqual(groups.find(group=>group.id==='start').sections.flatMap(section=>section.items.map(card=>card.id)),['overview']);
+assert.equal(groups.at(-1).title,'UI-kit');
+assert.deepEqual(groups.at(-1).sections.flatMap(section=>section.items.map(card=>card.id)),['AngularSetup','AngularComponents']);
+assert.equal(cards.find(card=>card.id==='AngularComponents')?.readmePath,'ng-ui-kit/docs/adding-components.md');
+assert.deepEqual(groups.map(group=>group.title),['Начало','Основы','Компоненты','Карта','Примеры экранов','Миграция','UI-kit']);
 const links=groups.flatMap(group=>group.sections.flatMap(section=>section.items.map(card=>card.id)));
 assert.equal(links.length,cards.length);assert.equal(new Set(links).size,cards.length);
 assert.deepEqual(groups.find(group=>group.id==='components').sections.map(section=>section.title),families.map(family=>family.title));

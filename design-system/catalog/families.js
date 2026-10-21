@@ -34,6 +34,7 @@ export function navigationGroups(cards){
   {id:'map',title:'Карта',groups:['6 · Карта'],order:['IconsMapAssets','IconsArrows','MapTrack']},
   {id:'screens',title:'Примеры экранов',groups:['7 · Эталонные экраны'],order:['AppShell','Monitoring','Admin']},
   {id:'migration',title:'Миграция',groups:['3 · Миграция'],order:['DsBreakpointsDecisions']},
+  {id:'ui-kit',title:'UI-kit',groups:['8 · UI-kit'],order:['AngularSetup','AngularComponents']},
  ];
  const assigned=new Set(),result=[];
  for(const definition of definitions){

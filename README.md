@@ -44,7 +44,7 @@ CSS, шрифты, токены, конфиг stylelint и Angular-сервис 
 интеграция ECharts подключается отдельно. React-компоненты поставляются готовыми
 и служат эталоном поведения. Angular UI kit поставляется из этого же пакета;
 первый компонент — [DsButtonComponent](ng-ui-kit/src/components/button/README.md), `button[dsButton]`.
-Доступ к приватному пакету и пошаговая настройка — в [руководстве](design-system/docs/usage.md).
+Доступ к пакету в GitHub Packages и пошаговая настройка — в [руководстве](design-system/docs/usage.md).
 
 Angular-вход собран на 19.2.25 и проверяется в Angular 19.2.25 и 20.3.34;
 интеграция графиков — ECharts 6.1+.

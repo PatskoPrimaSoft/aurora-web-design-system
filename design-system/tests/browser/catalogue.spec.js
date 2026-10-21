@@ -10,7 +10,7 @@ test('all catalogue pages render from local files without runtime errors',async(
  await page.route('**/*',r=>r.request().url().startsWith(served.url+'/')?r.continue():r.abort('blockedbyclient'));
  try{
   await page.goto(served.url+'/index.html');await expect(page.locator('nav a[data-id]')).toHaveCount(cards.length);
-  await expect(page.locator('nav h2')).toHaveText(['Начало','Основы','Компоненты','Карта','Примеры экранов','Миграция']);
+  await expect(page.locator('nav h2')).toHaveText(['Начало','Основы','Компоненты','Карта','Примеры экранов','Миграция','UI-kit']);
   await expect(page.locator('[data-navigation-group=components] h3')).toHaveText(['Кнопки и иконки','Поля и выбор','Навигация','Данные и фильтры','Контейнеры и окна','Обратная связь','Графики']);
   expect(await page.locator('nav a[data-id]').evaluateAll(links=>new Set(links.map(link=>link.dataset.id)).size)).toBe(cards.length);
   await expect(page.locator('[data-navigation-group=components] a[data-id]').first()).toHaveText('Button');

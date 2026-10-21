@@ -47,6 +47,7 @@ mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
 сохранены для совместимости поставки; новые компоненты создаются здесь.
 
 - [Правила разработки](docs/development.md)
+- [Добавление компонентов](docs/adding-components.md)
 - [Кнопка DsButtonComponent](src/components/button/README.md)
 - [Подключение к приложению](../design-system/docs/usage.md)
 - [Разработка дизайн-системы](../CONTRIBUTING.md)

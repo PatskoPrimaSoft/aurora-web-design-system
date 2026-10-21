@@ -1,4 +1,6 @@
 @import url('./code-blocks.css');
+.catalog-controls[hidden],#viewports[hidden]{display:none}
+.component-page.guide-page>.card-description{margin-top:24px}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ds-surface);color:var(--ds-fg);font:var(--ds-type-body)}
 #catalog-shell{height:100dvh;min-height:0}
