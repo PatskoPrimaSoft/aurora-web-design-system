@@ -5,7 +5,9 @@ import {dirname, join, posix} from 'node:path';
 // These copies are generated; the editable originals live in design-system/.
 export function buildCompatibility({root}) {
   const entries = ['fonts', 'assets/fonts', 'components/src', 'components/DsButton/README.md',
-    'templates/angular', 'docs/usage.md', 'docs/design.md', 'docs/tokens.md', 'docs/migration.md'];
+    'templates/angular', 'docs/usage.md', 'docs/design.md', 'docs/tokens.md', 'docs/migration.md',
+    'lint/config.js', 'lint/index.js', 'lint/lib', 'lint/rules', 'lint/scripts', 'lint/naming.config.json',
+    'lint/README.md', 'lint/tokens.allowed.json'];
   const publicPath = path => path.replace(/^design-system\//, '');
   const copy = (source, destination) => {
     const from = join(root, source), to = join(root, destination);
@@ -33,6 +35,8 @@ export function buildCompatibility({root}) {
         return result;
       };
       text = text.replace(/((?:from\s*|import\s*\()\s*['"])(\.[^'"]+)(['"])/g,
+        (_, before, target, after) => before + relative(target) + after);
+      text = text.replace(/(new URL\(\s*['"])(\.[^'"]+)(['"]\s*,\s*import\.meta\.url)/g,
         (_, before, target, after) => before + relative(target) + after);
       text = text.replace(/(\]\()(\.[^\s)#]+)([^)]*\))/g,
         (_, before, target, after) => before + relative(target) + after);

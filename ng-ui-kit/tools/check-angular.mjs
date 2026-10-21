@@ -1,5 +1,5 @@
 import{spawnSync}from'node:child_process';import{mkdtempSync,mkdirSync,readFileSync,writeFileSync,copyFileSync,readdirSync,rmSync,existsSync,realpathSync}from'node:fs';import{tmpdir}from'node:os';import{join,dirname,resolve,relative,isAbsolute}from'node:path';import{fileURLToPath}from'node:url';import{createRequire}from'node:module';import assert from'node:assert/strict';
-import{serveRoot}from'../../tools/baseline/render.mjs';import{chromium}from'@playwright/test';
+import{serveRoot}from'../../design-system/tools/baseline/render.mjs';import{chromium}from'@playwright/test';
 import{assertAngularButton}from'./check-angular-button.mjs';
 const toolRoot=fileURLToPath(new URL('../../',import.meta.url));
 export function validateConsumerInputs(root=toolRoot){

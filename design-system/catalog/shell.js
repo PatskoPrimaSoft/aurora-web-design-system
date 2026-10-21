@@ -19,7 +19,7 @@ window.ReactDOM.flushSync(()=>layoutRoot.render(h(DsPageLayout,{
 const headerRoot=window.ReactDOM.createRoot(document.getElementById('catalog-header-content'));
 window.ReactDOM.flushSync(()=>headerRoot.render(
  h('div',{className:'catalog-identity'},
-  h('span',{className:'catalog-logo'},h('img',{src:new URL('design-system/components/assets/logo/AuroraWhite.png',import.meta.url).href,alt:''})),
+  h('span',{className:'catalog-logo'},h('img',{src:new URL('./design-system/components/assets/logo/AuroraWhite.png',import.meta.url).href,alt:''})),
   h('strong',{className:'catalog-product'},'Aurora Design'))
 ));
 

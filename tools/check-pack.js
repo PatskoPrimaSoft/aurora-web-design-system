@@ -25,7 +25,8 @@ const check = async (name, fn) => { await fn(); console.log(`ok   пакет-п�
 const work = mkdtempSync(join(tmpdir(), 'ds-pack-'));
 try {
   const packed = JSON.parse(sh(['pack', '--json', '--ignore-scripts', '--pack-destination', work], root))[0];
-  assert.equal(packed.files.some(f=>/^(?:site|catalog|tests|tools|\.tmp)\//.test(f.path)),false,'catalogue and build/test tooling must not ship');
+  assert.equal(packed.files.some(f=>f.path!=='design-system/lint/README.md'&&/^(?:design-system\/(?:tests|tools|lint)|site|catalog|tests|tools|\.tmp)\//.test(f.path)),false,'catalogue and build/test tooling must not ship');
+  assert.ok(packed.files.some(f=>f.path==='design-system/lint/README.md'),'canonical lint guide linked from usage documentation must ship');
   for(const path of ['dist/styles.css','dist/tokens.css','tokens.json','dist/react/index.mjs','dist/react/index.d.ts','dist/angular/core.mjs','dist/angular/core.d.mts','dist/angular/echarts.mjs','dist/angular/echarts.d.mts'])assert.ok(packed.files.some(f=>f.path===path),path);
   const tgz = packed.filename;
   writeFileSync(join(work, 'package.json'), JSON.stringify({ name: 'consumer', private: true, type: 'module' }));
@@ -88,7 +89,7 @@ try {
     assert.ok(!existsSync(join(work,'node_modules/echarts')));
   });
   await check('React: строгие типы потребителя и отклонение неверных props', () => {
-    writeFileSync(join(work,'react-consumer.tsx'),readFileSync(join(root,'tests/fixtures/react-consumer.tsx'),'utf8'));
+    writeFileSync(join(work,'react-consumer.tsx'),readFileSync(join(root,'design-system/tests/fixtures/react-consumer.tsx'),'utf8'));
     const result=spawnSync(process.execPath,[join(root,'node_modules/typescript/bin/tsc'),
       '--strict','--noEmit','--skipLibCheck','false','--module','NodeNext','--moduleResolution','NodeNext',
       '--target','ES2022','--jsx','react-jsx','--types','react,react-dom','react-consumer.tsx'],{cwd:work,encoding:'utf8'});

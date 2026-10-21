@@ -73,7 +73,7 @@ function Ready(){return <form onSubmit={event=>event.preventDefault()} style={{d
   <DsField label="Поиск объекта" name="object"/>
   <div><DsButton type="reset" tone="secondary">Сбросить</DsButton></div>
 </form>;}
-function Comparison(){const state=useObjects();return <>{['cozy','compact'].map(density=><div className="scene" id={'density-'+density} data-fixed-density={density} data-ds-density={density} key={density}><p className="mode">{density==='cozy'?'Обычная':'Компактная'}</p><ObjectList {...state}/></div>)}</>;}
+function Comparison(){const state=useObjects();React.useLayoutEffect(refresh);return <>{['cozy','compact'].map(density=><div className="scene" id={'density-'+density} data-fixed-density={density} data-ds-density={density} key={density}><p className="mode">{density==='cozy'?'Обычная':'Компактная'}</p><ObjectList {...state}/></div>)}</>;}
 ReactDOM.createRoot(document.getElementById('ready-interface')).render(<Ready/>);
 ReactDOM.createRoot(document.getElementById('density-comparison')).render(<Comparison/>);
 function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){

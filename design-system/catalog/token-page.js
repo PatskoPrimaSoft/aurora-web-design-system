@@ -3,11 +3,11 @@ import {createCatalogueNavigation} from './navigation.js';
 import {parseState} from './state.js';
 
 mountCatalogueShell('catalog-content reference token-page-content');
-const cards=await(await fetch(new URL('cards.json',import.meta.url))).json();
+const cards=await(await fetch(new URL('./cards.json',import.meta.url))).json();
 const state=parseState(new URL(location.href),cards);
 state.query='';
 const drawNavigation=createCatalogueNavigation(cards,{
- base:new URL('index.html',import.meta.url),tokensActive:true,
+ base:new URL('./index.html',import.meta.url),tokensActive:true,
 });
 drawNavigation(state);
 document.getElementById('search').addEventListener('input',event=>{

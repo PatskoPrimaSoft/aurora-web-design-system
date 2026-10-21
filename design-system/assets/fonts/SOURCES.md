@@ -1,6 +1,6 @@
 # Происхождение шрифтов
 
-Собраны `tools/fonts/build_fonts.py`; лицензия SIL OFL 1.1 (OFL.txt рядом).
+Собраны `design-system/tools/fonts/build_fonts.py`; лицензия SIL OFL 1.1 (OFL.txt рядом).
 
 | Файл | Источник | SHA-256 источника |
 |---|---|---|

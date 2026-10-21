@@ -273,10 +273,10 @@ TypeScript-адаптеры сохранены. Механический пер�
 | `aurora/no-rem` | `rem` вместо `px` |
 | `aurora/focus-from-tokens` | свой `outline` / `box-shadow` в состоянии фокуса, `outline: none` |
 | `aurora/shadow-token-only` | `box-shadow` мимо ступеней системы |
-| `aurora/no-deprecated-token` | устаревшее имя-алиас (список `aliases` в `lint/naming.config.json`); предупреждение, не ошибка |
+| `aurora/no-deprecated-token` | устаревшее имя-алиас (список `aliases` в `design-system/lint/naming.config.json`); предупреждение, не ошибка |
 
 Версия правил совпадает с версией токенов: линтер поставляется в том же пакете.
-Правила и опции — [справочник линтера](../../lint/README.md). В новом приложении
+Правила и опции — [справочник линтера](../lint/README.md). В новом приложении
 включайте его сразу, в существующем — на срезе 1, после перевода цветов на токены.
 
 ### Ограничения

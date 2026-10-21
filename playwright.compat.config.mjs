@@ -2,8 +2,8 @@ import {defineConfig} from '@playwright/test';
 
 // Behavioral coverage is shared across engines; pixel baselines stay in the Chromium suite.
 export default defineConfig({
-  globalSetup: './tests/browser/global-setup.mjs',
-  testDir: './tests/browser-compat',
+  globalSetup: './design-system/tests/browser/global-setup.mjs',
+  testDir: './design-system/tests/browser-compat',
   workers: 1,
   timeout: 60000,
   outputDir: '.tmp/browser-compat-results',

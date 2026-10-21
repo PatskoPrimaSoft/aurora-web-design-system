@@ -164,4 +164,4 @@
 Проверьте DEFAULT/light/cozy, DEFAULT/dark/compact, RED2/light/cozy,
 RED2/dark/compact и клавиатурное управление живыми примерами. Изменения
 параметров должны автоматически отражаться в таблице после сборки. Общий
-браузерный контракт страницы проверяет `tests/browser/component-page.spec.js`.
+браузерный контракт страницы проверяет `design-system/tests/browser/component-page.spec.js`.

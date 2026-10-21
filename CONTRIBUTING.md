@@ -29,6 +29,8 @@ The catalogue runs at http://127.0.0.1:5173 and rebuilds when sources change.
 | `design-system/components/<Name>/` | Declarations, README and preview with `@dsCard` metadata |
 | `design-system/docs/` | Usage, design, token naming and migration guides |
 | `docs/` | Release guide and implementation plans |
+| `design-system/tests/`, `design-system/tools/`, `design-system/lint/` | Design-system checks, fixtures, tooling and lint rules |
+| `tests/`, `tools/` | Shared build orchestration, package delivery, CI, release and Pages checks |
 
 The catalogue discovers previews automatically and derives API props from public
 sources and declarations. A prop change updates the implementation, `.d.ts` and
@@ -38,7 +40,7 @@ sources and declarations. A prop change updates the implementation, `.d.ts` and
 
 Browser tests prepare one catalogue in a unique `.tmp/migration/browser-run-*`
 directory per Playwright invocation. They do not require an existing root `site/`.
-Use `siteRoot()` and `catalogueCards()` from `tests/helpers/browser-snapshot.mjs`
+Use `siteRoot()` and `catalogueCards()` from `design-system/tests/helpers/browser-snapshot.mjs`
 for scenarios that read the catalogue. Do not build it again inside those tests.
 Teardown checks that the shared sources, site and pinned baseline stayed unchanged.
 
@@ -48,7 +50,7 @@ as well. Dev-server tests keep independent `fixtureRoot()` source trees because
 rebuilding and recovery are the behaviour under test.
 
 For example, run a single scenario with
-`mise exec -- npx playwright test tests/browser/menu.spec.js`.
+`mise exec -- npx playwright test design-system/tests/browser/menu.spec.js`.
 The compatibility configuration prepares its own catalogue:
 `mise exec -- npx playwright test --config=playwright.compat.config.mjs`.
 The default remains one worker. Isolated scenarios can also be checked with

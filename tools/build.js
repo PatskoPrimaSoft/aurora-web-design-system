@@ -1,11 +1,11 @@
 /** Собирает пакет из канонических исходников, сохраняя прежний buildDist API. */
 import { fileURLToPath } from 'node:url';
-import { buildTokens } from './tokens/build.mjs';
+import { buildTokens } from '../design-system/tools/tokens/build.mjs';
 import { join } from 'node:path';
 import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, renameSync, rmSync, existsSync } from 'node:fs';
-import { buildCatalogue } from './catalog/build.mjs';
+import { buildCatalogue } from '../design-system/tools/catalog/build.mjs';
 import { buildAngular } from '../ng-ui-kit/tools/build-angular.mjs';
-import { buildReact } from './build-react.mjs';
+import { buildReact } from '../design-system/tools/build-react.mjs';
 import { buildCompatibility } from './build-compatibility.mjs';
 export function buildDist({root = fileURLToPath(new URL('..', import.meta.url))} = {}) {
   const {styles, tokens} = buildTokens({root});

@@ -1,5 +1,5 @@
 import assert from'node:assert/strict';import{existsSync,readFileSync,rmSync}from'node:fs';import{join}from'node:path';
-import{buildAll}from'../tools/build.js';import{fixtureRoot}from'./helpers/build-root.js';
+import{buildAll}from'../tools/build.js';import{fixtureRoot}from'../design-system/tests/helpers/build-root.js';
 const root=fixtureRoot();try{
  assert.equal(existsSync(join(root,'design-system/components/bundle.js')),false);
  assert.equal(existsSync(join(root,'tokens.json')),false);
