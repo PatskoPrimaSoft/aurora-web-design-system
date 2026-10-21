@@ -1,11 +1,4 @@
-# CI дизайн-системы. Правила разработки и релиза — AGENTS.md.
-#   PR в develop/master     -> npm run verify
-#   push в develop          -> npm run verify
-#   push в master (= релиз) -> guard «версия ещё не выпущена», verify, npm publish в GitHub Packages,
-#                              тег v<version> и GitHub Release из раздела CHANGELOG
-#   workflow_dispatch       -> то же, что push в выбранную ветку (ручной перезапуск на том же коммите)
-# Версия — package.json (разрабатываемая, её переводит /aurora-release). Теги ставит только этот workflow.
-# Секретов нет: публикация и чтение реестра под GITHUB_TOKEN.
+# One build, independent checks, then promotion of the verified npm package.
 name: CI
 
 on:
@@ -15,95 +8,226 @@ on:
     branches: [develop, master]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
 jobs:
-  verify:
-    name: Verify and publish
+  plan:
+    name: Select verification or promotion
     runs-on: ubuntu-latest
-    timeout-minutes: 60
-    permissions:
-      contents: write
-      packages: write
+    timeout-minutes: 5
     outputs:
       version: ${{ steps.version.outputs.version }}
+      reused: ${{ steps.artifact.outputs.reused }}
+      run_id: ${{ steps.artifact.outputs.run_id }}
+      artifact_id: ${{ steps.artifact.outputs.artifact_id }}
+      source_sha: ${{ steps.artifact.outputs.source_sha }}
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-          cache: npm
-          registry-url: https://npm.pkg.github.com
-          scope: '@primasoftllc'
-
-      - uses: jdx/mise-action@v5
-
       - name: Package version
         id: version
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
-
-      - name: Release guard, version must not be released (master only)
-        # Гейт смотрит только на тег: он единственный признак завершённого релиза. Пакет в GitHub
-        # Packages без тега не гейтится — это отставание в один шаг после частичного релиза (npm
-        # publish прошёл, git tag/push или gh release упали); publish-шаг ниже сам пропускает
-        # `npm publish`, если версия там уже есть, и идёт дальше ставить тег и релиз (docs/release.md).
+      - name: Release guard
         if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           tag_status=0
           git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null || tag_status=$?
           if [ "$tag_status" -eq 0 ]; then
-            echo "::error::Version $VERSION is already released (tag v$VERSION exists). Bump the version on develop first (chore: start ...)."
+            echo "::error::Version $VERSION is already released."
             exit 1
           fi
           if [ "$tag_status" -ne 2 ]; then
-            echo "::error::Cannot check release tag (git exit $tag_status). Publication stopped."
+            echo "::error::Cannot check release tag (git exit $tag_status)."
             exit 1
           fi
           node tools/release-check.mjs > /dev/null
+      - name: Find verified develop artifact
+        id: artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node tools/ci-artifact.mjs plan
 
+  build:
+    name: Build package and catalogue
+    needs: plan
+    if: needs.plan.outputs.reused != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
       - run: npm ci
+      - run: node tools/verify.mjs build
+      - name: Archive common build
+        run: tar -cf .tmp/build.tar dist site .tmp/package .tmp/runtime design-system/components/bundle.js design-system/components/bundle.css design-system/tokens/scoped.css design-system/lint/tokens.allowed.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: .tmp/build.tar
+          include-hidden-files: true
+          overwrite: true
+          retention-days: 7
 
+  checks:
+    name: Verify ${{ matrix.group }}
+    needs: [plan, build]
+    if: needs.plan.outputs.reused != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [components, catalogue, raster, angular]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: jdx/mise-action@v5
+        if: matrix.group == 'components'
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: .tmp/build-input
+      - run: tar -xf .tmp/build-input/build.tar
       - name: Prepare Angular consumer caches
+        if: matrix.group == 'angular'
         run: |
           npm ci --prefix ng-ui-kit/tests/consumers/angular-19
           npm ci --prefix ng-ui-kit/tests/consumers/angular-base
           npm ci --prefix ng-ui-kit/tests/consumers/angular-charts
           npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
-
-      - name: Install browser engines
+      - name: Install catalogue browsers
+        if: matrix.group == 'catalogue'
         run: npx playwright install --with-deps chromium firefox webkit
-
+      - name: Install isolated browser
+        if: matrix.group == 'raster' || matrix.group == 'angular'
+        run: npx playwright install --with-deps chromium
       - name: Verify
-        run: npm run verify
-
-      - name: Upload migration diagnostics
+        env:
+          VERIFY_GROUP: ${{ matrix.group }}
+        run: node tools/verify.mjs "$VERIFY_GROUP"
+      - name: Upload diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: migration-diagnostics
+          name: diagnostics-${{ matrix.group }}
+          overwrite: true
+          include-hidden-files: true
           path: |
             .tmp/migration/
             .tmp/browser-results/
             .tmp/browser-compat-results/
 
-      - name: Publish, tag and release (master only)
-        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+  verified:
+    name: Certify verified package
+    needs: [plan, build, checks]
+    if: >-
+      always() && !cancelled() && needs.plan.result == 'success' &&
+      (needs.plan.outputs.reused == 'true' ||
+      (needs.build.result == 'success' && needs.checks.result == 'success'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Download verified develop package
+        if: needs.plan.outputs.reused == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.plan.outputs.artifact_id }}
+          run-id: ${{ needs.plan.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          merge-multiple: true
+          path: .tmp/reused
+      - name: Validate and promote release metadata
+        if: needs.plan.outputs.reused == 'true'
+        env:
+          VERIFIED_SHA: ${{ needs.plan.outputs.source_sha }}
+        run: node tools/ci-artifact.mjs restore .tmp/reused "$VERIFIED_SHA"
+      - uses: actions/download-artifact@v4
+        if: needs.plan.outputs.reused != 'true'
+        with:
+          name: build
+          path: .tmp/build-input
+      - name: Restore checked build
+        if: needs.plan.outputs.reused != 'true'
+        run: tar -xf .tmp/build-input/build.tar
+      - name: Seal verified package
+        run: node tools/ci-artifact.mjs seal .tmp/certified
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verified-package
+          path: .tmp/certified/
+          include-hidden-files: true
+          overwrite: true
+          retention-days: 90
+
+  publish:
+    name: Publish verified release
+    needs: [plan, verified]
+    if: >-
+      !cancelled() && needs.plan.result == 'success' && needs.verified.result == 'success' &&
+      github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      packages: write
+      actions: read
+    outputs:
+      version: ${{ needs.plan.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          registry-url: https://npm.pkg.github.com
+          scope: '@primasoftllc'
+      - uses: actions/download-artifact@v4
+        with:
+          name: verified-package
+          path: .tmp/certified
+      - name: Validate verified release package
+        run: |
+          node tools/ci-artifact.mjs restore .tmp/certified "$GITHUB_SHA"
+          node tools/release-check.mjs > /dev/null
+      - name: Publish, tag and release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ steps.version.outputs.version }}
+          VERSION: ${{ needs.plan.outputs.version }}
         run: |
           registry_state=$(node tools/release-check.mjs registry "$VERSION")
           if [ "$registry_state" = present ]; then
-            echo "::notice::@primasoftllc/design-system@$VERSION is already in GitHub Packages — resuming a partial release, skipping npm publish."
+            echo "::notice::Package already published; resuming release."
           else
             npm publish ./.tmp/package --ignore-scripts
           fi
@@ -114,12 +238,12 @@ jobs:
 
   pages:
     name: Publish version catalogue
-    needs: verify
-    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    needs: publish
+    if: "!cancelled() && needs.publish.result == 'success' && github.ref == 'refs/heads/master' && github.event_name != 'pull_request'"
     permissions:
       contents: read
       pages: write
       id-token: write
     uses: ./.github/workflows/pages.yml
     with:
-      tag: v${{ needs.verify.outputs.version }}
+      tag: v${{ needs.publish.outputs.version }}

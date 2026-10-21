@@ -1,6 +1,7 @@
 import {siteRoot} from '../helpers/browser-snapshot.mjs';
 import {test,expect} from '@playwright/test';
 import {serveRoot} from '../../tools/baseline/render.mjs';
+import {expectPreviewFits} from './helpers/preview-layout.js';
 test('read first provides a short guide and working search in four scopes and on mobile',async({page})=>{
  const served=await serveRoot(siteRoot()),errors=[];
  page.on('pageerror',error=>errors.push(error.message));
@@ -25,7 +26,7 @@ test('read first provides a short guide and working search in four scopes and on
   }
   await page.setViewportSize({width:390,height:844});
   const frame=page.frameLocator('#preview');
-  expect(await frame.locator('body').evaluate(el=>el.scrollWidth<=el.clientWidth)).toBe(true);
+  await expectPreviewFits(page);
   await frame.getByRole('link',{name:'Типографика',exact:true}).focus();
   await page.keyboard.press('Enter');
   await expect(page.locator('#title')).toHaveText('Типографика');

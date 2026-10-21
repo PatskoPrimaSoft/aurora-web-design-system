@@ -9,4 +9,16 @@ assert.match(workflow,/node tools\/release-check\.mjs > \/dev\/null/,'CI must ve
 assert.match(workflow,/registry_state=\$\(node tools\/release-check\.mjs registry "\$VERSION"\)/,'registry failures must stop publication');
 assert.match(workflow,/if \[ "\$registry_state" = present \]; then[\s\S]*else\s+npm publish/,'existing package must skip publication');
 assert.match(workflow,/npm publish \.\/\.tmp\/package --ignore-scripts/,'CI must publish the verified staging directory without rebuilding');
+assert.match(workflow,/group: \[components, catalogue, raster, angular\]/,'four independent verification jobs');
+assert.match(workflow,/fail-fast: false/,'one failed group must not cancel others');
+assert.match(workflow,/tar -cf \.tmp\/build\.tar dist site \.tmp\/package \.tmp\/runtime design-system\/components\/bundle\.js/,'shared build includes the unit-test runtime and legacy bundle');
+assert.match(workflow,/design-system\/components\/bundle\.css design-system\/tokens\/scoped\.css design-system\/lint\/tokens\.allowed\.json/,'shared build includes generated CSS and the lint allowlist');
+assert.match(workflow,/needs: \[plan, build, checks\]/,'certification must wait for every verification job');
+assert.match(workflow,/needs\.build\.result == 'success' && needs\.checks\.result == 'success'/,'unchecked builds cannot be certified');
+assert.match(workflow,/needs\.verified\.result == 'success'/,'publication requires a successful artifact gate');
+assert.match(workflow,/artifact-ids: \$\{\{ needs\.plan\.outputs\.artifact_id \}\}/,'download the pinned artifact from the selected successful run');
+assert.match(workflow,/run-id: \$\{\{ needs\.plan\.outputs\.run_id \}\}/,'cross-run download must be scoped to the verified develop run');
+assert.match(workflow,/restore \.tmp\/reused "\$VERIFIED_SHA"/,'reused archive and source identity must be validated');
+assert.match(workflow,/restore \.tmp\/certified "\$GITHUB_SHA"/,'publisher must validate the artifact against its own source SHA');
+assert.match(workflow,/retention-days: 90/,'verified release artifacts must outlive transient builds');
 console.log('ci-toolchain: configured hook runtime installed before verification');

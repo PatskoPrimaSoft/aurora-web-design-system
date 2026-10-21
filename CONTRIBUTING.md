@@ -53,8 +53,16 @@ For example, run a single scenario with
 `mise exec -- npx playwright test design-system/tests/browser/menu.spec.js`.
 The compatibility configuration prepares its own catalogue:
 `mise exec -- npx playwright test --config=playwright.compat.config.mjs`.
-The default remains one worker. Isolated scenarios can also be checked with
-`--workers=2`; do not restore writes into shared paths when adding tests.
+The default is two workers. Catalogue files run in parallel; the `raster` and
+`angular` projects each use one worker. Do not restore writes into shared paths
+when adding tests. After changing viewport width, use the polling geometry helper
+`expectPreviewFits(page)` before asserting iframe overflow: ResizeObserver and
+the iframe layout can settle on different animation frames. Persistent overflow
+must fail; fixed sleeps and retries are not a substitute for that condition.
+Raster captures fulfill local fixture requests through the same resolver as the
+HTTP server, avoiding thousands of loopback sockets on Windows. HTTP/fixture
+body and MIME parity, missing-file errors, external-request blocking and exact
+pixel comparisons remain checked. Interactive catalogue tests still use HTTP.
 
 `npm test` builds the project and runs lint, UI, package and release-guard checks.
 `npm run verify` also checks the catalogue, documentation links, browser CSS cascade
@@ -73,6 +81,32 @@ mise exec -- npm run verify
 For Angular alone: `mise exec -- npm run build`, then
 `mise exec -- npm run check:angular` to check the built tarball.
 `npm run check:names` checks token names, ladders, status slots and uniqueness.
+
+### Independent CI groups
+
+`npm run verify` still runs the complete set. CI builds once and passes the same
+`dist/`, `site/` and `.tmp/package/` to four independent jobs. To run a group
+locally, first build, then select the group:
+
+```bash
+mise exec -- npm run build
+mise exec -- node tools/verify.mjs components
+mise exec -- node tools/verify.mjs catalogue
+mise exec -- node tools/verify.mjs raster
+mise exec -- node tools/verify.mjs angular
+```
+
+`components` includes unit, documentation, build, release guard and npm tarball
+checks. `catalogue` includes interactive pages and three-browser smoke tests;
+`raster` owns pixel/computed-style baselines and baseline accessibility checks.
+`angular` owns Angular unit checks and all four installed consumers. Only this
+last job prepares Angular consumer caches; only browser jobs install engines.
+`fail-fast` is disabled: failed jobs can be rerun without repeating successful
+groups. The verified artifact is saved only after every group succeeds.
+
+Browser groups copy the already built catalogue into their own snapshot.
+Standalone Playwright commands without `AURORA_PREBUILT=1` still prepare a fresh
+catalogue. Do not set that variable when the build is stale.
 
 For every affected example, apply the [screen acceptance criteria](design-system/docs/usage.md#приёмка-экрана):
 four theme/appearance/density combinations, AXE, keyboard focus and loading states.

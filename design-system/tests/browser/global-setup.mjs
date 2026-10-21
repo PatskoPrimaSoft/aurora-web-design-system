@@ -1,9 +1,10 @@
 import {fileURLToPath} from 'node:url';
 import {join} from 'node:path';
-import {mkdirSync, copyFileSync, writeFileSync, readdirSync} from 'node:fs';
+import {mkdirSync, copyFileSync, writeFileSync, readdirSync, readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
 import {buildCatalogue} from '../../tools/catalog/build.mjs';
 import {buildComponents} from '../../tools/build-components.mjs';
+import {writeTokenOutputs} from '../../tools/tokens/build.mjs';
 import {prepareBaseline} from '../../tools/baseline/render.mjs';
 import {vendorAssets} from '../../tools/catalog/assets.mjs';
 import {copyTree, createSnapshot, removeSnapshot, fingerprint} from '../helpers/browser-snapshot.mjs';
@@ -30,11 +31,16 @@ export default async function setup(config) {
       mkdirSync(join(target, '..'), {recursive: true});
       copyFileSync(join(root, path), target);
     }
-    const cards = await buildCatalogue({root: source, outDir: site});
-    const needsBaseline = config.projects.some(project => project.name === 'catalogue');
+    let cards;
+    if(process.env.AURORA_PREBUILT === '1'){
+      copyTree(join(root,'site'),site);
+      cards=JSON.parse(readFileSync(join(site,'cards.json'),'utf8'));
+    }else cards = await buildCatalogue({root: source, outDir: site});
+    const needsBaseline = config.projects.some(project => project.name === 'raster');
     let baseline;
     if (needsBaseline) {
       // Source/delivery parity still uses an independently bundled source runtime.
+      writeTokenOutputs({root: source});
       await buildComponents({root: source, outDir: source});
       baseline = await prepareBaseline(root, {outDir: join(run, 'original')});
       for (const target of [source, site]) {

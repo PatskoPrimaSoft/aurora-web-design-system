@@ -25,19 +25,24 @@ export async function prepareBaseline(root, {outDir = join(root, '.tmp/migration
 const MIME = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.woff2': 'font/woff2', '.svg': 'image/svg+xml', '.png': 'image/png' };
 export async function serveRoot(root, pages = new Map()) {
   const base = resolve(root);
-  const server = createServer((req, res) => {
+  const responseFor = requestUrl => {
     try {
-      const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-      if (pages.has(pathname)) { res.setHeader('Content-Type', MIME['.html']); res.end(pages.get(pathname)); return; }
+      const pathname = decodeURIComponent(new URL(requestUrl, 'http://localhost').pathname);
+      if (pages.has(pathname)) return {status: 200, contentType: MIME['.html'], body: pages.get(pathname)};
       const file = resolve(base, `.${pathname}`);
       const rel = relative(base, file);
-      if (rel === '..' || rel.startsWith(`..${sep}`) || rel.includes('.git') || rel.includes('node_modules')) { res.writeHead(403); res.end(); return; }
-      res.setHeader('Content-Type', MIME[extname(file)] ?? 'application/octet-stream');
-      res.end(readFileSync(sourceAsset(base, rel)));
-    } catch { res.writeHead(404); res.end(); }
+      if (rel === '..' || rel.startsWith(`..${sep}`) || rel.includes('.git') || rel.includes('node_modules')) return {status: 403, body: ''};
+      return {status: 200, contentType: MIME[extname(file)] ?? 'application/octet-stream', body: readFileSync(sourceAsset(base, rel))};
+    } catch { return {status: 404, body: ''}; }
+  };
+  const server = createServer((req, res) => {
+    const response = responseFor(req.url);
+    res.statusCode = response.status;
+    if (response.contentType) res.setHeader('Content-Type', response.contentType);
+    res.end(response.body);
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-  return { server, url: `http://127.0.0.1:${server.address().port}` };
+  return { server, url: `http://127.0.0.1:${server.address().port}`, responseFor };
 }
 
 export async function matchExactRaster({actual,expected,captureActual,captureReference,attempts=8}){
@@ -88,7 +93,11 @@ export async function captureCards({ browser, root, cards, mode = 'legacy', outD
   });
    await context.route('**/*', route => {
     const url = route.request().url();
-    if (url.startsWith(served.url + '/') || url.startsWith(reference.url + '/') || /^(?:data:|blob:)/.test(url)) return route.continue();
+    if (/^(?:data:|blob:)/.test(url)) return route.continue();
+    const fixture = url.startsWith(served.url + '/') ? served : url.startsWith(reference.url + '/') ? reference : null;
+    // Hundreds of fresh contexts must not exhaust Windows loopback sockets.
+    // Use the same response resolver as HTTP, including its 403/404 checks.
+    if (fixture) return route.fulfill(fixture.responseFor(url));
     return route.abort('blockedbyclient');
   });
    page=await context.newPage();
