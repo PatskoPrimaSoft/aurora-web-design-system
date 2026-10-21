@@ -2,6 +2,11 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const read=path=>readFileSync(new URL('../../'+path,import.meta.url),'utf8');
 const guide=read('design-system/docs/usage.md');
+const stylesBlock=[...guide.matchAll(/```json\s*\n([\s\S]*?)```/g)].map(match=>match[1]).find(block=>block.includes('node_modules/@primasoftllc/design-system/dist/styles.css'));
+assert.ok(stylesBlock,'guide must show Angular styles configuration');
+const styles=JSON.parse(stylesBlock).styles;
+assert.deepEqual(styles,['node_modules/@primasoftllc/design-system/dist/styles.css','src/styles.scss'],
+  'Angular build options use styles and load package CSS before application styles');
 const blocks=[...guide.matchAll(/```ts\s*\n([\s\S]*?)```/g)].map(match=>match[1]);
 const documented=blocks.find(block=>block.includes('export const appConfig'));
 assert.ok(documented,'guide must show ApplicationConfig');
@@ -19,3 +24,6 @@ const buttonGuide=read('ng-ui-kit/src/components/button/README.md');
 const buttonExample=[...buttonGuide.matchAll(/```ts\s*\n([\s\S]*?)```/g)][0][1];
 assert.equal(normalize(buttonExample),normalize(read('ng-ui-kit/tests/consumers/shared/button-example.ts')),
   'button guide must match the independently compiled Angular example');
+const connectionButton=blocks.find(block=>block.includes('export class SaveExample'));
+assert.ok(connectionButton,'connection guide must include a complete standalone button example');
+assert.equal(normalize(connectionButton),normalize(buttonExample),'connection guide button must match the compiled consumer example');

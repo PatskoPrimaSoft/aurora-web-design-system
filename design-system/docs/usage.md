@@ -5,7 +5,12 @@
 Новое приложение проходит подключение ниже. Для существующего приложения
 сначала выберите [срез внедрения](#существующее-приложение).
 
+Дизайн-система и Angular UI kit устанавливаются одним пакетом
+`@primasoftllc/design-system`. CSS, токены, шрифты и Angular-компоненты согласованы
+по версии; отдельный пакет `ng-ui-kit` и React-зависимости для Angular не нужны.
+
 - [Подключение](#1-доступ-к-пакету)
+- [Angular-компоненты](#10-компоненты)
 - [Локальные скоупы](#локальные-скоупы) и [графики](#echarts)
 - [Проверки линтера](#что-проверяет-линтер) и [приёмка экрана](#приёмка-экрана)
 - [Пилот](#пилот) и [внедрение в существующее приложение](#существующее-приложение)
@@ -14,6 +19,7 @@
 Для разработки UI kit используется Angular 19.2.25 и TypeScript 5.8.3.
 Проверенные потребители — Angular 19.2.25 и 20.3.34 с Zone.js.
 Peer range — `^19.2.25 || >=20.3.34`; более новые major не проверены.
+SSR, hydration и zoneless пока не проверены.
 Node 22.12+ (в проекте 22.23.2), доступ к GitHub.
 Для графиков — ECharts 6.1+; ECharts 5 не поддерживается.
 Правила компонентов и критерии совместимости описаны в [правилах UI kit](../../ng-ui-kit/docs/development.md).
@@ -44,25 +50,46 @@ npm i -D stylelint postcss-scss      # линтер (шаг 8)
 ```
 
 Базовый Angular-вход не требует ECharts. Устанавливайте `echarts` отдельно, если используете графики.
+Выбирайте выпущенную версию, в которой уже есть нужный Angular-компонент:
+наличие компонента в ветке разработки не означает его наличие в реестре.
 
 ## 4. Стили: `angular.json`
 
-`projects.<app>.architect.build.options.styles`, первой строкой, до стилей приложения:
+В `projects.<app>.architect.build.options` добавьте или обновите свойство `styles`.
+CSS пакета должен идти перед стилями приложения:
 
 ```json
-"design-system/styles": [
-  "node_modules/@primasoftllc/design-system/dist/styles.css",
-  "src/styles.scss"
-]
+{
+  "styles": [
+    "node_modules/@primasoftllc/design-system/dist/styles.css",
+    "src/styles.scss"
+  ]
+}
 ```
 
 Шрифты (Inter Tight, JetBrains Mono) и иконки Material Symbols подключаются самим `styles.css` — в `assets`
 ничего добавлять не нужно, в Google Fonts интерфейс не ходит.
 
-## 5. Angular-слой
+## 5. Публичные входы пакета
 
-Пакет содержит скомпилированный Angular-вход с типами. Для нового проекта алиас в `tsconfig.paths` не нужен.
-Импортируйте сервис, директиву и провайдер из `@primasoftllc/design-system/angular`.
+Пакет содержит скомпилированную Angular-библиотеку с типами. Для нового проекта
+алиас в `tsconfig.paths` не нужен. Используйте публичные входы:
+
+| Импорт от `@primasoftllc/design-system` | Что подключает |
+|---|---|
+| `/angular` | `provideAurora`, `AuroraThemeService`, `AuroraScopeDirective`, `DsButtonComponent` и их типы |
+| `/angular/echarts` | Angular-интеграция графиков; требует отдельной установки ECharts |
+| `/styles.css` | Общие стили, токены, шрифты и иконки; физический путь для `angular.json` показан выше |
+| `/tokens.css`, `/tokens.json` | Отдельные CSS-токены и JSON-справочник; для обычного UI kit достаточно `styles.css` |
+| `/stylelint-config` | Конфиг линтера для CSS/SCSS приложения |
+| `/echarts-theme` | Самостоятельный JavaScript-мост токенов к ECharts |
+| Корень пакета | React-компоненты; Angular-приложение использует `/angular` |
+
+Каталоги `design-system/` и `ng-ui-kit/` разделяют исходники в этом репозитории,
+но не меняют npm-импорты. `.tmp/package/` — внутренняя директория подготовки
+поставки: копировать её файлы в приложение или ссылаться на неё из `tsconfig` не нужно.
+Прежние исходные TypeScript-адаптеры оставлены только для
+[миграции существующих алиасов](#переход-со-старого-алиаса).
 
 ## 6. Тема, оформление, плотность
 
@@ -77,19 +104,22 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Провайдер запускает сервис при bootstrap и выставляет атрибуты на `<body>`.
-Внедряйте сервис в компонент там, где нужны переключатели оформления или плотности:
+Передайте `appConfig` вторым аргументом `bootstrapApplication` в `src/main.ts`:
 
 ```ts
-import {inject} from '@angular/core';
-import {AuroraThemeService} from '@primasoftllc/design-system/angular';
+import {bootstrapApplication} from '@angular/platform-browser';
+import {AppComponent} from './app/app.component';
+import {appConfig} from './app/app.config';
 
-private readonly aurora = inject(AuroraThemeService);
-
-toggleDark(): void {
-  this.aurora.setAppearance(this.aurora.appearance() === 'dark' ? 'light' : 'dark');
-}
+bootstrapApplication(AppComponent, appConfig).catch(console.error);
 ```
+
+Пути соответствуют приложению с `src/app/app.component.ts` и
+`src/app/app.config.ts`; при другой структуре измените только относительные импорты.
+Провайдер запускает сервис при bootstrap и выставляет атрибуты на `<body>`.
+Для переключателей оформления или плотности внедряйте `AuroraThemeService`
+в компонент через `inject(AuroraThemeService)`; доступны `appearance()`,
+`density()`, `setAppearance('dark')`, `setDensity('compact')` и `setTheme('RED2')`.
 
 `src/index.html` — те же значения статически, чтобы до старта Angular страница не мигнула без темы:
 
@@ -161,6 +191,43 @@ Angular UI-компоненты разрабатываются централи�
 добавьте её в `imports` standalone-компонента и используйте `<button dsButton>`.
 Корневой импорт пакета уже поставляет скомпилированные React-компоненты.
 
+Standalone-компоненты UI kit добавляются в `imports` каждого компонента,
+чей шаблон их использует. Провайдер темы не регистрирует компоненты автоматически.
+Полный пример кнопки приведён ниже; `loading` управляется приложением.
+
+```ts
+import {Component, signal} from '@angular/core';
+import {DsButtonComponent} from '@primasoftllc/design-system/angular';
+
+@Component({
+  selector: 'app-save-example',
+  standalone: true,
+  imports: [DsButtonComponent],
+  template: `<button dsButton icon="save" [loading]="saving()" (click)="save()">Сохранить</button>
+    <p role="status">{{message()}}</p>`,
+})
+export class SaveExample {
+  readonly saving = signal(false);
+  readonly message = signal('');
+
+  async save(): Promise<void> {
+    this.saving.set(true);
+    this.message.set('Сохраняем изменения…');
+    try {
+      // Демонстрация асинхронного действия; в приложении здесь вызов сервиса.
+      await new Promise<void>(resolve => setTimeout(resolve, 500));
+      this.message.set('Изменения сохранены.');
+    } catch {
+      this.message.set('Не удалось сохранить изменения. Попробуйте ещё раз.');
+    } finally {
+      this.saving.set(false);
+    }
+  }
+}
+```
+
+Доступные inputs, тип кнопки и правила доступности — в [API кнопки](../../ng-ui-kit/src/components/button/README.md).
+
 Карточки `design-system/components/Ds<Имя>/` описывают применение, вид и состояния; исходники
 `design-system/components/src/components/**/Ds<Имя>.jsx` служат эталоном поведения.
 Их `.d.ts` описывают React API, а не готовый Angular-контракт.
@@ -194,7 +261,10 @@ steps:
 
 ## Локальные скоупы
 
-Добавьте standalone-директиву `AuroraScopeDirective` в `imports` компонента:
+Добавьте standalone-директиву `AuroraScopeDirective` из
+`@primasoftllc/design-system/angular` в `imports` компонента.
+Например, вместе с кнопкой: `imports: [DsButtonComponent, AuroraScopeDirective]`.
+После этого в шаблоне доступны локальные скоупы:
 
 ```html
 <section auroraScope density="compact">…</section>
@@ -416,7 +486,9 @@ Patch и minor не должны ломать приложение; major пла
 Для Angular application-builder старый исходный `index.ts` должен быть включён в `tsconfig.files`:
 
 ```json
-"files": ["node_modules/@primasoftllc/design-system/components/src/templates/angular/index.ts"]
+{
+  "files": ["node_modules/@primasoftllc/design-system/components/src/templates/angular/index.ts"]
+}
 ```
 
 Для перехода удалите только алиас `@primasoftllc/design-system/angular` из `paths`.
@@ -432,6 +504,7 @@ CSS-путь, имена токенов и SCSS-партиал сохраняю�
 | `npm i` — ERESOLVE по `echarts` или `stylelint` | проверьте диапазоны: echarts 6.1+, stylelint 16–17 |
 | `Cannot find module 'echarts'` при сборке | установите ECharts при использовании `/angular/echarts` |
 | Не найден `/angular` | проверьте установленную версию и оставшийся старый `paths` |
-| Интерфейс в Helvetica, иконки — текстом | `styles.css` пакета не первой строкой `design-system/styles` или подключён не `dist/styles.css` |
+| Интерфейс в Helvetica, иконки — текстом | проверьте массив `styles` в `angular.json`, порядок CSS и загрузку шрифтов; путь — `node_modules/@primasoftllc/design-system/dist/styles.css` |
+| Angular не распознаёт `dsButton`, `loading` или `auroraScope` | проверьте версию пакета и наличие `DsButtonComponent` / `AuroraScopeDirective` в `imports` компонента |
 | Тема не меняется, на `<body>` нет `data-ds-*` | проверьте включение `...provideAurora(...)` в bootstrap-конфигурацию |
 | CI: 403 на `npm ci` | репозиторию приложения не выдан доступ в настройках пакета (шаг 11) |
