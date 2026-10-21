@@ -3,6 +3,8 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Policy: [Versions and publishing](docs/release.md#versioning).
 
+## [Unreleased]
+
 ## [5.2.0] — 2026-10-21
 
 - Полная проверка каталога учитывает HTML-руководства UI-kit; сценарий сортировки
