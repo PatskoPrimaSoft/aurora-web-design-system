@@ -59,6 +59,15 @@ export class DsExampleComponent {}
 
 - Inputs объявляйте через `input()`, булевы атрибуты — с `booleanAttribute`.
   Собственные события — через типизированный `output<T>()` без префикса `on`.
+  Это правило относится к Angular API. В React-примерах каталога `onClick` и
+  `onChange` — свойства с функциями-обработчиками; их имена не переносятся
+  в Angular API. Например, React-кнопка использует `onClick={save}`, а
+  Angular-кнопка — нативное `(click)="save()"`. Собственное Angular-событие
+  объявляется, например, как `readonly selectionChange = output<string>()`,
+  отправляется через `selectionChange.emit(value)` и обрабатывается в шаблоне
+  как `(selectionChange)="handleSelection($event)"`. Этот пример условный,
+  он не описывает API уже выпущенного компонента. Общими для React и Angular
+  остаются поведение, состояния и оформление.
 - Сохраняйте нативные HTML-атрибуты и события. Не создавайте output `click`
   или `onClick` поверх обычного `(click)`.
 - Используйте семантические CSS-токены, размеры в px и отступы родителя.
