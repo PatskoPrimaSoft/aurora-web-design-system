@@ -3,6 +3,8 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Policy: [Versions and publishing](docs/release.md#versioning).
 
+## [Unreleased]
+
 ## [5.2.2] — 2026-10-22
 
 - В руководстве Angular UI kit уточнено отличие собственных Angular-событий
