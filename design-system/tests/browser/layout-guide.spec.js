@@ -16,6 +16,19 @@ test('layout examples preserve selection, filtering, forms and navigation in fou
         await page.setViewportSize({width,height:900});
         await page.goto(`${served.url}/index.html?card=DsLayout&theme=${theme}&appearance=${appearance}&density=${density}`);
         const frame=page.frameLocator('#preview');
+        for(const [id,label] of [['table-example','Сетка таблицы'],['form-example','Сетка формы'],['width-example','Сетка сравнения ширины']]){
+          const example=frame.locator('#'+id);
+          const toggle=example.getByRole('switch',{name:label,exact:true});
+          await expect(toggle).toBeChecked();
+          await expect(example.locator('.example-grid>.column-sheet span')).toHaveCount(12);
+          await toggle.press('Space');
+          await expect(example.locator('.example-grid')).toHaveAttribute('data-grid-visible','false');
+          await expect(example.locator('.example-grid>.column-sheet')).toHaveCount(0);
+          await toggle.press('Space');
+          await expect(example.locator('.example-grid')).toHaveAttribute('data-grid-visible','true');
+        }
+        await expect(frame.locator('#map-example .column-sheet')).toHaveCount(0);
+        await expect(frame.locator('#map-example').getByRole('switch')).toHaveCount(0);
         await expect(frame.getByRole('button',{name:'Volvo FH16',exact:true})).toBeVisible();
         await frame.getByRole('button',{name:'Volvo FH16',exact:true}).press('Enter');
         await expect(frame.locator('#map-example')).toContainText('Выбран Volvo FH16');
@@ -54,14 +67,26 @@ test('layout examples preserve selection, filtering, forms and navigation in fou
         expect(geometry[0].width).toBeLessThan(geometry[1].width);
         expect(geometry[1].width).toBeLessThan(geometry[2].width);
         const comparison=frame.locator('#width-example');
+        const expectGridAlignment=async(example,selector)=>{
+          await expect.poll(()=>example.evaluate((host,selector)=>{
+            const columns=host.querySelector('.example-grid>.column-sheet').getBoundingClientRect();
+            const content=host.querySelector(selector).getBoundingClientRect();
+            return Math.abs(columns.left-content.left)<1&&Math.abs(columns.right-content.right)<1;
+          },selector)).toBe(true);
+        };
+        await expectGridAlignment(comparison,'.width-form');
+        await expectGridAlignment(frame.locator('#form-example'),'.settings');
         const limited=await comparison.locator('.width-surface').evaluate(element=>element.getBoundingClientRect().width);
         await comparison.getByRole('button',{name:'На всю ширину',exact:true}).press('Enter');
         await expect(comparison.locator('.width-surface')).toHaveAttribute('data-policy','fluid');
         const fluid=await comparison.locator('.width-surface').evaluate(element=>element.getBoundingClientRect().width);
+        await expectGridAlignment(comparison,'.width-form');
         expect(fluid).toBeGreaterThanOrEqual(limited);
         if(width===1440)expect(fluid).toBeGreaterThan(limited);
         await comparison.getByRole('button',{name:'Карта',exact:true}).click();
         await expect(comparison.getByRole('img',{name:'Схема карты для сравнения ширины',exact:true})).toBeVisible();
+        await expect(comparison.locator('.column-sheet')).toHaveCount(0);
+        await expect(comparison.getByRole('switch')).toHaveCount(0);
         await expect(comparison).toContainText('Карта использует всё доступное место.');
         await comparison.getByRole('button',{name:'Ограниченная',exact:true}).click();
         await expect(comparison).toContainText('Карта ограничена');
