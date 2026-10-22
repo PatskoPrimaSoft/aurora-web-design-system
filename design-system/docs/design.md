@@ -228,25 +228,10 @@ WCAG AA — заявленный минимум, новый UI проходит 
 
 ## Иконки
 
-**Material Symbols Outlined** — самохостится как шрифт (`design-system/fonts/MaterialSymbolsOutlined.woff2`) и это единственный иконочный шрифт системы: глиф — текстовое содержимое элемента, а не SVG. В компоненте этот элемент — **`DsIcon`** (`<DsIcon name="delete"/>`), единственный иконочный примитив: он владеет размером по умолчанию, осью `wght`, таблицей оптических поправок и решением `aria-hidden` / `role="img"`.
-
-Размер глифа — всегда токен `ds-icon-*`, никогда литерал: 20px внутри контролов (`ds-icon`), 24px отдельно стоящий (`ds-icon-lg`), 16px для плотных строк и удаления чипа (`ds-icon-sm`), 14px для глифа при тексте 11–12px — стрелка сортировки, бейдж, шеврон хлебных крошек, галочка степпера (`ds-icon-xs`). Все четыре уменьшаются на полступени в compact. Собственные *габариты* компонента — другое, они остаются числовыми пропсами: диск `DsStateIcon` (28), диаметры `DsFab` (40/48/56), размер `DsSpinner`.
-
-Берите глифы из этого словаря, а не подбирайте новые:
-
-| Группа | Глифы |
-|---|---|
-| Действия | `add` `edit` `delete` `clear` `close` `check` `search` `settings` `refresh` `undo` `autorenew` `print` `share` `build` `open_with` |
-| Файлы и данные | `download` `file_upload` `attach_file` `content_paste` `table_chart` `assessment` `event_note` `straighten` `crop_free` |
-| Сообщения | `info` `error` `warning` `check_circle` `help` `priority_high` `notifications` |
-| Навигация | `arrow_back` `chevron_left` `chevron_right` `expand_more` `unfold_less` `unfold_more` `apps` `exit_to_app` |
-| Списки и порядок | `sort` `filter_alt` `filter_list` `label` `bookmark` `account_tree` `format_list_bulleted` `view_list` |
-| Карта и парк | `place` `map` `layers` `layers_clear` `navigation` `local_parking` `local_shipping` `speed` `timer` |
-| Доступ | `visibility` / `visibility_off` `lock` / `lock_open` `vpn_key` `person_add` `more_vert` |
-
-**Поворот несёт смысл:** `navigation` поворачивается по курсу объекта и показывает направление; `straighten` повёрнут на −45°, чтобы читаться как линия измерения; `priority_high` — на 180°. Карточка `IconsArrows`.
-
-**Единственное законное исключение-вектор** — слой карты: маркеры геозон и точек — настоящие SVG в `design-system/assets/images/` плюс два растра (карточки `IconsMapAssets`, `MapTrack`). Никаких эмодзи и Unicode-символов вместо иконок.
+Выбор символов, утверждённый словарь, размеры, цвет и доступность описаны в
+[«Иконографике»](../components/DsIconography/preview.html). API и примеры React —
+в [DsIcon](../components/DsIcon/README.md). Правила маркеров карты остаются в
+[отдельной карточке](../components/IconsMapAssets/README.md).
 
 ## Логотип
 

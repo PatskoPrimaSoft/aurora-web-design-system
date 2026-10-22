@@ -20,16 +20,16 @@ test('foundation and map descriptions stay with examples through navigation and 
     ]);
     const foundationLinks = page.locator('[data-navigation-group=foundations] a[data-id]');
     expect(await foundationLinks.evaluateAll(links => links.map(link => link.dataset.id))).toEqual([
-      'DsAccessibility', 'DsContent', 'DsType', 'DsNeutrals', 'DsShape', 'DsStatus',
+      'DsAccessibility', 'DsContent', 'DsType', 'DsNeutrals', 'DsIconography', 'DsShape', 'DsStatus',
       'DsAppearance', 'DsDensity', 'DsHover', 'DsFocus', 'DsMotion',
-      'DsSpacing', 'DsBreakpoints', 'DsSortingMenu', 'DsCharts', 'DsBrandThemes', 'DsBrandPick', 'BrandLogoLockup',
+      'DsLayout', 'DsSpacing', 'DsBreakpoints', 'DsSortingMenu', 'DsCharts', 'DsBrandThemes', 'DsBrandPick', 'BrandLogoLockup',
     ]);
     await page.locator('#search').fill('сортировка');
     await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText(['Режимы интерфейса', 'Компоновка и данные']);
     await expect(foundationLinks).toHaveText(['Плотность интерфейса', 'Сортировка вне таблицы']);
     await page.locator('#search').fill('визуальный язык');
     await expect(page.locator('[data-navigation-group=foundations] h3')).toHaveText(['Визуальный язык']);
-    await expect(foundationLinks).toHaveText(['Типографика', 'Нейтральные цвета', 'Форма и глубина', 'Цвета статусов']);
+    await expect(foundationLinks).toHaveText(['Типографика', 'Нейтральные цвета', 'Иконографика', 'Форма и глубина', 'Цвета статусов']);
     await foundationLinks.first().focus();
     await page.keyboard.press('Enter');
     await expect(page.locator('#title')).toHaveText('Типографика');

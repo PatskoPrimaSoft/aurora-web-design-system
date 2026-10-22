@@ -1,0 +1,94 @@
+<!-- @dsCard name="Иконографика" group="2 · Основы" scopeMode="inherit" aliases="иконки|иконография|iconography|symbols|словарь иконок" subtitle="Как выбирать и применять иконки в интерфейсе" page -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><title>Иконографика</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface)}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+h2{font:var(--ds-type-title);color:var(--ds-fg-strong);margin:0 0 16px}
+h3{font:var(--ds-type-section);margin:0 0 12px}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+p{max-width:74ch;margin:0 0 16px}li+li{margin-top:8px}
+a{color:var(--ds-brand-text);text-underline-offset:3px}code{font:var(--ds-type-mono)}
+.scene{padding:20px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);background:var(--ds-surface);color:var(--ds-fg)}
+.row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.row>*{min-width:0}
+.dictionary{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:16px}
+.glyph{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-sm);min-width:0}
+.glyph code{display:block;overflow-wrap:anywhere}.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.pair>div{min-width:0}
+details{margin-top:16px}summary{cursor:pointer;padding:12px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-sm)}
+summary:focus-visible,a:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+table{border-collapse:collapse;width:100%;margin:16px 0}th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--ds-divider)}
+@media(max-width:560px){.pair{grid-template-columns:1fr}.scene{padding:16px}}
+</style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="purpose"><h2 id="purpose">Иконка помогает узнать действие</h2>
+<p>Используйте знакомый символ рядом с названием действия. В панели ниже лупа помогает найти объект, а плюс — добавить его. Подписи сохраняют смысл без знания символов.</p>
+<div class="scene" id="ready-example"></div>
+<p>Готовые компоненты сами задают размер, цвет и положение иконки. Вам нужно выбрать её смысл и понятную подпись. Для собственной разметки используйте <a href="?card=DsIcon">DsIcon</a>; API и примеры React находятся на его странице.</p>
+</section>
+<section aria-labelledby="choose"><h2 id="choose">Выбор по смыслу</h2>
+<ul><li>Один смысл — один символ во всём продукте. Начинайте с утверждённого словаря ниже.</li>
+<li>Закрытие окна — <code>close</code>, удаление данных — <code>delete</code>. Крестик не обозначает удаление.</li>
+<li>Редкое или неоднозначное действие сопровождайте видимой подписью. Если иконка не помогает, достаточно текста.</li>
+<li>Не используйте один символ для разных действий рядом и не добавляйте декоративные иконки к каждой строке.</li></ul>
+</section>
+<section aria-labelledby="dictionary"><h2 id="dictionary">Словарь иконок Aurora</h2>
+<p>Система использует Material Symbols Outlined из локального шрифта. Ищите по русскому назначению или имени глифа. При добавлении символа сначала проверьте, нет ли подходящего в словаре; не подключайте второй набор иконочных шрифтов.</p>
+<div class="scene" id="icon-dictionary"></div>
+</section>
+<section aria-labelledby="sizes"><h2 id="sizes">Размер и плотность</h2>
+<p>Размер глифа и область нажатия — разные величины. Размеры <code>xs / sm / md / lg</code> в DsIcon связаны с токенами и автоматически учитывают плотность. Отступы и область нажатия задаёт родитель.</p>
+<div class="scene" id="size-example"></div>
+<table><thead><tr><th scope="col">Роль</th><th scope="col">Где применять</th></tr></thead><tbody>
+<tr><td><code>md · --ds-icon</code></td><td>Внутри обычного контрола</td></tr>
+<tr><td><code>lg · --ds-icon-lg</code></td><td>Отдельно стоящая иконка</td></tr>
+<tr><td><code>sm · --ds-icon-sm</code></td><td>Плотная строка, удаление чипа</td></tr>
+<tr><td><code>xs · --ds-icon-xs</code></td><td>Шеврон, сортировка, вспомогательный символ рядом с мелким текстом</td></tr>
+</tbody></table>
+<details><summary>Технические параметры</summary><p>В cozy размеры составляют 14 / 16 / 20 / 24 px; в compact значения выбирают токены. Не уменьшайте подробный символ до неразборчивого размера. DsIcon согласованно задаёт глиф и его область, толщину <code>wght=400</code> и оптические поправки; не переопределяйте отдельно только <code>fontSize</code>.</p>
+<p>Шрифт поставляется вместе с пакетом и подключается общим <code>styles.css</code>. Дополнительный CDN не нужен. <a href="?card=AngularSetup">Подключение в Angular</a> и <a href="?card=DsDensity">плотность интерфейса</a>.</p></details>
+</section>
+<section aria-labelledby="accessibility"><h2 id="accessibility">Цвет, подпись и доступность</h2>
+<p>Иконка наследует цвет родителя. Готовый компонент выбирает его сам; для собственной разметки используйте семантические роли цвета с учётом поверхности. Состояние передавайте символом и текстом, а не только цветом.</p>
+<div class="scene" id="accessible-example"></div>
+<ul><li>Рядом с поясняющим текстом иконка декоративная: DsIcon по умолчанию скрывает её от скринридера.</li>
+<li>Самостоятельной смысловой иконке задайте <code>label</code>: DsIcon добавит <code>role="img"</code> и доступное имя.</li>
+<li>Для действия используйте DsIconButton с доступным именем. Подсказка при наведении не заменяет имя кнопки. Иконка сама не становится кнопкой; область нажатия должна быть не меньше 24×24 px.</li></ul>
+<p>Подробности: <a href="?card=DsAccessibility">доступность</a>, <a href="?card=DsStatus">статусы</a> и <a href="?card=DsNeutrals">цветовые роли</a>.</p>
+</section>
+<section aria-labelledby="mistakes"><h2 id="mistakes">Типичные ошибки</h2>
+<div class="pair"><div><h3>Рекомендуется</h3><div class="scene" id="correct-example"></div><p>Корзина и подпись однозначно обозначают удаление.</p></div>
+<div><h3>Избегайте</h3><div class="scene" id="incorrect-example"></div><p>Крестик с той же подписью смешивает удаление и закрытие.</p></div></div>
+<p>Не заменяйте системные глифы эмодзи или Unicode-символами. Не используйте цвет как единственный признак ошибки и не прячьте неоднозначное действие за символом без подписи.</p>
+</section>
+<section aria-labelledby="map"><h2 id="map">Направление и карта</h2>
+<p>Поворот несёт смысл: <code>navigation</code> показывает курс объекта, а не универсальную команду перехода; <code>straighten</code> повёрнут на −45° для измерения, <code>priority_high</code> — на 180°. Примеры — <a href="?card=IconsArrows">стрелки и направления</a>.</p>
+<p>Маркеры карты используют отдельные SVG-ресурсы и растры: это исключение из шрифтовой иконографики интерфейса. Их оформление учитывает фон карты. См. <a href="?card=IconsMapAssets">маркеры и значки карты</a> и <a href="?card=MapTrack">трек на карте</a>.</p>
+</section>
+</main><script type="text/babel">
+const {DsIcon,DsButton,DsIconButton,DsField}=window.AuroraWebDesignSystem_96e210;
+const groups=[
+ ['Действия','add edit delete clear close check search settings refresh undo autorenew print share build open_with'],
+ ['Файлы и данные','download file_upload attach_file content_paste table_chart assessment event_note straighten crop_free'],
+ ['Сообщения','info error warning check_circle help priority_high notifications'],
+ ['Навигация','arrow_back chevron_left chevron_right expand_more unfold_less unfold_more apps exit_to_app'],
+ ['Списки и порядок','sort filter_alt filter_list label bookmark account_tree format_list_bulleted view_list'],
+ ['Карта и парк','place map layers layers_clear navigation local_parking local_shipping speed timer'],
+ ['Доступ','visibility visibility_off lock lock_open vpn_key person_add more_vert'],
+];
+const meanings={add:'Добавить',edit:'Редактировать',delete:'Удалить',clear:'Очистить',close:'Закрыть',check:'Подтвердить',search:'Поиск',settings:'Настройки',refresh:'Обновить',undo:'Отменить',download:'Скачать',file_upload:'Загрузить',warning:'Предупреждение',error:'Ошибка',info:'Информация',navigation:'Направление',local_shipping:'Транспорт',lock:'Закрытый доступ',visibility:'Показать',visibility_off:'Скрыть'};
+function Dictionary(){const [query,setQuery]=React.useState('');const filtered=groups.flatMap(([group,names])=>names.split(' ').map(name=>({name,group}))).filter(({name,group})=>(name+' '+group+' '+(meanings[name]||'')).toLocaleLowerCase('ru').includes(query.trim().toLocaleLowerCase('ru')));return <>
+ <DsField label="Найти иконку" icon="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Например, удалить или delete"/>
+ <p role="status" className="caption">Найдено: {filtered.length}</p>
+ <div className="dictionary">{filtered.map(({name,group})=><div className="glyph" key={name}><DsIcon name={name}/><div><code>{name}</code><span className="caption">{meanings[name]||group}</span></div></div>)}</div>
+ {!filtered.length&&<p>Совпадений нет. Попробуйте название группы или другое имя.</p>}</>;}
+function Ready(){const [query,setQuery]=React.useState('');const [count,setCount]=React.useState(1);return <div style={{display:'grid',gap:16}}><DsField label="Поиск объекта" icon="search" value={query} onChange={event=>setQuery(event.target.value)}/><div className="row"><DsButton icon="add" onClick={()=>setCount(count+1)}>Добавить объект</DsButton><span role="status">Объектов: {count}{query?' · Поиск: '+query:''}</span></div></div>;}
+ReactDOM.createRoot(document.getElementById('ready-example')).render(<Ready/>);
+ReactDOM.createRoot(document.getElementById('icon-dictionary')).render(<Dictionary/>);
+ReactDOM.createRoot(document.getElementById('size-example')).render(<div className="row">{['xs','sm','md','lg'].map(size=><span className="row" key={size}><DsIcon name="search" size={size}/><code>{size}</code></span>)}</div>);
+function Accessible(){const [open,setOpen]=React.useState(false);return <><div className="row"><DsIcon name="warning"/><span>Нет связи с объектом</span><DsIcon name="lock" label="Доступ ограничен"/><DsIconButton icon="settings" label="Показать пояснение настроек" active={open} onClick={()=>setOpen(!open)}/></div>{open&&<p role="status">Кнопка настроек имеет собственное доступное имя; глиф внутри неё декоративный.</p>}</>;}
+ReactDOM.createRoot(document.getElementById('accessible-example')).render(<Accessible/>);
+function Removal({icon}){const [done,setDone]=React.useState(false);return <><DsButton tone="danger" icon={icon} onClick={()=>setDone(!done)}>Удалить объект</DsButton>{done&&<p role="status">Пример: выбранное действие — удаление объекта.</p>}</>;}
+for(const [id,icon] of [['correct-example','delete'],['incorrect-example','close']])ReactDOM.createRoot(document.getElementById(id)).render(<Removal icon={icon}/>);
+function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';scene.dataset.dsAppearance=root.dataset.dsAppearance||'light';scene.dataset.dsDensity=root.dataset.dsDensity||'cozy';}}
+refresh();new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density','style']});
+</script></body></html>

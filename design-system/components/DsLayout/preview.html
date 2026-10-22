@@ -1,0 +1,100 @@
+<!-- @dsCard name="Сетка и компоновка" group="2 · Основы" scopeMode="inherit" aliases="сетка|компоновка|grid|layout|колонки|ширина содержимого|прокрутка" subtitle="Как распределять место между картой, панелями, таблицей и формой" page -->
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><title>Сетка и компоновка</title><style>
+html,body{margin:0}*{box-sizing:border-box}
+body{font:var(--ds-type-body);color:var(--ds-fg);background:var(--ds-surface)}
+main{max-width:920px;padding:24px 0;overflow-wrap:anywhere}
+h2{font:var(--ds-type-title);color:var(--ds-fg-strong);margin:0 0 16px}
+h3{font:var(--ds-type-section);margin:0 0 12px}
+p{margin:0 0 16px;max-width:74ch}li+li{margin-top:8px}
+section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
+a{color:var(--ds-brand-text);text-underline-offset:3px}code{font:var(--ds-type-mono)}
+.scene{container-type:inline-size;padding:var(--ds-pad-xl);background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
+.stack{display:grid;gap:var(--ds-gap-md);min-width:0}.row{display:flex;gap:var(--ds-gap-sm);align-items:center;flex-wrap:wrap}
+.workspace{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:var(--ds-gap-md)}
+.workspace>*{min-width:0}.objects{display:grid;gap:var(--ds-gap-sm)}
+.map{position:relative;min-height:250px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-md);background:var(--ds-map-ground);overflow:hidden}
+.road{position:absolute;border:4px solid var(--ds-map-point);opacity:.25;inset:40px 28px;transform:rotate(-15deg);border-radius:var(--ds-radius-lg);pointer-events:none}
+.point{position:absolute;transform:translate(-50%,-50%)}.map-caption{position:absolute;bottom:12px;left:12px;color:var(--ds-fg);background:var(--ds-surface);padding:4px 8px;border-radius:var(--ds-radius-sm);font:var(--ds-type-caption)}
+.filters{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--ds-gap-md);align-items:end}
+.table-scroll{overflow-x:auto;min-width:0}.table-scroll>div{min-width:560px}
+.settings{max-width:560px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ds-gap-md)}.full{grid-column:1/-1}
+.caption{font:var(--ds-type-caption);color:var(--ds-fg-muted)}
+.frame-diagram{display:grid;grid-template-columns:140px minmax(0,1fr);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md);overflow:hidden}
+.frame-header{grid-column:1/-1;padding:16px;background:var(--ds-surface-raised);border-bottom:1px solid var(--ds-border)}
+.frame-nav{padding:16px;background:var(--ds-surface-raised);border-right:1px solid var(--ds-border)}
+.frame-main{min-width:0;padding:16px;background:var(--ds-surface)}
+.content-grid{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--ds-gap-md);padding:16px;border:1px solid var(--ds-border)}
+.content-card{grid-column:span 2;padding:16px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-sm);min-width:0}
+.grid-actions{grid-column:1/-1}.guides{position:absolute;inset:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--ds-gap-md);pointer-events:none}
+.guides span{border-left:1px dashed var(--ds-brand-text);border-right:1px dashed var(--ds-brand-text)}
+.width-surface{width:100%;min-width:0}.width-surface[data-policy="limited"]{max-width:560px}
+.width-form{padding:16px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md)}
+summary{cursor:pointer;padding:12px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-sm)}
+summary:focus-visible,a:focus-visible,.table-scroll:focus-visible{outline:var(--ds-focus-width) solid var(--ds-focus-color);outline-offset:var(--ds-focus-offset)}
+@container(max-width:600px){.workspace,.filters,.fields{grid-template-columns:minmax(0,1fr)}}
+@container(max-width:440px){.frame-diagram{grid-template-columns:minmax(0,1fr)}.frame-nav{border-right:0;border-bottom:1px solid var(--ds-border)}.content-card{grid-column:1/-1}.content-grid{padding:12px}.guides{inset:12px}}
+@media(max-width:560px){.scene{padding:var(--ds-pad-md)}}
+</style></head><body data-ds-theme="DEFAULT" data-ds-appearance="light" data-ds-density="cozy"><main>
+<section aria-labelledby="workspace"><h2 id="workspace">Карта занимает свободное место</h2>
+<p>В рабочем экране панель помогает выбрать объект, а карта использует оставшуюся ширину. Выберите объект в списке или на схеме: обе области показывают один выбор.</p>
+<div class="scene" id="map-example"></div>
+<p>Ширина панели определяется её задачей, а не долей экрана. Основной регион может растягиваться. Готовый <a href="?card=DsPageLayout">DsPageLayout</a> размещает регионы; приложение выбирает их состав и наполнение. В примере выше каркас задан собственной CSS-сеткой.</p>
+</section>
+<section aria-labelledby="choose"><h2 id="choose">Выбирайте компоновку по задаче</h2>
+<ul><li><strong>Карта и рабочая область:</strong> вспомогательная панель имеет ограниченную ширину, основной регион получает остаток.</li>
+<li><strong>Таблица:</strong> использует доступную ширину. Поиск, фильтры и результат имеют общую левую границу.</li>
+<li><strong>Форма:</strong> ограничена удобной для чтения шириной. Связанные короткие поля могут стоять рядом; длинные занимают всю строку.</li></ul>
+<p>Не вводите обязательную сетку из 12 колонок для каждого экрана. Число колонок следует содержимому. Расстояния задаются по правилам <a href="?card=DsSpacing">отступов и группировки</a>, перестроение при нехватке места — по правилам <a href="?card=DsBreakpoints">адаптивности</a>.</p>
+</section>
+<section aria-labelledby="structure"><h2 id="structure">Каркас приложения и сетка содержимого</h2>
+<p>Каркас задаёт внешние регионы: шапку, навигацию, боковые панели и основной регион. Сетка выравнивает контейнеры уже внутри основного региона. Её колонки не проходят через навигацию и боковую панель.</p>
+<div class="scene" id="structure-example"></div>
+<p>Включите направляющие: карточки занимают колонки внутренней сетки. Кнопки внутри контейнера располагаются по содержимому и отступам; иконки и всплывающие меню также не нужно подгонять под колонки страницы. Четыре колонки здесь служат наглядной схемой, а не обязательным стандартом Aurora.</p>
+</section>
+<section aria-labelledby="width"><h2 id="width">Ограниченная и растягиваемая ширина</h2>
+<p>Сравните два способа распределения места в одной области. Переключите содержимое между формой и картой, затем измените ограничение ширины. На узком экране оба варианта занимают доступное место.</p>
+<div class="scene" id="width-example"></div>
+<p>Для формы ограничение помогает сохранить связь подписи, поля и действия. Карте полезно отдавать свободное место для обзора. В этом примере предел формы — 560 px: это решение сценария, а не универсальная ширина всех форм или новый токен.</p>
+</section>
+<section aria-labelledby="table"><h2 id="table">Таблица и фильтры образуют одну область</h2>
+<p>Фильтры находятся над результатом, а не в независимой колонке без связи с таблицей. Поиск и переключатель в примере меняют строки. При нехватке ширины прокручивается только таблица: фильтры остаются доступны.</p>
+<div class="scene" id="table-example"></div>
+<p>Не сжимайте столбцы до нечитаемого текста ради размещения всех данных. Состав колонок выбирает приложение. Порядок строк описан отдельно в <a href="?card=DsSortingMenu">правилах сортировки</a>.</p>
+</section>
+<section aria-labelledby="form"><h2 id="form">Форма сохраняет удобную ширину</h2>
+<p>Форма не обязана растягиваться вслед за окном. Название занимает всю строку; два связанных значения стоят рядом. Подписи находятся над полями, а кнопки начинаются на той же левой границе.</p>
+<div class="scene" id="form-example"></div>
+<p>Внешнюю ширину и расположение полей задаёт родитель. Готовые поля и кнопки сами оформляют содержимое и состояния. Проверяйте порядок Tab: он должен совпадать с порядком чтения.</p>
+</section>
+<section aria-labelledby="scroll"><h2 id="scroll">Назначьте владельца прокрутки</h2>
+<ul><li>Для обычной страницы оставляйте одну вертикальную прокрутку документа. Длинная форма продолжается вниз, без собственного окна прокрутки.</li>
+<li>В рабочем экране с картой приложение может ограничить высоту каркаса и дать списку собственную прокрутку. Карта остаётся на месте; не добавляйте прокрутку всем вложенным панелям.</li>
+<li>Горизонтальную прокрутку локализуйте внутри широкой таблицы или кода. Область должна быть доступна с клавиатуры и иметь понятное имя.</li></ul>
+<p>У DsPageLayout есть режимы <code>scroll="page"</code> и <code>scroll="regions"</code>; для них родитель задаёт высоту. Обычному потоку подходит <code>scroll="none"</code>. Контракт — на <a href="?card=DsPageLayout">странице компонента</a>.</p>
+</section>
+<section aria-labelledby="reference"><h2 id="reference">Для собственной разметки</h2>
+<p>Каркас распределяет место между регионами, внутренняя сетка выравнивает контейнеры. Компоненты управляют своим оформлением. Не меняйте размер текста или внутренние размеры контролов, чтобы исправить тесную компоновку.</p>
+<details><summary>Как не дать содержимому растянуть страницу</summary><ul>
+<li><code>minmax(0, 1fr)</code> позволяет основному столбцу уменьшаться ниже ширины длинного содержимого.</li>
+<li><code>min-width: 0</code> на дочернем регионе разрешает ему сжиматься внутри grid или flex.</li>
+<li><code>max-width</code> ограничивает форму; числовые размеры примеров — решения для этих сценариев, а не новые системные токены.</li>
+<li>Для панели внутри другого региона учитывайте её собственную ширину. Порог перестроения и container queries описаны в <a href="?card=DsBreakpoints">адаптивности</a>.</li></ul></details>
+</section>
+</main><script type="text/babel">
+const {DsPanel,DsButton,DsIconButton,DsField,DsTable,DsSwitch}=window.AuroraWebDesignSystem_96e210;
+const objects=[{id:1,name:'МАЗ 5440',driver:'Андрей Иванов',speed:62,online:true,x:35,y:40},{id:2,name:'Volvo FH16',driver:'Мария Петрова',speed:0,online:false,x:70,y:65},{id:3,name:'Scania R450',driver:'Иван Сидоров',speed:48,online:true,x:60,y:30}];
+function MapExample(){const [selected,setSelected]=React.useState(1);const current=objects.find(item=>item.id===selected);return <div className="stack"><div className="workspace"><DsPanel title="Объекты" headingLevel="h3"><div className="objects">{objects.map(item=><DsButton key={item.id} tone={selected===item.id?'subtle':'secondary'} fullWidth aria-pressed={selected===item.id} onClick={()=>setSelected(item.id)}>{item.name}</DsButton>)}</div></DsPanel><div className="map" role="group" aria-label="Схема карты с объектами"><div className="road"/>{objects.map(item=><span className="point" key={item.id} style={{left:item.x+'%',top:item.y+'%'}}><DsIconButton icon="local_shipping" label={'Выбрать '+item.name+' на карте'} active={selected===item.id} onClick={()=>setSelected(item.id)}/></span>)}<span className="map-caption">Схема расположения объектов</span></div></div><p role="status">Выбран {current.name} · {current.driver}</p></div>;}
+function Structure(){const [guides,setGuides]=React.useState(false);return <div className="stack"><DsSwitch label="Показать сетку" checked={guides} onChange={event=>setGuides(event.target.checked)}/><div className="frame-diagram"><div className="frame-header">Шапка приложения</div><div className="frame-nav">Навигация и боковая панель</div><div className="frame-main"><h3>Основной регион</h3><div className="content-grid" data-guides={guides}><div className="content-card">Карточка объектов</div><div className="content-card">Карточка уведомлений</div><div className="row grid-actions"><DsButton onClick={()=>setGuides(!guides)} aria-pressed={guides}>Направляющие</DsButton><span className="caption">Действия внутри контейнера</span></div>{guides&&<div className="guides" aria-hidden="true">{[1,2,3,4].map(column=><span key={column}/>)}</div>}</div></div></div><p role="status">{guides?'Направляющие показаны только в основном регионе.':'Направляющие скрыты.'}</p></div>;}
+function WidthExample(){const [content,setContent]=React.useState('form');const [policy,setPolicy]=React.useState('limited');const [name,setName]=React.useState('Основной автопарк');return <div className="stack"><div className="row" role="group" aria-label="Содержимое сравнения">{[['form','Форма'],['map','Карта']].map(([value,label])=><DsButton key={value} tone={content===value?'subtle':'secondary'} aria-pressed={content===value} onClick={()=>setContent(value)}>{label}</DsButton>)}</div><div className="row" role="group" aria-label="Ширина содержимого">{[['limited','Ограниченная'],['fluid','На всю ширину']].map(([value,label])=><DsButton key={value} tone={policy===value?'subtle':'secondary'} aria-pressed={policy===value} onClick={()=>setPolicy(value)}>{label}</DsButton>)}</div><div className="width-surface" data-policy={policy}>{content==='form'?<div className="width-form"><DsField label="Название в сравнении ширины" value={name} onChange={event=>setName(event.target.value)}/></div>:<div className="map" role="img" aria-label="Схема карты для сравнения ширины"><div className="road"/><span className="map-caption">Область обзора карты</span></div>}</div><p role="status">{content==='form'?(policy==='limited'?'Форма ограничена по ширине.':'Форма растянута: на широком экране поле становится длиннее необходимого.'):(policy==='fluid'?'Карта использует всё доступное место.':'Карта ограничена: часть доступного места остаётся свободной.')}</p></div>;}
+const columns=[{key:'name',label:'Объект',strong:true},{key:'driver',label:'Водитель'},{key:'speed',label:'Скорость, км/ч',align:'right',mono:true}];
+function TableExample(){const [query,setQuery]=React.useState('');const [online,setOnline]=React.useState(false);const rows=objects.filter(item=>item.name.toLowerCase().includes(query.toLowerCase())&&(!online||item.online));return <div className="stack"><div className="filters"><DsField label="Поиск в таблице" icon="search" value={query} onChange={event=>setQuery(event.target.value)}/><DsSwitch label="Только на связи" checked={online} onChange={event=>setOnline(event.target.checked)}/></div><p role="status">Найдено объектов: {rows.length}</p><div className="table-scroll" role="region" aria-label="Таблица объектов с горизонтальной прокруткой" tabIndex={0}><div><DsTable columns={columns} rows={rows} ariaLabel="Объекты и водители" empty="Объекты не найдены"/></div></div></div>;}
+function Settings(){const [name,setName]=React.useState('Основной автопарк');const [speed,setSpeed]=React.useState('90');const [interval,setInterval]=React.useState('30');const [saved,setSaved]=React.useState(false);return <form className="settings stack" onSubmit={event=>{event.preventDefault();setSaved(true);}} onChange={()=>setSaved(false)}><div className="fields"><div className="full"><DsField label="Название автопарка" value={name} onChange={event=>setName(event.target.value)} required/></div><DsField label="Лимит скорости, км/ч" type="number" min="1" value={speed} onChange={event=>setSpeed(event.target.value)} required/><DsField label="Интервал отчёта, мин" type="number" min="1" value={interval} onChange={event=>setInterval(event.target.value)} required/></div><div className="row"><DsButton type="submit" icon="save">Сохранить настройки</DsButton><DsButton tone="secondary" onClick={()=>{setName('Основной автопарк');setSpeed('90');setInterval('30');setSaved(false);}}>Сбросить</DsButton></div><p role="status">{saved?'Настройки примера сохранены локально.':'Измените значения и сохраните форму.'}</p></form>;}
+ReactDOM.createRoot(document.getElementById('map-example')).render(<MapExample/>);
+ReactDOM.createRoot(document.getElementById('structure-example')).render(<Structure/>);
+ReactDOM.createRoot(document.getElementById('width-example')).render(<WidthExample/>);
+ReactDOM.createRoot(document.getElementById('table-example')).render(<TableExample/>);
+ReactDOM.createRoot(document.getElementById('form-example')).render(<Settings/>);
+function refresh(){const root=document.documentElement;for(const scene of document.querySelectorAll('.scene')){scene.dataset.dsTheme=root.dataset.dsTheme||'DEFAULT';scene.dataset.dsAppearance=root.dataset.dsAppearance||'light';scene.dataset.dsDensity=root.dataset.dsDensity||'cozy';}}
+refresh();new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['data-ds-theme','data-ds-appearance','data-ds-density','style']});
+</script></body></html>
