@@ -9,7 +9,7 @@ h3{font:var(--ds-type-section);margin:0 0 12px}
 p{margin:0 0 16px;max-width:74ch}li+li{margin-top:8px}
 section+section{margin-top:40px;padding-top:32px;border-top:1px solid var(--ds-divider)}
 a{color:var(--ds-brand-text);text-underline-offset:3px}code{font:var(--ds-type-mono)}
-.scene{container-type:inline-size;padding:var(--ds-pad-xl);background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
+.scene{--layout-grid-pink:#d96ce3;--layout-grid-fill:color-mix(in srgb,var(--layout-grid-pink) 16%,var(--ds-surface));--layout-grid-line:color-mix(in srgb,var(--layout-grid-pink) 32%,var(--ds-surface));container-type:inline-size;padding:var(--ds-pad-xl);background:var(--ds-bg);color:var(--ds-fg);border:1px solid var(--ds-border);border-radius:var(--ds-radius-lg);min-width:0}
 .stack{display:grid;gap:var(--ds-gap-md);min-width:0}.row{display:flex;gap:var(--ds-gap-sm);align-items:center;flex-wrap:wrap}
 .workspace{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:var(--ds-gap-md)}
 .workspace>*{min-width:0}.objects{display:grid;gap:var(--ds-gap-sm)}
@@ -27,7 +27,21 @@ a{color:var(--ds-brand-text);text-underline-offset:3px}code{font:var(--ds-type-m
 .content-grid{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--ds-gap-md);padding:16px;border:1px solid var(--ds-border)}
 .content-card{grid-column:span 2;padding:16px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-sm);min-width:0}
 .grid-actions{grid-column:1/-1}.guides{position:absolute;inset:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--ds-gap-md);pointer-events:none}
-.guides span{border-left:1px dashed var(--ds-brand-text);border-right:1px dashed var(--ds-brand-text)}
+.guides span{background:var(--layout-grid-fill);opacity:.6;border-left:1px dashed var(--layout-grid-line);border-right:1px dashed var(--layout-grid-line)}
+.grid-figure{margin:0;min-width:0}.grid-figure figcaption{margin-top:16px;max-width:74ch}
+.grid-canvas{--layout-grid-gutter:var(--ds-gap-md);position:relative;padding:24px var(--ds-pad-md);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md);background:var(--ds-surface);min-width:0}
+.column-sheet{position:absolute;inset:0 var(--ds-pad-md);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--layout-grid-gutter);pointer-events:none}
+.column-sheet span{background:var(--layout-grid-fill);border-left:1px solid var(--layout-grid-line);border-right:1px solid var(--layout-grid-line)}
+.grid-anatomy{min-height:120px}.span-stack{position:relative;display:grid;gap:var(--ds-gap-md)}
+.span-row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--layout-grid-gutter);min-width:0}
+.span-block{display:grid;place-items:center;min-width:0;min-height:48px;padding:8px 4px;text-align:center;border:1px solid var(--ds-border-strong);border-radius:var(--ds-radius-sm);background:var(--ds-surface);color:var(--ds-fg);font:var(--ds-type-mono);overflow-wrap:anywhere}
+.grid-key{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--ds-gap-md);margin:16px 0 0}.grid-key dt{font:var(--ds-type-body-strong);margin-bottom:8px}.grid-key dd{margin:0}
+.key-column{display:inline-block;width:16px;height:16px;background:var(--layout-grid-fill);border:1px solid var(--layout-grid-line);vertical-align:middle;margin-right:8px}
+.grid-tokens{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:16px;font:var(--ds-type-caption);color:var(--ds-fg-muted)}.grid-tokens>span{min-width:0}.grid-tokens code{overflow-wrap:anywhere}
+.grid-token-narrow{display:none}
+@container(max-width:440px){.grid-token-wide{display:none}.grid-token-narrow{display:inline}}
+.grid-standard{width:100%;border-collapse:collapse;margin:16px 0}.grid-standard th,.grid-standard td{padding:12px 8px;border-bottom:1px solid var(--ds-divider);text-align:left;overflow-wrap:anywhere}.grid-standard code{overflow-wrap:anywhere}
+@container(max-width:440px){.grid-canvas{--layout-grid-gutter:var(--ds-gap-sm)}.grid-key{grid-template-columns:minmax(0,1fr)}}
 .width-surface{width:100%;min-width:0}.width-surface[data-policy="limited"]{max-width:560px}
 .width-form{padding:16px;background:var(--ds-surface);border:1px solid var(--ds-border);border-radius:var(--ds-radius-md)}
 summary{cursor:pointer;padding:12px;border:1px solid var(--ds-border);border-radius:var(--ds-radius-sm)}
@@ -51,6 +65,32 @@ summary:focus-visible,a:focus-visible,.table-scroll:focus-visible{outline:var(--
 <p>Каркас задаёт внешние регионы: шапку, навигацию, боковые панели и основной регион. Сетка выравнивает контейнеры уже внутри основного региона. Её колонки не проходят через навигацию и боковую панель.</p>
 <div class="scene" id="structure-example"></div>
 <p>Включите направляющие: карточки занимают колонки внутренней сетки. Кнопки внутри контейнера располагаются по содержимому и отступам; иконки и всплывающие меню также не нужно подгонять под колонки страницы. Четыре колонки здесь служат наглядной схемой, а не обязательным стандартом Aurora.</p>
+</section>
+<section aria-labelledby="grid-anatomy"><h2 id="grid-anatomy">Из чего состоит сетка</h2>
+<p>Колонки задают линии выравнивания, промежутки отделяют соседние блоки, а поля оставляют место до границы контейнера. Заливка ниже — учебная направляющая, она не является фоном интерфейса.</p>
+<div class="scene" id="anatomy-example"></div>
+<p>Здесь показаны 12 колонок: их удобно делить на половины и трети. Число колонок выбирается по задаче; расстояния между ними и поля следуют стандарту ниже.</p>
+</section>
+<section aria-labelledby="grid-standard"><h2 id="grid-standard">Стандарт расстояний для сеток Aurora</h2>
+<p>Для сетки контейнеров внутри основного региона используйте эти значения. Узкая сетка — та, чей контейнер имеет доступную ширину не больше 440 px; это ширина области содержимого контейнера, а не окна браузера.</p>
+<table class="grid-standard"><caption class="caption">Значения для обычной и компактной плотности</caption><thead><tr><th scope="col">Назначение и токен</th><th scope="col">Cozy</th><th scope="col">Compact</th></tr></thead><tbody>
+<tr><th scope="row">Между колонками: <code>--ds-gap-md</code></th><td>16 px</td><td>12 px</td></tr>
+<tr><th scope="row">Между колонками при ширине ≤ 440 px: <code>--ds-gap-sm</code></th><td>8 px</td><td>6 px</td></tr>
+<tr><th scope="row">Между рядами блоков: <code>--ds-gap-md</code></th><td>16 px</td><td>12 px</td></tr>
+<tr><th scope="row">Поля сетки слева и справа: <code>--ds-pad-md</code></th><td>16 px</td><td>12 px</td></tr>
+</tbody></table>
+<p>При смене плотности значения токенов меняются автоматически. Переход на меньший промежуток по ширине задаёт контейнерный CSS-запрос приложения: сами токены не определяют ширину контейнера. Не добавляйте поля повторно, если их уже создаёт обёртка сетки.</p>
+<p>Стандарт относится к сетке контейнеров. Расстояния внутри кнопок, полей и карточек остаются ответственностью компонентов; смысловая группировка описана в <a href="?card=DsSpacing">отступах и группировке</a>.</p>
+</section>
+<section aria-labelledby="grid-spans"><h2 id="grid-spans">Расположение блоков по колонкам</h2>
+<p>На одной сетке можно расположить блок на всю ширину, два равных, три равных или основной блок со сводкой в соотношении 2:1. Выровнены контейнеры, а не каждая кнопка и иконка внутри них.</p>
+<div class="scene" id="spans-example"></div>
+<p>Числа внутри блоков обозначают занятые колонки. На узком экране схема сохраняет пропорции для сравнения. Реальные карточки с длинным содержимым перестраиваются по правилам <a href="?card=DsBreakpoints">адаптивности</a>.</p>
+</section>
+<section aria-labelledby="grid-centering"><h2 id="grid-centering">Центрирование внутри сетки</h2>
+<p>Узкий блок может занимать центральные колонки, сохраняя одинаковое свободное место слева и справа. Например, блок на 8 колонок оставляет по 2 колонки с каждой стороны, на 10 — по 1.</p>
+<div class="scene" id="centering-example"></div>
+<p>Центрируйте сам контейнер; текст и поля внутри могут оставаться выровненными влево. Положение блока и выравнивание его содержимого — разные решения.</p>
 </section>
 <section aria-labelledby="width"><h2 id="width">Ограниченная и растягиваемая ширина</h2>
 <p>Сравните два способа распределения места в одной области. Переключите содержимое между формой и картой, затем измените ограничение ширины. На узком экране оба варианта занимают доступное место.</p>
@@ -84,6 +124,11 @@ summary:focus-visible,a:focus-visible,.table-scroll:focus-visible{outline:var(--
 </main><script type="text/babel">
 const {DsPanel,DsButton,DsIconButton,DsField,DsTable,DsSwitch}=window.AuroraWebDesignSystem_96e210;
 const objects=[{id:1,name:'МАЗ 5440',driver:'Андрей Иванов',speed:62,online:true,x:35,y:40},{id:2,name:'Volvo FH16',driver:'Мария Петрова',speed:0,online:false,x:70,y:65},{id:3,name:'Scania R450',driver:'Иван Сидоров',speed:48,online:true,x:60,y:30}];
+function ColumnSheet(){return <div className="column-sheet" aria-hidden="true">{Array.from({length:12},(_,index)=><span key={index}/>)}</div>;}
+function GridTokens({rows=false}){return <div className="grid-tokens" aria-label="Токены схемы"><span>Колонки: <span className="grid-token-wide"><code>--ds-gap-md</code> · 16 / 12 px</span><span className="grid-token-narrow"><code>--ds-gap-sm</code> · 8 / 6 px</span></span>{rows&&<span>Ряды: <code>--ds-gap-md</code> · 16 / 12 px</span>}<span>Поля: <code>--ds-pad-md</code> · 16 / 12 px</span><span>Значения: cozy / compact</span></div>;}
+function GridAnatomy(){return <figure className="grid-figure"><div className="grid-canvas grid-anatomy" role="img" aria-label="12 залитых колонок, промежутки между ними и поля по краям"><ColumnSheet/></div><figcaption><dl className="grid-key"><div><dt><span className="key-column" aria-hidden="true"/>Колонки</dt><dd>Залитые полосы для выравнивания блоков.</dd></div><div><dt>Промежутки</dt><dd>Незалитое место между колонками.</dd></div><div><dt>Поля контейнера</dt><dd>Свободное место от крайних колонок до рамки.</dd></div></dl><GridTokens/></figcaption></figure>;}
+function GridSpans(){return <figure className="grid-figure"><div className="grid-canvas"><ColumnSheet/><div className="span-stack">{[[12],[6,6],[4,4,4],[8,4]].map((spans,row)=><div className="span-row" key={row} data-span-row={spans.join('-')}>{spans.map((span,index)=><div className="span-block" key={index} style={{gridColumn:'span '+span}}>{span}</div>)}</div>)}</div></div><figcaption>Сверху вниз: вся ширина — 12; два равных блока — 6 + 6; три равных — 4 + 4 + 4; основной блок и сводка — 8 + 4.<GridTokens rows/></figcaption></figure>;}
+function GridCentering(){return <figure className="grid-figure"><div className="grid-canvas"><ColumnSheet/><div className="span-stack">{[8,10,12].map(span=><div className="span-row" key={span}><div className="span-block" data-centered-span={span} style={{gridColumn:((12-span)/2+1)+' / span '+span}}>{span} колонок</div></div>)}</div></div><figcaption>Блоки на 8, 10 и 12 колонок имеют общий центр. Отступ от начала сетки: 2, 1 и 0 колонок соответственно.<GridTokens rows/></figcaption></figure>;}
 function MapExample(){const [selected,setSelected]=React.useState(1);const current=objects.find(item=>item.id===selected);return <div className="stack"><div className="workspace"><DsPanel title="Объекты" headingLevel="h3"><div className="objects">{objects.map(item=><DsButton key={item.id} tone={selected===item.id?'subtle':'secondary'} fullWidth aria-pressed={selected===item.id} onClick={()=>setSelected(item.id)}>{item.name}</DsButton>)}</div></DsPanel><div className="map" role="group" aria-label="Схема карты с объектами"><div className="road"/>{objects.map(item=><span className="point" key={item.id} style={{left:item.x+'%',top:item.y+'%'}}><DsIconButton icon="local_shipping" label={'Выбрать '+item.name+' на карте'} active={selected===item.id} onClick={()=>setSelected(item.id)}/></span>)}<span className="map-caption">Схема расположения объектов</span></div></div><p role="status">Выбран {current.name} · {current.driver}</p></div>;}
 function Structure(){const [guides,setGuides]=React.useState(false);return <div className="stack"><DsSwitch label="Показать сетку" checked={guides} onChange={event=>setGuides(event.target.checked)}/><div className="frame-diagram"><div className="frame-header">Шапка приложения</div><div className="frame-nav">Навигация и боковая панель</div><div className="frame-main"><h3>Основной регион</h3><div className="content-grid" data-guides={guides}><div className="content-card">Карточка объектов</div><div className="content-card">Карточка уведомлений</div><div className="row grid-actions"><DsButton onClick={()=>setGuides(!guides)} aria-pressed={guides}>Направляющие</DsButton><span className="caption">Действия внутри контейнера</span></div>{guides&&<div className="guides" aria-hidden="true">{[1,2,3,4].map(column=><span key={column}/>)}</div>}</div></div></div><p role="status">{guides?'Направляющие показаны только в основном регионе.':'Направляющие скрыты.'}</p></div>;}
 function WidthExample(){const [content,setContent]=React.useState('form');const [policy,setPolicy]=React.useState('limited');const [name,setName]=React.useState('Основной автопарк');return <div className="stack"><div className="row" role="group" aria-label="Содержимое сравнения">{[['form','Форма'],['map','Карта']].map(([value,label])=><DsButton key={value} tone={content===value?'subtle':'secondary'} aria-pressed={content===value} onClick={()=>setContent(value)}>{label}</DsButton>)}</div><div className="row" role="group" aria-label="Ширина содержимого">{[['limited','Ограниченная'],['fluid','На всю ширину']].map(([value,label])=><DsButton key={value} tone={policy===value?'subtle':'secondary'} aria-pressed={policy===value} onClick={()=>setPolicy(value)}>{label}</DsButton>)}</div><div className="width-surface" data-policy={policy}>{content==='form'?<div className="width-form"><DsField label="Название в сравнении ширины" value={name} onChange={event=>setName(event.target.value)}/></div>:<div className="map" role="img" aria-label="Схема карты для сравнения ширины"><div className="road"/><span className="map-caption">Область обзора карты</span></div>}</div><p role="status">{content==='form'?(policy==='limited'?'Форма ограничена по ширине.':'Форма растянута: на широком экране поле становится длиннее необходимого.'):(policy==='fluid'?'Карта использует всё доступное место.':'Карта ограничена: часть доступного места остаётся свободной.')}</p></div>;}
@@ -92,6 +137,9 @@ function TableExample(){const [query,setQuery]=React.useState('');const [online,
 function Settings(){const [name,setName]=React.useState('Основной автопарк');const [speed,setSpeed]=React.useState('90');const [interval,setInterval]=React.useState('30');const [saved,setSaved]=React.useState(false);return <form className="settings stack" onSubmit={event=>{event.preventDefault();setSaved(true);}} onChange={()=>setSaved(false)}><div className="fields"><div className="full"><DsField label="Название автопарка" value={name} onChange={event=>setName(event.target.value)} required/></div><DsField label="Лимит скорости, км/ч" type="number" min="1" value={speed} onChange={event=>setSpeed(event.target.value)} required/><DsField label="Интервал отчёта, мин" type="number" min="1" value={interval} onChange={event=>setInterval(event.target.value)} required/></div><div className="row"><DsButton type="submit" icon="save">Сохранить настройки</DsButton><DsButton tone="secondary" onClick={()=>{setName('Основной автопарк');setSpeed('90');setInterval('30');setSaved(false);}}>Сбросить</DsButton></div><p role="status">{saved?'Настройки примера сохранены локально.':'Измените значения и сохраните форму.'}</p></form>;}
 ReactDOM.createRoot(document.getElementById('map-example')).render(<MapExample/>);
 ReactDOM.createRoot(document.getElementById('structure-example')).render(<Structure/>);
+ReactDOM.createRoot(document.getElementById('anatomy-example')).render(<GridAnatomy/>);
+ReactDOM.createRoot(document.getElementById('spans-example')).render(<GridSpans/>);
+ReactDOM.createRoot(document.getElementById('centering-example')).render(<GridCentering/>);
 ReactDOM.createRoot(document.getElementById('width-example')).render(<WidthExample/>);
 ReactDOM.createRoot(document.getElementById('table-example')).render(<TableExample/>);
 ReactDOM.createRoot(document.getElementById('form-example')).render(<Settings/>);

@@ -30,6 +30,29 @@ test('layout examples preserve selection, filtering, forms and navigation in fou
         await expect(structure.locator('.content-grid')).toHaveAttribute('data-guides','true');
         await expect(structure.locator('.frame-nav .guides')).toHaveCount(0);
         await expect(structure.locator('.content-grid .guides span')).toHaveCount(4);
+        for(const id of ['anatomy-example','spans-example','centering-example']){
+          await expect(frame.locator('#'+id+' .column-sheet span')).toHaveCount(12);
+          const diagram=frame.locator('#'+id);
+          const gap=width===390?(density==='cozy'?8:6):(density==='cozy'?16:12);
+          await expect(diagram.locator('.column-sheet')).toHaveCSS('column-gap',gap+'px');
+          await expect(diagram.locator('.grid-canvas')).toHaveCSS('padding-left',(density==='cozy'?16:12)+'px');
+          await expect(diagram.locator(width===390?'.grid-token-narrow':'.grid-token-wide')).toBeVisible();
+          await expect(diagram.locator(width===390?'.grid-token-narrow':'.grid-token-wide')).toContainText(width===390?'--ds-gap-sm':'--ds-gap-md');
+          if(id!=='anatomy-example')await expect(diagram.locator('.span-stack')).toHaveCSS('row-gap',(density==='cozy'?16:12)+'px');
+        }
+        await expect(frame.locator('#spans-example .span-row')).toHaveCount(4);
+        await expect(frame.locator('[data-span-row="6-6"] .span-block')).toHaveCount(2);
+        await expect(frame.locator('[data-span-row="4-4-4"] .span-block')).toHaveCount(3);
+        const geometry=await frame.locator('#centering-example').evaluate(figure=>{
+          const columns=figure.querySelector('.column-sheet').getBoundingClientRect();
+          return [...figure.querySelectorAll('.span-block')].map(block=>{
+            const box=block.getBoundingClientRect();
+            return {span:Number(block.dataset.centeredSpan),centerDelta:Math.abs((box.left+box.right-columns.left-columns.right)/2),fits:box.left>=columns.left-1&&box.right<=columns.right+1,width:box.width};
+          });
+        });
+        expect(geometry.every(block=>block.centerDelta<1&&block.fits)).toBe(true);
+        expect(geometry[0].width).toBeLessThan(geometry[1].width);
+        expect(geometry[1].width).toBeLessThan(geometry[2].width);
         const comparison=frame.locator('#width-example');
         const limited=await comparison.locator('.width-surface').evaluate(element=>element.getBoundingClientRect().width);
         await comparison.getByRole('button',{name:'На всю ширину',exact:true}).press('Enter');
