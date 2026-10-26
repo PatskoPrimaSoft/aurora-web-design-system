@@ -43,7 +43,8 @@ mise exec -- npm run dev
 CSS, шрифты, токены, конфиг stylelint и Angular-сервис скоупов с директивой;
 интеграция ECharts подключается отдельно. React-компоненты поставляются готовыми
 и служат эталоном поведения. Angular UI kit поставляется из этого же пакета;
-первый компонент — [DsButtonComponent](ng-ui-kit/src/components/button/README.md), `button[dsButton]`.
+доступны [DsButtonComponent](ng-ui-kit/src/components/button/README.md), `button[dsButton]`,
+и [DsIconComponent](ng-ui-kit/src/components/icon/README.md), `ds-icon`.
 Доступ к пакету в GitHub Packages и пошаговая настройка — в [руководстве](design-system/docs/usage.md).
 
 Angular-вход собран на 19.2.25 и проверяется в Angular 19.2.25 и 20.3.34;

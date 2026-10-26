@@ -5,7 +5,7 @@ import {auroraChartChrome,auroraWatchScopes} from '@primasoftllc/design-system/a
 import theme,{dsEChartsTheme} from '@primasoftllc/design-system/echarts-theme';
 import{init,use}from'echarts/core';import{LineChart}from'echarts/charts';import{GridComponent,TooltipComponent,LegendComponent,DataZoomComponent}from'echarts/components';import{CanvasRenderer}from'echarts/renderers';
 use([LineChart,GridComponent,TooltipComponent,LegendComponent,DataZoomComponent,CanvasRenderer]);
-@Component({selector:'app-root',standalone:true,template:`<h1>Angular charts</h1><div id="panel" data-ds-appearance="dark"><div id="chart" style="width:500px;height:250px"></div></div>`,host:{'data-ready':'true'}})
+@Component({selector:'app-root',template:`<h1>Angular charts</h1><div id="panel" data-ds-appearance="dark"><div id="chart" style="width:500px;height:250px"></div></div>`,host:{'data-ready':'true'}})
 class Root implements AfterViewInit {
  ngAfterViewInit(){
   const host=document.getElementById('chart')!,chart=init(host);let callbacks=0;

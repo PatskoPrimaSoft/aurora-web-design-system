@@ -82,7 +82,7 @@ CSS пакета должен идти перед стилями приложе�
 
 | Импорт от `@primasoftllc/design-system` | Что подключает |
 |---|---|
-| `/angular` | `provideAurora`, `AuroraThemeService`, `AuroraScopeDirective`, `DsButtonComponent` и их типы |
+| `/angular` | `provideAurora`, `AuroraThemeService`, `AuroraScopeDirective`, `DsButtonComponent`, `DsIconComponent` и их типы |
 | `/angular/echarts` | Angular-интеграция графиков; требует отдельной установки ECharts |
 | `/styles.css` | Общие стили, токены, шрифты и иконки; физический путь для `angular.json` показан выше |
 | `/tokens.css`, `/tokens.json` | Отдельные CSS-токены и JSON-справочник; для обычного UI kit достаточно `styles.css` |
@@ -192,8 +192,10 @@ import {auroraChartChrome, auroraWatchScopes} from '@primasoftllc/design-system/
 
 Angular UI-компоненты разрабатываются централизованно в этом репозитории
 и импортируются из `/angular` по [правилам UI kit](../../ng-ui-kit/docs/development.md).
-Доступна [кнопка DsButtonComponent](../../ng-ui-kit/src/components/button/README.md):
-добавьте её в `imports` standalone-компонента и используйте `<button dsButton>`.
+Доступны [иконка DsIconComponent](../../ng-ui-kit/src/components/icon/README.md)
+и [кнопка DsButtonComponent](../../ng-ui-kit/src/components/button/README.md).
+Для примера кнопки добавьте её в `imports` standalone-компонента
+и используйте `<button dsButton>`.
 Корневой импорт пакета уже поставляет скомпилированные React-компоненты.
 Поддерживаются React / React DOM `^18.3.0 || ^19.3.1`; проверены 18.3.1 и 19.3.1.
 Типы проверены с `@types/react` / `@types/react-dom` 18.3.31 / 18.3.7 и 19.3.0 / 19.3.0,
@@ -214,7 +216,6 @@ import {DsButtonComponent} from '@primasoftllc/design-system/angular';
 
 @Component({
   selector: 'app-save-example',
-  standalone: true,
   imports: [DsButtonComponent],
   template: `<button dsButton icon="save" [loading]="saving()" (click)="save()">Сохранить</button>
     <p role="status">{{message()}}</p>`,

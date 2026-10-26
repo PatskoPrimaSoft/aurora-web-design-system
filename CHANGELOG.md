@@ -15,6 +15,10 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 - Сборка скриптов каталога из вложенного checkout больше не наследует чужой
   `tsconfig.json`: глобальный namespace компонентов сохраняется и при `strict` у родителя.
 
+- Добавлен Angular-компонент `DsIconComponent` (`ds-icon`) из `/angular`:
+  строковое имя Material Symbols, четыре системных размера, наследование цвета
+  и плотности, поворот, оптическое выравнивание и доступное имя через `label`.
+
 ## [5.2.2] — 2026-10-22
 
 - В руководстве Angular UI kit уточнено отличие собственных Angular-событий

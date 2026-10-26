@@ -2,7 +2,7 @@ import {Component, signal} from '@angular/core';
 import {DsButtonComponent, type DsButtonTone, type DsButtonSize} from '@primasoftllc/design-system/angular';
 
 @Component({
-  selector: 'button-demo', standalone: true, imports: [DsButtonComponent],
+  selector: 'button-demo', imports: [DsButtonComponent],
   styles: [':host{display:block;background:var(--ds-surface);color:var(--ds-fg);padding:12px} label{display:block}'],
   template: `
     <h2>Кнопка</h2>

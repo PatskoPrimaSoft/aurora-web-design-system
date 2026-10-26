@@ -5,7 +5,7 @@ export type DsButtonSize = 'sm' | 'md' | 'lg';
 
 /** Нативная кнопка Aurora. Loading сохраняет геометрию и фокус, блокируя активацию. */
 @Component({
-  selector: 'button[dsButton]', standalone: true,
+  selector: 'button[dsButton]',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './button.component.css',
   template: `

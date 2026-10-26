@@ -3,7 +3,6 @@ import {DsButtonComponent} from '@primasoftllc/design-system/angular';
 
 @Component({
   selector: 'app-save-example',
-  standalone: true,
   imports: [DsButtonComponent],
   template: `<button dsButton icon="save" [loading]="saving()" (click)="save()">Сохранить</button>
     <p role="status">{{message()}}</p>`,

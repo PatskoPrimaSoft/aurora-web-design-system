@@ -38,7 +38,6 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
   selector: 'ds-example',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styles: [`
@@ -114,6 +113,9 @@ export * from './components/example/example.component';
 Не подменяйте Angular-пример React-превью или таблицей React props.
 Генератор API каталога пока читает React-контракты; Angular API документируется
 и проверяется отдельно.
+
+Проверочные примеры потребителей не заменяют публичные демонстрации сайта.
+План перехода хранится в репозитории в `docs/plans/angular-ui-kit-vision.md`.
 
 ## 6. Проверьте путь от исходника до приложения
 

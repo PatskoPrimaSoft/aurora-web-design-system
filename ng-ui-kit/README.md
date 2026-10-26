@@ -11,6 +11,7 @@ Angular 19.2.25 и 20.3.34.
 | `src/` | Компоненты, сервис темы, директива скоупа и интеграция ECharts |
 | `src/core.ts`, `src/echarts.ts` | Публичные экспорты |
 | `src/components/button/` | Кнопка и документация её API |
+| `src/components/icon/` | Иконка и документация её API |
 | `docs/development.md` | Правила разработки Angular-компонентов |
 | `tools/` | Сборка библиотеки и проверки установленного пакета |
 | `tests/` | Проверки API, темы, документации и браузерного поведения |
@@ -18,6 +19,13 @@ Angular 19.2.25 и 20.3.34.
 | `tsconfig.lib.json` | Конфигурация partial compilation |
 
 ## Команды
+
+`npm run dev` запускает существующий сайт дизайн-системы с React-примерами.
+Angular-иконка находится в `src/components/icon/`; её страница на сайте пока не добавлена.
+
+Согласованное направление нового сайта описано в репозитории:
+`docs/plans/angular-ui-kit-vision.md`.
+Новое приложение пока не создано; существующие команды запуска и сборки сохранены.
 
 Выполняются из корня репозитория:
 
@@ -49,5 +57,6 @@ mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
 - [Правила разработки](docs/development.md)
 - [Добавление компонентов](docs/adding-components.md)
 - [Кнопка DsButtonComponent](src/components/button/README.md)
+- [Иконка DsIconComponent](src/components/icon/README.md)
 - [Подключение к приложению](../design-system/docs/usage.md)
 - [Разработка дизайн-системы](../CONTRIBUTING.md)

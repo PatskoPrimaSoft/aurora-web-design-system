@@ -7,7 +7,7 @@ import { AURORA_ATTR, type DsAppearance, type DsDensity, type DsTheme } from './
  *
  *   <section auroraScope density="compact">…</section>
  */
-@Directive({ selector: '[auroraScope]', standalone: true })
+@Directive({ selector: '[auroraScope]' })
 export class AuroraScopeDirective {
   readonly theme = input<DsTheme | undefined>(undefined);
   readonly appearance = input<DsAppearance | undefined>(undefined);

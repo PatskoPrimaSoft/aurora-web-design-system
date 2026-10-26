@@ -31,6 +31,7 @@
     "ng-ui-kit/docs/development.md",
     "ng-ui-kit/docs/adding-components.md",
     "ng-ui-kit/src/components/button/README.md",
+    "ng-ui-kit/src/components/icon/README.md",
     "components/DsButton/README.md",
     "docs/design.md",
     "docs/tokens.md",
