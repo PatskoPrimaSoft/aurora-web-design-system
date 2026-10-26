@@ -3,6 +3,8 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Policy: [Versions and publishing](docs/release.md#versioning).
 
+## [Unreleased]
+
 ## [5.2.3] — 2026-10-26
 
 - Добавлена совместимость с React / React DOM 19.3.1 при сохранении поддержки 18.3:
