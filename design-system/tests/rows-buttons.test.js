@@ -51,7 +51,7 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
   ok(d.activeElement===button&&!button.disabled&&button.getAttribute('aria-busy')==='true'&&button.getAttribute('aria-disabled')==='true','DsIconButton: загрузка сохраняет фокус и объявляет состояние');
   const event=fire(button,'click',{},w.MouseEvent);
   ok(event.defaultPrevented&&!action.calls.length&&!submit.calls.length,'DsIconButton: загрузка блокирует действие и submit');
-  ok(!!button.querySelector('[data-ds-icon-button-spinner]')&&button.style.background.includes('ds-brand'),'DsIconButton: спиннер сохраняет тон');
+  ok(!!button.querySelector('[data-ds-icon-button-spinner]')&&button.style.backgroundColor.includes('ds-brand'),'DsIconButton: спиннер сохраняет тон');
   draw({type:'submit'});click(button);
   ok(action.calls.length===1&&submit.calls.length===1,'DsIconButton: после загрузки действие и submit работают');
   draw({disabled:true,loading:true});ok(button.disabled,'DsIconButton: явный disabled сохраняет нативную блокировку');
@@ -72,7 +72,7 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
   ok(d.activeElement===button&&!button.disabled&&button.getAttribute('aria-busy')==='true'&&button.getAttribute('aria-disabled')==='true','DsFab: загрузка сохраняет фокус и объявляет недоступность');
   const event=fire(button,'click',{},w.MouseEvent);
   ok(event.defaultPrevented&&action.calls.length===0&&submit.calls.length===0,'DsFab: загрузка блокирует действие и submit');
-  ok(!!button.querySelector('[data-ds-fab-spinner]')&&button.style.background.includes('ds-brand'),'DsFab: загрузка сохраняет тон и показывает спиннер');
+  ok(!!button.querySelector('[data-ds-fab-spinner]')&&button.style.backgroundColor.includes('ds-brand'),'DsFab: загрузка сохраняет тон и показывает спиннер');
   draw({extended:true});act(()=>button.blur());act(()=>button.focus());
   ok(!d.querySelector('[role="tooltip"]'),'DsFab: полная видимая подпись не дублируется подсказкой');
   draw({disabled:true,loading:true});ok(button.disabled,'DsFab: явный disabled сохраняет нативную блокировку');
@@ -185,7 +185,7 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
 {
   for(const [active,selected] of [[true,false],[false,true],[true,true]]){
     const row=render(h(NS.DsListRow,{title:'Объект',active,selected})).firstElementChild;
-    ok(row.style.background==='var(--ds-surface-selected)',`DsListRow active=${active} selected=${selected}: подложка просмотра и выбора`);
+    ok(row.style.backgroundColor==='var(--ds-surface-selected)',`DsListRow active=${active} selected=${selected}: подложка просмотра и выбора`);
     ok(row.style.boxShadow.includes('inset')===active,`DsListRow active=${active} selected=${selected}: полоса только для просмотра`);
   }
 }
@@ -202,9 +202,9 @@ const nested = (box) => box.querySelectorAll('button button, [role="button"] but
   ok(mono.querySelector('[data-ds-list-subtitle]')?.style.fontFamily==='var(--ds-font-mono)','DsListRow: номера можно оформить моноширинным шрифтом');
   const button=text.querySelector('button');
   key(button,'keydown',' ');
-  ok(text.firstElementChild.style.background==='var(--ds-surface-active)','DsListRow: клавиатурное нажатие меняет подложку');
+  ok(text.firstElementChild.style.backgroundColor==='var(--ds-surface-active)','DsListRow: клавиатурное нажатие меняет подложку');
   fire(button,'focusout');
-  ok(text.firstElementChild.style.background!=='var(--ds-surface-active)','DsListRow: потеря фокуса сбрасывает нажатие');
+  ok(text.firstElementChild.style.backgroundColor!=='var(--ds-surface-active)','DsListRow: потеря фокуса сбрасывает нажатие');
 }
 {
   const open = spy(), del = spy();
@@ -278,10 +278,10 @@ ok(head(table({ selectedIds: [4, 1, 3] })).checked === true, '№4: все ви�
     h(NS.DsButton,{type:'submit',icon:'save',iconRight:'arrow_forward',onClick:action,...props},'Сохранить изменения'))));}
   update({});
   const button=box.querySelector('button');act(()=>button.focus());
-  const color=button.style.color,background=button.style.background;
+  const color=button.style.color,background=button.style.backgroundColor;
   update({loading:true});
   ok(!button.disabled&&button.getAttribute('aria-disabled')==='true'&&button.getAttribute('aria-busy')==='true','DsButton: загрузка объявлена и сохраняет фокусируемость');
-  ok(d.activeElement===button&&button.style.color===color&&button.style.background===background,'DsButton: загрузка сохраняет фокус и тон');
+  ok(d.activeElement===button&&button.style.color===color&&button.style.backgroundColor===background,'DsButton: загрузка сохраняет фокус и тон');
   const event=fire(button,'click',{},w.MouseEvent);
   ok(event.defaultPrevented&&action.calls.length===0&&submit.calls.length===0&&parentClick.calls.length===0,'DsButton: загрузка блокирует действие, отправку формы и всплытие клика');
   ok(button.textContent.includes('Сохранить изменения'),'DsButton: при загрузке остаётся доступная подпись');
@@ -312,13 +312,13 @@ const mouse = { pointerType: 'mouse', button: 0 };
   const d = render(h(NS.DsButton, { disabled: true }, 'Нет')).querySelector('button');
   fire(d, 'pointerdown', mouse); key(d, 'keydown', ' '); ok(!img(d), 'DsButton disabled: не реагирует');
   const s = render(h(NS.DsButton, { tone: 'secondary' }, 'Отмена')).querySelector('button');
-  fire(s, 'pointerdown', mouse); ok(s.style.background.includes('surface-active'), 'DsButton secondary: нажатие сдвигает фон');
+  fire(s, 'pointerdown', mouse); ok(s.style.backgroundColor.includes('surface-active'), 'DsButton secondary: нажатие сдвигает фон');
 }
 {
   const p = render(h(NS.DsIconButton, { icon: 'add', label: 'Добавить', tone: 'primary' })).querySelector('button');
   fire(p, 'pointerdown', mouse); ok(img(p).includes('overlay-press'), 'DsIconButton primary: нажатие 16%');
   const g = render(h(NS.DsIconButton, { icon: 'edit', label: 'Править' })).querySelector('button');
-  key(g, 'keydown', ' '); ok(g.style.background.includes('surface-active'), 'DsIconButton ghost: Space — нажатие сдвигает фон');
+  key(g, 'keydown', ' '); ok(g.style.backgroundColor.includes('surface-active'), 'DsIconButton ghost: Space — нажатие сдвигает фон');
   ok(!g.hasAttribute('aria-pressed'), 'DsIconButton без active — не переключатель');
   const t0 = render(h(NS.DsIconButton, { icon: 'filter_alt', label: 'Фильтр', active: false })).querySelector('button');
   const t1 = render(h(NS.DsIconButton, { icon: 'filter_alt', label: 'Фильтр', active: true })).querySelector('button');
@@ -416,9 +416,9 @@ const mouse = { pointerType: 'mouse', button: 0 };
   const idleMain=idle.querySelector('button');
   fire(idleMain,'pointerover',{pointerType:'mouse'});
   await new Promise(resolve=>w.setTimeout(resolve,0));
-  ok(idleMain.style.background==='var(--ds-surface-hover)','DsTreeRow: hover основной области');
+  ok(idleMain.style.backgroundColor==='var(--ds-surface-hover)','DsTreeRow: hover основной области');
   key(idleMain,'keydown',' ');
-  ok(idleMain.style.background==='var(--ds-surface-active)','DsTreeRow: нажатие основной области');
+  ok(idleMain.style.backgroundColor==='var(--ds-surface-active)','DsTreeRow: нажатие основной области');
   key(idleMain,'keyup',' ');
   const clipped=render(h(NS.DsTreeRow,{title:'Длинное название группы',onClick:open}));
   const title=clipped.querySelector('[data-ds-tree-title]');

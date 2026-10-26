@@ -2,6 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
 import { usePress } from './DsButton.jsx';
+import { mergeButtonStyle } from './buttonStyle.js';
 
 const Ds_OVERLAY=(ink,depth)=>{const c='color-mix(in oklab,'+ink+' '+depth+',transparent)';return 'linear-gradient(0deg,'+c+','+c+')'};
 
@@ -51,13 +52,13 @@ export function DsFab({icon='add',label,extended=false,tone='primary',size='md',
       onPointerLeave={e=>{handlers.onPointerLeave(e);if(!tipRef.current?.contains(e.relatedTarget))hideTip();}} ref={buttonRef} type={type} aria-label={label} title={undefined}
       aria-describedby={[own['aria-describedby'],tip?tipId:undefined].filter(Boolean).join(' ')||undefined}
       disabled={disabled} aria-disabled={loading||own['aria-disabled']} aria-busy={loading||own['aria-busy']} onClick={activate}
-      style={{boxSizing:'border-box',position:'relative',display:'inline-flex',alignItems:'center',justifyContent:'center',flex:'none',
+      style={mergeButtonStyle({boxSizing:'border-box',position:'relative',display:'inline-flex',alignItems:'center',justifyContent:'center',flex:'none',
         minWidth:extended?0:d,maxWidth:extended?'100%':undefined,height:d,width:extended?'auto':d,padding:extended?'0 '+(d/3)+'px':0,
         borderRadius:extended?'var(--ds-radius-pill)':'var(--ds-radius-circle)',
         border:tone==='surface'?'1px solid var(--ds-border)':'none',
-        background:disabled?'var(--ds-surface-disabled)':(tone==='surface'&&(h||p)?(p?'var(--ds-surface-active)':'var(--ds-surface-hover)'):bg),backgroundImage:ov,
+        backgroundColor:disabled?'var(--ds-surface-disabled)':(tone==='surface'&&(h||p)?(p?'var(--ds-surface-active)':'var(--ds-surface-hover)'):bg),backgroundImage:ov,
         color:disabled?'var(--ds-fg-disabled)':fg,font:'var(--ds-type-body-strong)',cursor:disabled?'not-allowed':loading?'progress':'pointer',
-        boxShadow:disabled?'none':h?'var(--ds-shadow-lg)':'var(--ds-shadow-md)',transition:'var(--ds-transition-control)',...own.style}}>
+        boxShadow:disabled?'none':h?'var(--ds-shadow-lg)':'var(--ds-shadow-md)',transition:'var(--ds-transition-control)'},own.style)}>
       <span data-ds-fab-content="" style={{display:'inline-flex',alignItems:'center',justifyContent:'center',gap:'var(--ds-gap-sm)',minWidth:0,maxWidth:'100%',overflow:'hidden',opacity:loading?0:1}}>
         <Icon name={icon} size={iconSize}/>
         {extended?<span ref={labelRef} data-ds-fab-label="" style={{minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{label}</span>:null}

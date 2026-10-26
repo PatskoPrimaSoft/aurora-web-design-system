@@ -64,7 +64,7 @@ export function DsListRow({title,subtitle,subtitleMono=false,state,course,value,
     onFocusCapture={()=>setFocused(true)} onBlurCapture={e=>{if(!e.currentTarget.contains(e.relatedTarget)){setFocused(false);hideTip();}}}
     style={{display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',width:'100%',minWidth:0,
       minHeight:'var(--ds-row-h-lg)',padding:'0 var(--ds-pad-sm)',borderRadius:'var(--ds-radius-md)',
-      background:tinted?'var(--ds-surface-selected)':pressed?'var(--ds-surface-active)':clickable&&(hover||focused)?'var(--ds-surface-hover)':'transparent',backgroundImage:overlay,
+      backgroundColor:tinted?'var(--ds-surface-selected)':pressed?'var(--ds-surface-active)':clickable&&(hover||focused)?'var(--ds-surface-hover)':'transparent',backgroundImage:overlay,
       boxShadow:active?'inset 2px 0 0 var(--ds-brand)':'none',transition:'var(--ds-transition-control)'}}>
     <Main {...(link?{href,target,rel:rel??(target==='_blank'?'noopener noreferrer':undefined),onClick}:clickable?{type:'button',onClick}:null)}
       {...own} {...handlers} aria-current={active?(link?'page':'true'):undefined}

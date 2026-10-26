@@ -107,7 +107,7 @@ function Row({sel,act,onClick,children}){
   const [h,setH]=React.useState(false);
   return <tr onClick={onClick?e=>{if(e.target.closest&&e.target.closest(DS_CONTROL))return;onClick(e)}:undefined} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
     style={{borderBottom:'1px solid var(--ds-divider)',height:'var(--ds-row-h)',cursor:onClick?'pointer':'default',
-      background:sel||act?'var(--ds-surface-selected)':h?'var(--ds-surface-hover)':'transparent',
+      backgroundColor:sel||act?'var(--ds-surface-selected)':h?'var(--ds-surface-hover)':'transparent',
       backgroundImage:(sel||act)&&h?'linear-gradient(0deg,color-mix(in oklab,var(--ds-brand-text) var(--ds-overlay-hover),transparent),color-mix(in oklab,var(--ds-brand-text) var(--ds-overlay-hover),transparent))':undefined,
       boxShadow:act?'inset 2px 0 0 var(--ds-brand)':'none',
       transition:'background-color var(--ds-dur-fast) var(--ds-ease)'}}>{children}</tr>;

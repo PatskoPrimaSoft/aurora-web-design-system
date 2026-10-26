@@ -69,5 +69,13 @@ React-приложение; для потребителя только CSS он�
 и 19.3.0 / 19.3.0 соответственно. React 19 проверяется установкой tarball,
 строгой компиляцией типов, SSR/hydration и интерактивными контролами в Chromium;
 Next.js 15.5.28 — production-сборкой и работающим клиентским маршрутом.
+Дополнительно development React проверяет `DsButton`, `DsIconButton` и `DsFab`
+в светлой и тёмной теме: цвета и слои наведения/нажатия, клавиатуру,
+disabled/loading, refs, события и приоритет пользовательских `style.background` /
+`backgroundColor` без ошибок консоли. Эта проверка входит в
+`npm run check:react19` и `npm run verify`; четыре режима SSR/hydration сохраняются.
+Та же development-проверка отдельно монтирует checkbox/radio, `DsChip`, `DsTable`,
+`DsListRow` и `DsTreeRow` и проверяет семантические фоны и слои при наведении,
+выборе, нажатии и сбросе состояния без конфликтов CSS-свойств.
 В Next.js импортируйте компоненты внутри границы `'use client'`.
 Браузерные цели и проверки описаны в [правилах разработки](CONTRIBUTING.md#browser-support).

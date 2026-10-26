@@ -5,6 +5,14 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ## [Unreleased]
 
+- У `DsButton`, `DsIconButton`, `DsFab`, checkbox/radio, `DsChip`, `DsTable`,
+  `DsListRow` и `DsTreeRow` устранён конфликт CSS-свойств фона при наведении,
+  нажатии и смене выбранного состояния в React 19 development. Цвета, слои и поведение
+  сохранены; проверка установленного tarball теперь охватывает development React
+  в светлой и тёмной теме, включая клавиатуру и переходы disabled/loading.
+  У кнопок сохранён приоритет пользовательского `style.background`; переопределение
+  через `backgroundColor` также остаётся устойчивым при смене состояния.
+
 ## [5.2.3] — 2026-10-26
 
 - Добавлена совместимость с React / React DOM 19.3.1 при сохранении поддержки 18.3:

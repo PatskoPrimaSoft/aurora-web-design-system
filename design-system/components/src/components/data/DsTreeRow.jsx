@@ -55,10 +55,10 @@ export function DsTreeRow({title,meta,icon,avatarSrc,avatar=false,level=0,expand
   const Main=act?'button':'div';
   const mainProps=onClick?{type:'button',onClick}:onToggle?{type:'button',onClick:toggle,'aria-expanded':expanded}:{tabIndex:clipped?0:undefined};
   const feedback=(press,focus)=>({
-    background:press.pressed?'var(--ds-surface-active)':press.hover||focus?'var(--ds-surface-hover)':'transparent',
+    backgroundColor:press.pressed?'var(--ds-surface-active)':press.hover||focus?'var(--ds-surface-hover)':'transparent',
     backgroundImage:undefined
   });
-  const mainFeedback=active?{background:'transparent',backgroundImage:mainPress.pressed||mainPress.hover||focused?tint(mainPress.pressed?'var(--ds-overlay-press)':'var(--ds-overlay-hover)'):undefined}:feedback(mainPress,focused);
+  const mainFeedback=active?{backgroundColor:'transparent',backgroundImage:mainPress.pressed||mainPress.hover||focused?tint(mainPress.pressed?'var(--ds-overlay-press)':'var(--ds-overlay-hover)'):undefined}:feedback(mainPress,focused);
   return <div data-ds-tree-row="" style={{display:'flex',alignItems:'center',gap:'var(--ds-gap-sm)',minHeight:'var(--ds-row-h)',
     padding:'0 var(--ds-pad-sm)',paddingLeft:'calc(var(--ds-pad-sm) + '+level*20+'px)',
     userSelect:'none',minWidth:0,borderRadius:'var(--ds-radius-md)',

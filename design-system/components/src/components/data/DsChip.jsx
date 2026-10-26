@@ -17,7 +17,7 @@ export function DsChip({children,icon,selected=false,removable=false,onRemove,on
     onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}
     style={{boxSizing:'border-box',display:'inline-flex',alignItems:'center',gap:6,flex:'0 1 auto',minWidth:0,maxWidth:'min(100%, '+maxWidth+'px)',minHeight:'var(--ds-control-h-sm)',
       padding:removable?'1px 4px 1px 10px':'1px 10px',font:'var(--ds-type-ui)',whiteSpace:'normal',
-      background:disabled?'var(--ds-surface-disabled)':selected?'var(--ds-brand-subtle)':h&&interactive?'var(--ds-surface-hover)':'var(--ds-surface)',
+      backgroundColor:disabled?'var(--ds-surface-disabled)':selected?'var(--ds-brand-subtle)':h&&interactive?'var(--ds-surface-hover)':'var(--ds-surface)',
       backgroundImage:selected&&h&&interactive?Ds_OVERLAY('var(--ds-brand-text)','var(--ds-overlay-hover)'):undefined,
       color:disabled?'var(--ds-fg-disabled)':selected?'var(--ds-brand-text)':'var(--ds-fg)',
       border:'1px solid '+(disabled?'var(--ds-border)':selected?'var(--ds-brand-border)':'var(--ds-border)'),

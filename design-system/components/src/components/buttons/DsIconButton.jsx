@@ -2,6 +2,7 @@ import React from 'react';
 import { DsTooltip } from '../overlays/DsTooltip.jsx';
 import { DsIcon as Icon } from '../primitives/DsIcon.jsx';
 import { usePress } from './DsButton.jsx';
+import { mergeButtonStyle } from './buttonStyle.js';
 const Ds_OVERLAY=(ink,depth)=>{const c='color-mix(in oklab,'+ink+' '+depth+',transparent)';return 'linear-gradient(0deg,'+c+','+c+')'};
 const DsIB_SIZE={sm:'var(--ds-control-h-sm)',md:'var(--ds-control-h)',lg:'var(--ds-control-h-lg)'};
 
@@ -34,9 +35,9 @@ export function DsIconButton({icon,label,tone='ghost',size='md',active,loading=f
   return <DsTooltip content={label} disabled={off}><button {...own} {...handlers} type={type} aria-label={undefined} title={undefined}
     disabled={disabled} aria-disabled={loading||own['aria-disabled']} aria-busy={loading||own['aria-busy']} onClick={activate}
     aria-pressed={active==null?undefined:!!active}
-    style={{boxSizing:'border-box',display:'inline-flex',alignItems:'center',justifyContent:'center',flex:'none',
-      width:DsIB_SIZE[size],height:DsIB_SIZE[size],padding:0,borderRadius:'var(--ds-radius-md)',border:bd,background:bg,backgroundImage:ov,color:fg,
-      position:'relative',cursor:disabled?'not-allowed':loading?'progress':'pointer',transition:'var(--ds-transition-control)',...own.style}}>
+    style={mergeButtonStyle({boxSizing:'border-box',display:'inline-flex',alignItems:'center',justifyContent:'center',flex:'none',
+      width:DsIB_SIZE[size],height:DsIB_SIZE[size],padding:0,borderRadius:'var(--ds-radius-md)',border:bd,backgroundColor:bg,backgroundImage:ov,color:fg,
+      position:'relative',cursor:disabled?'not-allowed':loading?'progress':'pointer',transition:'var(--ds-transition-control)'},own.style)}>
     <span data-ds-icon-button-label="" style={{position:'absolute',width:1,height:1,padding:0,margin:-1,overflow:'hidden',clip:'rect(0, 0, 0, 0)',clipPath:'inset(50%)',whiteSpace:'nowrap',border:0}}>{label}</span>
     <span data-ds-icon-button-content="" style={{display:'inline-flex',opacity:loading?0:1}}><Icon name={icon} size={iconSize} rotate={rotate}/></span>
     {loading?<span data-ds-icon-button-spinner="" aria-hidden="true" style={{position:'absolute',left:'50%',top:'50%',width:iconSize,height:iconSize,transform:'translate(-50%,-50%)',display:'grid',placeItems:'center'}}>

@@ -6,6 +6,7 @@ import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {chromium, expect} from '@playwright/test';
+import {checkDevelopmentButtons} from './check-react19-buttons.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const fixture = join(root, 'design-system/tests/consumers/react19');
@@ -29,7 +30,7 @@ function run(command, args, cwd=work) {
 }
 const npm = (args, cwd) => run(process.execPath, [npmCli, ...args], cwd);
 console.log(`React19 consumer: ${work}`);
-for (const name of ['package.json', 'package-lock.json', 'app.jsx']) copyFileSync(join(fixture, name), join(work, name));
+for (const name of ['package.json', 'package-lock.json', 'app.jsx', 'buttons.jsx', 'feedback.jsx']) copyFileSync(join(fixture, name), join(work, name));
 npm(['ci', '--offline', '--ignore-scripts', '--no-audit', '--no-fund']);
 const packed = JSON.parse(npm(['pack', '--json', '--ignore-scripts', '--pack-destination', work], join(root, '.tmp/package')))[0];
 // Normal npm resolution is part of the contract: no force/legacy-peer-deps.
@@ -80,9 +81,19 @@ window.consumerRoot=hydrateRoot(document.getElementById('root'), <App {...window
 `);
 await build({entryPoints:[join(work, 'client.jsx')], outfile:join(work, 'client.js'), bundle:true, platform:'browser',
   define:{'process.env.NODE_ENV':'"production"'}});
+writeFileSync(join(work, 'development.jsx'), `
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import Buttons from './buttons.jsx';
+window.buttonRoot=createRoot(document.getElementById('root'));
+window.buttonRoot.render(<Buttons/>);
+`);
+await build({entryPoints:[join(work, 'development.jsx')], outfile:join(work, 'development.js'), bundle:true, platform:'browser',
+  define:{'process.env.NODE_ENV':'"development"'}});
+writeFileSync(join(work, 'development.html'), '<!doctype html><html><head><link rel="stylesheet" href="/styles.css"></head><body><div id="root"></div><script src="/development.js"></script></body></html>');
 const server = createServer((request, response) => {
   const name = request.url.slice(1);
-  const path = name === 'styles.css' ? join(installed, 'dist/styles.css') : /^scope-\d\.html$|^client\.js$/.test(name) ? join(work, name)
+  const path = name === 'styles.css' ? join(installed, 'dist/styles.css') : /^scope-\d\.html$|^client\.js$|^development\.(?:html|js)$/.test(name) ? join(work, name)
     : /^(?:assets\/fonts\/[a-z-]+\/|fonts\/)[\w.-]+\.woff2$/.test(name) ? join(installed, name) : null;
   if (name === 'favicon.ico') {response.writeHead(204).end();return;}
   if (!path) {response.writeHead(404).end();return;}
@@ -93,8 +104,9 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 let browser;
 try {
   browser = await chromium.launch();
+  await checkDevelopmentButtons(browser, `http://127.0.0.1:${server.address().port}/development.html`, work);
   const scopeStyles = new Set();
-  for (let index=0; index<4; index++) {
+  for (let index=0; !process.argv.includes('--development-only') && index<4; index++) {
     const page = await browser.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -142,10 +154,11 @@ try {
     await page.close();
     console.log(`ok   React19: SSR hydration, refs/events, form, select/tabs keyboard, dialog portal/focus/Escape/unmount (scope ${index+1}/4)`);
   }
-  assert.equal(scopeStyles.size, 4, 'All four scope combinations must apply distinct theme/density tokens');
+  if (!process.argv.includes('--development-only')) assert.equal(scopeStyles.size, 4, 'All four scope combinations must apply distinct theme/density tokens');
 } finally {
   await browser?.close();await new Promise(resolve => server.close(resolve));
 }
+if (process.argv.includes('--development-only')) process.exit(0);
 
 // Exercise a real Next 15 client boundary and production route from the installed tarball.
 mkdirSync(join(work, 'app'));
