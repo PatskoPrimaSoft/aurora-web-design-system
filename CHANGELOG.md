@@ -3,7 +3,7 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Policy: [Versions and publishing](docs/release.md#versioning).
 
-## [Unreleased]
+## [5.2.4] — 2026-10-26
 
 - У `DsButton`, `DsIconButton`, `DsFab`, checkbox/radio, `DsChip`, `DsTable`,
   `DsListRow` и `DsTreeRow` устранён конфликт CSS-свойств фона при наведении,
