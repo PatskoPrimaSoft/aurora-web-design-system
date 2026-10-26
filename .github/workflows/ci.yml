@@ -117,11 +117,14 @@ jobs:
           npm ci --prefix ng-ui-kit/tests/consumers/angular-base
           npm ci --prefix ng-ui-kit/tests/consumers/angular-charts
           npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
+      - name: Prepare React 19 consumer cache
+        if: matrix.group == 'components'
+        run: npm ci --prefix design-system/tests/consumers/react19 --ignore-scripts
       - name: Install catalogue browsers
         if: matrix.group == 'catalogue'
         run: npx playwright install --with-deps chromium firefox webkit
       - name: Install isolated browser
-        if: matrix.group == 'raster' || matrix.group == 'angular'
+        if: matrix.group == 'components' || matrix.group == 'raster' || matrix.group == 'angular'
         run: npx playwright install --with-deps chromium
       - name: Verify
         env:
@@ -138,6 +141,9 @@ jobs:
             .tmp/migration/
             .tmp/browser-results/
             .tmp/browser-compat-results/
+            .tmp/react19/**/command-*.log
+            .tmp/react19/**/next-*.log
+            .tmp/react19/**/scope-*.html
 
   verified:
     name: Certify verified package

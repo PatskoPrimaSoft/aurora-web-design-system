@@ -16,4 +16,4 @@ export interface DsProgressBarProps {
   id?: string;
   style?: React.CSSProperties;
 }
-export declare function DsProgressBar(props: DsProgressBarProps): JSX.Element;
+export declare function DsProgressBar(props: DsProgressBarProps): React.JSX.Element;

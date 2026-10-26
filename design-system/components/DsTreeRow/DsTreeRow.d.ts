@@ -37,4 +37,4 @@ export interface DsTreeRowProps {
   /** Текст действия сворачивания отдельного шеврона; название ветки добавляется автоматически. */
   collapseLabel?: string;
 }
-export declare function DsTreeRow(props: DsTreeRowProps): JSX.Element;
+export declare function DsTreeRow(props: DsTreeRowProps): React.JSX.Element;

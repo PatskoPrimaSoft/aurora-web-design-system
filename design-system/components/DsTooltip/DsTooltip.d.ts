@@ -9,4 +9,4 @@ export interface DsTooltipProps {
   /** Отключает подсказку, например на время загрузки действия. */
   disabled?: boolean;
 }
-export declare function DsTooltip(props: DsTooltipProps): JSX.Element | null;
+export declare function DsTooltip(props: DsTooltipProps): React.JSX.Element | null;

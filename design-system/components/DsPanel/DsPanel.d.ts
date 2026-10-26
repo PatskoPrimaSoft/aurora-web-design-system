@@ -31,4 +31,4 @@ export interface DsPanelProps {
   /** Стили внешнего контейнера панели. */
   style?: React.CSSProperties;
 }
-export declare function DsPanel(props: DsPanelProps): JSX.Element;
+export declare function DsPanel(props: DsPanelProps): React.JSX.Element;

@@ -64,4 +64,4 @@ export interface DsFilterMenuProps {
   /** Максимальная высота поповера в px; дополнительно ограничивается экраном. */
   maxHeight?: number;
 }
-export declare function DsFilterMenu(props: DsFilterMenuProps): JSX.Element;
+export declare function DsFilterMenu(props: DsFilterMenuProps): React.JSX.Element;

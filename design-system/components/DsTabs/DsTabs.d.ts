@@ -27,7 +27,7 @@ export type DsTabsProps = DsTabsCommonProps & (
   | { tone: 'onHeader'; idBase?: string }
   | { tone?: 'underline' | 'segmented'; idBase: string }
 );
-export declare function DsTabs(props: DsTabsProps): JSX.Element;
+export declare function DsTabs(props: DsTabsProps): React.JSX.Element;
 export interface DsTabPanelProps {
   /** Тот же префикс, что у связанной группы DsTabs. */
   idBase: string;
@@ -41,7 +41,7 @@ export interface DsTabPanelProps {
   /** Стили контейнера панели. */
   style?: React.CSSProperties;
 }
-export declare function DsTabPanel(props: DsTabPanelProps): JSX.Element;
+export declare function DsTabPanel(props: DsTabPanelProps): React.JSX.Element;
 /** Контекст размещения вкладок внутри шапки приложения. */
 export declare const DsInHeader: React.Context<boolean>;
 /** Идентификаторы связанной вкладки и панели. */

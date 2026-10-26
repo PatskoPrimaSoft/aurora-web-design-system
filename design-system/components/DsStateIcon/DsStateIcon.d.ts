@@ -13,7 +13,7 @@ export interface DsStateIconProps {
   /** Скрывает индикатор от скринридера и убирает подсказку, если состояние уже дано текстом. */
   decorative?: boolean;
 }
-export declare function DsStateIcon(props: DsStateIconProps): JSX.Element;
+export declare function DsStateIcon(props: DsStateIconProps): React.JSX.Element;
 /** Общий словарь глифов, тонов и русских подписей состояний объекта. */
 export declare const dsFleetState: Record<'moving' | 'parked' | 'offline' | 'invalid' | 'alarm' | 'nodata',
   { glyph: string; tone: 'success' | 'neutral' | 'danger' | 'info' | 'warning'; label: string }>;

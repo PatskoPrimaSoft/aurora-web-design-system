@@ -39,4 +39,4 @@ export interface DsAppHeaderProps {
    */
   scrolled?: boolean;
 }
-export declare function DsAppHeader(props: DsAppHeaderProps): JSX.Element;
+export declare function DsAppHeader(props: DsAppHeaderProps): React.JSX.Element;

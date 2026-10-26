@@ -37,6 +37,6 @@ export interface DsDialogProps {
   /** false keeps the close button but ignores Escape and scrim clicks. */
   dismissable?: boolean;
 }
-export declare function DsDialog(props: DsDialogProps): JSX.Element;
+export declare function DsDialog(props: DsDialogProps): React.JSX.Element;
 /** Регистрирует слой, обрабатывающий Escape только когда он верхний. */
 export declare function useDsLayer(active: boolean, onEscape?: ((event: KeyboardEvent) => void) | null | false): void;

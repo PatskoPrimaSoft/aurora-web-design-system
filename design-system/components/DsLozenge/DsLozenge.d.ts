@@ -13,4 +13,4 @@ export interface DsLozengeProps {
   /** Текст статуса или значимого атрибута. */
   children?: React.ReactNode;
 }
-export declare function DsLozenge(props: DsLozengeProps): JSX.Element;
+export declare function DsLozenge(props: DsLozengeProps): React.JSX.Element;

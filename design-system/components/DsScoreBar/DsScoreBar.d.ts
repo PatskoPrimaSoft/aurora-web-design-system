@@ -32,4 +32,4 @@ export interface DsScoreBarProps {
   height?: number;
   style?: React.CSSProperties;
 }
-export declare function DsScoreBar(props: DsScoreBarProps): JSX.Element;
+export declare function DsScoreBar(props: DsScoreBarProps): React.JSX.Element;

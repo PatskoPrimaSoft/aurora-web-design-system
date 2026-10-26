@@ -78,7 +78,7 @@ export interface DsStringsProviderProps {
   strings?: DsStrings | DsStringsOverrides;
   children?: React.ReactNode;
 }
-export declare function DsStringsProvider(props: DsStringsProviderProps): JSX.Element;
+export declare function DsStringsProvider(props: DsStringsProviderProps): React.JSX.Element;
 export declare function useDsStrings(): DsStrings;
 export declare const dsStringsRu: DsStrings;
 export declare const dsStringsEn: DsStrings;

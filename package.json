@@ -62,9 +62,10 @@
   },
   "scripts": {
     "check:angular": "node ng-ui-kit/tools/check-angular.mjs",
+    "check:react19": "node tools/check-react19.mjs",
     "test": "npm run test:lint && npm run test:ui",
     "test:lint": "node design-system/lint/test/run.js",
-    "test:ui": "node design-system/tests/DsFilterMenu.test.js && node design-system/tests/a11y-tokens.test.js && node design-system/tests/checkbox.test.js && node design-system/tests/radio-progress.test.js && node design-system/tests/date-controls.test.js && node design-system/tests/switch.test.js && node design-system/tests/rows-buttons.test.js && node design-system/tests/nav-dialog-i18n.test.js && node design-system/tests/page-layout.test.js && node design-system/tests/field.test.js && node design-system/tests/select.test.js && node tests/guard-command.test.js && node tests/release-check.test.js && node tests/package.test.js && node design-system/tests/fonts.test.js && node tests/changelog-section.test.js && node design-system/tests/react-build.test.mjs && node tests/verification-plan.test.js",
+    "test:ui": "node design-system/tests/DsFilterMenu.test.js && node design-system/tests/a11y-tokens.test.js && node design-system/tests/checkbox.test.js && node design-system/tests/radio-progress.test.js && node design-system/tests/date-controls.test.js && node design-system/tests/switch.test.js && node design-system/tests/rows-buttons.test.js && node design-system/tests/nav-dialog-i18n.test.js && node design-system/tests/page-layout.test.js && node design-system/tests/field.test.js && node design-system/tests/select.test.js && node tests/guard-command.test.js && node tests/release-check.test.js && node tests/package.test.js && node design-system/tests/fonts.test.js && node tests/changelog-section.test.js && node design-system/tests/react-build.test.mjs && node design-system/tests/react-consumer-inputs.test.mjs && node tests/verification-plan.test.js",
     "check:names": "node design-system/lint/scripts/check-names.js",
     "check:delivery": "node design-system/lint/scripts/check-delivery.js",
     "build:allowlist": "node design-system/lint/scripts/build-allowlist.js",
@@ -83,8 +84,8 @@
     "@angular/common": "^19.2.25 || >=20.3.34",
     "@angular/core": "^19.2.25 || >=20.3.34",
     "echarts": "^6.1.0",
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
+    "react": "^18.3.0 || ^19.3.1",
+    "react-dom": "^18.3.0 || ^19.3.1",
     "stylelint": "^16.10.0 || ^17.0.0"
   },
   "peerDependenciesMeta": {

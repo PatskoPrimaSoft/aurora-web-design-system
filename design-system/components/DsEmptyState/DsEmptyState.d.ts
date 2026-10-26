@@ -21,4 +21,4 @@ export interface DsEmptyStateProps {
   /** Компактный вариант для узкой области. */
   size?: 'md' | 'sm';
 }
-export declare function DsEmptyState(props: DsEmptyStateProps): JSX.Element;
+export declare function DsEmptyState(props: DsEmptyStateProps): React.JSX.Element;

@@ -7,6 +7,16 @@ import {JSDOM} from 'jsdom';
 import {buildComponents} from '../tools/build-components.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const load=paths=>{const dom=new JSDOM('<div id="root"></div>',{runScripts:'outside-only'});for(const p of [paths.runtime,paths.components])dom.window.eval(readFileSync(p,'utf8'));return dom;};
+const host=mkdtempSync(join(tmpdir(),'aurora-strict-host-'));
+try {
+ writeFileSync(join(host,'tsconfig.json'),JSON.stringify({compilerOptions:{strict:true}}));
+ const child=join(host,'nested-checkout');
+ mkdirSync(join(child,'design-system/components/src'),{recursive:true});
+ writeFileSync(join(child,'design-system/components/src/index.js'),'export const probe="standalone";');
+ const isolated=load(await buildComponents({root:child,outDir:join(child,'out')}));
+ assert.equal(isolated.window.AuroraWebDesignSystem_96e210?.probe,'standalone','Standalone classic-script namespace must ignore a host tsconfig strict setting');
+ isolated.window.close();
+} finally {rmSync(host,{recursive:true,force:true});}
 const actual=await buildComponents({root,outDir:join(root,'.tmp/runtime')});
 const dom=load(actual);const api=dom.window.AuroraWebDesignSystem_96e210;
 assert.equal(typeof api.DsButton,'function');assert.equal(typeof api.DsStringsProvider,'function');assert.equal(api.__errors,undefined);

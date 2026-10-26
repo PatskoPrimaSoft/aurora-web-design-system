@@ -22,4 +22,4 @@ export interface DsStepperProps {
   /** Доступное имя последовательности; по умолчанию — из словаря DsStrings. */
   ariaLabel?: string;
 }
-export declare function DsStepper(props: DsStepperProps): JSX.Element;
+export declare function DsStepper(props: DsStepperProps): React.JSX.Element;

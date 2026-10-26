@@ -21,4 +21,4 @@ export interface DsFabProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   /** Тип HTML-кнопки; по умолчанию button. */
   type?: 'button' | 'submit' | 'reset';
 }
-export declare function DsFab(props: DsFabProps): JSX.Element;
+export declare function DsFab(props: DsFabProps): React.JSX.Element;

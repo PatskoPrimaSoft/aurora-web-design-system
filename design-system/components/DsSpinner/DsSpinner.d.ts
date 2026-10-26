@@ -10,7 +10,7 @@ export interface DsSpinnerProps {
   /** Доступное название операции; без значения используется строка загрузки из DsStringsProvider. */
   label?: string;
 }
-export declare function DsSpinner(props: DsSpinnerProps): JSX.Element;
+export declare function DsSpinner(props: DsSpinnerProps): React.JSX.Element;
 export interface DsSkeletonProps {
   /** Пульсация блока; отключается при prefers-reduced-motion независимо от этого параметра. */
   animated?: boolean;
@@ -21,4 +21,4 @@ export interface DsSkeletonProps {
   /** Скругление блока; 50% для круга при равных ширине и высоте. */
   radius?: string;
 }
-export declare function DsSkeleton(props: DsSkeletonProps): JSX.Element;
+export declare function DsSkeleton(props: DsSkeletonProps): React.JSX.Element;

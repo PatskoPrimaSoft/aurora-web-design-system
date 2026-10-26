@@ -21,4 +21,4 @@ export interface DsDurationProps {
   /** Ширина внешнего контейнера; число в px, строка — CSS-размер. */
   width?: number | string;
 }
-export declare function DsDuration(props: DsDurationProps): JSX.Element;
+export declare function DsDuration(props: DsDurationProps): React.JSX.Element;

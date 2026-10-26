@@ -75,6 +75,7 @@ mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-19
 mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-base
 mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-charts
 mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
+mise exec -- npm ci --prefix design-system/tests/consumers/react19 --ignore-scripts
 mise exec -- npm run verify
 ```
 
@@ -96,17 +97,43 @@ mise exec -- node tools/verify.mjs raster
 mise exec -- node tools/verify.mjs angular
 ```
 
-`components` includes unit, documentation, build, release guard and npm tarball
-checks. `catalogue` includes interactive pages and three-browser smoke tests;
+`components` includes unit, documentation, build, release guard, npm tarball
+checks and an installed React 19 / Next 15 consumer (requires Chromium).
+`catalogue` includes interactive pages and three-browser smoke tests;
 `raster` owns pixel/computed-style baselines and baseline accessibility checks.
-`angular` owns Angular unit checks and all four installed consumers. Only this
-last job prepares Angular consumer caches; only browser jobs install engines.
+`angular` owns Angular unit checks and all four installed Angular consumers. Only this
+last job prepares Angular consumer caches; `components` prepares the React 19 cache
+and Chromium, while other browser jobs install their engines.
 `fail-fast` is disabled: failed jobs can be rerun without repeating successful
 groups. The verified artifact is saved only after every group succeeds.
 
 Browser groups copy the already built catalogue into their own snapshot.
 Standalone Playwright commands without `AURORA_PREBUILT=1` still prepare a fresh
 catalogue. Do not set that variable when the build is stale.
+
+### React compatibility consumer
+
+Keep the root development runtime on React 18.3.1. The existing build/tarball checks
+compile public declarations with React types 18.3.31 / React DOM types 18.3.7 and
+render with React DOM 18.3.1. The separate locked fixture in
+`design-system/tests/consumers/react19/` pins React / React DOM 19.3.1, both types
+19.3.0, TypeScript 5.8.3 and Next.js 15.5.28. Prepare its npm cache using the command
+above; `npm run build` followed by `npm run check:react19` runs it independently.
+
+Every run creates a fresh consumer under `.tmp/react19/run-*`, performs an offline
+locked install and a normal offline tarball install, checks a single React instance
+and strict public declarations (including rejected invalid props), then exercises
+SSR-to-browser hydration, field refs/events, form submission, select/tabs keyboard
+interaction and consumer-hosted dialog portal/focus/Escape/unmount in Chromium.
+Four theme/density scopes must apply distinct tokens. A Next production build and
+HTTP route smoke exercise the client boundary and hydrated controls. React 19.0–19.2,
+other Next versions and React 19 behavior in Firefox/WebKit are not covered by this
+consumer. The repository's existing React 18 browser compatibility suite remains.
+Logs and failed consumer directories remain under `.tmp/react19/` for diagnosis;
+they are ignored and included in CI failure artifacts. The fixture lock must contain
+no design-system dependency or workspace links: only the freshly built tarball is
+installed. Verification uses the prepared npm cache; it does not read sibling apps
+or fetch dependencies silently.
 
 For every affected example, apply the [screen acceptance criteria](design-system/docs/usage.md#приёмка-экрана):
 four theme/appearance/density combinations, AXE, keyboard focus and loading states.

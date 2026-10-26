@@ -40,7 +40,7 @@ export interface DsMenuProps {
   /** Запрос на открытие или закрытие меню. */
   onOpenChange?: (open: boolean) => void;
 }
-export declare function DsMenu(props: DsMenuProps): JSX.Element;
+export declare function DsMenu(props: DsMenuProps): React.JSX.Element;
 export interface DsUserMenuProps {
   name?: React.ReactNode;
   email?: string;
@@ -48,4 +48,4 @@ export interface DsUserMenuProps {
   items?: DsMenuItem[];
   onSelect?: (item: DsMenuItem) => void;
 }
-export declare function DsUserMenu(props: DsUserMenuProps): JSX.Element;
+export declare function DsUserMenu(props: DsUserMenuProps): React.JSX.Element;

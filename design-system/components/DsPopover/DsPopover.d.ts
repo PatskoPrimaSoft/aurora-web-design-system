@@ -26,4 +26,4 @@ export interface DsPopoverProps {
   /** Ширина в px либо по содержимому; ограничена доступной шириной экрана. */
   width?: number | 'auto';
 }
-export declare function DsPopover(props: DsPopoverProps): JSX.Element;
+export declare function DsPopover(props: DsPopoverProps): React.JSX.Element;

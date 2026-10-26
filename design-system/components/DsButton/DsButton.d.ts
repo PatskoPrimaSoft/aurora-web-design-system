@@ -23,7 +23,7 @@ export interface DsButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElem
   /** Поведение в форме; для отправки задайте submit. */
   type?: 'button' | 'submit' | 'reset';
 }
-export declare function DsButton(props: DsButtonProps): JSX.Element;
+export declare function DsButton(props: DsButtonProps): React.JSX.Element;
 /** Общее правило наведения и нажатия DsButton, DsIconButton и DsFab. Обработчики rest вызываются после внутренних. */
 export declare function usePress(disabled: boolean, rest?: Record<string, any>): {
   hover: boolean; pressed: boolean; handlers: Record<string, (e: any) => void>; rest: Record<string, any>;

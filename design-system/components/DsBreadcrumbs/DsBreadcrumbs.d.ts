@@ -19,4 +19,4 @@ export interface DsBreadcrumbsProps {
   className?: string;
   style?: React.CSSProperties;
 }
-export declare function DsBreadcrumbs(props: DsBreadcrumbsProps): JSX.Element | null;
+export declare function DsBreadcrumbs(props: DsBreadcrumbsProps): React.JSX.Element | null;

@@ -51,4 +51,4 @@ export type DsFieldAs = 'input' | 'select' | 'textarea';
 export type DsFieldElement<T extends DsFieldAs> = T extends 'select' ? HTMLSelectElement : T extends 'textarea' ? HTMLTextAreaElement : HTMLInputElement;
 type NativeFieldProps<T extends DsFieldAs> = T extends 'select' ? React.SelectHTMLAttributes<HTMLSelectElement> : T extends 'textarea' ? React.TextareaHTMLAttributes<HTMLTextAreaElement> : React.InputHTMLAttributes<HTMLInputElement>;
 export type DsFieldProps<T extends DsFieldAs = 'input'> = Omit<DsFieldOwnProps, 'as'> & { as?: T; /** Ссылка на нативный input, select или textarea; позволяет перевести фокус из формы. */ ref?: React.Ref<DsFieldElement<T>> } & Omit<NativeFieldProps<T>, keyof DsFieldOwnProps | 'size'>;
-export declare function DsField<T extends DsFieldAs = 'input'>(props: DsFieldProps<T>): JSX.Element;
+export declare function DsField<T extends DsFieldAs = 'input'>(props: DsFieldProps<T>): React.JSX.Element;

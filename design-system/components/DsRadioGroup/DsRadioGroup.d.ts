@@ -36,4 +36,4 @@ export interface DsRadioGroupProps extends Omit<React.FieldsetHTMLAttributes<HTM
   /** Стили внешнего контейнера. */
   style?: React.CSSProperties;
 }
-export declare function DsRadioGroup(props: DsRadioGroupProps): JSX.Element;
+export declare function DsRadioGroup(props: DsRadioGroupProps): React.JSX.Element;

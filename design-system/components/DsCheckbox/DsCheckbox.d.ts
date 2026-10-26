@@ -23,4 +23,4 @@ export interface DsCheckboxProps {
   /** Минимальная сторона области нажатия. @default var(--ds-control-h) */
   hit?: number | string;
 }
-export declare function DsCheckbox(props: DsCheckboxProps): JSX.Element;
+export declare function DsCheckbox(props: DsCheckboxProps): React.JSX.Element;

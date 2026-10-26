@@ -16,6 +16,8 @@ export const verificationSteps=[
  ['release-check',['tests/release-check.test.js']],
  ['catalog-search',['design-system/tests/catalog-search.test.js']],
  ['react-build',['design-system/tests/react-build.test.mjs']],
+ ['react19-consumer',['tools/check-react19.mjs']],
+ ['react-consumer-inputs',['design-system/tests/react-consumer-inputs.test.mjs']],
  ['pages',['tests/pages.test.js']],
  ['raster-match',['design-system/tests/raster-match.test.js']],
  ['radio-progress',['design-system/tests/radio-progress.test.js']],

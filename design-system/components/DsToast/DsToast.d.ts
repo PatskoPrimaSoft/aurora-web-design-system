@@ -18,7 +18,7 @@ export interface DsToastProps {
   /** Имя иконки вместо стандартной для тона; neutral без icon не показывает иконку. */
   icon?: string;
 }
-export declare function DsToast(props: DsToastProps): JSX.Element;
+export declare function DsToast(props: DsToastProps): React.JSX.Element;
 export interface DsToastStackProps {
   /** DsToast со стабильными уникальными key, от старого к новому. Ожидающие тосты не монтируются до показа. */
   children?: React.ReactNode;
@@ -37,4 +37,4 @@ export interface DsToastStackProps {
   /** Куда вернуть фокус после закрытия последнего тоста с фокусом. Без пропа — элемент, активный при первом показе. */
   returnFocusRef?: React.RefObject<HTMLElement>;
 }
-export declare function DsToastStack(props: DsToastStackProps): JSX.Element;
+export declare function DsToastStack(props: DsToastStackProps): React.JSX.Element;

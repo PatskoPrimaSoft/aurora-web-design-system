@@ -91,7 +91,7 @@ export interface DsChartProps {
   actions?: React.ReactNode;
   style?: React.CSSProperties;
 }
-export declare function DsChart(props: DsChartProps): JSX.Element;
+export declare function DsChart(props: DsChartProps): React.JSX.Element;
 
 export interface DsChartLegendProps {
   series?: DsChartSeries[];
@@ -101,7 +101,7 @@ export interface DsChartLegendProps {
   style?: React.CSSProperties;
 }
 /** Standalone legend, for a legend that must live outside the plot (a panel footer, a map overlay). */
-export declare function DsChartLegend(props: DsChartLegendProps): JSX.Element;
+export declare function DsChartLegend(props: DsChartLegendProps): React.JSX.Element;
 
 export interface DsChartTooltipProps {
   label?: React.ReactNode;
@@ -109,4 +109,4 @@ export interface DsChartTooltipProps {
   style?: React.CSSProperties;
 }
 /** The axis readout — inverse ground, mono values. Exported so a map hover can reuse it. */
-export declare function DsChartTooltip(props: DsChartTooltipProps): JSX.Element;
+export declare function DsChartTooltip(props: DsChartTooltipProps): React.JSX.Element;

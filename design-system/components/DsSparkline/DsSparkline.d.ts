@@ -27,4 +27,4 @@ export interface DsSparklineProps {
   label?: string;
   style?: React.CSSProperties;
 }
-export declare function DsSparkline(props: DsSparklineProps): JSX.Element;
+export declare function DsSparkline(props: DsSparklineProps): React.JSX.Element;

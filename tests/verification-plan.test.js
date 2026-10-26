@@ -9,6 +9,11 @@ const required=[...pkg.scripts['test:ui'].matchAll(/\bnode\s+((?:design-system\/
 assert.ok(required.length>0,'test:ui must contain recognizable test commands');
 const included=new Set(verificationSteps.flatMap(([,args])=>args));
 for(const path of required)assert.ok(included.has(path),`verify omits npm test:ui check: ${path}`);
+assert.ok(stepsForGroup('components').some(([name,args])=>name==='react19-consumer'&&args.includes('tools/check-react19.mjs')), 'CI components must exercise installed React19 declarations, hydration and Next production route');
+assert.equal(pkg.scripts['check:react19'], 'node tools/check-react19.mjs');
+const workflow=readFileSync(new URL('../.github/workflows/ci.yml',import.meta.url),'utf8');
+assert.match(workflow,/name: Prepare React 19 consumer cache\s+if: matrix.group == 'components'\s+run: npm ci --prefix design-system\/tests\/consumers\/react19 --ignore-scripts/);
+assert.match(workflow,/name: Install isolated browser\s+if: matrix.group == 'components' \|\| matrix.group == 'raster' \|\| matrix.group == 'angular'/);
 assert.equal(new Set(verificationSteps.map(([name])=>name)).size,verificationSteps.length,'verification step names must be unique');
 const partition=verificationGroups.flatMap(group=>stepsForGroup(group));
 for(const [name]of verificationSteps)assert.equal(partition.filter(([candidate])=>candidate===name).length,name==='browser'?3:1,`${name}: CI group coverage`);

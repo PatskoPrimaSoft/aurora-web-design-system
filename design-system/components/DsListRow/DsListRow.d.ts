@@ -39,4 +39,4 @@ export interface DsListRowProps {
   /** div отключает действие и ссылку. Без href и onClick основная область всегда div. @default button */
   as?: 'button' | 'div';
 }
-export declare function DsListRow(props: DsListRowProps): JSX.Element;
+export declare function DsListRow(props: DsListRowProps): React.JSX.Element;

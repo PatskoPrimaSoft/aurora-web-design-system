@@ -17,4 +17,4 @@ export interface DsPaginationProps {
   /** Доступное название навигации. Различайте списки, если пагинаций несколько. */
   ariaLabel?: string;
 }
-export declare function DsPagination(props: DsPaginationProps): JSX.Element;
+export declare function DsPagination(props: DsPaginationProps): React.JSX.Element;

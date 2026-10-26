@@ -21,4 +21,4 @@ export interface DsChipProps {
   /** Максимальная ширина в px; длинная подпись переносится, высота чипа растёт. Ширина также ограничена родителем. */
   maxWidth?: number;
 }
-export declare function DsChip(props: DsChipProps): JSX.Element;
+export declare function DsChip(props: DsChipProps): React.JSX.Element;

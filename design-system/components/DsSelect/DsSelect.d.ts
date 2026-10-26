@@ -56,4 +56,4 @@ export interface DsSelectProps<Multiple extends boolean = false> extends Omit<Re
   /** Ссылка на кнопку combobox для перевода фокуса. */
   ref?: React.Ref<HTMLButtonElement>;
 }
-export declare function DsSelect<Multiple extends boolean = false>(props: DsSelectProps<Multiple>): JSX.Element;
+export declare function DsSelect<Multiple extends boolean = false>(props: DsSelectProps<Multiple>): React.JSX.Element;

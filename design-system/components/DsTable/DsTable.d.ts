@@ -77,6 +77,6 @@ export interface DsTableProps {
   /** Подвал: например, DsPagination или сводка выбора. */
   footer?: React.ReactNode;
 }
-export declare function DsTable(props: DsTableProps): JSX.Element;
+export declare function DsTable(props: DsTableProps): React.JSX.Element;
 /** Состояние выбора видимых строк для собственного заголовка. */
 export declare function dsVisibleSelection(visibleIds: Array<string | number>, selectedIds: Array<string | number>, allSelected?: boolean): 'unchecked' | 'indeterminate' | 'checked';

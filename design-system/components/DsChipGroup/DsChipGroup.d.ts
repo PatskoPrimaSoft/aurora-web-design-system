@@ -9,4 +9,4 @@ export interface DsChipGroupProps {
   /** Подпись кнопки очистки. По умолчанию — локализованное «Очистить все». */
   clearAllLabel?: string;
 }
-export declare function DsChipGroup(props: DsChipGroupProps): JSX.Element;
+export declare function DsChipGroup(props: DsChipGroupProps): React.JSX.Element;

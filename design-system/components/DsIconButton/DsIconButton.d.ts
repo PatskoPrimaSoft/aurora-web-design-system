@@ -25,4 +25,4 @@ export interface DsIconButtonProps extends React.ButtonHTMLAttributes<HTMLButton
   /** Тип HTML-кнопки; по умолчанию button. */
   type?: 'button' | 'submit' | 'reset';
 }
-export declare function DsIconButton(props: DsIconButtonProps): JSX.Element;
+export declare function DsIconButton(props: DsIconButtonProps): React.JSX.Element;

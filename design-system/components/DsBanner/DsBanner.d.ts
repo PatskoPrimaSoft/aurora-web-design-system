@@ -18,4 +18,4 @@ export interface DsBannerProps {
   /** Уменьшенные внутренние отступы для плотного интерфейса. */
   compact?: boolean;
 }
-export declare function DsBanner(props: DsBannerProps): JSX.Element;
+export declare function DsBanner(props: DsBannerProps): React.JSX.Element;

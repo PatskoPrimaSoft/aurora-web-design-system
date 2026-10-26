@@ -19,4 +19,4 @@ export interface DsBulkActionsBarProps {
   /** Стили корневой панели, например перенос содержимого на узком экране. */
   style?: React.CSSProperties;
 }
-export declare function DsBulkActionsBar(props: DsBulkActionsBarProps): JSX.Element;
+export declare function DsBulkActionsBar(props: DsBulkActionsBarProps): React.JSX.Element;

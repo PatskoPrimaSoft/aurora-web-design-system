@@ -12,4 +12,4 @@ export interface DsIconProps {
   label?: string;
   style?: React.CSSProperties;
 }
-export declare function DsIcon(props: DsIconProps): JSX.Element;
+export declare function DsIcon(props: DsIconProps): React.JSX.Element;
