@@ -1,0 +1,141 @@
+:host {
+  display: block;
+}
+
+.guide-content {
+  display: block;
+  font: var(--ds-type-body);
+  color: var(--ds-fg);
+  background: var(--ds-surface);
+  -webkit-font-smoothing: antialiased;
+  max-width: 920px;
+  margin: 0;
+  padding: 24px 0;
+  overflow-wrap: anywhere;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+section + section {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--ds-divider);
+}
+
+h2 {
+  font: var(--ds-type-title);
+  letter-spacing: var(--ds-tracking-tight);
+  color: var(--ds-fg-strong);
+  margin: 0 0 12px;
+}
+
+p {
+  margin: 0;
+  max-width: 74ch;
+  text-wrap: pretty;
+}
+
+p + p {
+  margin-top: 12px;
+}
+
+a {
+  color: var(--ds-brand-text);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--ds-brand);
+}
+
+a:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-focus-color);
+  outline-offset: var(--ds-focus-offset);
+}
+
+.lead {
+  color: var(--ds-fg-muted);
+  margin-bottom: 24px;
+}
+
+.sample {
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  padding: 24px;
+  background: var(--ds-surface);
+  color: var(--ds-fg);
+}
+
+.sample ul {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.sample li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--ds-divider);
+}
+
+.sample li span:first-child {
+  font: var(--ds-type-body-strong);
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  margin: 0;
+}
+
+.choices dt,
+.choices dd {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ds-divider);
+}
+
+.choices dt {
+  font: var(--ds-type-body-strong);
+}
+
+.choices dd {
+  margin: 0;
+}
+
+.rules {
+  margin: 0;
+  padding-left: 20px;
+  max-width: 74ch;
+}
+
+.rules li + li {
+  margin-top: 12px;
+}
+
+@media (max-width: 640px) {
+  .guide-content {
+    padding: 20px 0;
+  }
+  .sample {
+    padding: 16px;
+  }
+  .choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .choices dt {
+    border: 0;
+    padding-bottom: 4px;
+  }
+  .choices dd {
+    padding-top: 0;
+  }
+  .sample li {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

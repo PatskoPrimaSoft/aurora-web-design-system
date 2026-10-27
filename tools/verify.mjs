@@ -27,6 +27,9 @@ export const verificationSteps=[
  ['browser',['node_modules/@playwright/test/cli.js','test']],
  ['pack',['tools/check-pack.js']],
  ['browser-compat',['node_modules/@playwright/test/cli.js','test','--config=playwright.compat.config.mjs']],
+ ['documentation-site-format',['documentation-site/tools/format.mjs','--check']],
+ ['documentation-site-build',['documentation-site/tools/run.mjs','build','--base-href','/site-check/','--output-path','../.tmp/documentation-site-check']],
+ ['documentation-site-browser',['documentation-site/tests/smoke.mjs']],
 ];
 export const verificationGroups=['build','components','catalogue','raster','angular'];
 export function stepsForGroup(group){
@@ -34,10 +37,10 @@ export function stepsForGroup(group){
  if(!verificationGroups.includes(group))throw Error(`Unknown verify group: ${group}`);
  const browser=verificationSteps.find(([name])=>name==='browser');
  if(group==='build')return verificationSteps.filter(([name])=>name==='build-package');
- if(group==='catalogue')return [[browser[0],[...browser[1],'--project=catalogue']],verificationSteps.find(([name])=>name==='browser-compat')];
+ if(group==='catalogue')return [[browser[0],[...browser[1],'--project=catalogue']],verificationSteps.find(([name])=>name==='browser-compat'),...verificationSteps.filter(([name])=>name.startsWith('documentation-site-'))];
  if(group==='raster')return [[browser[0],[...browser[1],'--project=raster']]];
  if(group==='angular')return [...verificationSteps.filter(([name])=>name.startsWith('angular-')),[browser[0],[...browser[1],'--project=angular']]];
- return verificationSteps.filter(([name])=>name!=='build-package'&&!name.startsWith('angular-')&&!['browser','browser-compat'].includes(name));
+ return verificationSteps.filter(([name])=>name!=='build-package'&&!name.startsWith('angular-')&&!name.startsWith('documentation-site-')&&!['browser','browser-compat'].includes(name));
 }
 if(process.argv[1]===fileURLToPath(import.meta.url)){
 const group=process.argv[2];

@@ -1,0 +1,98 @@
+<aurora-article-layout title="Прочитать первым"
+  subtitle="С чего начать работу с Aurora и как найти нужный компонент или правило.">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Собирайте интерфейс из готовых компонентов</h2>
+      <p class="lead">
+        Aurora — компоненты и правила для интерфейсов мониторинга. Готовые компоненты уже используют
+        согласованные шрифты, цвета и состояния. Вы выбираете подходящий компонент и задаёте данные
+        и действия.
+      </p>
+      <div class="sample placeholder"
+        role="note"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        Пример поиска будет перенесён после подготовки Angular-компонентов поля и метки состояния.
+      </div>
+    </section>
+    <section aria-labelledby="start">
+      <h2 id="start" tabindex="-1">С чего начать</h2>
+      <dl class="choices">
+        <dt>Собрать экран</dt>
+        <dd>
+          Найдите компонент в меню слева или через поиск. Начните с его живого примера и правил
+          применения: например,
+          <a routerLink="/components/button" [queryParams]="settings.queryParams()">Button</a>
+          ,
+          <span>Field (ещё не перенесено)</span>
+          или
+          <span>Table (ещё не перенесено)</span>
+          .
+        </dd>
+        <dt>Оформить свою разметку</dt>
+        <dd>
+          Начните со страниц
+          <a routerLink="/foundations/typography" [queryParams]="settings.queryParams()">
+            Типографика
+          </a>
+          и
+          <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+            Нейтральные цвета
+          </a>
+          . Используйте токены по назначению — например, цвет текста или поверхности.
+        </dd>
+        <dt>Подключить в проект</dt>
+        <dd>
+          Откройте
+          <span>руководство по подключению (ещё не перенесено)</span>
+          : установка пакета, стили и использование в Angular.
+        </dd>
+      </dl>
+    </section>
+    <section aria-labelledby="catalogue">
+      <h2 id="catalogue" tabindex="-1">Как пользоваться каталогом</h2>
+      <ul class="rules">
+        <li>
+          <strong>Проверяйте поведение в живых примерах.</strong>
+          На странице компонента рядом находятся правила, код и параметры.
+        </li>
+        <li>
+          <strong>Меняйте настройки в шапке.</strong>
+          Бренд, светлый или тёмный режим и плотность меняют демонстрацию. Текст руководства
+          остаётся на светлой поверхности.
+        </li>
+        <li>
+          <strong>Переходите к подробностям по задаче.</strong>
+          <a routerLink="/foundations/themes" [queryParams]="settings.queryParams()">
+            Цветовые темы
+          </a>
+          отвечают за бренд,
+          <a routerLink="/foundations/appearance" [queryParams]="settings.queryParams()">
+            светлый и тёмный режимы
+          </a>
+          — за оформление,
+          <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">плотность</a>
+          — за отступы и высоты элементов.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="check">
+      <h2 id="check" tabindex="-1">Перед передачей в разработку</h2>
+      <p>
+        Проверьте экран с реальными данными: длинными названиями, пустым списком и ошибкой.
+        Убедитесь, что им удобно пользоваться с клавиатуры и на нужной ширине окна.
+      </p>
+      <p>
+        Для этого пригодятся
+        <a routerLink="/foundations/focus" [queryParams]="settings.queryParams()">правила фокуса</a>
+        и
+        <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+          адаптивность и брейкпоинты
+        </a>
+        . Готовый компонент помогает с оформлением и взаимодействием, а поведение всего экрана
+        проверяет команда продукта.
+      </p>
+    </section>
+  </div>
+</aurora-article-layout>

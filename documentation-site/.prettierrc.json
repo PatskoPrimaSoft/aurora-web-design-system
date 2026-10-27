@@ -1,0 +1,10 @@
+{
+  "printWidth": 100,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "bracketSameLine": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "trailingComma": "all",
+  "endOfLine": "lf",
+  "overrides": [{ "files": "*.html", "options": { "parser": "angular" } }]
+}

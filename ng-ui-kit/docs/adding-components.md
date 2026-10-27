@@ -115,7 +115,10 @@ export * from './components/example/example.component';
 и проверяется отдельно.
 
 Проверочные примеры потребителей не заменяют публичные демонстрации сайта.
-План перехода хранится в репозитории в `docs/plans/angular-ui-kit-vision.md`.
+Демонстрации добавляются в `documentation-site/src/app/` и импортируют компонент
+из `@primasoftllc/design-system/angular`, а не из исходников библиотеки.
+Команды разработки и проверки описаны в [README сайта](../../documentation-site/README.md).
+План перехода — [договорённости](../../docs/plans/angular-ui-kit-vision.md).
 
 ## 6. Проверьте путь от исходника до приложения
 

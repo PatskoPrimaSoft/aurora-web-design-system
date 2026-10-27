@@ -1,0 +1,32 @@
+// Highlighted spans are inserted as sanitized HTML and have no Angular style attributes.
+// Scope these global rules to this component; colours match the previous catalogue.
+@mixin styles {
+  aurora-code-block {
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-name,
+    .hljs-title,
+    .hljs-type {
+      color: var(--ds-brand-text);
+    }
+    .hljs-keyword,
+    .hljs-selector-tag,
+    .hljs-name {
+      font-weight: var(--ds-weight-semibold);
+    }
+    .hljs-string,
+    .hljs-attr,
+    .hljs-selector-class {
+      color: var(--ds-success-fg);
+    }
+    .hljs-number,
+    .hljs-literal,
+    .hljs-built_in {
+      color: var(--ds-warning-fg);
+    }
+    .hljs-comment,
+    .hljs-meta {
+      color: var(--ds-fg-muted);
+    }
+  }
+}

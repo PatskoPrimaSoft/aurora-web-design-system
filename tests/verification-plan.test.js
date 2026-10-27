@@ -15,6 +15,8 @@ const workflow=readFileSync(new URL('../.github/workflows/ci.yml',import.meta.ur
 assert.match(workflow,/name: Prepare React 19 consumer cache\s+if: matrix.group == 'components'\s+run: npm ci --prefix design-system\/tests\/consumers\/react19 --ignore-scripts/);
 assert.match(workflow,/name: Install isolated browser\s+if: matrix.group == 'components' \|\| matrix.group == 'raster' \|\| matrix.group == 'angular'/);
 assert.equal(new Set(verificationSteps.map(([name])=>name)).size,verificationSteps.length,'verification step names must be unique');
+assert.deepEqual(stepsForGroup('catalogue').filter(([name])=>name.startsWith('documentation-site-')).map(([name])=>name),
+ ['documentation-site-format','documentation-site-build','documentation-site-browser'],'catalogue CI must format-check, build and exercise the Angular documentation site');
 const partition=verificationGroups.flatMap(group=>stepsForGroup(group));
 for(const [name]of verificationSteps)assert.equal(partition.filter(([candidate])=>candidate===name).length,name==='browser'?3:1,`${name}: CI group coverage`);
 for(const group of ['catalogue','raster','angular'])assert.ok(stepsForGroup(group).some(([name,args])=>name==='browser'&&args.includes(`--project=${group}`)));

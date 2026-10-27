@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+summary {
+  cursor: pointer;
+  font: var(--ds-type-ui);
+  color: var(--ds-brand-text);
+}
+
+.content {
+  margin-top: 12px;
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "../node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": { "analytics": false },
+  "projects": {
+    "documentation-site": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "inlineTemplate": false,
+          "inlineStyle": false,
+          "changeDetection": "OnPush"
+        }
+      },
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "browser": "src/main.ts",
+            "polyfills": ["zone.js"],
+            "tsConfig": "tsconfig.json",
+            "styles": ["src/styles.scss"],
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "AuroraWhite.png",
+                "input": "../design-system/components/assets/logo",
+                "output": "assets"
+              }
+            ]
+          },
+          "configurations": {
+            "production": { "outputHashing": "all" },
+            "development": { "optimization": false, "sourceMap": true, "extractLicenses": false }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "host": "127.0.0.1",
+            "port": 4200,
+            "prebundle": { "exclude": ["@primasoftllc/design-system/angular"] }
+          },
+          "configurations": {
+            "development": { "buildTarget": "documentation-site:build:development" }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    }
+  }
+}

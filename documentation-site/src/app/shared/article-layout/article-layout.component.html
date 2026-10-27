@@ -1,0 +1,27 @@
+<div class="page-layout" [class.has-contents]="headings().length > 0">
+  <article #article>
+    <h1 id="page-title" tabindex="-1">{{ title() }}</h1>
+    @if (subtitle()) {
+      <p class="subtitle">{{ subtitle() }}</p>
+    }
+    <ng-content></ng-content>
+  </article>
+  @if (headings().length) {
+    <aside class="page-contents" aria-label="Оглавление страницы">
+      <details [open]="wide()">
+        <summary>На этой странице</summary>
+        <nav>
+          @for (heading of headings(); track heading.id) {
+            <a routerLink="."
+              [fragment]="heading.id"
+              queryParamsHandling="preserve"
+              (click)="repeatAnchor($event, heading.id)"
+              [attr.aria-current]="activeHeading() === heading.id ? 'location' : null">
+              {{ heading.title }}
+            </a>
+          }
+        </nav>
+      </details>
+    </aside>
+  }
+</div>

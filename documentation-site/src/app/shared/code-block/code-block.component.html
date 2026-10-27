@@ -1,0 +1,27 @@
+@if (collapsible()) {
+  <details class="code-disclosure">
+    <summary>
+      <span class="show-code">Показать код</span>
+      <span class="hide-code">Скрыть код</span>
+    </summary>
+    <ng-container [ngTemplateOutlet]="block"></ng-container>
+  </details>
+} @else {
+  <ng-container [ngTemplateOutlet]="block"></ng-container>
+}
+
+<ng-template #block>
+  <div class="code-block">
+    <div class="toolbar">
+      <span class="language">{{ label() }}</span>
+      <button type="button" aria-label="Копировать код" [disabled]="copying()" (click)="copy()">
+        Копировать
+      </button>
+    </div>
+    <pre #source
+      tabindex="0"
+      role="region"
+      [attr.aria-label]="'Код: ' + label()"><code [innerHTML]="highlighted()"></code></pre>
+    <span class="status" role="status" aria-atomic="true">{{ status() }}</span>
+  </div>
+</ng-template>
