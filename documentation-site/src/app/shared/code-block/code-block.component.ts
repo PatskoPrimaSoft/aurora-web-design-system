@@ -18,6 +18,7 @@ import css from 'highlight.js/lib/languages/css';
 import scss from 'highlight.js/lib/languages/scss';
 import json from 'highlight.js/lib/languages/json';
 import bash from 'highlight.js/lib/languages/bash';
+import type { CodeLanguage, CodeSnippet } from './code-snippet';
 
 hljs.registerLanguage('typescript', typescript);
 hljs.registerLanguage('html', xml);
@@ -26,7 +27,6 @@ hljs.registerLanguage('scss', scss);
 hljs.registerLanguage('json', json);
 hljs.registerLanguage('shell', bash);
 
-export type CodeLanguage = 'typescript' | 'html' | 'css' | 'scss' | 'json' | 'shell' | 'text';
 const labels: Record<CodeLanguage, string> = {
   typescript: 'TypeScript',
   html: 'HTML',
@@ -45,18 +45,19 @@ const labels: Record<CodeLanguage, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeBlockComponent {
-  readonly code = input.required<string>();
-  readonly language = input<CodeLanguage>('typescript');
-  readonly fileName = input<string>();
+  readonly snippet = input.required<CodeSnippet>();
   readonly collapsible = input(false, { transform: booleanAttribute });
-  protected readonly label = computed(() => this.fileName() ?? labels[this.language()]);
+  protected readonly label = computed(() => {
+    const snippet = this.snippet();
+    return snippet.fileName ?? labels[snippet.language];
+  });
   protected readonly highlighted = computed(() => {
-    const code = this.code();
-    if (this.language() === 'text') {
+    const { code, language } = this.snippet();
+    if (language === 'text') {
       return code.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
     }
     // Highlight.js escapes source text; Angular sanitizes the generated markup as well.
-    return hljs.highlight(code, { language: this.language(), ignoreIllegals: true }).value;
+    return hljs.highlight(code, { language, ignoreIllegals: true }).value;
   });
   protected readonly status = signal('');
   protected readonly copying = signal(false);
@@ -73,7 +74,7 @@ export class CodeBlockComponent {
     if (this.copying()) return;
     this.status.set('');
     this.copying.set(true);
-    const text = this.code();
+    const text = this.snippet().code;
     try {
       await navigator.clipboard.writeText(text);
       if (!this.destroyed) this.status.set('Скопировано');

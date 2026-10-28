@@ -1,0 +1,117 @@
+<aurora-article-layout title="Отступы и группировка"
+  subtitle="Как расстояния помогают увидеть связанные элементы">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Связанные элементы — ближе</h2>
+      <p class="lead">
+        Готовые компоненты оформляют свои внутренние отступы. Расстояния между компонентами задаёт
+        родитель. Сравните одну форму с разными промежутками: содержимое остаётся тем же.
+      </p>
+      <aurora-example-block class="migration-placeholder"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Пример группировки формы появится после подготовки Angular-компонентов Button и Field.
+        </p>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Внутри группы</dt>
+        <dd>Небольшой промежуток объединяет подпись и значение или соседние действия.</dd>
+        <dt>Между группами</dt>
+        <dd>Более крупный промежуток отделяет настройки объекта от уведомлений.</dd>
+        <dt>Внутри контейнера</dt>
+        <dd>Внутренний отступ оставляет пространство между содержимым и границей панели.</dd>
+      </dl>
+      <p style="margin-top: 16px">
+        <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">Плотность</a>
+        меняет размеры и промежутки. Группировка объясняет связи между элементами в любой плотности.
+      </p>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul class="rules">
+        <li>Повторяйте одинаковые промежутки у равнозначных элементов.</li>
+        <li>
+          Сначала отделяйте группы пространством. Добавляйте рамку, когда она помогает понять
+          границу самостоятельной области.
+        </li>
+        <li>Сохраняйте общую левую границу заголовка, полей и действий.</li>
+        <li>
+          Не компенсируйте тесную компоновку уменьшением текста. Проверьте перенос и узкое окно.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="для-разработчика">
+      <h2 id="для-разработчика" tabindex="-1">Для разработчика</h2>
+      <p>
+        Распределение ширины между регионами и выбор владельца прокрутки — в
+        <a routerLink="/foundations/layout" [queryParams]="settings.queryParams()">
+          «Сетке и компоновке»
+        </a>. Эта страница объясняет расстояния и группировку внутри выбранной компоновки.
+      </p>
+      <details>
+        <summary>Токены и пример кода</summary>
+        <p>
+          Для расстояний используйте
+          <code>--ds-gap-*</code>, для внутренних отступов —
+          <code>--ds-pad-*</code>. Значения наследуют плотность контейнера.
+        </p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Токены отступов">
+          <table class="tokens">
+            <thead>
+              <tr>
+                <th scope="col">Токен</th>
+                <th scope="col">Применение</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>gap-sm</code></td>
+                <td>8 px cozy / 6 px compact — соседние действия.</td>
+              </tr>
+              <tr>
+                <td><code>gap-md</code></td>
+                <td>16 / 12 px — поля одной группы.</td>
+              </tr>
+              <tr>
+                <td><code>gap-xl</code></td>
+                <td>32 / 24 px — группы в этом примере.</td>
+              </tr>
+              <tr>
+                <td><code>pad-xl</code></td>
+                <td>24 / 18 px — внутренний отступ примера.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Это отправные точки, а не обязательные значения для каждого экрана. Оценивайте связь
+          элементов и реальное содержимое.
+        </p>
+        <p>Собственная компоновка: внутренние отступы полей уже заданы компонентами.</p>
+        <aurora-code-block [snippet]="snippets.settingsLayout"></aurora-code-block>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">
+            Плотность интерфейса
+          </a>
+        </li>
+        <li>
+          <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+            Адаптивность и брейкпоинты
+          </a>
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

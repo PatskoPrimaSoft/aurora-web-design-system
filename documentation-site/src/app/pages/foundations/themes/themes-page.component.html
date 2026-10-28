@@ -1,0 +1,278 @@
+<aurora-article-layout title="Цветовые темы"
+  subtitle="Как бренд, акцент и статусы работают вместе в интерфейсе">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Цветовые темы в интерфейсе</h2>
+      <p class="lead">
+        Выберите бренд и светлое или тёмное оформление. Готовые компоненты сами подберут цвета
+        текста, кнопок и состояний.
+      </p>
+      <aurora-example-block class="scene"
+        id="ready-interface"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <p class="migration-placeholder" role="note" data-migration-placeholder>
+          Пример настройки объекта появится после подготовки Angular-компонентов Panel, Button,
+          Checkbox и Lozenge.
+        </p>
+      </aurora-example-block>
+      <p class="caption" style="margin-top: 16px">
+        Измените бренд и оформление в шапке каталога: действие и счётчик меняют цвет, статус
+        сохраняет смысл.
+      </p>
+    </section>
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Главное действие и выбор</dt>
+        <dd>
+          Бренд: основная кнопка, выбранный чекбокс или активный элемент. В готовом компоненте
+          задайте его вариант или состояние.
+        </dd>
+        <dt>Дополнительное внимание</dt>
+        <dd>
+          Акцент: привлекает внимание, например к счётчику. Не обозначает успех, предупреждение или
+          ошибку: смена оттенка не должна менять смысл.
+        </dd>
+        <dt>Состояние и результат</dt>
+        <dd>
+          Статус: успех, предупреждение, ошибка, информационное сообщение или отсутствие данных.
+          Выбирайте по смыслу, независимо от бренда.
+        </dd>
+        <dt>Обычный интерфейс</dt>
+        <dd>
+          Нейтральные роли: текст, поверхности, границы. Большая часть экрана остаётся нейтральной,
+          чтобы выделения были заметны.
+        </dd>
+      </dl>
+    </section>
+    <section aria-labelledby="themes">
+      <h2 id="themes" tabindex="-1">Один интерфейс, разные бренды</h2>
+      <p class="lead">
+        Бренд меняет цвет кнопки и счётчика. Статус «На связи» сохраняет свою роль в обеих темах.
+      </p>
+      <div id="brand-comparison" class="pair">
+        <aurora-example-block class="scene"
+          background="subtle"
+          data-ds-theme="DEFAULT"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p class="mode">DEFAULT</p>
+          <p class="new-events">
+            <span class="counter">3</span>
+            новых события
+          </p>
+          <p class="migration-placeholder" role="note" data-migration-placeholder>
+            Кнопка и статус появятся после подготовки Angular-компонентов Button и Lozenge.
+          </p>
+        </aurora-example-block>
+        <aurora-example-block class="scene"
+          background="subtle"
+          data-ds-theme="RED2"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p class="mode">RED2</p>
+          <p class="new-events">
+            <span class="counter">3</span>
+            новых события
+          </p>
+          <p class="migration-placeholder" role="note" data-migration-placeholder>
+            Кнопка и статус появятся после подготовки Angular-компонентов Button и Lozenge.
+          </p>
+        </aurora-example-block>
+      </div>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <div id="color-guidelines" class="guideline">
+        <h3>Статус сохраняет смысл при смене бренда</h3>
+        <div class="pair">
+          <aurora-example-block class="sample"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            <p class="recommendation">Рекомендуется</p>
+            <span class="status-sample" style="color: var(--ds-success-fg)">
+              <span class="dot" aria-hidden="true"></span>
+              На связи
+            </span>
+            <p class="caption" style="margin-top: 12px">Успешный статус использует свою роль.</p>
+          </aurora-example-block>
+          <aurora-example-block class="sample"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            <p class="recommendation">Избегайте</p>
+            <span class="status-sample" style="color: var(--ds-brand-text)">
+              <span class="dot" aria-hidden="true"></span>
+              На связи
+            </span>
+            <p class="caption" style="margin-top: 12px">
+              Брендовый цвет придаёт статусу цвет действия.
+            </p>
+          </aurora-example-block>
+        </div>
+      </div>
+      <ul class="rules">
+        <li>
+          Выделяйте одно главное действие в области. Дополнительные действия оформляйте спокойнее.
+        </li>
+        <li>
+          Не передавайте смысл одним цветом: добавляйте понятную подпись, а при необходимости —
+          иконку.
+        </li>
+        <li>
+          Наведение, нажатие, отключение и фокус готовых компонентов уже оформлены системой. Не
+          заменяйте их случайными оттенками.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Для собственных стилей</h2>
+      <p>
+        Если создаёте собственную разметку, выбирайте цветовые роли по назначению. Готовые
+        компоненты уже используют их автоматически.
+      </p>
+      <details id="theme-reference">
+        <summary>Показать правила и токены</summary>
+        <div class="content">
+          <div id="custom-color-guidelines" class="guideline">
+            <h3>Текст и заливка используют разные роли</h3>
+            <div class="pair">
+              <aurora-example-block class="sample"
+                [attr.data-ds-theme]="settings.theme()"
+                [attr.data-ds-appearance]="settings.appearance()"
+                [attr.data-ds-density]="settings.density()">
+                <p class="recommendation">Рекомендуется</p>
+                <div style="color: var(--ds-brand-text)">Брендовый текст на поверхности</div>
+                <code>--ds-brand-text</code>
+                <p class="caption" style="margin-top: 12px">
+                  Роль текста рассчитана для поверхности.
+                </p>
+              </aurora-example-block>
+              <aurora-example-block class="sample"
+                [attr.data-ds-theme]="settings.theme()"
+                [attr.data-ds-appearance]="settings.appearance()"
+                [attr.data-ds-density]="settings.density()">
+                <p class="recommendation">Избегайте</p>
+                <div style="color: var(--ds-brand)" aria-hidden="true">
+                  Брендовый текст на поверхности
+                </div>
+                <code>--ds-brand</code>
+                <p class="caption" style="margin-top: 12px">
+                  Роль заливки не гарантирует контраст текста.
+                </p>
+              </aurora-example-block>
+            </div>
+          </div>
+          <p>
+            Для текста на брендовой заливке используйте
+            <code>--ds-on-brand</code>, на акцентной —
+            <code>--ds-accent-on</code>. Счётчик в примере использует пару
+            <code>--ds-accent</code>
+            /
+            <code>--ds-accent-on</code>.
+          </p>
+          <p>
+            У DsButton вариант
+            <code>tone="accent"</code>
+            доступен для дополнительного выделения. Он не обозначает статус и не должен
+            конкурировать с главным действием.
+          </p>
+          <p>Значения токенов ниже соответствуют настройкам каталога.</p>
+          <div id="token-values">
+            @for (role of roles; track role.token) {
+              <div #tokenRow
+                class="token-row"
+                [attr.data-token]="role.token"
+                [attr.data-ds-theme]="settings.theme()"
+                [attr.data-ds-appearance]="settings.appearance()"
+                [attr.data-ds-density]="settings.density()">
+                <div>
+                  <code>{{ role.token }}</code>
+                  <p>{{ role.description }}</p>
+                </div>
+                <div>
+                  <div class="swatch"
+                    [style.background]="'var(' + role.token + ')'"
+                    aria-hidden="true"></div>
+                  <p class="value">{{ tokenValues()[role.token] }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </details>
+    </section>
+    <section aria-labelledby="new-theme">
+      <h2 id="new-theme" tabindex="-1">Настройка новой темы</h2>
+      <p>
+        Для создания палитры используйте
+        <a routerLink="/foundations/theme-colors" [queryParams]="settings.queryParams()">
+          подбор цветов темы
+        </a>: выбор цветов и проверка контраста в светлом и тёмном оформлении.
+      </p>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Минимальное подключение темы к готовому компоненту. Атрибуты контейнера задают бренд и
+        оформление для всех компонентов внутри.
+      </p>
+      <aurora-example-block class="pending-code">
+        <p class="migration-placeholder" role="note" data-migration-placeholder>
+          Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+          компонентов.
+        </p>
+      </aurora-example-block>
+      <details>
+        <summary>Полный код примера с настройками объекта</summary>
+        <p>
+          Код воспроизводит вводную демонстрацию: изменение настройки и подтверждение сохранения.
+        </p>
+        <aurora-example-block class="pending-code">
+          <p class="migration-placeholder" role="note" data-migration-placeholder>
+            Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+            компонентов.
+          </p>
+        </aurora-example-block>
+        <p>
+          Кнопка подтверждает действие внутри демонстрации. В приложении обновляйте сообщение после
+          успешного ответа на запрос сохранения. Счётчик — собственная разметка: заливка и текст
+          используют парные роли акцента.
+        </p>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+            Нейтральные цвета
+          </a>
+          — текст, поверхности и границы.
+        </li>
+        <li>
+          <a routerLink="/foundations/status" [queryParams]="settings.queryParams()">
+            Цвета статусов
+          </a>
+          — выбор цвета по смыслу сообщения.
+        </li>
+        <li>
+          <a routerLink="/foundations/theme-colors" [queryParams]="settings.queryParams()">
+            Как выбрать цвета темы
+          </a>
+          — подготовка новой палитры.
+        </li>
+        <li>
+          <a routerLink="/foundations/typography" [queryParams]="settings.queryParams()">
+            Типографика
+          </a>
+          — текстовые роли и иерархия.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

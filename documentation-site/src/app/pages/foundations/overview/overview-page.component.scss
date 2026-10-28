@@ -1,3 +1,5 @@
+@use '../../../../styles/article';
+
 :host {
   display: block;
 }
@@ -24,42 +26,16 @@ section + section {
   border-top: 1px solid var(--ds-divider);
 }
 
-h2 {
-  font: var(--ds-type-title);
-  letter-spacing: var(--ds-tracking-tight);
-  color: var(--ds-fg-strong);
-  margin: 0 0 12px;
-}
-
-p {
-  margin: 0;
-  max-width: 74ch;
-  text-wrap: pretty;
-}
-
-p + p {
-  margin-top: 12px;
-}
-
-a {
-  color: var(--ds-brand-text);
-  text-underline-offset: 3px;
-}
-
-a:hover {
-  color: var(--ds-brand);
-}
-
+@include article.title-heading;
+@include article.paragraph;
+@include article.paragraph-spacing;
+@include article.links;
 a:focus-visible {
   outline: var(--ds-focus-width) solid var(--ds-focus-color);
   outline-offset: var(--ds-focus-offset);
 }
 
-.lead {
-  color: var(--ds-fg-muted);
-  margin-bottom: 24px;
-}
-
+@include article.lead;
 .sample {
   border: 1px solid var(--ds-border);
   border-radius: var(--ds-radius-lg);

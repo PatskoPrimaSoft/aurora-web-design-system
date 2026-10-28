@@ -1,0 +1,592 @@
+<aurora-article-layout title="Сетка и компоновка"
+  subtitle="Как распределять место между картой, панелями, таблицей и формой">
+  <div class="guide-content">
+    <section aria-labelledby="workspace">
+      <h2 id="workspace" tabindex="-1">Карта занимает свободное место</h2>
+      <p>
+        В рабочем экране панель помогает выбрать объект, а карта использует оставшуюся ширину.
+        Выберите объект в списке или на схеме: обе области показывают один выбор.
+      </p>
+      <aurora-example-block class="scene"
+        id="map-example"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <p class="migration-placeholder" role="note" data-migration-placeholder>
+          Пример выбора объекта в списке и на карте появится после подготовки необходимых
+          Angular-компонентов.
+        </p>
+      </aurora-example-block>
+      <p>
+        Ширина панели определяется её задачей, а не долей экрана. Основной регион может
+        растягиваться. Готовый
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница компонента ещё не перенесена">
+          DsPageLayout
+        </span>
+        размещает регионы; приложение выбирает их состав и наполнение. В примере выше каркас задан
+        собственной CSS-сеткой. Колонки интерфейса не определяют положение объектов на карте: оно
+        задаётся географическими координатами.
+      </p>
+    </section>
+    <section aria-labelledby="choose">
+      <h2 id="choose" tabindex="-1">Выбирайте компоновку по задаче</h2>
+      <ul>
+        <li>
+          <strong>Карта и рабочая область:</strong>
+          вспомогательная панель имеет ограниченную ширину, основной регион получает остаток.
+        </li>
+        <li>
+          <strong>Таблица:</strong>
+          использует доступную ширину. Поиск, фильтры и результат имеют общую левую границу.
+        </li>
+        <li>
+          <strong>Форма:</strong>
+          ограничена удобной для чтения шириной. Связанные короткие поля могут стоять рядом; длинные
+          занимают всю строку.
+        </li>
+      </ul>
+      <p>
+        Не вводите обязательную сетку из 12 колонок для каждого экрана. Число колонок следует
+        содержимому. Расстояния задаются по правилам
+        <a routerLink="/foundations/spacing" [queryParams]="settings.queryParams()">
+          отступов и группировки
+        </a>, перестроение при нехватке места — по правилам
+        <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+          адаптивности
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="structure">
+      <h2 id="structure" tabindex="-1">Каркас приложения и сетка содержимого</h2>
+      <p>
+        Каркас задаёт внешние регионы: шапку, навигацию, боковые панели и основной регион. Сетка
+        выравнивает контейнеры уже внутри основного региона. Её колонки не проходят через навигацию
+        и боковую панель.
+      </p>
+      <aurora-example-block class="scene"
+        id="structure-example"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <div class="stack">
+          <p class="migration-placeholder" role="note" data-migration-placeholder>
+            Переключение направляющих появится после подготовки Angular-компонентов Switch и Button.
+            Пока показана исходная схема каркаса.
+          </p>
+          <div class="frame-diagram">
+            <div class="frame-header">Шапка приложения</div>
+            <div class="frame-nav">Навигация и боковая панель</div>
+            <div class="frame-main">
+              <h3>Основной регион</h3>
+              <div class="content-grid">
+                <div class="content-card">Карточка объектов</div>
+                <div class="content-card">Карточка уведомлений</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aurora-example-block>
+      <p>
+        Включите направляющие: карточки занимают колонки внутренней сетки. Кнопки внутри контейнера
+        располагаются по содержимому и отступам; иконки и всплывающие меню также не нужно подгонять
+        под колонки страницы. Четыре колонки здесь служат наглядной схемой, а не обязательным
+        стандартом Aurora.
+      </p>
+    </section>
+    <section aria-labelledby="grid-anatomy">
+      <h2 id="grid-anatomy" tabindex="-1">Из чего состоит сетка</h2>
+      <p>
+        Колонки задают линии выравнивания, промежутки отделяют соседние блоки, а поля оставляют
+        место до границы контейнера. Заливка ниже — учебная направляющая, она не является фоном
+        интерфейса.
+      </p>
+      <aurora-example-block class="scene"
+        id="anatomy-example"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <figure class="grid-figure">
+          <div class="grid-canvas grid-anatomy"
+            role="img"
+            aria-label="12 залитых колонок, промежутки между ними и поля по краям">
+            <div class="column-sheet" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+          <figcaption>
+            <dl class="grid-key">
+              <div>
+                <dt>
+                  <span class="key-column" aria-hidden="true"></span>
+                  Колонки
+                </dt>
+                <dd>Залитые полосы для выравнивания блоков.</dd>
+              </div>
+              <div>
+                <dt>Промежутки</dt>
+                <dd>Незалитое место между колонками.</dd>
+              </div>
+              <div>
+                <dt>Поля контейнера</dt>
+                <dd>Свободное место от крайних колонок до рамки.</dd>
+              </div>
+            </dl>
+            <div class="grid-tokens" aria-label="Токены схемы">
+              <span>
+                Колонки:
+                <span class="grid-token-wide">
+                  <code>--ds-gap-md</code>
+                  · 16 / 12 px
+                </span>
+                <span class="grid-token-narrow">
+                  <code>--ds-gap-sm</code>
+                  · 8 / 6 px
+                </span>
+              </span>
+              <span>
+                Поля:
+                <code>--ds-pad-md</code>
+                · 16 / 12 px
+              </span>
+              <span>Значения: cozy / compact</span>
+            </div>
+          </figcaption>
+        </figure>
+      </aurora-example-block>
+      <p>
+        Здесь показаны 12 колонок: их удобно делить на половины и трети. Число колонок выбирается по
+        задаче; расстояния между ними и поля следуют стандарту ниже.
+      </p>
+    </section>
+    <section aria-labelledby="grid-standard">
+      <h2 id="grid-standard" tabindex="-1">Стандарт расстояний для сеток Aurora</h2>
+      <p>
+        Для сетки контейнеров внутри основного региона используйте эти значения. Узкая сетка — та,
+        чей контейнер имеет доступную ширину не больше 440 px; это ширина области содержимого
+        контейнера, а не окна браузера.
+      </p>
+      <div class="table-scroll"
+        tabindex="0"
+        role="region"
+        aria-label="Стандарт расстояний для сеток">
+        <table class="grid-standard">
+          <caption class="caption">Значения для обычной и компактной плотности</caption>
+          <thead>
+            <tr>
+              <th scope="col">Назначение и токен</th>
+              <th scope="col">Cozy</th>
+              <th scope="col">Compact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                Между колонками:
+                <code>--ds-gap-md</code>
+              </th>
+              <td>16 px</td>
+              <td>12 px</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                Между колонками при ширине ≤ 440 px:
+                <code>--ds-gap-sm</code>
+              </th>
+              <td>8 px</td>
+              <td>6 px</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                Между рядами блоков:
+                <code>--ds-gap-md</code>
+              </th>
+              <td>16 px</td>
+              <td>12 px</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                Поля сетки слева и справа:
+                <code>--ds-pad-md</code>
+              </th>
+              <td>16 px</td>
+              <td>12 px</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        При смене плотности значения токенов меняются автоматически. Переход на меньший промежуток
+        по ширине задаёт контейнерный CSS-запрос приложения: сами токены не определяют ширину
+        контейнера. Не добавляйте поля повторно, если их уже создаёт обёртка сетки.
+      </p>
+      <p>
+        Стандарт относится к сетке контейнеров. Расстояния внутри кнопок, полей и карточек остаются
+        ответственностью компонентов; смысловая группировка описана в
+        <a routerLink="/foundations/spacing" [queryParams]="settings.queryParams()">
+          отступах и группировке
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="grid-spans">
+      <h2 id="grid-spans" tabindex="-1">Расположение блоков по колонкам</h2>
+      <p>
+        На одной сетке можно расположить блок на всю ширину, два равных, три равных или основной
+        блок со сводкой в соотношении 2:1. Выровнены контейнеры, а не каждая кнопка и иконка внутри
+        них.
+      </p>
+      <aurora-example-block class="scene"
+        id="spans-example"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <figure class="grid-figure">
+          <div class="grid-canvas">
+            <div class="column-sheet" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="span-stack">
+              <div class="span-row" data-span-row="12">
+                <div class="span-block" style="grid-column: span 12">12</div>
+              </div>
+              <div class="span-row" data-span-row="6-6">
+                <div class="span-block" style="grid-column: span 6">6</div>
+                <div class="span-block" style="grid-column: span 6">6</div>
+              </div>
+              <div class="span-row" data-span-row="4-4-4">
+                <div class="span-block" style="grid-column: span 4">4</div>
+                <div class="span-block" style="grid-column: span 4">4</div>
+                <div class="span-block" style="grid-column: span 4">4</div>
+              </div>
+              <div class="span-row" data-span-row="8-4">
+                <div class="span-block" style="grid-column: span 8">8</div>
+                <div class="span-block" style="grid-column: span 4">4</div>
+              </div>
+            </div>
+          </div>
+          <figcaption>
+            Сверху вниз: вся ширина — 12; два равных блока — 6 + 6; три равных — 4 + 4 + 4; основной
+            блок и сводка — 8 + 4.
+            <div class="grid-tokens" aria-label="Токены схемы">
+              <span>
+                Колонки:
+                <span class="grid-token-wide">
+                  <code>--ds-gap-md</code>
+                  · 16 / 12 px
+                </span>
+                <span class="grid-token-narrow">
+                  <code>--ds-gap-sm</code>
+                  · 8 / 6 px
+                </span>
+              </span>
+              <span>
+                Ряды:
+                <code>--ds-gap-md</code>
+                · 16 / 12 px
+              </span>
+              <span>
+                Поля:
+                <code>--ds-pad-md</code>
+                · 16 / 12 px
+              </span>
+              <span>Значения: cozy / compact</span>
+            </div>
+          </figcaption>
+        </figure>
+      </aurora-example-block>
+      <p>
+        Числа внутри блоков обозначают занятые колонки. На узком экране схема сохраняет пропорции
+        для сравнения. Реальные карточки с длинным содержимым перестраиваются по правилам
+        <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+          адаптивности
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="grid-centering">
+      <h2 id="grid-centering" tabindex="-1">Центрирование внутри сетки</h2>
+      <p>
+        Узкий блок может занимать центральные колонки, сохраняя одинаковое свободное место слева и
+        справа. Например, блок на 8 колонок оставляет по 2 колонки с каждой стороны, на 10 — по 1.
+      </p>
+      <aurora-example-block class="scene"
+        id="centering-example"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <figure class="grid-figure">
+          <div class="grid-canvas">
+            <div class="column-sheet" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="span-stack">
+              <div class="span-row">
+                <div class="span-block" data-centered-span="8" style="grid-column: 3 / span 8">
+                  8 колонок
+                </div>
+              </div>
+              <div class="span-row">
+                <div class="span-block" data-centered-span="10" style="grid-column: 2 / span 10">
+                  10 колонок
+                </div>
+              </div>
+              <div class="span-row">
+                <div class="span-block" data-centered-span="12" style="grid-column: 1 / span 12">
+                  12 колонок
+                </div>
+              </div>
+            </div>
+          </div>
+          <figcaption>
+            Блоки на 8, 10 и 12 колонок имеют общий центр. Отступ от начала сетки: 2, 1 и 0 колонок
+            соответственно.
+            <div class="grid-tokens" aria-label="Токены схемы">
+              <span>
+                Колонки:
+                <span class="grid-token-wide">
+                  <code>--ds-gap-md</code>
+                  · 16 / 12 px
+                </span>
+                <span class="grid-token-narrow">
+                  <code>--ds-gap-sm</code>
+                  · 8 / 6 px
+                </span>
+              </span>
+              <span>
+                Ряды:
+                <code>--ds-gap-md</code>
+                · 16 / 12 px
+              </span>
+              <span>
+                Поля:
+                <code>--ds-pad-md</code>
+                · 16 / 12 px
+              </span>
+              <span>Значения: cozy / compact</span>
+            </div>
+          </figcaption>
+        </figure>
+      </aurora-example-block>
+      <p>
+        Центрируйте сам контейнер; текст и поля внутри могут оставаться выровненными влево.
+        Положение блока и выравнивание его содержимого — разные решения.
+      </p>
+    </section>
+    <section aria-labelledby="width">
+      <h2 id="width" tabindex="-1">Ограниченная и растягиваемая ширина</h2>
+      <p>
+        Сравните два способа распределения места в одной области. Переключите содержимое между
+        формой и картой, затем измените ограничение ширины. На узком экране оба варианта занимают
+        доступное место.
+      </p>
+      <aurora-example-block class="scene"
+        id="width-example"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <p class="migration-placeholder" role="note" data-migration-placeholder>
+          Интерактивное сравнение ширины формы и карты появится после подготовки Angular-компонентов
+          Button, Switch и Field.
+        </p>
+      </aurora-example-block>
+      <p>
+        Для формы ограничение помогает сохранить связь подписи, поля и действия. Карте полезно
+        отдавать свободное место для обзора. В этом примере предел формы — 560 px: это решение
+        сценария, а не универсальная ширина всех форм или новый токен.
+      </p>
+    </section>
+    <section aria-labelledby="table">
+      <h2 id="table" tabindex="-1">Таблица и фильтры образуют одну область</h2>
+      <p>
+        Фильтры находятся над результатом, а не в независимой колонке без связи с таблицей. Поиск и
+        переключатель в примере меняют строки. При нехватке ширины прокручивается только таблица:
+        фильтры остаются доступны.
+      </p>
+      <aurora-example-block class="scene"
+        id="table-example"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <p class="migration-placeholder" role="note" data-migration-placeholder>
+          Пример фильтров и таблицы появится после подготовки Angular-компонентов Field, Switch и
+          Table.
+        </p>
+      </aurora-example-block>
+      <p>
+        Не сжимайте столбцы до нечитаемого текста ради размещения всех данных. Состав колонок
+        выбирает приложение. Порядок строк описан отдельно в
+        <a routerLink="/foundations/sorting" [queryParams]="settings.queryParams()">
+          правилах сортировки
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="form">
+      <h2 id="form" tabindex="-1">Форма сохраняет удобную ширину</h2>
+      <p>
+        Форма не обязана растягиваться вслед за окном. Название занимает всю строку; два связанных
+        значения стоят рядом. Подписи находятся над полями, а кнопки начинаются на той же левой
+        границе.
+      </p>
+      <aurora-example-block class="scene"
+        id="form-example"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <p class="migration-placeholder" role="note" data-migration-placeholder>
+          Пример формы появится после подготовки Angular-компонентов Field, Button и Switch.
+        </p>
+      </aurora-example-block>
+      <p>
+        Внешнюю ширину и расположение полей задаёт родитель. Готовые поля и кнопки сами оформляют
+        содержимое и состояния. Проверяйте порядок Tab: он должен совпадать с порядком чтения.
+      </p>
+    </section>
+    <section aria-labelledby="scroll">
+      <h2 id="scroll" tabindex="-1">Назначьте владельца прокрутки</h2>
+      <ul>
+        <li>
+          Для обычной страницы оставляйте одну вертикальную прокрутку документа. Длинная форма
+          продолжается вниз, без собственного окна прокрутки.
+        </li>
+        <li>
+          В рабочем экране с картой приложение может ограничить высоту каркаса и дать списку
+          собственную прокрутку. Карта остаётся на месте; не добавляйте прокрутку всем вложенным
+          панелям.
+        </li>
+        <li>
+          Горизонтальную прокрутку локализуйте внутри широкой таблицы или кода. Область должна быть
+          доступна с клавиатуры и иметь понятное имя.
+        </li>
+      </ul>
+      <p>
+        У DsPageLayout есть режимы
+        <code>scroll="page"</code>
+        и
+        <code>scroll="regions"</code>; для них родитель задаёт высоту. Обычному потоку подходит
+        <code>scroll="none"</code>. Контракт — на
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница компонента ещё не перенесена">
+          странице компонента
+        </span>.
+      </p>
+    </section>
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Для собственной разметки</h2>
+      <p>
+        Каркас распределяет место между регионами, внутренняя сетка выравнивает контейнеры.
+        Компоненты управляют своим оформлением. Не меняйте размер текста или внутренние размеры
+        контролов, чтобы исправить тесную компоновку.
+      </p>
+      <details>
+        <summary>Как не дать содержимому растянуть страницу</summary>
+        <ul>
+          <li>
+            <code>minmax(0, 1fr)</code>
+            позволяет основному столбцу уменьшаться ниже ширины длинного содержимого.
+          </li>
+          <li>
+            <code>min-width: 0</code>
+            на дочернем регионе разрешает ему сжиматься внутри grid или flex.
+          </li>
+          <li>
+            <code>max-width</code>
+            ограничивает форму; числовые размеры примеров — решения для этих сценариев, а не новые
+            системные токены.
+          </li>
+          <li>
+            Для панели внутри другого региона учитывайте её собственную ширину. Порог перестроения и
+            container queries описаны в
+            <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+              адаптивности
+            </a>.
+          </li>
+        </ul>
+      </details>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Примеры и правила выбора регионов показаны выше. Размеры и поведение готового каркаса
+        описаны в
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница компонента ещё не перенесена">
+          DsPageLayout
+        </span>.
+      </p>
+
+      <p>
+        Стили для собственной разметки: панель занимает ограниченную ширину, а основной регион —
+        остаток. В приложении поместите их в контейнер
+        <code>.workspace</code>. Интервалы берутся из существующих токенов. Порог 600 px выбран для этого примера, а не
+        является новым общим брейкпоинтом.
+      </p>
+      <aurora-code-block [snippet]="snippets.workspace"></aurora-code-block>
+      <p>
+        Ширина 240 px служит только демонстрации. У DsPageLayout ширина боковой панели по умолчанию
+        определяется токеном
+        <code>--ds-panel-w</code>.
+      </p>
+      <h3>Применение стандарта расстояний</h3>
+      <p>
+        Этот CSS применяет стандарт из справочника выше: промежуток колонок уменьшается при ширине
+        контейнера не больше 440 px. Число колонок здесь — пример, его выбирают по задаче. Плотность
+        наследуется из скоупа приложения. Если горизонтальные поля уже заданы обёрткой, не
+        добавляйте их второй раз.
+      </p>
+      <aurora-code-block [snippet]="snippets.productGrid"></aurora-code-block>
+      <p>
+        Связанные темы:
+        <a routerLink="/foundations/spacing" [queryParams]="settings.queryParams()">отступы</a>,
+        <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+          адаптивность
+        </a>,
+        <span title="Руководство находится в ng-ui-kit/docs/adding-components.md">
+          Angular UI kit
+        </span>.
+      </p>
+    </section>
+  </div>
+</aurora-article-layout>

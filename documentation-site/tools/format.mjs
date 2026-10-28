@@ -25,6 +25,11 @@ async function formatDirectory(directory) {
     if (extname(file) === '.html') {
       // Prettier has no option to keep the first attribute beside the opening tag.
       formatted = formatted.replace(/(<[A-Za-z][\w:-]*)\n[\t ]+(?=[^\s<>/])/g, '$1 ');
+      // Keep punctuation attached to inline text when Prettier breaks the closing tag onto a new line.
+      formatted = formatted.replace(
+        /(<\/(?:code|a|span|strong|em|b|i|kbd)>)[\t \r\n]+([,.;:!?])/g,
+        '$1$2',
+      );
     }
     if (formatted === source) continue;
     changed++;

@@ -1,0 +1,65 @@
+@use '../../../../styles/article';
+
+@include article.plain-base;
+@include article.lead;
+@include article.choices;
+.rules {
+  padding-left: 20px;
+  max-width: 74ch;
+}
+.rules li + li {
+  margin-top: 12px;
+}
+@include article.links($underline-offset: false, $hover: false);
+a:focus-visible,
+summary:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-focus-color);
+  outline-offset: var(--ds-focus-offset);
+}
+summary {
+  cursor: pointer;
+}
+details p {
+  margin-top: 12px;
+}
+@include article.inline-code($wrap: false);
+@media (max-width: 640px) {
+  .choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .choices dt {
+    border: 0;
+    padding-bottom: 4px;
+  }
+  .choices dd {
+    padding-top: 0;
+  }
+}
+@include article.migration-note;
+
+aurora-code-block,
+.pending-code {
+  margin: 20px 0;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.tokens {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--ds-type-body);
+  text-align: left;
+}
+.tokens th,
+.tokens td {
+  padding: 12px;
+  border-bottom: 1px solid var(--ds-border);
+  vertical-align: top;
+}
+.tokens thead th {
+  background: var(--ds-bg);
+  color: var(--ds-fg-muted);
+  font-weight: var(--ds-weight-semibold);
+}

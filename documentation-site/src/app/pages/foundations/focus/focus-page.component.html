@@ -1,0 +1,229 @@
+<aurora-article-layout title="Фокус"
+  subtitle="Как показывать место ввода и управлять интерфейсом с клавиатуры">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Фокус в интерфейсе</h2>
+      <p class="lead">
+        Фокус показывает, какой элемент сейчас управляется с клавиатуры. Готовые компоненты
+        показывают обводку автоматически.
+      </p>
+      <div class="try-it">
+        <p>
+          Нажмите на поле, затем
+          <kbd>Tab</kbd>
+          — обводка перейдёт к следующему элементу.
+        </p>
+        <p class="caption">
+          <kbd>Shift+Tab</kbd>
+          — назад ·
+          <kbd>Пробел</kbd>
+          — изменить флажок ·
+          <kbd>Enter</kbd>
+          — нажать кнопку
+        </p>
+      </div>
+      <aurora-example-block class="scene migration-placeholder"
+        id="ready-interface"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>Пример формы появится после подготовки Angular-компонентов Field, Checkbox и Button.</p>
+      </aurora-example-block>
+      <p class="caption" style="margin-top: 16px">
+        На флажке нажмите
+        <kbd>Пробел</kbd>, затем
+        <kbd>Tab</kbd>: отметка останется, обводка переместится.
+      </p>
+    </section>
+    <section aria-labelledby="states">
+      <h2 id="states" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Фокус</dt>
+        <dd>Элемент, которым сейчас управляют с клавиатуры.</dd>
+        <dt>Выбор</dt>
+        <dd>Отмеченный вариант, который сохраняется после ухода фокуса.</dd>
+        <dt>Наведение</dt>
+        <dd>Элемент под указателем; может совпадать с фокусом.</dd>
+      </dl>
+      <p style="margin-top: 16px">
+        У кнопок обводка появляется при работе с клавиатуры, у полей ввода — также после клика.
+      </p>
+    </section>
+    <section aria-labelledby="navigation">
+      <h2 id="navigation" tabindex="-1">Вкладки и меню</h2>
+      <p class="lead">
+        <kbd>Tab</kbd>
+        переводит фокус между группами управления.
+      </p>
+      <div class="try-it">
+        <p>
+          <strong>Вкладки:</strong>
+          <kbd>←</kbd>
+          <kbd>→</kbd>
+          переключают вкладку.
+        </p>
+        <p>
+          <strong>Меню:</strong>
+          <kbd>↑</kbd>
+          <kbd>↓</kbd>
+          перемещают фокус между пунктами,
+          <kbd>Escape</kbd>
+          закрывает меню и возвращает фокус на кнопку.
+        </p>
+      </div>
+      <aurora-example-block class="scene migration-placeholder"
+        id="keyboard-navigation"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>Пример навигации появится после подготовки Angular-компонентов Tabs и Menu.</p>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul class="rules">
+        <li>
+          <strong>Сохраняйте видимую обводку.</strong>
+          Одного изменения фона недостаточно.
+        </li>
+        <li>
+          <strong>Соблюдайте порядок чтения.</strong>
+          Переход по
+          <kbd>Tab</kbd>
+          должен следовать расположению элементов; недоступные кнопки пропускаются.
+        </li>
+        <li>
+          <strong>Не перекрывайте контур.</strong>
+          Он должен оставаться видимым у края контейнера и под закреплёнными панелями.
+        </li>
+        <li>
+          <strong>Возвращайте фокус после закрытия.</strong>
+          Готовое меню делает это автоматически. В собственном диалоге верните фокус на открывший
+          его элемент или логичный следующий.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Для собственной разметки</h2>
+      <p>
+        Используйте настоящие кнопки, ссылки и поля: они поддерживают клавиатуру и получают общие
+        стили фокуса при подключении стилей пакета. Собственному составному контролу дополнительно
+        нужны клавиатурная навигация и управление фокусом.
+      </p>
+      <details id="focus-reference">
+        <summary>Показать токены и особенности обводки</summary>
+        <div class="reference-content">
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Единый контур фокуса">
+            <table class="tokens">
+              <caption>Единый контур фокуса</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Токен</th>
+                  <th scope="col">Назначение</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>--ds-focus-color</code></td>
+                  <td>Цвет обводки текущей темы.</td>
+                </tr>
+                <tr>
+                  <td><code>--ds-focus-width</code></td>
+                  <td>Толщина: 2 px.</td>
+                </tr>
+                <tr>
+                  <td><code>--ds-focus-offset</code></td>
+                  <td>Отступ от элемента: 2 px.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Для кнопок и ссылок используется
+            <code>:focus-visible</code>: браузер определяет, когда нужен видимый индикатор. Текстовые поля показывают его через
+            <code>:focus</code>. У составного поля обводка охватывает всю оболочку через
+            <code>:focus-within</code>. Обводка не меняет размеры элемента.
+          </p>
+          <p>
+            У поля с ошибкой граница сохраняет цвет ошибки, а обводка — цвет фокуса. Внутри
+            составного поля не добавляйте второй контур: его уже рисует оболочка. Проверяйте
+            собственные элементы в обоих брендах и оформлениях.
+          </p>
+        </div>
+      </details>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Готовая кнопка уже показывает обводку при управлении с клавиатуры. Подключите стили пакета и
+        передайте обработчик действия.
+      </p>
+      <aurora-example-block class="pending-code migration-placeholder"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+          компонентов.
+        </p>
+      </aurora-example-block>
+      <details>
+        <summary>Полный код формы и навигации</summary>
+        <p>
+          Форма подтверждает сохранение локально. В приложении показывайте результат после ответа
+          сервера. Вкладки и меню используют встроенное управление с клавиатуры.
+        </p>
+        <aurora-example-block class="pending-code migration-placeholder"
+          role="note"
+          data-migration-placeholder>
+          <p>
+            Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+            компонентов.
+          </p>
+        </aurora-example-block>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/foundations/hover" [queryParams]="settings.queryParams()">
+            Наведение и нажатие
+          </a>
+          — временная реакция на указатель и действие.
+        </li>
+        <li>
+          <a routerLink="/components/button" [queryParams]="settings.queryParams()">Кнопка</a>
+          — готовое действие с клавиатурным фокусом.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            Поле
+          </span>
+          — обводка вокруг оболочки ввода.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            Вкладки
+          </span>
+          и
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            меню
+          </span>
+          — навигация внутри группы.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

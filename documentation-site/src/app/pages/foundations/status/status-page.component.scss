@@ -1,0 +1,185 @@
+@use '../../../../styles/article';
+
+@include article.base;
+@include article.links;
+a:focus-visible,
+summary:focus-visible,
+select:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-focus-color);
+  outline-offset: var(--ds-focus-offset);
+  border-radius: var(--ds-radius-xs);
+}
+@include article.inline-code;
+@include article.lead;
+.stage,
+.sample {
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  padding: 24px;
+  min-width: 0;
+  background: var(--ds-surface);
+}
+.ready-content {
+  display: grid;
+  gap: 16px;
+}
+.ready-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+}
+@include article.caption;
+.choices {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  margin: 0;
+}
+.choices dt,
+.choices dd {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ds-divider);
+}
+.choices dt {
+  font: var(--ds-type-body-strong);
+}
+.choices dd {
+  margin: 0;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.controls label {
+  font: var(--ds-type-ui);
+}
+select {
+  font: var(--ds-type-ui);
+  background: var(--ds-surface);
+  color: var(--ds-fg);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  padding: 8px 12px;
+  max-width: 100%;
+  min-height: var(--ds-control-h);
+}
+.surface-examples {
+  display: grid;
+  gap: 24px;
+}
+.surface-examples > div {
+  min-width: 0;
+}
+.surface-examples p {
+  margin-top: 8px;
+}
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.pair > * {
+  min-width: 0;
+}
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--ds-radius-circle);
+  margin-right: 8px;
+}
+.rules {
+  margin: 24px 0 0;
+  padding-left: 20px;
+  max-width: 74ch;
+}
+.rules li + li {
+  margin-top: 12px;
+}
+summary {
+  cursor: pointer;
+  font: var(--ds-type-ui);
+}
+details + details {
+  margin-top: 16px;
+}
+.reference-content {
+  margin-top: 16px;
+}
+.token-roles {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  margin: 0;
+}
+.token-roles dt,
+.token-roles dd {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ds-divider);
+}
+.token-roles dd {
+  margin: 0;
+}
+.palette {
+  display: grid;
+  gap: 20px;
+}
+.palette-row {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+.palette-samples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.palette-row p {
+  margin-top: 8px;
+}
+.swatch {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--ds-radius-xs);
+  vertical-align: middle;
+}
+@media (max-width: 640px) {
+  .guide-content {
+    padding: 20px 0;
+  }
+  .stage,
+  .sample {
+    padding: 16px;
+  }
+  .pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .choices,
+  .token-roles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .choices dt,
+  .token-roles dt {
+    border: 0;
+    padding-bottom: 4px;
+  }
+  .choices dd,
+  .token-roles dd {
+    padding-top: 0;
+  }
+  .palette-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+}
+
+@include article.migration-note;
+.pending-code,
+aurora-code-block {
+  margin: 20px 0;
+}

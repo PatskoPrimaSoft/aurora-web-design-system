@@ -1,0 +1,610 @@
+<aurora-article-layout title="Подбор цветов темы"
+  subtitle="Как подобрать бренд и акцент и проверить палитру в двух оформлениях">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Подбор на примере интерфейса</h2>
+      <p class="lead">
+        Выберите бренд и акцент. Ниже — результат для светлого и тёмного оформления.
+      </p>
+      <div class="bar">
+        <div class="field">
+          <label for="bt">Цвет бренда</label>
+          <div class="inputs">
+            <input type="color"
+              id="bs"
+              aria-label="Выбрать цвет бренда"
+              [value]="pickerColors().brand"
+              (input)="updateColor('brand', $any($event.target).value)" />
+            <input type="text"
+              id="bt"
+              spellcheck="false"
+              aria-describedby="brand-hint input-error"
+              [value]="brand()"
+              (input)="updateColor('brand', $any($event.target).value)"
+              [attr.aria-invalid]="!validColor(brand())" />
+          </div>
+          <p class="cap" id="brand-hint">Основные действия и выбор.</p>
+        </div>
+        <div class="field">
+          <label for="at">Цвет акцента</label>
+          <div class="inputs">
+            <input type="color"
+              id="as"
+              aria-label="Выбрать цвет акцента"
+              [value]="pickerColors().accent"
+              (input)="updateColor('accent', $any($event.target).value)" />
+            <input type="text"
+              id="at"
+              spellcheck="false"
+              aria-describedby="accent-hint input-error"
+              [value]="accent()"
+              (input)="updateColor('accent', $any($event.target).value)"
+              [attr.aria-invalid]="!validColor(accent())" />
+          </div>
+          <p class="cap" id="accent-hint">Дополнительное выделение.</p>
+        </div>
+      </div>
+      <p id="input-error" class="error" role="status">{{ error() }}</p>
+      <div class="proof" aria-label="Предварительный просмотр палитры">
+        <div class="pane"
+          id="pl"
+          data-ds-appearance="light"
+          [attr.data-ds-density]="settings.density()"
+          [style.background]="'var(--ds-bg)'">
+          <span class="pl">Светлое оформление</span>
+          <div class="row">
+            <span class="cap migration-placeholder"
+              id="p-btn"
+              role="note"
+              data-migration-placeholder>
+              Кнопка «Построить отчёт» ожидает Angular-компонент Button.
+            </span>
+            <span class="pill"
+              id="p-pill"
+              [style.background]="palette().light.subtle"
+              [style.border-color]="palette().light.border"
+              [style.color]="palette().light.text">
+              ✓ Выбрано 4
+            </span>
+            <a routerLink="/foundations/themes"
+              [queryParams]="settings.queryParams()"
+              id="p-link"
+              [style.color]="palette().light.text">
+              Цветовые темы
+            </a>
+            <span class="dot"
+              id="p-dot"
+              [style.background]="palette().light.mark"
+              [style.color]="palette().light.markOn"
+              aria-label="7 непрочитанных">
+              7
+            </span>
+          </div>
+          <p class="cap" role="status" id="p-result">Отчёт ещё не построен.</p>
+        </div>
+        <div class="pane"
+          id="pd"
+          data-ds-appearance="dark"
+          [attr.data-ds-density]="settings.density()"
+          [style.background]="'var(--ds-surface)'">
+          <span class="pl">Тёмное оформление</span>
+          <div class="row">
+            <span class="cap migration-placeholder"
+              id="d-btn"
+              role="note"
+              data-migration-placeholder>
+              Кнопка «Построить отчёт» ожидает Angular-компонент Button.
+            </span>
+            <span class="pill"
+              id="d-pill"
+              [style.background]="palette().dark.subtle"
+              [style.border-color]="palette().dark.border"
+              [style.color]="palette().dark.text">
+              ✓ Выбрано 4
+            </span>
+            <a routerLink="/foundations/themes"
+              [queryParams]="settings.queryParams()"
+              id="d-link"
+              [style.color]="palette().dark.text">
+              Цветовые темы
+            </a>
+            <span class="dot"
+              id="d-dot"
+              [style.background]="palette().dark.mark"
+              [style.color]="palette().dark.markOn"
+              aria-label="7 непрочитанных">
+              7
+            </span>
+          </div>
+          <p class="cap" role="status" id="d-result">Отчёт ещё не построен.</p>
+        </div>
+      </div>
+      <p class="cap">
+        Нажмите «Построить отчёт», чтобы проверить кнопку. Для существующего бренда используйте
+        <a routerLink="/foundations/themes" [queryParams]="settings.queryParams()">готовую тему</a>.
+      </p>
+      <p id="check-summary" role="status" style="margin-top: 16px">{{ palette().summary }}</p>
+      <a [routerLink]="[]"
+        fragment="reference"
+        [queryParams]="settings.queryParams()"
+        id="check-link">
+        Посмотреть проверки
+      </a>
+    </section>
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Светлый бренд</dt>
+        <dd>Калькулятор затемняет заливку, если белая подпись недостаточно контрастна.</dd>
+        <dt>Второй цвет</dt>
+        <dd>
+          Начните со второго фирменного цвета. Подсказки помогут заметить сходство с брендом и
+          статусами.
+        </dd>
+      </dl>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Что проверить перед применением</h2>
+      <ul class="rules">
+        <li>
+          <b>Читайте подписи на реальном фоне.</b>
+          Проверьте текст кнопки, ссылку и цифру счётчика. Светлый цвет логотипа может потребовать
+          более тёмного варианта в интерфейсе.
+        </li>
+        <li>
+          <b>Сохраняйте смысл статусов.</b>
+          Акцент не должен выглядеть как ошибка или успешное действие. Проверка близости оттенков —
+          подсказка, а не гарантия различимости.
+        </li>
+        <li>
+          <b>Проверьте реальные экраны.</b>
+          Список объектов, карту и диалог подтверждения — в обоих оформлениях. Расчёт отдельных пар
+          цветов не подтверждает доступность всей темы.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Расчёт и проверка контраста</h2>
+      <p>
+        Сначала проверьте читаемость пар «текст — фон». Значимые метки проверяются отдельно. Эти
+        результаты относятся к указанным парам цветов, а не ко всей теме.
+      </p>
+      <div id="contrast-pairs" class="contrast-pairs">
+        @for (pair of palette().pairs; track pair.label) {
+          <div class="contrast-pair">
+            <strong>{{ pair.label }}</strong>
+            <span>
+              Светлое: {{ pair.light >= pair.threshold ? '✓' : '✗' }} {{ pair.light.toFixed(2) }}:1
+            </span>
+            <span>
+              Тёмное: {{ pair.dark >= pair.threshold ? '✓' : '✗' }} {{ pair.dark.toFixed(2) }}:1
+            </span>
+            <span class="cap">Порог {{ pair.threshold }}:1</span>
+          </div>
+        }
+      </div>
+      <details id="color-advice">
+        <summary>Рекомендации по палитре</summary>
+        <div class="warns" id="warns">
+          @for (warning of palette().warnings; track $index) {
+            <div class="warn" [class.w]="warning[0] === 'w'" [class.g]="warning[0] === 'g'">
+              {{ warning[1] }}
+            </div>
+          }
+        </div>
+        <p class="cap">
+          Дополнительные ориентиры подложек и оттенков — в технической таблице ниже.
+        </p>
+      </details>
+      <details id="palette-reference">
+        <summary>Токены и подробности расчёта</summary>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Расчёт токенов палитры">
+          <table>
+            <colgroup>
+              <col class="tokc" />
+              <col />
+              <col class="swc" />
+              <col class="chkc" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">Токен</th>
+                <th scope="col">Что это и как выведено</th>
+                <th scope="col">Предложение</th>
+                <th scope="col">Проверка</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="grp">
+                <td colspan="4">
+                  <span class="gn">LIGHT</span>
+                  <span class="gd">Основные роли светлой палитры</span>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-brand</span></td>
+                <td class="role">
+                  Заливка основного действия и выбранных контролов. Если белая подпись не достигает
+                  4,5:1, исходный цвет затемняется.
+                </td>
+                <td id="r-brand">
+                  <span class="sw" [style.background]="palette().rows['brand'].color"></span>
+                  <span class="hex">{{ palette().rows['brand'].label }}</span>
+                </td>
+                <td id="c-brand">
+                  @for (check of palette().rows['brand'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-brand-subtle</span></td>
+                <td class="role">
+                  Подложка выбранного элемента. Получается смешением бренда с поверхностью, начиная
+                  с 8%.
+                </td>
+                <td id="r-bsub">
+                  <span class="sw" [style.background]="palette().rows['bsub'].color"></span>
+                  <span class="hex">{{ palette().rows['bsub'].label }}</span>
+                </td>
+                <td id="c-bsub">
+                  @for (check of palette().rows['bsub'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-brand-border</span></td>
+                <td class="role">
+                  Граница брендовой подложки. Получается смешением бренда с поверхностью, начиная с
+                  28%.
+                </td>
+                <td id="r-bbor">
+                  <span class="sw" [style.background]="palette().rows['bbor'].color"></span>
+                  <span class="hex">{{ palette().rows['bbor'].label }}</span>
+                </td>
+                <td id="c-bbor">
+                  @for (check of palette().rows['bbor'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-brand-text</span></td>
+                <td class="role">
+                  Цвет ссылки и брендового текста. Проверяется к фону --ds-bg и при необходимости
+                  затемняется.
+                </td>
+                <td id="r-btxt">
+                  <span class="sw" [style.background]="palette().rows['btxt'].color"></span>
+                  <span class="hex">{{ palette().rows['btxt'].label }}</span>
+                </td>
+                <td id="c-btxt">
+                  @for (check of palette().rows['btxt'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-accent</span></td>
+                <td class="role">
+                  Дополнительный цвет бренда. Калькулятор предупреждает о близости к основному цвету
+                  и статусам.
+                </td>
+                <td id="r-acc">
+                  <span class="sw" [style.background]="palette().rows['acc'].color"></span>
+                  <span class="hex">{{ palette().rows['acc'].label }}</span>
+                </td>
+                <td id="c-acc">
+                  @for (check of palette().rows['acc'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-accent-on</span></td>
+                <td class="role">
+                  Подпись на акцентной заливке: белая либо тёмная. Проверяется контраст к акценту.
+                </td>
+                <td id="r-aon">
+                  <span class="sw" [style.background]="palette().rows['aon'].color"></span>
+                  <span class="hex">{{ palette().rows['aon'].label }}</span>
+                </td>
+                <td id="c-aon">
+                  @for (check of palette().rows['aon'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-accent-subtle</span></td>
+                <td class="role">
+                  Мягкая подложка акцента. Доля исходного цвета увеличивается, если подложка слишком
+                  близка к поверхности.
+                </td>
+                <td id="r-asub">
+                  <span class="sw" [style.background]="palette().rows['asub'].color"></span>
+                  <span class="hex">{{ palette().rows['asub'].label }}</span>
+                </td>
+                <td id="c-asub">
+                  @for (check of palette().rows['asub'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-accent-mark</span></td>
+                <td class="role">
+                  Значимая метка, например индикатор непрочитанного. Проверяется контраст 3:1 к
+                  фону.
+                </td>
+                <td id="r-amark">
+                  <span class="sw" [style.background]="palette().rows['amark'].color"></span>
+                  <span class="hex">{{ palette().rows['amark'].label }}</span>
+                </td>
+                <td id="c-amark">
+                  @for (check of palette().rows['amark'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-accent-mark-on</span></td>
+                <td class="role">
+                  Цифра на метке. Проверяется к цвету метки, который может отличаться от акцента.
+                </td>
+                <td id="r-amon">
+                  <span class="sw" [style.background]="palette().rows['amon'].color"></span>
+                  <span class="hex">{{ palette().rows['amon'].label }}</span>
+                </td>
+                <td id="c-amon">
+                  @for (check of palette().rows['amon'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr class="grp">
+                <td colspan="4">
+                  <span class="gn">DARK</span>
+                  <span class="gd">
+                    Основные роли тёмной палитры:
+                    <span class="mono">-mark</span>
+                    и
+                    <span class="mono">-mark-on</span>
+                    здесь равны акценту — на тёмном грунте он держит 3:1 сам
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-brand</span></td>
+                <td class="role">
+                  Заливка основного действия в тёмном оформлении. Исходный оттенок осветляется,
+                  подпись становится тёмной.
+                </td>
+                <td id="r-dbrand">
+                  <span class="sw" [style.background]="palette().rows['dbrand'].color"></span>
+                  <span class="hex">{{ palette().rows['dbrand'].label }}</span>
+                </td>
+                <td id="c-dbrand">
+                  @for (check of palette().rows['dbrand'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-brand-subtle</span></td>
+                <td class="role">Брендовая подложка: заливка с прозрачностью 14%.</td>
+                <td id="r-dbsub">
+                  <span class="sw" [style.background]="palette().rows['dbsub'].color"></span>
+                  <span class="hex">{{ palette().rows['dbsub'].label }}</span>
+                </td>
+                <td id="c-dbsub">
+                  @for (check of palette().rows['dbsub'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-brand-border</span></td>
+                <td class="role">Брендовая граница: заливка с прозрачностью 34%.</td>
+                <td id="r-dbbor">
+                  <span class="sw" [style.background]="palette().rows['dbbor'].color"></span>
+                  <span class="hex">{{ palette().rows['dbbor'].label }}</span>
+                </td>
+                <td id="c-dbbor">
+                  @for (check of palette().rows['dbbor'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-brand-text</span></td>
+                <td class="role">
+                  Брендовый текст на тёмной поверхности. Осветляется отдельно от заливки.
+                </td>
+                <td id="r-dbtxt">
+                  <span class="sw" [style.background]="palette().rows['dbtxt'].color"></span>
+                  <span class="hex">{{ palette().rows['dbtxt'].label }}</span>
+                </td>
+                <td id="c-dbtxt">
+                  @for (check of palette().rows['dbtxt'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-accent</span></td>
+                <td class="role">
+                  Акцент на тёмной поверхности. Осветляется, если исходный цвет не достигает 3:1.
+                </td>
+                <td id="r-dacc">
+                  <span class="sw" [style.background]="palette().rows['dacc'].color"></span>
+                  <span class="hex">{{ palette().rows['dacc'].label }}</span>
+                </td>
+                <td id="c-dacc">
+                  @for (check of palette().rows['dacc'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><span class="tok">--ds-accent-on</span></td>
+                <td class="role">
+                  Тёмная подпись на акценте. Проверяется контраст к акцентной заливке.
+                </td>
+                <td id="r-daon">
+                  <span class="sw" [style.background]="palette().rows['daon'].color"></span>
+                  <span class="hex">{{ palette().rows['daon'].label }}</span>
+                </td>
+                <td id="c-daon">
+                  @for (check of palette().rows['daon'].checks; track $index) {
+                    <span class="chk"
+                      [class.ok]="check[1] === true"
+                      [class.bad]="check[1] === false"
+                      [class.inf]="check[1] === null">
+                      {{ check[1] === null ? '' : check[1] ? '✓ ' : '✗ ' }}{{ check[0] }}
+                    </span>
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+      <details id="calculation">
+        <summary>Как работает расчёт</summary>
+        <div>
+          <p>
+            Для обычного текста проверяется контраст 4,5:1, для значимых графических элементов — 3:1
+            к их фону. Дополнительные проверки подложек и близости оттенков — внутренние ориентиры
+            калькулятора.
+          </p>
+          <p>
+            Светлота подбирается в пространстве OKLCH; насыщенность уменьшается, если цвет выходит
+            за диапазон sRGB. Подложки выводятся из основного цвета, а тёмная палитра рассчитывается
+            отдельно. Наведение и нажатие оформляются общими оверлеями компонентов.
+          </p>
+        </div>
+      </details>
+    </section>
+    <section aria-labelledby="export">
+      <h2 id="export" tabindex="-1">Как перенести результат</h2>
+      <p>
+        CSS ниже нужен для предварительного просмотра. После проверки внесите утверждённые значения
+        в
+        <code>tokens/source.json</code>
+        и выполните
+        <code>npm run build</code>. Готовые компоненты используют токены выбранной темы автоматически.
+      </p>
+      <details id="export-css">
+        <summary>Показать CSS палитры</summary>
+        <div class="bar">
+          <div class="field">
+            <label for="nm">Имя темы в CSS</label>
+            <input type="text"
+              id="nm"
+              [value]="themeName()"
+              (input)="updateName($any($event.target).value)"
+              spellcheck="false"
+              aria-describedby="name-hint" />
+          </div>
+          <p id="name-hint" class="cap">Латинские буквы, цифры, дефис и подчёркивание.</p>
+        </div>
+        <aurora-code-block id="out" [snippet]="paletteSnippet()"></aurora-code-block>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/foundations/themes" [queryParams]="settings.queryParams()">
+            Цветовые темы
+          </a>
+          — подключение готовой темы.
+        </li>
+        <li>
+          <a routerLink="/foundations/appearance" [queryParams]="settings.queryParams()">
+            Светлый и тёмный режимы
+          </a>
+          — переключение оформления.
+        </li>
+        <li>
+          <a routerLink="/foundations/status" [queryParams]="settings.queryParams()">
+            Цвета статусов
+          </a>
+          — смысловые цвета, общие для брендов.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

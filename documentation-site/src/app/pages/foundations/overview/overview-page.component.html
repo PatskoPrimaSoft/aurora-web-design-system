@@ -8,7 +8,8 @@
         согласованные шрифты, цвета и состояния. Вы выбираете подходящий компонент и задаёте данные
         и действия.
       </p>
-      <div class="sample placeholder"
+      <div data-migration-placeholder
+        class="sample placeholder migration-placeholder"
         role="note"
         [attr.data-ds-theme]="settings.theme()"
         [attr.data-ds-appearance]="settings.appearance()"
@@ -23,12 +24,14 @@
         <dd>
           Найдите компонент в меню слева или через поиск. Начните с его живого примера и правил
           применения: например,
-          <a routerLink="/components/button" [queryParams]="settings.queryParams()">Button</a>
-          ,
-          <span>Field (ещё не перенесено)</span>
+          <a routerLink="/components/button" [queryParams]="settings.queryParams()">Button</a>,
+          <span class="migration-placeholder" data-migration-placeholder>
+            Field (ещё не перенесено)
+          </span>
           или
-          <span>Table (ещё не перенесено)</span>
-          .
+          <span class="migration-placeholder" data-migration-placeholder>
+            Table (ещё не перенесено)
+          </span>.
         </dd>
         <dt>Оформить свою разметку</dt>
         <dd>
@@ -39,14 +42,14 @@
           и
           <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
             Нейтральные цвета
-          </a>
-          . Используйте токены по назначению — например, цвет текста или поверхности.
+          </a>. Используйте токены по назначению — например, цвет текста или поверхности.
         </dd>
         <dt>Подключить в проект</dt>
         <dd>
           Откройте
-          <span>руководство по подключению (ещё не перенесено)</span>
-          : установка пакета, стили и использование в Angular.
+          <span class="migration-placeholder" data-migration-placeholder>
+            руководство по подключению (ещё не перенесено)
+          </span>: установка пакета, стили и использование в Angular.
         </dd>
       </dl>
     </section>
@@ -89,8 +92,7 @@
         и
         <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
           адаптивность и брейкпоинты
-        </a>
-        . Готовый компонент помогает с оформлением и взаимодействием, а поведение всего экрана
+        </a>. Готовый компонент помогает с оформлением и взаимодействием, а поведение всего экрана
         проверяет команда продукта.
       </p>
     </section>

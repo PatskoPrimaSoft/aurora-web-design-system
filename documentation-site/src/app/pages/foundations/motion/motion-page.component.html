@@ -1,0 +1,146 @@
+<aurora-article-layout title="Анимация и переходы"
+  subtitle="Как показывать изменения без лишнего движения">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Движение поддерживает действие</h2>
+      <p class="lead">
+        Готовые компоненты управляют своими переходами. Не добавляйте анимацию поверх них. Измените
+        любую из двух настроек: оба примера показывают одно состояние, но справа ползунок
+        перемещается сразу. Обычный вариант также учитывает системную настройку уменьшения движения.
+      </p>
+      <aurora-example-block class="scene"
+        id="demo"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <div class="comparison">
+          <div>
+            <h3>Обычный переход</h3>
+            <p class="migration-placeholder" role="note" data-migration-placeholder>
+              Пример появится после подготовки Angular-компонента Switch.
+            </p>
+          </div>
+          <div data-motion-reduced style="--ds-dur-fast: 0ms">
+            <h3>Без движения</h3>
+            <p class="migration-placeholder" role="note" data-migration-placeholder>
+              Пример появится после подготовки Angular-компонента Switch.
+            </p>
+          </div>
+        </div>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Наведение и нажатие</dt>
+        <dd>
+          Короткая реакция подтверждает действие. Действие должно выполняться сразу, без ожидания
+          окончания эффекта.
+        </dd>
+        <dt>Загрузка</dt>
+        <dd>
+          Spinner показывает выполнение операции; Skeleton обозначает структуру ещё не загруженных
+          данных.
+        </dd>
+        <dt>Изменение состояния</dt>
+        <dd>
+          Сохраняйте контекст и доступность действий. Избегайте отскоков, параллакса и декоративных
+          перемещений.
+        </dd>
+      </dl>
+    </section>
+    <section aria-labelledby="reduced">
+      <h2 id="reduced" tabindex="-1">Уменьшение движения</h2>
+      <p>
+        Система учитывает настройку уменьшения движения на устройстве: отключает переходы контролов,
+        пульсацию Skeleton и движение Toast. У индикатора загрузки отключается плавное появление, но
+        вращение сохраняется. Его можно проверить в дополнительном примере ниже.
+      </p>
+      <p>
+        Для собственной анимации предусматривайте вариант без движения. Смысл должен сохраняться в
+        тексте и состоянии элемента.
+      </p>
+      <details style="margin-top: 16px">
+        <summary>Исключение: индикатор загрузки</summary>
+        <p>
+          Вращение сохраняется как признак выполняющейся операции. Ниже — двухсекундная имитация
+          загрузки, без запроса к серверу.
+        </p>
+        <aurora-example-block class="scene migration-placeholder"
+          id="loading-demo"
+          style="margin-top: 16px"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()"
+          role="note"
+          data-migration-placeholder>
+          <p>Пример загрузки появится после подготовки Angular-компонентов Button и Spinner.</p>
+        </aurora-example-block>
+      </details>
+    </section>
+    <section aria-labelledby="для-разработчика">
+      <h2 id="для-разработчика" tabindex="-1">Для разработчика</h2>
+      <details>
+        <summary>Токены и пример кода</summary>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Токены анимации">
+          <table class="reference-table">
+            <thead>
+              <tr>
+                <th>Токен</th>
+                <th>Применение</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-transition-control</code></td>
+                <td>Переход фона, границы, цвета и тени контрола.</td>
+              </tr>
+              <tr>
+                <td><code>ds-dur-fast</code></td>
+                <td>120 ms — короткие переходы контролов.</td>
+              </tr>
+              <tr>
+                <td><code>ds-dur</code></td>
+                <td>180 ms — базовая длительность, например для тени шапки.</td>
+              </tr>
+              <tr>
+                <td><code>ds-ease</code></td>
+                <td>Общая кривая плавности.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Это токены для собственной разметки. Компоненты загрузки и уведомлений имеют свои
+          анимации; не переопределяйте их длительности глобально.
+        </p>
+        <p>Переход в собственной разметке. Готовые компоненты уже подключают нужные стили.</p>
+        <aurora-code-block [snippet]="snippets.controlTransition"></aurora-code-block>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/foundations/hover" [queryParams]="settings.queryParams()">
+            Наведение и нажатие
+          </a>
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            Spinner
+          </span>
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            Skeleton
+          </span>
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

@@ -1,0 +1,146 @@
+<aurora-article-layout title="Доступность"
+  subtitle="Что обеспечивают компоненты и что проверять в готовом сценарии">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Заполните форму без мыши</h2>
+      <p class="lead">
+        Готовые компоненты поддерживают управление с клавиатуры. Нажмите Tab до поля, измените
+        название, перейдите Tab к кнопке и нажмите Enter. Результат появится под формой без переноса
+        фокуса. Сохранение в примере локальное.
+      </p>
+      <aurora-example-block class="scene migration-placeholder"
+        id="demo"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Пример формы с клавиатурным управлением появится после подготовки Angular-компонентов
+          Field и Button.
+        </p>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="responsibility">
+      <h2 id="responsibility" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Что делает компонент</dt>
+        <dd>Показывает фокус и связывает переданную подпись с полем.</dd>
+        <dt>Что проверяет приложение</dt>
+        <dd>
+          Понятные названия, порядок действий, ошибки и объявление результата в готовом сценарии.
+        </dd>
+      </dl>
+    </section>
+    <section aria-labelledby="check">
+      <h2 id="check" tabindex="-1">Проверка перед передачей</h2>
+      <ul class="rules">
+        <li>
+          Пройдите сценарий без мыши.
+          <a routerLink="/foundations/focus" [queryParams]="settings.queryParams()">Фокус</a>
+          должен быть виден, порядок — понятен; после закрытия окна возвращайте пользователя к
+          действию, открывшему его.
+        </li>
+        <li>
+          Давайте полям видимые подписи, кнопкам с иконками — доступные имена. Подсказка внутри
+          пустого поля не заменяет подпись.
+        </li>
+        <li>
+          Передавайте статус текстом и при необходимости символом:
+          <a routerLink="/foundations/status" [queryParams]="settings.queryParams()">цвет</a>
+          дополняет значение.
+        </li>
+        <li>
+          Проверяйте увеличение страницы, перенос текста и
+          <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+            узкую компоновку
+          </a>. Данные и действия должны оставаться доступны.
+        </li>
+        <li>
+          Сообщайте об ошибке рядом с полем и объясняйте исправление. О результате фоновой операции
+          сообщайте без неожиданного переноса фокуса.
+        </li>
+        <li>
+          <strong>Контраст.</strong>
+          Проверяйте текст на реальном фоне в обеих темах: обычный текст — не менее 4,5:1, крупный —
+          3:1. Значимые иконки и границы, необходимые для распознавания контрола, — не менее 3:1 к
+          соседнему цвету. Используйте семантические цвета; подробности — в
+          <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+            «Нейтральных цветах»
+          </a>.
+        </li>
+        <li>
+          <strong>Область нажатия.</strong>
+          Для отдельных кнопок ориентируйтесь минимум на 24 × 24 CSS px всей нажимаемой области, а
+          не рисунка иконки. Для частых действий на сенсорном экране выбирайте более крупную
+          область. Исключения для строчных ссылок и небольших целей с достаточным расстоянием
+          описаны в
+          <a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html">
+            WCAG 2.5.8
+          </a>.
+        </li>
+        <li>
+          <strong>Без наведения.</strong>
+          Действия должны быть доступны с клавиатуры и касанием. Если кнопка появляется при
+          наведении, показывайте её и при фокусе внутри строки, а на сенсорном экране оставляйте
+          видимой или доступной через явное меню. Важные сведения не прячьте только во всплывающей
+          подсказке.
+        </li>
+        <li>
+          Проверьте сценарий скринридером. Автоматическая проверка не оценивает понятность названий
+          и логичность всех действий.
+        </li>
+      </ul>
+      <details>
+        <summary>Как понимать требования к контрасту</summary>
+        <p>
+          Крупный текст — от 24 CSS px обычного начертания или примерно 18,7 CSS px полужирного. Для
+          неактивных контролов и декоративных элементов предусмотрены исключения. Проверяйте
+          применимость по
+          <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">WCAG 1.4.3</a>
+          и
+          <a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html">1.4.11</a>.
+        </p>
+      </details>
+    </section>
+    <section aria-labelledby="для-разработчика">
+      <h2 id="для-разработчика" tabindex="-1">Для разработчика</h2>
+      <details>
+        <summary>Как объявлять результат операции</summary>
+        <p>
+          Создайте область результата заранее и обновляйте её текст после успешного ответа сервера.
+          Не переносите в неё фокус. Если компонент уже объявляет результат, не добавляйте второе
+          объявление.
+        </p>
+        <p>
+          Пример локального сохранения: сообщение появляется после отправки формы. В продукте
+          замените локальное действие запросом к серверу и обработайте ошибку.
+        </p>
+        <aurora-example-block class="pending-code migration-placeholder"
+          role="note"
+          data-migration-placeholder>
+          <p>
+            Код формы будет добавлен вместе с Angular-демонстрацией после подготовки компонентов
+            Field и Button.
+          </p>
+        </aurora-example-block>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li><a routerLink="/foundations/focus" [queryParams]="settings.queryParams()">Фокус</a></li>
+        <li>
+          <a routerLink="/foundations/status" [queryParams]="settings.queryParams()">
+            Цвета статусов
+          </a>
+        </li>
+        <li>
+          <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+            Адаптивность
+          </a>
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

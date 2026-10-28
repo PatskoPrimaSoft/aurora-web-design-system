@@ -1,0 +1,123 @@
+@use '../../../../styles/article';
+
+@include article.base;
+@include article.inline-code;
+@include article.links;
+@include article.lead;
+.scene {
+  padding: 24px;
+  background: var(--ds-bg);
+  color: var(--ds-fg);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  min-width: 0;
+}
+@include article.caption;
+.state-comparison {
+  margin: 24px 0 0;
+}
+.state-comparison figcaption {
+  font: var(--ds-type-caption);
+  color: var(--ds-fg-muted);
+  margin-bottom: 16px;
+}
+.state-strip {
+  display: flex;
+  gap: var(--ds-gap-md);
+  flex-wrap: wrap;
+}
+.state-item {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+.state-label {
+  font: var(--ds-type-caption);
+  color: var(--ds-fg-muted);
+}
+.state-sample {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--ds-control-h);
+  padding: 0 var(--ds-control-pad-x);
+  font: var(--ds-type-ui);
+  border: 1px solid transparent;
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-brand);
+  color: var(--ds-on-brand);
+}
+.state-sample[data-state='hover'],
+.state-sample[data-state='press'] {
+  background-image: linear-gradient(
+    0deg,
+    color-mix(in oklab, var(--ds-on-brand) var(--state-depth), transparent),
+    color-mix(in oklab, var(--ds-on-brand) var(--state-depth), transparent)
+  );
+}
+.state-sample[data-state='hover'] {
+  --state-depth: var(--ds-overlay-hover);
+}
+.state-sample[data-state='press'] {
+  --state-depth: var(--ds-overlay-press);
+}
+@include article.choices;
+.rules {
+  padding-left: 20px;
+  max-width: 74ch;
+  margin: 0;
+}
+.rules li + li {
+  margin-top: 12px;
+}
+@include article.boxed-disclosure;
+details {
+  margin-top: 24px;
+}
+details > div {
+  margin-top: 24px;
+}
+.reference-content {
+  display: grid;
+  gap: 24px;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+.tokens {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.tokens th,
+.tokens td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--ds-divider);
+  vertical-align: top;
+}
+.tokens th {
+  font: var(--ds-type-body-strong);
+}
+@media (max-width: 640px) {
+  .guide-content {
+    padding: 20px 0;
+  }
+  .scene {
+    padding: 16px;
+  }
+  .choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .choices dt {
+    border: 0;
+    padding-bottom: 4px;
+  }
+  .choices dd {
+    padding-top: 0;
+  }
+}
+
+@include article.migration-note;
+.pending-code {
+  margin: 20px 0;
+}

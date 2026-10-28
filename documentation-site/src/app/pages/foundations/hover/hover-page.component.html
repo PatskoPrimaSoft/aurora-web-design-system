@@ -1,0 +1,209 @@
+<aurora-article-layout title="Наведение и нажатие"
+  subtitle="Как показывать реакцию на действие и отличать её от выбора">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Реакция на действие</h2>
+      <p class="lead">
+        Готовые компоненты автоматически реагируют на наведение и нажатие. Приложение обрабатывает
+        действие и сообщает результат.
+      </p>
+      <aurora-example-block class="scene migration-placeholder"
+        id="ready-interface"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Пример действий и подтверждения результата появится после подготовки Angular-компонента
+          Button.
+        </p>
+      </aurora-example-block>
+      <p class="caption" style="margin-top: 16px">
+        Наведите указатель и удержите кнопку. С клавиатуры используйте Tab, затем Space или Enter.
+        Сообщение под кнопками показывает результат; в примере он подтверждается локально.
+      </p>
+      <figure class="scene state-comparison"
+        id="state-comparison"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <figcaption>Одна кнопка в трёх состояниях · образцы для сравнения</figcaption>
+        <div class="state-strip">
+          <div class="state-item">
+            <span class="state-label">Обычно</span>
+            <span class="state-sample" data-state="rest">Сохранить</span>
+          </div>
+          <div class="state-item">
+            <span class="state-label">Наведение</span>
+            <span class="state-sample" data-state="hover">Сохранить</span>
+          </div>
+          <div class="state-item">
+            <span class="state-label">Нажатие</span>
+            <span class="state-sample" data-state="press">Сохранить</span>
+          </div>
+        </div>
+      </figure>
+    </section>
+
+    <section aria-labelledby="states">
+      <h2 id="states" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Наведение</dt>
+        <dd>Указатель находится над элементом. Само действие ещё не выполнено.</dd>
+        <dt>Нажатие</dt>
+        <dd>Кнопку удерживают мышью, касанием или клавиатурой. Отклик временный.</dd>
+        <dt>Выбор</dt>
+        <dd>Сохраняется после отпускания: например, активная вкладка или отмеченный флажок.</dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul class="rules">
+        <li>
+          <strong>Сохраняйте клавиатурный фокус.</strong>
+          Он показывает, где находится управление с клавиатуры, и может быть виден вместе с
+          наведением. Подробнее —
+          <a routerLink="/foundations/focus" [queryParams]="settings.queryParams()">«Фокус»</a>.
+        </li>
+        <li>
+          <strong>Не прячьте действие за наведением.</strong>
+          На сенсорном экране его нет. Назначение и доступность управления должны быть понятны до
+          касания.
+        </li>
+        <li>
+          <strong>Проверяйте недоступное состояние.</strong>
+          Отключённый элемент не выполняет действие и не реагирует как доступный. В приложении
+          сообщайте, что нужно для его включения.
+        </li>
+        <li>
+          <strong>Подтверждайте результат.</strong>
+          Эффект нажатия не означает, что сохранение прошло успешно. Показывайте успех после ответа
+          приложения, а ошибку — с понятным следующим шагом.
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Для собственных контролов</h2>
+      <p>
+        Собственной кнопке нужны не только цвета состояний, но и семантика, фокус и обработка мыши,
+        касания и клавиатуры. Для обычных действий используйте
+        <a routerLink="/components/button" [queryParams]="settings.queryParams()">DsButton</a>.
+      </p>
+      <details id="hover-reference">
+        <summary>Показать токены и принцип оформления</summary>
+        <div class="reference-content">
+          <div>
+            <h3>Кнопки с цветной заливкой</h3>
+            <p>
+              У
+              <code>primary</code>,
+              <code>accent</code>,
+              <code>danger</code>
+              и
+              <code>subtle</code>
+              поверх фона накладывается полупрозрачный цвет подписи. Он адаптируется к бренду и
+              оформлению; отдельные оттенки для каждого состояния не нужны.
+            </p>
+          </div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Оформление состояний">
+            <table class="tokens">
+              <caption>Оформление состояний</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Применение</th>
+                  <th scope="col">Наведение</th>
+                  <th scope="col">Нажатие</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Слой цвета подписи поверх заливки</td>
+                  <td>
+                    <code>--ds-overlay-hover</code>
+                    · 10%
+                  </td>
+                  <td>
+                    <code>--ds-overlay-press</code>
+                    · 16%
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Фон кнопок
+                    <code>secondary</code>,
+                    <code>ghost</code>
+                    и обычных интерактивных строк
+                  </td>
+                  <td><code>--ds-surface-hover</code></td>
+                  <td><code>--ds-surface-active</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="caption">
+            Токены surface задают цвет фона, overlay — долю цвета в слое. Название surface-active
+            здесь относится к временному нажатию; устойчивый выбор оформляется отдельно, например
+            через surface-selected.
+          </p>
+        </div>
+      </details>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>Для готовой кнопки достаточно передать обработчик действия — состояния уже реализованы.</p>
+      <aurora-example-block class="pending-code migration-placeholder"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+          компонентов.
+        </p>
+      </aurora-example-block>
+      <details>
+        <summary>Полный код примера с подтверждением действия</summary>
+        <p>Код воспроизводит первый пример: кнопки обновляют сообщение о результате.</p>
+        <aurora-example-block class="pending-code migration-placeholder"
+          role="note"
+          data-migration-placeholder>
+          <p>
+            Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+            компонентов.
+          </p>
+        </aurora-example-block>
+        <p>
+          Подтверждение в примере локальное. В приложении сообщайте об успешном сохранении после
+          ответа сервера.
+        </p>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/components/button" [queryParams]="settings.queryParams()">Кнопки</a>
+          — выбор тона по назначению действия.
+        </li>
+        <li>
+          <a routerLink="/foundations/focus" [queryParams]="settings.queryParams()">Фокус</a>
+          — управление с клавиатуры.
+        </li>
+        <li>
+          <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+            Нейтральные цвета
+          </a>
+          — состояния поверхностей и выбор.
+        </li>
+        <li>
+          <a routerLink="/foundations/appearance" [queryParams]="settings.queryParams()">
+            Светлый и тёмный режим
+          </a>
+          — читаемость в обоих оформлениях.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

@@ -1,0 +1,172 @@
+<aurora-article-layout title="Сортировка вне таблицы"
+  subtitle="Как выбирать поле и направление для списков и карточек">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Сортировка в списке</h2>
+      <p class="lead">
+        Сортировка меняет порядок, но сохраняет состав списка. Выберите поле и направление, затем
+        нажмите «Применить».
+      </p>
+      <aurora-example-block class="scene"
+        id="ready-interface"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <p class="migration-placeholder" role="note" data-migration-placeholder>
+          Пример сортировки списка появится после подготовки Angular-компонентов меню, кнопки и
+          строки списка.
+        </p>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Название</dt>
+        <dd>«А → Я / Я → А» — для поиска знакомого объекта в справочнике.</dd>
+        <dt>Дата или время</dt>
+        <dd>«Сначала новые / Сначала старые» — для последних записей или истории.</dd>
+        <dt>Число</dt>
+        <dd>«Сначала больше / Сначала меньше» — для сравнения значений, например скорости.</dd>
+      </dl>
+      <p style="margin-top: 16px">
+        В списке или наборе карточек используйте меню рядом с содержимым. Если есть заголовки
+        столбцов, сортировку удобнее разместить в
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница компонента ещё не перенесена">
+          таблице
+        </span>.
+      </p>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul class="rules">
+        <li>
+          <strong>Задайте начальный порядок.</strong>
+          Выберите его по задаче: в справочнике — по названию, в журнале — сначала новые. Сброс
+          возвращает этот порядок.
+        </li>
+        <li>
+          <strong>Показывайте применённый выбор.</strong>
+          Название поля и направление должны быть доступны без открытия меню. В примере они указаны
+          над списком.
+        </li>
+        <li>
+          <strong>Сохраняйте результаты.</strong>
+          Сортировка меняет порядок, а фильтр — состав списка. Не добавляйте сортировку в чипы
+          применённых фильтров.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Подключение и данные</h2>
+      <p>
+        Готовый
+        <code>DsFilterMenu type="sort-by"</code>
+        управляет выбором и подтверждением. Приложение перестраивает список или запрашивает данные с
+        сервера. В примере все четыре объекта загружены целиком и сортируются в браузере.
+      </p>
+      <details id="sorting-reference">
+        <summary>Показать технические подробности</summary>
+        <p class="caption migration-placeholder" role="note" data-migration-placeholder>
+          Параметры ниже относятся к исходной React-реализации меню. Публичный Angular API будет
+          согласован при разработке компонента.
+        </p>
+        <div class="reference-content">
+          <div>
+            <h3>Поле и направление</h3>
+            <p>
+              Передавайте
+              <code>value=&#123; &#123;key, dir&#125; &#125;</code>, где
+              <code>dir</code>
+              —
+              <code>asc</code>
+              или
+              <code>desc</code>. У вариантов задавайте понятные подписи
+              <code>asc</code>
+              и
+              <code>desc</code>.
+              <code>onApply</code>
+              получает весь выбор;
+              <code>onClear</code>
+              восстанавливает начальное значение. Не переставляйте шаги процесса и уровни дерева.
+              Группировка объединяет объекты по признаку и не имеет направления. Если меню также
+              содержит группировку, вариант с
+              <code>group: true</code>
+              скрывает направления; само объединение данных реализует приложение.
+            </p>
+          </div>
+          <div>
+            <h3>Порядок всего набора</h3>
+            <p>
+              Сортируйте в браузере только полностью загруженный список. При постраничной загрузке
+              передавайте выбор серверу и возвращайтесь на первую страницу, сохраняя фильтры. Текст
+              сравнивайте с учётом языка, числа — как числа, даты — по времени. Для одинаковых
+              значений задайте устойчивый дополнительный порядок, например по идентификатору.
+            </p>
+          </div>
+          <div>
+            <h3>Клавиатура и собственная кнопка</h3>
+            <p>
+              Enter или Space открывает меню, стрелки перемещают фокус по полям, Space выбирает
+              пункт. Tab переводит к направлению и действиям. Escape отменяет черновик и возвращает
+              фокус. При передаче
+              <code>trigger</code>
+              используйте доступную кнопку с понятным именем; открытие и возврат фокуса обеспечивает
+              компонент. Полный API — в
+              <span data-migration-placeholder
+                class="migration-placeholder"
+                title="Страница компонента ещё не перенесена">
+                DsFilterMenu
+              </span>.
+            </p>
+          </div>
+        </div>
+      </details>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Готовое меню и полностью загруженный список. Выбор применяется целиком; «Сбросить порядок»
+        возвращает порядок «Дате добавления · Сначала новые».
+      </p>
+      <details>
+        <summary>Показать полный код работающего примера</summary>
+        <aurora-example-block class="pending-code">
+          <p class="migration-placeholder" role="note" data-migration-placeholder>
+            Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+            компонентов.
+          </p>
+        </aurora-example-block>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            DsFilterMenu
+          </span>
+          — параметры меню и работа с черновиком.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            Таблица
+          </span>
+          — сортировка заголовками столбцов.
+        </li>
+        <li>
+          <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">
+            Плотность интерфейса
+          </a>
+          — размеры строк и отступы.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

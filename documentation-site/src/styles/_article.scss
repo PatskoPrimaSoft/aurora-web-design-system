@@ -1,0 +1,166 @@
+// Internal documentation styles. Mixins expand in the original cascade position.
+// Variants stay separate so page-specific typography and disclosures remain unchanged.
+
+// Applied globally because article content is projected from individual page components.
+@mixin related-links {
+  aurora-article-layout .guide-content > section[aria-labelledby='дальше'] > ul {
+    margin: 16px 0;
+    padding-left: 40px;
+    list-style: disc;
+
+    > li {
+      margin: 0;
+    }
+  }
+}
+
+@mixin title-heading($margin: 0 0 12px, $tight: true) {
+  h2 {
+    font: var(--ds-type-title);
+    @if $tight {
+      letter-spacing: var(--ds-tracking-tight);
+    }
+    color: var(--ds-fg-strong);
+    margin: $margin;
+  }
+}
+
+@mixin section-heading($strong: true) {
+  h3 {
+    font: var(--ds-type-section);
+    @if $strong {
+      color: var(--ds-fg-strong);
+    }
+    margin: 0 0 12px;
+  }
+}
+
+@mixin links($underline-offset: true, $hover: true) {
+  a {
+    color: var(--ds-brand-text);
+    @if $underline-offset {
+      text-underline-offset: 3px;
+    }
+  }
+  @if $hover {
+    a:hover {
+      color: var(--ds-brand);
+    }
+  }
+}
+
+@mixin lead {
+  .lead {
+    color: var(--ds-fg-muted);
+    margin-bottom: 24px;
+  }
+}
+
+@mixin caption {
+  .caption {
+    font: var(--ds-type-caption);
+    color: var(--ds-fg-muted);
+  }
+}
+
+@mixin inline-code($wrap: true) {
+  code {
+    font: var(--ds-type-mono);
+    @if $wrap {
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+@mixin paragraph($pretty: true) {
+  p {
+    margin: 0;
+    max-width: 74ch;
+    @if $pretty {
+      text-wrap: pretty;
+    }
+  }
+}
+
+@mixin paragraph-spacing {
+  p + p {
+    margin-top: 12px;
+  }
+}
+
+@mixin base($plain: false) {
+  :host {
+    display: block;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  .guide-content {
+    font: var(--ds-type-body);
+    color: var(--ds-fg);
+    background: var(--ds-surface);
+    @if not $plain {
+      -webkit-font-smoothing: antialiased;
+    }
+    max-width: 920px;
+    padding: 24px 0;
+    overflow-wrap: anywhere;
+  }
+  .guide-content > section + section {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--ds-divider);
+  }
+  @include title-heading($tight: not $plain);
+  @include section-heading($strong: not $plain);
+  @include paragraph($pretty: not $plain);
+  @include paragraph-spacing;
+}
+
+@mixin plain-base {
+  @include base($plain: true);
+}
+
+@mixin choices {
+  .choices {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    margin: 0;
+  }
+  .choices dt,
+  .choices dd {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ds-divider);
+  }
+  .choices dt {
+    font: var(--ds-type-body-strong);
+  }
+  .choices dd {
+    margin: 0;
+  }
+}
+
+@mixin boxed-disclosure {
+  summary {
+    cursor: pointer;
+    font: var(--ds-type-ui);
+    padding: 10px 12px;
+    border: 1px solid var(--ds-border-field);
+    border-radius: var(--ds-radius-md);
+    background: var(--ds-surface);
+  }
+  summary:hover {
+    background: var(--ds-surface-hover);
+  }
+  summary:focus-visible,
+  a:focus-visible {
+    outline: var(--ds-focus-width) solid var(--ds-focus-color);
+    outline-offset: var(--ds-focus-offset);
+  }
+}
+
+@mixin migration-note {
+  [data-migration-placeholder] {
+    color: var(--ds-fg-muted);
+  }
+}

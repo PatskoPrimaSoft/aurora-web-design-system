@@ -26,6 +26,7 @@ export const EXCLUDE = [
   { path: 'ng-ui-kit/tests/consumers/', why: 'шаблоны приложений: пути проверяет AOT и браузер после установки tarball' },
   { path: 'site/', why: 'генерируемый каталог проверяется в браузере' },
   { path: 'dist/', why: 'генерируемая поставка проверяется отдельно' },
+  { path: 'documentation-site/dist/', why: 'генерируемый Angular-сайт проверяется отдельной сборкой и браузером' },
   { path: 'design-system/catalog/index.html', why: 'HTML-шаблон: ссылки разрешаются в site/, проверяется браузером' },
 ];
 
@@ -55,6 +56,11 @@ function lineOf(text, index) {
 
 export function checkDelivery(root) {
   const problems = [];
+  const angularConfig = join(root, 'documentation-site/angular.json');
+  const angularAssets = existsSync(angularConfig)
+    ? Object.values(JSON.parse(readFileSync(angularConfig, 'utf8')).projects ?? {})
+      .flatMap(project => project.architect?.build?.options?.assets ?? [])
+    : [];
   for (const { abs, rel } of walk(root)) {
     if (!CODE.test(rel)) continue;
     const text = readFileSync(abs, 'utf8');
@@ -78,7 +84,16 @@ export function checkDelivery(root) {
         const url = m[1];
         // внешние, якоря, data:, и адреса, собираемые в скрипте ('+x+', {{x}}, ${x})
         if (!url || /^(?:[a-z]+:|\/\/|#)/i.test(url) || /['+{}$]/.test(url)) continue;
-        const target = normalize(join(linkBase, url.split(/[?#]/)[0]));
+        const localUrl = url.split(/[?#]/)[0];
+        let target = normalize(join(linkBase, localUrl));
+        // Named Angular assets are copied from input to output, not relative to the template.
+        // Only exact declarations qualify: a typo or a missing source must still fail.
+        if (rel.startsWith('documentation-site/src/')) {
+          const asset = angularAssets.find(asset => typeof asset === 'object'
+            && typeof asset.glob === 'string' && !/[*?{}[\]]/.test(asset.glob)
+            && normalize(join(asset.output ?? '', asset.glob)) === normalize(localUrl));
+          if (asset) target = join(root, 'documentation-site', asset.input, asset.glob);
+        }
         if (!existsSync(target)) {
           problems.push({ file: rel, line: lineOf(text, m.index), code: 'broken-link', message: `нет файла: ${url}` });
         }

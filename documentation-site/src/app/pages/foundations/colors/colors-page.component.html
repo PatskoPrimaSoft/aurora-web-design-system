@@ -1,0 +1,1014 @@
+<aurora-article-layout title="Нейтральные цвета"
+  subtitle="Как нейтральные цвета создают иерархию интерфейса">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Нейтрали в интерфейсе</h2>
+      <p class="lead">
+        В готовых компонентах цвета заголовков, подписей и элементов управления уже заданы. При
+        смене оформления компоненты получают нужные значения автоматически. Пример ниже собран из
+        DsPanel и DsField без отдельных настроек цвета текста.
+      </p>
+      <aurora-example-block class="scene migration-placeholder"
+        id="ready-interface"
+        aria-label="Готовая панель объекта"
+        role="note"
+        data-migration-placeholder=""
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        Демонстрация панели объекта ожидает Angular-компонентов Panel и Field.
+      </aurora-example-block>
+      <p style="margin-top: 16px">
+        Вы задаёте содержимое и параметры компонентов. Панель оформляет свой заголовок, поле —
+        подпись, значение и подсказку; обычный текст наследует цвет страницы.
+      </p>
+    </section>
+
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <p class="lead">
+        Этот справочник нужен при создании собственной разметки и стилей. Готовые компоненты уже
+        используют подходящие роли. Если вы оформляете новый элемент, выбирайте токен по назначению.
+      </p>
+      <dl class="choices">
+        <dt>Поверхность</dt>
+        <dd>
+          <code>--ds-bg</code>
+          — экран;
+          <code>--ds-surface</code>
+          — панель;
+          <code>--ds-surface-raised</code>
+          — всплывающий слой.
+        </dd>
+        <dt>Текст</dt>
+        <dd>
+          <code>--ds-fg</code>
+          — основной;
+          <code>--ds-fg-strong</code>
+          — заголовок;
+          <code>--ds-fg-muted</code>
+          — второстепенный;
+          <code>--ds-fg-subtle</code>
+          — короткая вспомогательная подпись.
+        </dd>
+        <dt>Граница</dt>
+        <dd>
+          <code>--ds-border</code>
+          — контейнер;
+          <code>--ds-divider</code>
+          — строки;
+          <code>--ds-border-field</code>
+          — поле;
+          <code>--ds-border-control</code>
+          — контур чекбокса или радио.
+        </dd>
+        <dt>Состояние</dt>
+        <dd>
+          Hover и нажатие используют собственные роли поверхности. Выбранное, действие и статус
+          берите из соответствующих семантических наборов.
+        </dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="surfaces">
+      <h2 id="surfaces" tabindex="-1">Поверхности</h2>
+      <p class="lead">
+        Выстраивайте глубину от фона страницы к панели и всплывающему слою. В светлом режиме панель
+        и поднятая поверхность совпадают по цвету; в тёмном поднятый слой становится светлее.
+      </p>
+      <aurora-example-block class="scene migration-placeholder"
+        id="surface-demo"
+        role="note"
+        data-migration-placeholder=""
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        Демонстрация поверхностей и меню действий ожидает Angular-компонентов Panel, Menu и
+        доработки Button.
+      </aurora-example-block>
+      <p style="margin-top: 16px">
+        Откройте меню «Действия объекта»: оно появляется над панелью на
+        <code>--ds-surface-raised</code>
+        с тенью
+        <code>--ds-shadow-md</code>. Углублённая область остаётся частью панели.
+      </p>
+      <div class="role-row">
+        <div>
+          <div class="surface-sample"
+            style="background: var(--ds-bg)"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Фон страницы
+          </div>
+        </div>
+        <div>
+          <code class="role-token">--ds-bg</code>
+          <p>Общий фон экрана и просветы между панелями.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <div>
+          <div class="surface-sample"
+            data-neutral-sample="surface"
+            style="background: var(--ds-surface)"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Панель объекта
+          </div>
+        </div>
+        <div>
+          <code class="role-token">--ds-surface</code>
+          <p>Карточки, таблицы и поля ввода.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <div>
+          <div class="surface-sample"
+            style="background: var(--ds-surface-raised); border-color: var(--ds-border-strong)"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Поднятый слой
+          </div>
+        </div>
+        <div>
+          <code class="role-token">--ds-surface-raised</code>
+          <p>Меню, всплывающая панель и панель массовых действий.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <div>
+          <div class="surface-sample"
+            style="background: var(--ds-bg-sunken)"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Углублённая область
+          </div>
+        </div>
+        <div>
+          <code class="role-token">--ds-bg-sunken</code>
+          <p>Вложенная область внутри панели, например зум графика.</p>
+        </div>
+      </div>
+      <div class="inverse"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <p>Объект перемещён в архив</p>
+        <p>
+          <code>--ds-surface-inverse</code>
+          +
+          <code>--ds-fg-on-inverse</code>
+        </p>
+      </div>
+      <p style="margin-top: 12px">
+        Инверсную поверхность всегда используйте вместе с её цветом текста. Обычный
+        <code>--ds-fg</code>
+        на ней теряет контраст.
+      </p>
+    </section>
+
+    <section aria-labelledby="text">
+      <h2 id="text" tabindex="-1">Текст</h2>
+      <p class="lead">
+        Так устроена иерархия цвета внутри компонентов. Контрастный текст выделяет опорную
+        информацию; приглушённые роли уменьшают визуальный вес. Назначать эти токены отдельно нужно
+        при разработке собственных текстовых стилей.
+      </p>
+      <div class="role-row">
+        <div class="text-role-demo"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p class="text-sample"
+            style="color: var(--ds-fg-strong)"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Объекты · 148
+          </p>
+          <p>Заголовок панели или итоговое значение.</p>
+        </div>
+        <div>
+          <code class="role-token">--ds-fg-strong</code>
+          <p>Наиболее контрастный текст.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <div class="text-role-demo"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p class="text-sample"
+            data-neutral-sample="fg"
+            style="color: var(--ds-fg)"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Объект движется по маршруту.
+          </p>
+          <p>Основное содержание, значения и ячейки.</p>
+        </div>
+        <div>
+          <code class="role-token">--ds-fg</code>
+          <p>Базовый цвет текста.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <div class="text-role-demo"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p class="text-sample"
+            style="color: var(--ds-fg-muted)"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Водитель не назначен
+          </p>
+          <p>Вторая строка, пояснение или счётчик.</p>
+        </div>
+        <div>
+          <code class="role-token">--ds-fg-muted</code>
+          <p>Второстепенная информация.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <div class="text-role-demo"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p class="text-sample"
+            style="color: var(--ds-fg-subtle)"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Последнее сообщение — 14:32
+          </p>
+          <p>Короткая подпись или единица измерения.</p>
+        </div>
+        <div>
+          <code class="role-token">--ds-fg-subtle</code>
+          <p>Вспомогательная информация.</p>
+        </div>
+      </div>
+      <p style="margin-top: 24px">
+        При создании собственного текстового стиля задавайте размер и вес токенами типографики, а
+        цвет — подходящей ролью. В готовых компонентах эти стили уже согласованы.
+      </p>
+    </section>
+
+    <section aria-labelledby="borders">
+      <h2 id="borders" tabindex="-1">Границы и разделители</h2>
+      <p class="lead">
+        Граница панели помогает группировать содержимое. Граница элемента управления помогает
+        распознать его — для неё предусмотрена отдельная роль.
+      </p>
+      <div class="role-row">
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p class="object-title">Объекты</p>
+          <p>148 объектов в парке</p>
+        </aurora-example-block>
+        <div>
+          <code class="role-token">--ds-border</code>
+          <p>Ненавязчивая граница карточки или панели.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <aurora-example-block class="sample"
+          style="border-color: var(--ds-border-strong); background: var(--ds-surface-raised)"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p style="font: var(--ds-type-body-strong)">Выбрано 3 объекта</p>
+          <p>Панель массовых действий</p>
+        </aurora-example-block>
+        <div>
+          <code class="role-token">--ds-border-strong</code>
+          <p>Край поднятого слоя или ось графика.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <aurora-example-block id="field-demo"
+          class="boundary-demo migration-placeholder"
+          role="note"
+          data-migration-placeholder=""
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          Демонстрация границы поля ожидает Angular-компонента Field.
+        </aurora-example-block>
+        <div>
+          <code class="role-token">--ds-border-field</code>
+          <p>Граница поля или вторичной кнопки, у которых есть другие признаки.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <aurora-example-block id="checkbox-demo"
+          class="boundary-demo migration-placeholder"
+          role="note"
+          data-migration-placeholder=""
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          Демонстрация границы чекбокса ожидает Angular-компонента Checkbox.
+        </aurora-example-block>
+        <div>
+          <code class="role-token">--ds-border-control</code>
+          <p>Чекбокс, радио и выключенный переключатель. Не заменяйте границей панели.</p>
+        </div>
+      </div>
+      <div class="role-row">
+        <div>
+          <table class="example-table" aria-label="Разделители строк объектов">
+            <thead>
+              <tr>
+                <th scope="col">Объект</th>
+                <th scope="col">км/ч</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>МАЗ 5440</td>
+                <td>62,4</td>
+              </tr>
+              <tr>
+                <td>Volvo FH16</td>
+                <td>0,0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <code class="role-token">--ds-divider</code>
+          <p>Отделяет соседние строки списка или таблицы.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="usage">
+      <h2 id="usage" tabindex="-1">Состояния элементов</h2>
+      <p class="lead">
+        Цвет помогает различать наведение, нажатие, выбор и недоступное действие. Готовые компоненты
+        уже оформляют эти состояния.
+      </p>
+      <aurora-example-block class="sample"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <h3>Выбор и фокус</h3>
+        <p>
+          Наведите курсор, удерживайте кнопку мыши или пробел. Нажмите, чтобы выбрать объект;
+          нажмите ещё раз, чтобы снять выбор. Tab показывает фокус отдельно от выбора.
+        </p>
+        <aurora-example-block class="migration-placeholder"
+          id="interaction-demo"
+          role="note"
+          data-migration-placeholder=""
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          Интерактивная демонстрация выбора и фокуса ожидает доработки Angular-компонента Button.
+        </aurora-example-block>
+        <p>
+          Обычная поверхность, hover и нажатие используют
+          <code>--ds-surface</code>,
+          <code>--ds-surface-hover</code>
+          и
+          <code>--ds-surface-active</code>. Выбранное сохраняет
+          <code>--ds-surface-selected</code>
+          и галочку, а при наведении и нажатии поверх добавляется полупрозрачный слой.
+        </p>
+        <p>
+          Отключённый элемент показывает недоступное действие. Цвет текста —
+          <code>--ds-fg-disabled</code>; для обычной подписи используйте muted или subtle.
+        </p>
+      </aurora-example-block>
+      <ul class="rules">
+        <li>
+          Не уменьшайте прозрачность всего блока ради второстепенного текста: она ослабит и границы,
+          и вложенные элементы.
+        </li>
+
+        <li>
+          Нейтральная палитра не заменяет роли состояния. Ошибку, предупреждение и отсутствие данных
+          обозначайте соответствующими токенами статуса и текстовой подписью.
+        </li>
+
+        <li>
+          Используйте готовые компоненты для контролов: в них уже согласованы границы, фокус,
+          отключённое состояние и взаимодействие с клавиатурой.
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="guidelines">
+      <h2 id="guidelines" tabindex="-1">Правила применения</h2>
+      <p class="lead">
+        Сравните правильное применение и типичные ошибки в светлом и тёмном режимах. Полосы в
+        иллюстрациях обозначают текст: видно, когда его цвет сливается с фоном.
+      </p>
+      <div id="color-guidelines">
+        <div class="guideline">
+          <h3>Выбирайте роль вместо оттенка</h3>
+          <div class="pair">
+            <div class="guideline-panel">
+              <p>Рекомендуется</p>
+              <code>--ds-fg</code>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="light">
+                <figcaption>Светлый режим</figcaption>
+                <div aria-hidden="true">
+                  <div style="color: var(--ds-fg)">
+                    <div class="ink-illustration">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </figure>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="dark">
+                <figcaption>Тёмный режим</figcaption>
+                <div aria-hidden="true">
+                  <div style="color: var(--ds-fg)">
+                    <div class="ink-illustration">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </figure>
+            </div>
+            <div class="guideline-panel">
+              <p>Избегайте</p>
+              <code>--ds-n-900</code>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="light">
+                <figcaption>Светлый режим</figcaption>
+                <div aria-hidden="true">
+                  <div style="color: var(--ds-n-900)">
+                    <div class="ink-illustration">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </figure>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="dark">
+                <figcaption>Тёмный режим</figcaption>
+                <div aria-hidden="true">
+                  <div style="color: var(--ds-n-900)">
+                    <div class="ink-illustration">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </figure>
+            </div>
+          </div>
+          <p style="margin-top: 12px">
+            Семантический цвет меняется с оформлением. Фиксированный n-900 теряет читаемость на
+            тёмной панели.
+          </p>
+        </div>
+        <div class="guideline">
+          <h3>Сочетайте инверсную поверхность с её текстом</h3>
+          <div class="pair">
+            <div class="guideline-panel">
+              <p>Рекомендуется</p>
+              <code>--ds-fg-on-inverse</code>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="light">
+                <figcaption>Светлый режим</figcaption>
+                <div aria-hidden="true">
+                  <div class="inverse-example" style="color: var(--ds-fg-on-inverse)">
+                    <div class="ink-illustration">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </figure>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="dark">
+                <figcaption>Тёмный режим</figcaption>
+                <div aria-hidden="true">
+                  <div class="inverse-example" style="color: var(--ds-fg-on-inverse)">
+                    <div class="ink-illustration">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </figure>
+            </div>
+            <div class="guideline-panel">
+              <p>Избегайте</p>
+              <code>--ds-fg</code>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="light">
+                <figcaption>Светлый режим</figcaption>
+                <div aria-hidden="true">
+                  <div class="inverse-example" style="color: var(--ds-fg)">
+                    <div class="ink-illustration">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </figure>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="dark">
+                <figcaption>Тёмный режим</figcaption>
+                <div aria-hidden="true">
+                  <div class="inverse-example" style="color: var(--ds-fg)">
+                    <div class="ink-illustration">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+              </figure>
+            </div>
+          </div>
+          <p style="margin-top: 12px">
+            На --ds-surface-inverse нужна специальная роль текста. Обычный fg сливается с инверсным
+            фоном.
+          </p>
+        </div>
+        <div class="guideline">
+          <h3>Используйте границу по назначению</h3>
+          <div class="pair">
+            <div class="guideline-panel">
+              <p>Рекомендуется</p>
+              <code>--ds-border-control</code>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="light">
+                <figcaption>Светлый режим</figcaption>
+                <div aria-hidden="true">
+                  <span class="bad-control" style="border-color: var(--ds-border-control)"></span>
+                  Показывать треки
+                </div>
+              </figure>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="dark">
+                <figcaption>Тёмный режим</figcaption>
+                <div aria-hidden="true">
+                  <span class="bad-control" style="border-color: var(--ds-border-control)"></span>
+                  Показывать треки
+                </div>
+              </figure>
+            </div>
+            <div class="guideline-panel">
+              <p>Избегайте</p>
+              <code>--ds-border</code>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="light">
+                <figcaption>Светлый режим</figcaption>
+                <div aria-hidden="true">
+                  <span class="bad-control" style="border-color: var(--ds-border)"></span>
+                  Показывать треки
+                </div>
+              </figure>
+              <figure class="mode-example" data-ds-theme="DEFAULT" data-ds-appearance="dark">
+                <figcaption>Тёмный режим</figcaption>
+                <div aria-hidden="true">
+                  <span class="bad-control" style="border-color: var(--ds-border)"></span>
+                  Показывать треки
+                </div>
+              </figure>
+            </div>
+          </div>
+          <p style="margin-top: 12px">
+            Контур чекбокса должен быть различим сам по себе. Ненавязчивая граница панели не
+            заменяет границу контрола.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="contrast">
+      <h2 id="contrast" tabindex="-1">Контраст текста</h2>
+      <p class="lead">
+        Таблица рассчитывает контраст цветов текущего оформления. Для обычного текста ориентир —
+        4,5:1. Каждая пара проверяется отдельно.
+      </p>
+      <div class="contrast-scroll"
+        tabindex="0"
+        role="region"
+        aria-label="Таблица контраста с горизонтальной прокруткой">
+        <table class="example-table contrast-table" aria-describedby="contrast-note">
+          <caption class="sample-label">Текстовые роли на трёх поверхностях</caption>
+          <thead>
+            <tr>
+              <th scope="col">Текст</th>
+              <th scope="col"><code>--ds-bg</code></th>
+              <th scope="col"><code>--ds-surface</code></th>
+              <th scope="col"><code>--ds-surface-raised</code></th>
+            </tr>
+          </thead>
+          <tbody id="contrast-values">
+            @for (row of contrastRows(); track row.token) {
+              <tr>
+                <th scope="row">
+                  <code>--ds-{{ row.token }}</code>
+                </th>
+                @for (cell of row.cells; track cell.background) {
+                  <td [attr.data-contrast]="row.token + '/' + cell.background"
+                    [attr.data-passes]="cell.passes">
+                    {{ cell.label }}
+                    <small>{{ cell.passes ? '≥ 4,5:1' : '&lt; 4,5:1' }}</small>
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <p id="contrast-note" style="margin-top: 16px">
+        В тёмном режиме роль
+        <code>--ds-fg-subtle</code>
+        на поднятой поверхности даёт меньше 4,5:1. Для обычного текста меню выбирайте
+        <code>--ds-fg</code>
+        или
+        <code>--ds-fg-muted</code>. Этот расчёт проверяет цвета, а не всю доступность элемента.
+      </p>
+      <p style="margin-top: 12px">
+        Отключённые контролы имеют исключение из требования к контрасту текста; второстепенные
+        подписи остаются обычным текстом.
+        <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html"
+          target="_blank"
+          rel="noopener noreferrer">
+          WCAG: контраст текста
+        </a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="palette">
+      <h2 id="palette" tabindex="-1">Исходная шкала</h2>
+      <p class="lead">
+        13 ступеней холодной нейтральной палитры, от белого к самым тёмным оттенкам. Это примитивы
+        для устройства системы; в интерфейсе используйте семантические роли. Шкала сохраняется при
+        смене оформления.
+      </p>
+      <details class="reference-details">
+        <summary>Показать 13 оттенков</summary>
+        <ul class="palette" aria-label="Исходные нейтральные оттенки">
+          @for (sample of neutralPalette; track sample.token) {
+            <li>
+              <div class="swatch"
+                [style.background]="'var(' + sample.token + ')'"
+                aria-hidden="true"></div>
+              <code>{{ sample.token }}</code>
+              <p class="hex">{{ sample.hex }}</p>
+            </li>
+          }
+        </ul>
+      </details>
+      <p style="margin-top: 24px">
+        Номер оттенка не задаёт роль:
+        <code>--ds-fg</code>
+        использует n-900 в light и n-100 в dark. Некоторые семантические значения заданы отдельно от
+        шкалы, поэтому тёмный режим не является её механической инверсией.
+      </p>
+    </section>
+
+    <section aria-labelledby="alpha">
+      <h2 id="alpha" tabindex="-1">Прозрачные нейтрали</h2>
+      <p class="lead">
+        Альфа-цвет смешивается с фоном: один и тот же токен выглядит по-разному на панели и поднятом
+        слое. Круг под заливкой помогает увидеть прозрачность.
+      </p>
+      <details class="reference-details">
+        <summary>Показать прозрачные оттенки на двух фонах</summary>
+        <div id="alpha-values">
+          <div class="alpha-row">
+            <p><code>--ds-n-a4</code></p>
+            <div class="alpha-pair">
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-n-a4)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface</code>
+                </figcaption>
+              </figure>
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface-raised)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-n-a4)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface-raised</code>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="alpha-row">
+            <p><code>--ds-n-a8</code></p>
+            <div class="alpha-pair">
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-n-a8)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface</code>
+                </figcaption>
+              </figure>
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface-raised)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-n-a8)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface-raised</code>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="alpha-row">
+            <p><code>--ds-n-a12</code></p>
+            <div class="alpha-pair">
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-n-a12)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface</code>
+                </figcaption>
+              </figure>
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface-raised)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-n-a12)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface-raised</code>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="alpha-row">
+            <p><code>--ds-n-a60</code></p>
+            <div class="alpha-pair">
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-n-a60)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface</code>
+                </figcaption>
+              </figure>
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface-raised)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-n-a60)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface-raised</code>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="alpha-row">
+            <p><code>--ds-w-a8</code></p>
+            <div class="alpha-pair">
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-w-a8)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface</code>
+                </figcaption>
+              </figure>
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface-raised)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-w-a8)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface-raised</code>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="alpha-row">
+            <p><code>--ds-w-a12</code></p>
+            <div class="alpha-pair">
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-w-a12)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface</code>
+                </figcaption>
+              </figure>
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface-raised)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-w-a12)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface-raised</code>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="alpha-row">
+            <p><code>--ds-w-a16</code></p>
+            <div class="alpha-pair">
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-w-a16)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface</code>
+                </figcaption>
+              </figure>
+              <figure>
+                <div class="alpha-swatch"
+                  style="background: var(--ds-surface-raised)"
+                  aria-hidden="true"
+                  [attr.data-ds-theme]="settings.theme()"
+                  [attr.data-ds-appearance]="settings.appearance()"
+                  [attr.data-ds-density]="settings.density()">
+                  <div class="alpha-overlay" style="background: var(--ds-w-a16)"></div>
+                </div>
+                <figcaption>
+                  На
+                  <code>--ds-surface-raised</code>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </details>
+      <p style="margin-top: 24px">
+        Чёрные и белые альфа-токены — примитивы, они сами не переключаются при смене оформления.
+        Чёрный затемняет подложку, белый осветляет. В компонентах используйте готовую семантическую
+        роль.
+      </p>
+      <p style="margin-top: 12px">
+        <code>--ds-n-a60</code>
+        используется для затемнения под диалогом. Остальные образцы показывают устройство палитры и
+        не заменяют роли hover, выбора или отключённого состояния.
+      </p>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Готовые компоненты оформляют свои заголовки, подписи и состояния. В этом примере цвет текста
+        отдельно не задаётся: его выбирают DsPanel и DsField, а обычный текст наследует цвет
+        страницы.
+      </p>
+      <aurora-example-block class="pending-code migration-placeholder"
+        role="note"
+        data-migration-placeholder>
+        Angular-пример кода будет добавлен после реализации Panel и Field. React-код здесь не
+        показывается как Angular API.
+      </aurora-example-block>
+      <p>
+        Внешние отступы и промежутки между дочерними элементами задаёт родитель. Цветовые токены из
+        справочника нужны при создании собственной разметки и стилей. Токен
+        <code>--ds-type-title</code>
+        задаёт параметры шрифта; сам по себе он не назначает цвет. Готовый заголовок DsPanel
+        объединяет нужные стили.
+      </p>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/foundations/typography" [queryParams]="settings.queryParams()">
+            Типографика
+          </a>
+          — размер, вес и иерархия текста.
+        </li>
+        <li>
+          <a routerLink="/foundations/appearance" [queryParams]="settings.queryParams()">
+            Оформление интерфейса
+          </a>
+          — светлый и тёмный режимы.
+        </li>
+        <li>
+          <a routerLink="/foundations/status" [queryParams]="settings.queryParams()">
+            Статусные цвета
+          </a>
+          — цвет состояния и обратной связи.
+        </li>
+        <li>
+          <a routerLink="/foundations/hover" [queryParams]="settings.queryParams()">Hover</a>
+          — правила наведения и нажатия.
+        </li>
+        <li>
+          <a routerLink="/foundations/shape" [queryParams]="settings.queryParams()">
+            Форма и глубина
+          </a>
+          — скругления и тени.
+        </li>
+        <li>
+          <a href="https://atlassian.design/foundations/color/"
+            target="_blank"
+            rel="noopener noreferrer">
+            Atlassian: Color
+          </a>
+          — роли, выразительность и состояния цвета.
+        </li>
+        <li>
+          <a href="https://atlassian.design/foundations/elevation/"
+            target="_blank"
+            rel="noopener noreferrer">
+            Atlassian: Elevation
+          </a>
+          — уровни поверхностей.
+        </li>
+      </ul>
+    </section>
+  </div>
+  <span #colorProbe
+    class="color-probe"
+    aria-hidden="true"
+    [attr.data-ds-theme]="settings.theme()"
+    [attr.data-ds-appearance]="settings.appearance()"
+    [attr.data-ds-density]="settings.density()"></span>
+</aurora-article-layout>

@@ -1,0 +1,124 @@
+@use '../../../../styles/article';
+
+:host {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+.guide-content {
+  font: var(--ds-type-body);
+  color: var(--ds-fg);
+  background: var(--ds-surface);
+}
+.guide-content {
+  max-width: 920px;
+  padding: 24px 0;
+  overflow-wrap: anywhere;
+}
+@include article.title-heading($margin: 0 0 16px, $tight: false);
+@include article.section-heading($strong: false);
+.guide-content > section + section {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--ds-divider);
+}
+p {
+  max-width: 74ch;
+  margin: 0 0 16px;
+}
+li + li {
+  margin-top: 8px;
+}
+@include article.links($hover: false);
+@include article.inline-code($wrap: false);
+.scene {
+  padding: 20px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface);
+  color: var(--ds-fg);
+}
+.row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.row > * {
+  min-width: 0;
+}
+.dictionary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.glyph {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  min-width: 0;
+}
+.glyph code {
+  display: block;
+  overflow-wrap: anywhere;
+}
+@include article.caption;
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.pair > div {
+  min-width: 0;
+}
+details {
+  margin-top: 16px;
+}
+summary {
+  cursor: pointer;
+  padding: 12px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+}
+summary:focus-visible,
+a:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-focus-color);
+  outline-offset: var(--ds-focus-offset);
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+}
+th,
+td {
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--ds-divider);
+}
+@media (max-width: 560px) {
+  .pair {
+    grid-template-columns: 1fr;
+  }
+  .scene {
+    padding: 16px;
+  }
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+.dictionary {
+  grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr));
+}
+@include article.migration-note;
+.pending-code,
+aurora-code-block {
+  margin: 20px 0;
+}

@@ -5,15 +5,24 @@
     "moduleResolution": "bundler",
     "experimentalDecorators": true,
     "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "skipLibCheck": false,
     "types": [],
     "lib": ["ES2022", "DOM"],
-    "outDir": "./out-tsc"
+    "outDir": "./out-tsc",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "extendedDiagnostics": {
+      "checks": {
+        "unusedStandaloneImports": "error"
+      }
+    }
   },
   "files": ["src/main.ts"]
 }

@@ -1,0 +1,293 @@
+<aurora-article-layout title="Иконографика" subtitle="Как выбирать и применять иконки в интерфейсе">
+  <div class="guide-content">
+    <section aria-labelledby="purpose">
+      <h2 id="purpose" tabindex="-1">Иконка помогает узнать действие</h2>
+      <p>
+        Используйте знакомый символ рядом с названием действия. В панели ниже лупа помогает найти
+        объект, а плюс — добавить его. Подписи сохраняют смысл без знания символов.
+      </p>
+      <aurora-example-block class="scene migration-placeholder"
+        id="ready-example"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Пример поиска и добавления объекта появится после подготовки Angular-компонентов Field и
+          Button.
+        </p>
+      </aurora-example-block>
+      <p>
+        Готовые компоненты сами задают размер, цвет и положение иконки. Вам нужно выбрать её смысл и
+        понятную подпись. Для собственной разметки используйте
+        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">DsIcon</a>; API и примеры находятся на его странице.
+      </p>
+    </section>
+    <section aria-labelledby="choose">
+      <h2 id="choose" tabindex="-1">Выбор по смыслу</h2>
+      <ul>
+        <li>Один смысл — один символ во всём продукте. Начинайте с утверждённого словаря ниже.</li>
+        <li>
+          Закрытие окна —
+          <code>close</code>, удаление данных —
+          <code>delete</code>. Крестик не обозначает удаление.
+        </li>
+        <li>
+          Редкое или неоднозначное действие сопровождайте видимой подписью. Если иконка не помогает,
+          достаточно текста.
+        </li>
+        <li>
+          Не используйте один символ для разных действий рядом и не добавляйте декоративные иконки к
+          каждой строке.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="dictionary">
+      <h2 id="dictionary" tabindex="-1">Словарь иконок Aurora</h2>
+      <p>
+        Система использует Material Symbols Outlined из локального шрифта. Ищите по русскому
+        назначению или имени глифа. При добавлении символа сначала проверьте, нет ли подходящего в
+        словаре; не подключайте второй набор иконочных шрифтов.
+      </p>
+      <aurora-example-block class="scene"
+        id="icon-dictionary"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <p class="caption migration-placeholder" role="note" data-migration-placeholder>
+          Поиск по словарю появится после подготовки Angular-компонента Field. Пока показан полный
+          словарь.
+        </p>
+        <div class="dictionary">
+          @for (icon of icons; track icon.name) {
+            <div class="glyph">
+              <ds-icon [name]="icon.name"></ds-icon>
+              <div>
+                <code>{{ icon.name }}</code>
+                <span class="caption">{{ icon.label }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="sizes">
+      <h2 id="sizes" tabindex="-1">Размер и плотность</h2>
+      <p>
+        Размер глифа и область нажатия — разные величины. Размеры
+        <code>xs / sm / md / lg</code>
+        в DsIcon связаны с токенами и автоматически учитывают плотность. Отступы и область нажатия
+        задаёт родитель.
+      </p>
+      <aurora-example-block class="scene"
+        id="size-example"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <div class="row">
+          @for (size of sizes; track size) {
+            <span class="row">
+              <ds-icon name="search" [size]="size"></ds-icon>
+              <code>{{ size }}</code>
+            </span>
+          }
+        </div>
+      </aurora-example-block>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Размеры иконок">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Роль</th>
+              <th scope="col">Где применять</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>md · --ds-icon</code></td>
+              <td>Внутри обычного контрола</td>
+            </tr>
+            <tr>
+              <td><code>lg · --ds-icon-lg</code></td>
+              <td>Отдельно стоящая иконка</td>
+            </tr>
+            <tr>
+              <td><code>sm · --ds-icon-sm</code></td>
+              <td>Плотная строка, удаление чипа</td>
+            </tr>
+            <tr>
+              <td><code>xs · --ds-icon-xs</code></td>
+              <td>Шеврон, сортировка, вспомогательный символ рядом с мелким текстом</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <details>
+        <summary>Технические параметры</summary>
+        <p>
+          В cozy размеры составляют 14 / 16 / 20 / 24 px; в compact значения выбирают токены. Не
+          уменьшайте подробный символ до неразборчивого размера. DsIcon согласованно задаёт глиф и
+          его область, толщину
+          <code>wght=400</code>
+          и оптические поправки; не переопределяйте отдельно только
+          <code>fontSize</code>.
+        </p>
+        <p>
+          Шрифт поставляется вместе с пакетом и подключается общим
+          <code>styles.css</code>. Дополнительный CDN не нужен.
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            Подключение в Angular
+          </span>
+          и
+          <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">
+            плотность интерфейса
+          </a>.
+        </p>
+      </details>
+    </section>
+    <section aria-labelledby="accessibility">
+      <h2 id="accessibility" tabindex="-1">Цвет, подпись и доступность</h2>
+      <p>
+        Иконка наследует цвет родителя. Готовый компонент выбирает его сам; для собственной разметки
+        используйте семантические роли цвета с учётом поверхности. Состояние передавайте символом и
+        текстом, а не только цветом.
+      </p>
+      <aurora-example-block class="scene"
+        id="accessible-example"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        <div class="row">
+          <ds-icon name="warning"></ds-icon>
+          <span>Нет связи с объектом</span>
+          <ds-icon name="lock" label="Доступ ограничен"></ds-icon>
+        </div>
+        <p class="caption migration-placeholder" role="note" data-migration-placeholder>
+          Пример кнопки настроек появится после согласования и подготовки компонента кнопки с
+          иконкой.
+        </p>
+      </aurora-example-block>
+      <ul>
+        <li>
+          Рядом с поясняющим текстом иконка декоративная: DsIcon по умолчанию скрывает её от
+          скринридера.
+        </li>
+        <li>
+          Самостоятельной смысловой иконке задайте
+          <code>label</code>: DsIcon добавит
+          <code>role="img"</code>
+          и доступное имя.
+        </li>
+        <li>
+          Для действия используйте DsIconButton с доступным именем. Подсказка при наведении не
+          заменяет имя кнопки. Иконка сама не становится кнопкой; область нажатия должна быть не
+          меньше 24×24 px.
+        </li>
+      </ul>
+      <p>
+        Подробности:
+        <a routerLink="/foundations/accessibility" [queryParams]="settings.queryParams()">
+          доступность
+        </a>,
+        <a routerLink="/foundations/status" [queryParams]="settings.queryParams()">статусы</a>
+        и
+        <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">цветовые роли</a>.
+      </p>
+    </section>
+    <section aria-labelledby="mistakes">
+      <h2 id="mistakes" tabindex="-1">Типичные ошибки</h2>
+      <div class="pair">
+        <div>
+          <h3>Рекомендуется</h3>
+          <aurora-example-block class="scene migration-placeholder"
+            id="correct-example"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()"
+            role="note"
+            data-migration-placeholder>
+            <p>Пример действия удаления появится после подготовки Angular-компонента Button.</p>
+          </aurora-example-block>
+          <p>Корзина и подпись однозначно обозначают удаление.</p>
+        </div>
+        <div>
+          <h3>Избегайте</h3>
+          <aurora-example-block class="scene migration-placeholder"
+            id="incorrect-example"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()"
+            role="note"
+            data-migration-placeholder>
+            <p>Пример действия удаления появится после подготовки Angular-компонента Button.</p>
+          </aurora-example-block>
+          <p>Крестик с той же подписью смешивает удаление и закрытие.</p>
+        </div>
+      </div>
+      <p>
+        Не заменяйте системные глифы эмодзи или Unicode-символами. Не используйте цвет как
+        единственный признак ошибки и не прячьте неоднозначное действие за символом без подписи.
+      </p>
+    </section>
+    <section aria-labelledby="map">
+      <h2 id="map" tabindex="-1">Направление и карта</h2>
+      <p>
+        Поворот несёт смысл:
+        <code>navigation</code>
+        показывает курс объекта, а не универсальную команду перехода;
+        <code>straighten</code>
+        повёрнут на −45° для измерения,
+        <code>priority_high</code>
+        — на 180°. Примеры —
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница ещё не перенесена">
+          стрелки и направления
+        </span>.
+      </p>
+      <p>
+        Маркеры карты используют отдельные SVG-ресурсы и растры: это исключение из шрифтовой
+        иконографики интерфейса. Их оформление учитывает фон карты. См.
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница ещё не перенесена">
+          маркеры и значки карты
+        </span>
+        и
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница ещё не перенесена">
+          трек на карте
+        </span>.
+      </p>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <p>
+        Правила выбора и словарь показаны в живых примерах выше. Для API используйте
+        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">DsIcon</a>
+        и
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница ещё не перенесена">
+          DsIconButton
+        </span>.
+      </p>
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Использование готовых компонентов: кнопка сама размещает иконку, а DsIcon рядом с текстом
+        остаётся декоративной. Angular API описывается в разделе
+        <span title="Руководство находится в ng-ui-kit/docs/adding-components.md">UI-kit</span>.
+      </p>
+      <aurora-example-block class="pending-code migration-placeholder"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+          компонентов.
+        </p>
+      </aurora-example-block>
+    </section>
+  </div>
+</aurora-article-layout>

@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import { watch } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
+import { buildTokenPage } from './build-token-page.mjs';
 import { buildDesignSystem } from '../../tools/build-design-system.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -26,6 +27,7 @@ function run(script, args = [], cwd = root) {
 const buildAngular = (clean = true) =>
   run(join(root, 'ng-ui-kit/tools/build-angular.mjs'), clean ? [] : ['--no-clean']);
 buildDesignSystem();
+buildTokenPage();
 await buildAngular();
 
 const watchers = [];
@@ -40,7 +42,10 @@ async function rebuild() {
       const changes = new Set(pending);
       pending.clear();
       try {
-        if (changes.has('styles')) buildDesignSystem();
+        if (changes.has('styles')) {
+          buildDesignSystem();
+          buildTokenPage();
+        }
         if (changes.has('angular')) await buildAngular(false);
         console.log('Site dependencies rebuilt');
       } catch (error) {

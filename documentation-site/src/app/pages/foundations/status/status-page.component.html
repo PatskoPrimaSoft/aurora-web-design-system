@@ -1,0 +1,282 @@
+<aurora-article-layout title="Цвета статусов"
+  subtitle="Как выбирать цвет статуса и сообщать о результате действия">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Статусы в интерфейсе</h2>
+      <p class="lead">
+        Цвет помогает заметить состояние или результат действия. Вы выбираете смысл через
+        <code>tone</code>
+        и пишете понятную подпись; готовые компоненты сами подбирают фон, текст и иконку. Цвета
+        адаптируются к светлому и тёмному оформлению, сохраняя смысл при смене бренда.
+      </p>
+      <aurora-example-block class="stage migration-placeholder"
+        id="ready-interface"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>Пример отчёта появится после подготовки Angular-компонентов Panel, Lozenge и Banner.</p>
+      </aurora-example-block>
+      <p style="margin-top: 16px">
+        Плашка показывает состояние отчёта, сообщение объясняет результат. Вручную назначать им
+        цвета не нужно. Токены ниже предназначены для собственной разметки.
+      </p>
+    </section>
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <p class="lead">Начните с того, что произошло и требуется ли внимание пользователя.</p>
+      <dl class="choices">
+        <dt>Нейтральный · neutral</dt>
+        <dd>
+          Фиксирует состояние без дополнительного акцента: «Черновик», «В очереди», «Не применимо».
+        </dd>
+        <dt>Информация · info</dt>
+        <dd>
+          Привлекает внимание к изменению или текущему процессу без проблемы: «Маршрут обновлён»,
+          «Отчёт формируется».
+        </dd>
+        <dt>Успех · success</dt>
+        <dd>Действие удалось или всё в норме: «Отчёт готов», «На связи».</dd>
+        <dt>Внимание · warning</dt>
+        <dd>Риск или приближение к порогу: «Топливо заканчивается», «Данные устаревают».</dd>
+        <dt>Ошибка · danger</dt>
+        <dd>Сбой или критическое состояние: «Не удалось сохранить», «Нет связи».</dd>
+      </dl>
+      <p style="margin-top: 16px">Цвет бренда, наведение и выбор элемента не обозначают статус.</p>
+    </section>
+    <section aria-labelledby="surfaces">
+      <h2 id="surfaces" tabindex="-1">Статус в разных компонентах</h2>
+      <p class="lead">
+        Плашка обозначает состояние, сообщение поясняет его внутри страницы, тост сообщает о
+        результате действия. Переключите статус, чтобы сравнить его оформление.
+      </p>
+      <aurora-example-block class="stage migration-placeholder"
+        id="surface-demo"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Сравнение статусов появится после подготовки Angular-компонентов Lozenge, Banner и Toast.
+        </p>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="guidelines">
+      <h2 id="guidelines" tabindex="-1">Правила применения</h2>
+      <div class="pair">
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Рекомендуется: цвет и подпись</h3>
+          <p>
+            <span class="status-dot"
+              style="background: var(--ds-danger-solid)"
+              aria-hidden="true"></span>
+            Нет связи
+          </p>
+          <p class="caption">Состояние понятно даже без различения цветов.</p>
+        </aurora-example-block>
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Избегайте: только цвет</h3>
+          <p>
+            <span class="status-dot"
+              style="background: var(--ds-danger-solid)"
+              aria-hidden="true"></span>
+            МАЗ 5440
+          </p>
+          <p class="caption">По цветной точке нельзя однозначно понять, что произошло.</p>
+        </aurora-example-block>
+      </div>
+      <ul class="rules">
+        <li>
+          Сохраняйте значение статуса во всём продукте. Различайте предупреждение о риске и уже
+          произошедшую ошибку.
+        </li>
+        <li>
+          Выделяйте сам статус, а не весь текст или фон строки. Для обычного содержимого используйте
+          <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+            нейтральные цвета
+          </a>.
+        </li>
+        <li>
+          Для ошибки объясняйте следующий шаг: «Проверьте соединение и попробуйте снова». Не
+          ограничивайтесь словом «Ошибка».
+        </li>
+        <li>
+          Важные изменения должны быть доступны пользователям экранных дикторов. Настройка
+          объявлений описана в
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            DsBanner
+          </span>
+          и
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            DsToast
+          </span>; выбор цвета сам по себе её не задаёт.
+        </li>
+        <li>
+          Для собственных стилей проверяйте контраст на реальном фоне в светлом и тёмном оформлении.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Справочник токенов</h2>
+      <p class="lead">
+        Для собственных стилей выбирайте семантическую группу и роль внутри неё. Подбор готовых
+        компонентов показан выше.
+      </p>
+      <details id="status-roles">
+        <summary>Показать роли цветов</summary>
+        <div class="reference-content">
+          <dl class="token-roles">
+            <dt><code>--ds-*-bg</code></dt>
+            <dd>Мягкая статусная подложка.</dd>
+            <dt><code>--ds-*-fg</code></dt>
+            <dd>Статусный текст на обычной поверхности или мягкой подложке.</dd>
+            <dt><code>--ds-*-line</code></dt>
+            <dd>Граница статусной плашки.</dd>
+            <dt><code>--ds-*-solid</code></dt>
+            <dd>Насыщенная заливка или отдельный цветной маркер.</dd>
+            <dt><code>--ds-on-solid</code></dt>
+            <dd>
+              Текст и иконка на насыщенной заливке. Обычный
+              <code>*-fg</code>
+              для неё не подходит.
+            </dd>
+            <dt><code>--ds-*-fg-on-inverse</code></dt>
+            <dd>
+              Статусная иконка на инверсной поверхности: info, success, warning, danger. Для
+              нейтральной иконки и обычного текста —
+              <code>--ds-fg-on-inverse</code>.
+            </dd>
+          </dl>
+          <p style="margin-top: 16px">
+            Вместо
+            <code>*</code>
+            подставьте neutral, info, success, warning или danger. DsBanner использует статусный
+            цвет для заголовка, обычный цвет текста для пояснения и solid для иконки. DsToast
+            использует инверсную поверхность и отдельный цвет статусной иконки.
+          </p>
+        </div>
+      </details>
+      <details id="status-palette">
+        <summary>Показать пять групп и образцы заливок</summary>
+        <p style="margin-top: 16px">
+          Насыщенная плашка
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            DsLozenge
+          </span>
+          с
+          <code>solid</code>
+          помогает отделить статус от цветного фона или карты.
+        </p>
+        <aurora-example-block class="reference-content"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <p class="migration-placeholder" role="note" data-migration-placeholder>
+            Мягкие и насыщенные плашки появятся после подготовки Angular-компонента Lozenge. Пока
+            показаны цвета маркеров.
+          </p>
+          <div class="palette">
+            @for (tone of tones; track tone) {
+              <div class="palette-row" [attr.data-status-tone]="tone">
+                <code>{{ tone }}</code>
+                <div class="palette-samples">
+                  <span class="swatch"
+                    aria-hidden="true"
+                    [style.background]="'var(--ds-' + tone + '-solid)'"></span>
+                  <span class="caption">Цвет маркера</span>
+                </div>
+              </div>
+            }
+          </div>
+        </aurora-example-block>
+      </details>
+      <details id="status-custom">
+        <summary>Для собственной разметки</summary>
+        <div class="reference-content">
+          <p>Пример собственного стиля для статичной подписи «Отчёт готов»:</p>
+          <aurora-code-block [snippet]="snippets.reportStatus"></aurora-code-block>
+          <p>
+            Для насыщенной заливки замените фон на
+            <code>--ds-success-solid</code>, цвет текста — на
+            <code>--ds-on-solid</code>. Объявление изменения состояния для экранных дикторов организуется отдельно.
+          </p>
+        </div>
+      </details>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        В готовом компоненте выбирайте смысл через
+        <code>tone</code>
+        и добавляйте подпись. Цвета подложки, текста и иконки назначает сам компонент.
+      </p>
+      <aurora-example-block class="pending-code migration-placeholder"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+          компонентов.
+        </p>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            DsLozenge
+          </span>
+          — короткая неинтерактивная плашка статуса.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            DsBanner
+          </span>
+          — постоянное сообщение внутри страницы.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            DsToast
+          </span>
+          — результат действия, срочность и время показа.
+        </li>
+        <li>
+          <a routerLink="/components/button" [queryParams]="settings.queryParams()">DsButton</a>
+          — варианты кнопок, в том числе для опасных действий.
+        </li>
+        <li>
+          <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+            Нейтральные цвета
+          </a>
+          — обычный текст и поверхности.
+        </li>
+        <li>
+          <a routerLink="/foundations/appearance" [queryParams]="settings.queryParams()">
+            Оформление интерфейса
+          </a>
+          — светлый и тёмный режимы.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

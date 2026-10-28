@@ -1,0 +1,262 @@
+<aurora-article-layout title="Плотность интерфейса"
+  subtitle="Как выбирать размеры и отступы для форм и насыщенных данными экранов">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Плотность в интерфейсе</h2>
+      <p class="lead">
+        Плотность меняет высоту кнопок, полей и строк, а также отступы. Готовые компоненты
+        подстраиваются автоматически. Размер текста сохраняется.
+      </p>
+      <aurora-example-block class="scene migration-placeholder"
+        id="ready-interface"
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()"
+        role="note"
+        data-migration-placeholder>
+        <p>Пример появится после подготовки Angular-компонентов Field и Button.</p>
+      </aurora-example-block>
+      <p class="caption" style="margin-top: 16px">
+        Переключите плотность в шапке и сравните размеры.
+      </p>
+    </section>
+
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Обычная · cozy</dt>
+        <dd>Основной выбор для форм, настроек и повседневной работы.</dd>
+        <dt>Компактная · compact</dt>
+        <dd>Для таблиц и списков, когда важно видеть больше данных одновременно.</dd>
+      </dl>
+      <p style="margin-top: 16px">
+        Компактной может быть отдельная область, например таблица внутри обычной страницы. Задавайте
+        плотность всему блоку вместе с его полями и кнопками.
+      </p>
+      <p class="caption">
+        <a routerLink="/foundations/themes" [queryParams]="settings.queryParams()">Бренд</a>
+        и
+        <a routerLink="/foundations/appearance" [queryParams]="settings.queryParams()">
+          светлый и тёмный режим
+        </a>
+        выбираются независимо от плотности.
+      </p>
+    </section>
+
+    <section aria-labelledby="comparison">
+      <h2 id="comparison" tabindex="-1">Один список в двух плотностях</h2>
+      <p class="lead">Одинаковые данные и размер текста; отличаются высота элементов и отступы.</p>
+      <div class="pair" id="density-comparison">
+        <aurora-example-block class="scene"
+          id="density-cozy"
+          background="subtle"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          data-ds-density="cozy">
+          <p class="mode">Обычная</p>
+          <p class="migration-placeholder" role="note" data-migration-placeholder>
+            Список с поиском и сортировкой появится после подготовки Angular-компонентов Panel,
+            Field, Button и Table.
+          </p>
+        </aurora-example-block>
+        <aurora-example-block class="scene"
+          id="density-compact"
+          background="subtle"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          data-ds-density="compact">
+          <p class="mode">Компактная</p>
+          <p class="migration-placeholder" role="note" data-migration-placeholder>
+            Список с поиском и сортировкой появится после подготовки Angular-компонентов Panel,
+            Field, Button и Table.
+          </p>
+        </aurora-example-block>
+      </div>
+      <p class="caption" style="margin-top: 16px">
+        Поиск и сортировка общие для двух примеров. Плотности закреплены для сравнения.
+      </p>
+    </section>
+
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Что проверить при уплотнении</h2>
+      <ul class="rules">
+        <li>
+          <strong>Текст читается.</strong>
+          Не уменьшайте шрифт ради дополнительных строк. Выбирайте
+          <a routerLink="/foundations/typography" [queryParams]="settings.queryParams()">
+            текстовую роль
+          </a>
+          по назначению.
+        </li>
+        <li>
+          <strong>Управление удобно.</strong>
+          Проверьте нажатия, клавиатурный фокус и соседние кнопки. Компактная плотность сама по себе
+          не гарантирует удобство на сенсорном экране.
+        </li>
+        <li>
+          <strong>Подписи помещаются.</strong>
+          Проверьте длинные названия и узкий экран. Не скрывайте важные данные ради компактности;
+          правила переноса — в разделе
+          <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+            «Адаптивность и брейкпоинты»
+          </a>.
+        </li>
+        <li>
+          <strong>Группы различимы.</strong>
+          Внутри группы — меньше расстояния, между разными задачами — больше. Сохраняйте эту разницу
+          и в компактном режиме.
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Для собственных стилей</h2>
+      <p>
+        Используйте токены размеров и отступов, чтобы собственная разметка менялась вместе с
+        готовыми компонентами. Внешние промежутки задаёт родитель: фиксированный отступ в px не
+        изменится при переключении плотности.
+      </p>
+      <details id="density-reference">
+        <summary>Показать подключение и размеры</summary>
+        <div class="reference-content">
+          <div>
+            <h3>Плотность задаётся контейнером</h3>
+            <p>
+              Атрибут
+              <code>data-ds-density="cozy"</code>
+              или
+              <code>"compact"</code>
+              действует на элемент и его содержимое. Вложенный контейнер может задать другую
+              плотность. Для промежутков используйте, например,
+              <code>gap: var(--ds-gap-md)</code>, для внутренних отступов —
+              <code>padding: var(--ds-pad-md)</code>.
+            </p>
+          </div>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Базовые размеры">
+            <table class="sizes">
+              <caption>Базовые размеры, px</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Назначение и токен</th>
+                  <th scope="col">Обычная</th>
+                  <th scope="col">Компактная</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    Средняя кнопка ·
+                    <code>--ds-control-h</code>
+                  </td>
+                  <td>36</td>
+                  <td>30</td>
+                </tr>
+                <tr>
+                  <td>
+                    Поле ·
+                    <code>--ds-field-h</code>
+                  </td>
+                  <td>40</td>
+                  <td>32</td>
+                </tr>
+                <tr>
+                  <td>
+                    Строка ·
+                    <code>--ds-row-h</code>
+                  </td>
+                  <td>44</td>
+                  <td>34</td>
+                </tr>
+                <tr>
+                  <td>
+                    Промежуток ·
+                    <code>--ds-gap-md</code>
+                  </td>
+                  <td>16</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td>
+                    Внутренний отступ ·
+                    <code>--ds-pad-md</code>
+                  </td>
+                  <td>16</td>
+                  <td>12</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="caption">
+            Высота строки зависит и от содержимого: длинный текст может потребовать больше места.
+            Полные шкалы доступны в разделе «Токены» в меню каталога.
+          </p>
+        </div>
+      </details>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Компактная область с готовыми компонентами. Поле и кнопка наследуют плотность контейнера;
+        промежуток между ними задаётся токеном.
+      </p>
+      <aurora-example-block class="pending-code migration-placeholder"
+        role="note"
+        data-migration-placeholder>
+        <p>
+          Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+          компонентов.
+        </p>
+      </aurora-example-block>
+      <details>
+        <summary>Полный код списка с поиском и сортировкой</summary>
+        <p>
+          Код воспроизводит список из сравнения. Плотность контейнера можно менять между
+          <code>cozy</code>
+          и
+          <code>compact</code>
+          без изменения компонентов.
+        </p>
+        <aurora-example-block class="pending-code migration-placeholder"
+          role="note"
+          data-migration-placeholder>
+          <p>
+            Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
+            компонентов.
+          </p>
+        </aurora-example-block>
+      </details>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/foundations/typography" [queryParams]="settings.queryParams()">
+            Типографика
+          </a>
+          — роли текста и читаемость данных.
+        </li>
+        <li>
+          <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
+            Адаптивность и брейкпоинты
+          </a>
+          — размещение на узком экране.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            Таблица
+          </span>
+          — сортировка, выбор строк и другие сценарии.
+        </li>
+        <li>
+          <a routerLink="/foundations/appearance" [queryParams]="settings.queryParams()">
+            Светлый и тёмный режим
+          </a>
+          — оформление независимо от плотности.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

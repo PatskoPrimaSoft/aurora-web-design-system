@@ -1,0 +1,228 @@
+<aurora-article-layout title="Логотип бренда"
+  subtitle="Как разместить знак и название продукта на разных поверхностях">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Логотип в шапке</h2>
+      <p class="lead">
+        В шапке используйте знак и название продукта. Готовая
+        <span data-migration-placeholder
+          class="migration-placeholder"
+          title="Страница ещё не перенесена">
+          DsAppHeader
+        </span>
+        задаёт плашку, размеры и отступы.
+      </p>
+      <div class="pair">
+        <div>
+          <h3>Обычная шапка</h3>
+          <aurora-example-block class="scene header-demo"
+            id="ready-interface"
+            background="subtle"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            <p class="migration-placeholder" role="note" data-migration-placeholder>
+              Пример обычной шапки будет собран после подготовки необходимых Angular-компонентов.
+            </p>
+          </aurora-example-block>
+        </div>
+        <div>
+          <h3>Мало места</h3>
+          <aurora-example-block class="scene header-demo"
+            id="compact-interface"
+            background="subtle"
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            <p class="migration-placeholder" role="note" data-migration-placeholder>
+              Пример компактной шапки будет собран после подготовки необходимых Angular-компонентов.
+            </p>
+          </aurora-example-block>
+        </div>
+      </div>
+      <p class="caption" style="margin-top: 12px">
+        Скрывать название и метку DEV решает приложение: DsAppHeader не переключает композицию
+        автоматически. В компактном примере название сохранено для скринридера.
+      </p>
+      <p style="margin-top: 16px">
+        Проверьте знак в обоих оформлениях переключателем вверху страницы: брендовая плашка может
+        становиться светлее, а белые детали — терять контраст. Тема не перекрашивает само
+        изображение.
+      </p>
+    </section>
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <dl class="choices">
+        <dt>Знак и название</dt>
+        <dd>
+          Основной вариант: помогает сразу узнать продукт. Метку DEV добавляйте, только если важно
+          различать окружения.
+        </dd>
+        <dt>Только знак</dt>
+        <dd>Когда места мало и из контекста уже понятно, какой продукт открыт.</dd>
+        <dt>Другой бренд</dt>
+        <dd>Используйте его собственный ресурс и название вместо Aurora.</dd>
+      </dl>
+    </section>
+    <section aria-labelledby="background">
+      <h2 id="background" tabindex="-1">Знак и фон</h2>
+      <p>
+        Одинаковый белый знак на светлой поверхности: с плашкой детали видны, без неё — сливаются с
+        фоном.
+      </p>
+      <div class="pair" data-ds-appearance="light">
+        <aurora-example-block class="sample light-sample"
+          [attr.data-ds-theme]="settings.theme()"
+          data-ds-appearance="light"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Рекомендуется</h3>
+          <div class="logo-field">
+            <span class="plate">
+              <img src="assets/AuroraWhite.png" alt="Знак Aurora на брендовой плашке" />
+            </span>
+          </div>
+          <p class="caption">Брендовая плашка отделяет белые детали от светлой поверхности.</p>
+        </aurora-example-block>
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          data-ds-appearance="light"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Избегайте</h3>
+          <div class="logo-field">
+            <img class="bare-logo" src="assets/AuroraWhite.png" alt="Знак Aurora без плашки" />
+          </div>
+          <p class="caption">Без подложки белая стрелка и кольцо теряются.</p>
+        </aurora-example-block>
+      </div>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul class="rules">
+        <li>
+          <b>Сохраняйте исходный знак.</b>
+          Не растягивайте изображение и не перекрашивайте отдельные части. Для Aurora используйте
+          прозрачный PNG с белой стрелкой, кольцом и жёлтыми дугами.
+        </li>
+        <li>
+          <b>Проверяйте всю композицию.</b>
+          Учитывайте длинное название, метку окружения и соседние действия в шапке.
+        </li>
+        <li>
+          <b>Называйте по назначению.</b>
+          Для самостоятельного изображения —
+          <code>alt="Aurora"</code>, для ссылки на главную —
+          <code>aria-label="На главную Aurora"</code>. Если название уже есть рядом, у изображения допустим пустой
+          <code>alt</code>. Шапки выше не являются ссылками.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Размеры и технические подробности</h2>
+      <details id="logo-reference">
+        <summary>Показать размеры и ресурс</summary>
+        <div>
+          <dl class="spec">
+            <dt>Плашка</dt>
+            <dd>
+              34 × 34 px; заливка
+              <code>--ds-brand</code>, скругление
+              <code>--ds-radius-md</code>.
+            </dd>
+            <dt>Изображение</dt>
+            <dd>
+              26 × 26 px;
+              <code>object-fit: contain</code>
+              сохраняет пропорции.
+            </dd>
+            <dt>Зазор до названия</dt>
+            <dd>
+              <code>--ds-gap-sm</code>
+              — 8 px.
+            </dd>
+            <dt>Название</dt>
+            <dd>
+              <code>--ds-type-section</code>; цвет
+              <code>--ds-fg-strong</code>.
+            </dd>
+            <dt>Поверхность шапки</dt>
+            <dd>
+              <code>--ds-surface</code>; отдельного токена подложки логотипа нет.
+            </dd>
+            <dt>Ресурс Aurora</dt>
+            <dd>
+              <a href="assets/AuroraWhite.png">AuroraWhite.png</a>
+              — PNG с прозрачностью. SVG-версии в системе нет.
+            </dd>
+          </dl>
+        </div>
+      </details>
+      <details id="logo-backgrounds">
+        <summary>Показать знак на других фонах</summary>
+        <aurora-example-block class="scene"
+          id="background-scene"
+          background="subtle"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <div class="backgrounds">
+            <figure>
+              <div class="logo-field" style="background: var(--ds-brand)">
+                <img src="assets/AuroraWhite.png" alt="Aurora на брендовом фоне" />
+              </div>
+              <figcaption>Брендовая заливка</figcaption>
+            </figure>
+            <figure>
+              <div class="logo-field" style="background: var(--ds-n-950)">
+                <img src="assets/AuroraWhite.png" alt="Aurora на почти чёрном фоне" />
+              </div>
+              <figcaption>Почти чёрный фон</figcaption>
+            </figure>
+            <figure>
+              <div class="logo-field" style="background: var(--ds-n-700)">
+                <img src="assets/AuroraWhite.png" alt="Aurora на тёмном нейтральном фоне" />
+              </div>
+              <figcaption>Тёмный нейтральный фон</figcaption>
+            </figure>
+          </div>
+        </aurora-example-block>
+      </details>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Готовая шапка задаёт размеры и оформление композиции. Путь к PNG замените путём к ресурсу
+        вашего приложения; файл должен быть доступен в его сборке.
+      </p>
+      <aurora-example-block class="pending-code">
+        <p class="migration-placeholder" role="note" data-migration-placeholder>
+          Пример кода будет добавлен вместе с согласованной Angular-реализацией шапки.
+        </p>
+      </aurora-example-block>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница ещё не перенесена">
+            Шапка приложения
+          </span>
+          — навигация и действия рядом с логотипом.
+        </li>
+        <li>
+          <a routerLink="/foundations/themes" [queryParams]="settings.queryParams()">
+            Цветовые темы
+          </a>
+          — подключение бренда.
+        </li>
+        <li>
+          <a routerLink="/foundations/appearance" [queryParams]="settings.queryParams()">
+            Светлый и тёмный режимы
+          </a>
+          — проверка оформления.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>

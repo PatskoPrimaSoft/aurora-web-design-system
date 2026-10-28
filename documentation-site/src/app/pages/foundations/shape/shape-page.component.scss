@@ -1,0 +1,229 @@
+@use '../../../../styles/article';
+
+:host {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+.guide-content {
+  font: var(--ds-type-body);
+  color: var(--ds-fg);
+  background: var(--ds-surface);
+  -webkit-font-smoothing: antialiased;
+}
+.guide-content {
+  max-width: 920px;
+  margin: 0;
+  padding: 24px 0;
+  overflow-wrap: anywhere;
+}
+.guide-content > section + section {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--ds-divider);
+}
+@include article.title-heading;
+@include article.section-heading;
+@include article.paragraph;
+@include article.paragraph-spacing;
+@include article.links($hover: false);
+a:focus-visible,
+summary:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-focus-color);
+  outline-offset: var(--ds-focus-offset);
+  border-radius: var(--ds-radius-xs);
+}
+@include article.inline-code;
+@include article.lead;
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.pair > * {
+  min-width: 0;
+}
+.ready-content {
+  display: grid;
+  gap: 16px;
+}
+.ready-content p {
+  margin: 0;
+}
+@include article.choices;
+.rules {
+  padding-left: 20px;
+  margin: 0;
+  max-width: 74ch;
+}
+.rules li + li {
+  margin-top: 12px;
+}
+.nested {
+  padding: 16px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-bg);
+  margin: 20px 0;
+}
+.nested > div {
+  padding: 16px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface);
+}
+.nested.excessive,
+.nested.excessive > div {
+  box-shadow: var(--ds-shadow-lg);
+}
+.nested.tight {
+  padding: 2px;
+}
+.component-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 20px 0;
+}
+.mode-stage {
+  padding: 20px;
+  background: var(--ds-bg);
+  border-radius: var(--ds-radius-lg);
+  margin-top: 16px;
+  color: var(--ds-fg);
+}
+.layer-example {
+  padding: 16px;
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+}
+.layer-example + .layer-example {
+  margin-top: 16px;
+}
+.layer-example.menu {
+  background: var(--ds-surface-raised);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-shadow-md);
+}
+.layer-example.dialog {
+  border-radius: var(--ds-radius-xl);
+  box-shadow: var(--ds-shadow-lg);
+}
+.layer-example p {
+  font: var(--ds-type-caption);
+  color: var(--ds-fg-muted);
+  margin-top: 8px;
+}
+#ready-interface {
+  position: relative;
+}
+.dialog-demo {
+  position: absolute;
+  inset: 0;
+}
+.dialog-demo > div {
+  position: absolute !important;
+  border-radius: var(--ds-radius-lg);
+}
+.scroll-demo {
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-lg);
+  padding: 8px;
+  margin-top: 16px;
+}
+.scroll-heading {
+  position: relative;
+  z-index: 1;
+}
+.scroll-content {
+  height: 160px;
+  overflow: auto;
+  padding: 16px;
+  outline-offset: 2px;
+}
+.scroll-content p {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ds-divider);
+}
+.reference {
+  border-top: 1px solid var(--ds-divider);
+  padding: 16px 0;
+}
+.reference + .reference {
+  margin-top: 8px;
+}
+summary {
+  cursor: pointer;
+  font: var(--ds-type-ui);
+}
+.token-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+  list-style: none;
+  padding: 0;
+}
+.token-grid li {
+  min-width: 0;
+}
+.token-grid p {
+  font: var(--ds-type-caption);
+  color: var(--ds-fg-muted);
+  margin-top: 8px;
+}
+.swatch {
+  height: 64px;
+  width: 100%;
+  max-width: 160px;
+  margin-bottom: 12px;
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border-control);
+}
+.shadow-swatch {
+  border-color: var(--ds-border);
+  border-radius: var(--ds-radius-md);
+}
+@media (max-width: 640px) {
+  .guide-content {
+    padding: 20px 0;
+  }
+  .pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sample,
+  .stage {
+    padding: 16px;
+  }
+  .choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .choices dt {
+    border: 0;
+    padding-bottom: 4px;
+  }
+  .choices dd {
+    padding-top: 0;
+  }
+  .token-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sample,
+.surface-sample,
+.scene,
+.stage {
+  color: var(--ds-fg);
+}
+@include article.migration-note;
+.pending-code {
+  margin: 20px 0;
+}
+aurora-code-block {
+  margin: 20px 0;
+}

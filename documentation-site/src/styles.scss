@@ -1,6 +1,8 @@
 @use './app/shared/code-block/code-highlighting';
+@use './styles/article';
 @import '@primasoftllc/design-system/styles.css';
 @include code-highlighting.styles;
+@include article.related-links;
 
 * {
   box-sizing: border-box;
@@ -11,6 +13,12 @@ body {
   font: var(--ds-type-body);
   color: var(--ds-fg);
   background: var(--ds-surface);
+}
+
+// Temporary review marker; override local demo colours without changing their spacing.
+body .migration-placeholder[data-migration-placeholder] {
+  background-color: var(--ds-warning-bg);
+  color: var(--ds-warning-fg);
 }
 
 a:focus-visible,

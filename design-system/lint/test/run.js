@@ -328,6 +328,29 @@ const cliCases = [];
     rmSync(root, { recursive: true, force: true });
   }
 }
+// Named Angular assets are resolved through the build configuration without hiding broken links.
+{
+  const root = mkdtempSync(join(tmpdir(), 'aurora angular delivery '));
+  try {
+    mkdirSync(join(root, 'documentation-site/src/app'), { recursive: true });
+    mkdirSync(join(root, 'design-system/logo'), { recursive: true });
+    writeFileSync(join(root, 'design-system/logo/logo.png'), 'fixture');
+    writeFileSync(join(root, 'documentation-site/angular.json'), JSON.stringify({ projects: {
+      docs: { architect: { build: { options: { assets: [
+        { glob: 'logo.png', input: '../design-system/logo', output: 'assets' },
+        { glob: 'absent.png', input: '../design-system/logo', output: 'assets' },
+      ] } } } },
+    } }));
+    writeFileSync(join(root, 'documentation-site/src/app/app.html'),
+      '<img src="assets/logo.png"><img src="assets/absent.png"><img src="assets/typo.png">');
+    const got = checkDelivery(root).map(p => p.message).sort();
+    const want = ['нет файла: assets/absent.png', 'нет файла: assets/typo.png'].sort();
+    cliCases.push({ title: 'поставка: Angular assets проверяются по конфигурации, отсутствующие файлы и опечатки не скрываются',
+      ok: JSON.stringify(got) === JSON.stringify(want), got: JSON.stringify(got) });
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+}
 // …и в самой поставке нарушений нет.
 {
   const problems = checkDelivery(fileURLToPath(new URL('../../..', import.meta.url)));

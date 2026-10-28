@@ -129,10 +129,8 @@
         </li>
         <li>
           Не отрывайте единицу от числа:
-          <span class="sample-mono">62,4&nbsp;км/ч</span>
-          . В HTML используйте
-          <code>&amp;nbsp;</code>
-          .
+          <span class="sample-mono">62,4&nbsp;км/ч</span>. В HTML используйте
+          <code>&amp;nbsp;</code>.
         </li>
         <li>
           Используйте семантические цвета текста. Caption и eyebrow оставляйте для коротких
@@ -228,8 +226,7 @@
         и дробную части отдельно. На осях и в легендах графиков допустимы
         <code>caption</code>
         и
-        <code>font-variant-numeric: tabular-nums</code>
-        ; одинаковая ширина цифр также не заменяет форматирование.
+        <code>font-variant-numeric: tabular-nums</code>; одинаковая ширина цифр также не заменяет форматирование.
       </p>
     </section>
 
@@ -413,10 +410,8 @@
       <h3>Шрифт, интервалы и цвет</h3>
       <p class="lead">
         Назначайте роль через
-        <code>font</code>
-        . Межбуквенный интервал (трекинг) задавайте отдельно через
-        <code>letter-spacing</code>
-        : tight для display и title, eyebrow для коротких меток верхнего регистра. Цвет также
+        <code>font</code>. Межбуквенный интервал (трекинг) задавайте отдельно через
+        <code>letter-spacing</code>: tight для display и title, eyebrow для коротких меток верхнего регистра. Цвет также
         задаётся отдельно — текстовый токен его не включает. В готовых компонентах эти стили уже
         согласованы.
       </p>
@@ -441,8 +436,7 @@
         Компактный режим уменьшает высоты строк и отступы, сохраняя размер текста. Подробнее —
         <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">
           «Плотность интерфейса»
-        </a>
-        .
+        </a>.
       </p>
       <div class="pair">
         <div class="sample"
@@ -494,6 +488,46 @@
           </table>
         </div>
       </div>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Подключение
+        <code>&#64;primasoftllc/design-system/styles.css</code>
+        загружает Inter Tight и JetBrains Mono. Ниже — стили для собственной разметки. Готовые
+        компоненты уже используют нужные текстовые роли и цвета. HTML-заголовки выбирайте по
+        структуре документа.
+      </p>
+      <aurora-code-block class="code-example" [snippet]="snippets.customStyles"></aurora-code-block>
+      <p>
+        Если подходящей роли нет, обсудите изменение системы. Дополнительный размер из примитивной
+        шкалы не заменяет согласованную текстовую роль.
+      </p>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul class="related-links">
+        <li>
+          <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+            Нейтральные цвета
+          </a>
+          — роли цвета текста и поверхностей.
+        </li>
+        <li>
+          <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">
+            Плотность интерфейса
+          </a>
+          — сравнение геометрии компонентов.
+        </li>
+        <li>
+          <span class="migration-placeholder"
+            data-migration-placeholder
+            title="Страница ещё не перенесена">
+            Смена типографической системы
+          </span>
+          — история решения и правила переноса.
+        </li>
+      </ul>
     </section>
   </div>
 </aurora-article-layout>

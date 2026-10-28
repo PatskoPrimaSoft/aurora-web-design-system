@@ -1,0 +1,398 @@
+<aurora-article-layout title="Форма и глубина"
+  subtitle="Как скругления объединяют элементы, а тени показывают слои интерфейса">
+  <div class="guide-content">
+    <section aria-labelledby="in-interface">
+      <h2 id="in-interface" tabindex="-1">Форма и глубина в интерфейсе</h2>
+      <p class="lead">
+        Скругления помогают узнавать элементы, а поверхности и тени отделяют всплывающие слои от
+        содержимого. В готовых компонентах они уже настроены. Для собственной разметки используйте
+        токены системы.
+      </p>
+      <aurora-example-block class="stage migration-placeholder"
+        id="ready-interface"
+        role="note"
+        data-migration-placeholder=""
+        background="subtle"
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        Демонстрация панели, меню и диалога ожидает Angular-компонентов Panel, Field, Menu, Dialog и
+        доработки Button.
+      </aurora-example-block>
+      <p style="margin-top: 16px">
+        Откройте меню или диалог, чтобы увидеть, как они перекрывают содержимое. В этом примере
+        диалог ограничен областью демонстрации.
+      </p>
+    </section>
+    <section aria-labelledby="choosing">
+      <h2 id="choosing" tabindex="-1">Краткая памятка</h2>
+      <p class="lead">
+        Для собственной разметки ориентируйтесь на назначение элемента. Скругление и тень выбираются
+        независимо.
+      </p>
+      <dl class="choices">
+        <dt>Кнопка или поле</dt>
+        <dd>Для действия или ввода. Интерактивность сама по себе не требует тени.</dd>
+        <dt>Панель или карточка</dt>
+        <dd>Для связанных данных в потоке страницы. Обычно достаточно поверхности и границы.</dd>
+        <dt>Меню</dt>
+        <dd>
+          Для списка действий поверх содержимого. Используйте готовый
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            DsMenu
+          </span>.
+        </dd>
+        <dt>Диалог</dt>
+        <dd>
+          Для отдельной задачи с временной блокировкой остального интерфейса.
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            DsDialog
+          </span>
+          управляет также фокусом и закрытием.
+        </dd>
+      </dl>
+    </section>
+    <section aria-labelledby="rounding">
+      <h2 id="rounding" tabindex="-1">Скругления и вложенность</h2>
+      <p class="lead">
+        У вложенного элемента может быть меньшее скругление, чем у контейнера. Сохраняйте
+        достаточный отступ, чтобы контуры не слипались.
+      </p>
+      <aurora-example-block class="migration-placeholder"
+        id="component-shapes"
+        role="note"
+        data-migration-placeholder=""
+        [attr.data-ds-theme]="settings.theme()"
+        [attr.data-ds-appearance]="settings.appearance()"
+        [attr.data-ds-density]="settings.density()">
+        Демонстрация скруглений контролов ожидает Angular-компонента Checkbox и доработки Button.
+      </aurora-example-block>
+      <p style="margin-bottom: 24px">
+        Чекбокс использует xs · 4 px, кнопка и поле — md · 8 px. Панель и диалог показаны выше: lg ·
+        12 px и xl · 16 px.
+      </p>
+      <div class="pair">
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Рекомендуется: достаточно места</h3>
+          <div class="nested"><div>Внутренняя область</div></div>
+          <p>
+            В этом примере внешний угол — 12 px, внутренний — 8 px, отступ — 16 px. Отступ выбирайте
+            по содержимому: это пример, а не обязательное значение.
+          </p>
+        </aurora-example-block>
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Избегайте: тесные контуры</h3>
+          <div class="nested tight"><div>Внутренняя область</div></div>
+          <p>
+            Те же скругления, но отступ только 2 px. Контуры слипаются. Проверяйте сочетание на
+            реальном содержимом.
+          </p>
+        </aurora-example-block>
+      </div>
+      <p style="margin-top: 16px">
+        Для коротких плашек есть pill, для круга — circle при равных сторонах. Полная шкала
+        находится в справочнике ниже.
+      </p>
+    </section>
+    <section aria-labelledby="depth">
+      <h2 id="depth" tabindex="-1">Глубина и слои</h2>
+      <p class="lead">
+        Глубину создают поверхность, граница и тень вместе. Ниже показаны сочетания, которые
+        используют готовые компоненты.
+      </p>
+      <div id="theme-layers">
+        <div class="pair">
+          <div>
+            <h3>Светлый режим</h3>
+            <div class="mode-stage"
+              data-ds-appearance="light"
+              [attr.data-ds-theme]="settings.theme()"
+              [attr.data-ds-density]="settings.density()">
+              <div class="layer-example">
+                Панель
+                <p>surface · граница · без тени</p>
+              </div>
+              <div class="layer-example menu">
+                Меню
+                <p>surface-raised · граница · shadow-md</p>
+              </div>
+              <div style="
+                  background: var(--ds-n-a60);
+                  padding: 16px;
+                  margin-top: 16px;
+                  border-radius: var(--ds-radius-lg);
+                ">
+                <div class="layer-example dialog">
+                  Диалог
+                  <p>surface · граница · shadow-lg</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3>Тёмный режим</h3>
+            <div class="mode-stage"
+              data-ds-appearance="dark"
+              [attr.data-ds-theme]="settings.theme()"
+              [attr.data-ds-density]="settings.density()">
+              <div class="layer-example">
+                Панель
+                <p>surface · граница · без тени</p>
+              </div>
+              <div class="layer-example menu">
+                Меню
+                <p>surface-raised · граница · shadow-md</p>
+              </div>
+              <div style="
+                  background: var(--ds-n-a60);
+                  padding: 16px;
+                  margin-top: 16px;
+                  border-radius: var(--ds-radius-lg);
+                ">
+                <div class="layer-example dialog">
+                  Диалог
+                  <p>surface · граница · shadow-lg</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top: 16px">
+        В тёмном режиме одной тени может быть недостаточно: граница и цвет поверхности помогают
+        различать слои. Подробнее о цветовых ролях — в разделе
+        <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+          «Нейтральные цвета»
+        </a>.
+      </p>
+      <h3 style="margin-top: 24px">Что перекрывает что</h3>
+      <ul class="rules">
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            Меню
+          </span>
+          раскрывается над содержимым, к которому относится. Перед открытием диалога из пункта меню
+          закройте меню. Меню внутри диалога должно оставаться над его поверхностью.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            Диалог
+          </span>
+          перекрывает страницу подложкой и удерживает клавиатурный фокус внутри. Не оставляйте
+          поверх него меню фоновой страницы.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            ToastStack
+          </span>
+          показывает уведомления отдельным слоем. Пока открыт диалог, важный результат и действия
+          показывайте внутри него: визуально заметное уведомление снаружи не становится частью его
+          клавиатурного сценария.
+        </li>
+      </ul>
+      <details>
+        <summary>Почему одного z-index недостаточно</summary>
+        <p>
+          В текущей реализации Dialog использует z-index 50, ToastStack — 60. Menu при поддержке
+          Popover API попадает в верхний слой браузера; его порядок нельзя описать одной шкалой
+          z-index. Контексты наложения родителей также влияют на результат. Проверяйте компоненты
+          вместе в приложении, не повышайте числа наугад и не используйте тень для управления
+          порядком.
+        </p>
+      </details>
+      <h3 style="margin-top: 24px">Не создавайте лишние слои</h3>
+      <div class="pair">
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Рекомендуется</h3>
+          <div class="nested"><div>Сведения об объекте</div></div>
+          <p>Обычные вложенные области разделены фоном, границей и отступом.</p>
+        </aurora-example-block>
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Избегайте</h3>
+          <div class="nested excessive"><div>Сведения об объекте</div></div>
+          <p>
+            Тени у каждого контейнера создают лишние уровни. Добавляйте тень, когда она объясняет
+            перекрытие содержимого.
+          </p>
+        </aurora-example-block>
+      </div>
+    </section>
+    <section aria-labelledby="guidelines">
+      <h2 id="guidelines" tabindex="-1">Правила применения</h2>
+      <div class="pair" style="margin-bottom: 24px">
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Скругление и фокус</h3>
+          <p>
+            Перейдите к кнопке клавишей Tab: рамка следует её форме и остаётся видимой. Готовый
+            компонент уже оформляет фокус.
+          </p>
+          <aurora-example-block id="focus-demo"
+            class="component-row migration-placeholder"
+            role="note"
+            data-migration-placeholder=""
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Демонстрация фокуса кнопки ожидает доработки Angular-компонента Button.
+          </aurora-example-block>
+        </aurora-example-block>
+        <aurora-example-block class="sample"
+          [attr.data-ds-theme]="settings.theme()"
+          [attr.data-ds-appearance]="settings.appearance()"
+          [attr.data-ds-density]="settings.density()">
+          <h3>Тень при прокрутке</h3>
+          <p>
+            Прокрутите список вниз и вернитесь к началу. Шапка получает тень, пока часть содержимого
+            скрыта над списком.
+          </p>
+          <aurora-example-block class="migration-placeholder"
+            id="scroll-demo"
+            role="note"
+            data-migration-placeholder=""
+            [attr.data-ds-theme]="settings.theme()"
+            [attr.data-ds-appearance]="settings.appearance()"
+            [attr.data-ds-density]="settings.density()">
+            Демонстрация шапки при прокрутке пока не перенесена: её композиция и поведение будут
+            согласованы отдельно.
+          </aurora-example-block>
+        </aurora-example-block>
+      </div>
+      <ul class="rules">
+        <li>
+          Не добавляйте тень при каждом наведении. Обратную связь кнопок и полей уже обеспечивают их
+          состояния.
+        </li>
+        <li>
+          Проверяйте, что родитель не обрезает тень и фокусную рамку.
+          <code>overflow: hidden</code>
+          нужен для обрезки содержимого, но может скрыть их.
+        </li>
+        <li>
+          Тень не меняет порядок наложения. Для всплывающего содержимого нужны также
+          позиционирование, управление слоями и фокусом — используйте готовое меню или диалог.
+        </li>
+        <li>
+          Проверяйте углы с длинным текстом и на узком экране. Скругление не должно отнимать место у
+          содержимого.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="reference">
+      <h2 id="reference" tabindex="-1">Справочник токенов</h2>
+      <p class="lead">
+        Значения для собственных стилей. Скругления одинаковы в светлом и тёмном оформлении; тени
+        переключаются вместе с оформлением.
+      </p>
+      <details class="reference" id="radius-reference">
+        <summary>Показать шкалу скруглений</summary>
+        <ul class="token-grid" id="radius-values">
+          @for (sample of radiusSamples; track sample.token) {
+            <li>
+              <div class="swatch"
+                aria-hidden="true"
+                [style.width.px]="sample.token === '--ds-radius-circle' ? 64 : null"
+                [style.border-radius]="'var(' + sample.token + ')'"
+                [attr.data-ds-theme]="settings.theme()"
+                [attr.data-ds-appearance]="settings.appearance()"
+                [attr.data-ds-density]="settings.density()"></div>
+              <code>{{ sample.token }}</code>
+              <p>{{ sample.description }}</p>
+            </li>
+          }
+        </ul>
+      </details>
+      <details class="reference" id="shadow-reference">
+        <summary>Показать уровни теней</summary>
+        <ul class="token-grid" id="shadow-values">
+          @for (sample of shadowSamples; track sample.token) {
+            <li>
+              <div class="swatch shadow-swatch"
+                aria-hidden="true"
+                [style.box-shadow]="'var(' + sample.token + ')'"
+                [attr.data-ds-theme]="settings.theme()"
+                [attr.data-ds-appearance]="settings.appearance()"
+                [attr.data-ds-density]="settings.density()"></div>
+              <code>{{ sample.token }}</code>
+              <p>{{ sample.description }}</p>
+            </li>
+          }
+        </ul>
+      </details>
+    </section>
+    <section aria-labelledby="пример-кода">
+      <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
+      <p>
+        Для обычной панели используйте готовый
+        <code>DsPanel</code>: поверхность, граница и скругление уже настроены. Вложенные компоненты оформляют себя сами.
+      </p>
+      <aurora-example-block class="pending-code migration-placeholder"
+        role="note"
+        data-migration-placeholder>
+        Angular-пример кода будет добавлен после реализации Panel и Field. React-код здесь не
+        показывается как Angular API.
+      </aurora-example-block>
+      <p>Если создаёте собственный контейнер, используйте токены в его стилях:</p>
+      <aurora-code-block [snippet]="snippets.panel"></aurora-code-block>
+    </section>
+    <section aria-labelledby="дальше">
+      <h2 id="дальше" tabindex="-1">Дальше</h2>
+      <ul>
+        <li>
+          <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
+            Нейтральные цвета
+          </a>
+          — поверхности и границы.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            DsPanel
+          </span>
+          — контейнер для связанных данных.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            DsMenu
+          </span>
+          — готовое меню действий.
+        </li>
+        <li>
+          <span data-migration-placeholder
+            class="migration-placeholder"
+            title="Страница компонента ещё не перенесена">
+            DsDialog
+          </span>
+          — модальный диалог.
+        </li>
+      </ul>
+    </section>
+  </div>
+</aurora-article-layout>
