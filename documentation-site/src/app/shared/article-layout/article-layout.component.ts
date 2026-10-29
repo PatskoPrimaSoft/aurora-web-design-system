@@ -27,6 +27,7 @@ export class ArticleLayoutComponent {
   private readonly article = viewChild.required<ElementRef<HTMLElement>>('article');
   protected readonly headings = signal<{ id: string; title: string }[]>([]);
   protected readonly activeHeading = signal<string | null>(null);
+  protected readonly contentsHeight = signal<number | null>(null);
   protected repeatAnchor(event: MouseEvent, id: string) {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
       return;
@@ -83,7 +84,22 @@ export class ArticleLayoutComponent {
         attributeFilter: ['id'],
       });
       refresh();
-      const resize = new ResizeObserver(schedule);
+      const measureContents = () => {
+        const style = getComputedStyle(scrollRoot);
+        this.contentsHeight.set(
+          Math.max(
+            0,
+            scrollRoot.clientHeight -
+              parseFloat(style.paddingTop) -
+              parseFloat(style.paddingBottom),
+          ),
+        );
+      };
+      const resize = new ResizeObserver(() => {
+        measureContents();
+        schedule();
+      });
+      measureContents();
       resize.observe(article);
       resize.observe(scrollRoot);
       scrollRoot.addEventListener('scroll', schedule, { passive: true });

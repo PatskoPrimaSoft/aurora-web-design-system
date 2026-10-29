@@ -33,51 +33,55 @@
       <option>compact</option>
     </select>
   </div>
-  <button class="mobile-menu"
-    type="button"
-    [attr.aria-expanded]="menuOpen()"
-    aria-controls="catalog-navigation"
-    (click)="menuOpen.set(!menuOpen())">
-    Меню
-  </button>
+  @if (!isDocument()) {
+    <button class="mobile-menu"
+      type="button"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="catalog-navigation"
+      (click)="menuOpen.set(!menuOpen())">
+      Меню
+    </button>
+  }
 </header>
-<div class="layout">
-  <aside id="catalog-navigation" class="catalog-navigation" [class.is-open]="menuOpen()">
-    <label for="catalog-search">
-      {{ isComponents() ? 'Найти компонент' : 'Найти правило или тему' }}
-    </label>
-    <input id="catalog-search"
-      type="search"
-      placeholder="Поиск"
-      [value]="query()"
-      (input)="query.set($any($event.target).value)" />
-    <nav aria-label="Разделы документации">
-      @for (group of groups(); track group.id) {
-        @if ($first || groups()[$index - 1].section !== group.section) {
-          <h2>{{ sectionTitles[group.section] }}</h2>
+<div class="layout" [class.document-layout]="isDocument()">
+  @if (!isDocument()) {
+    <aside id="catalog-navigation" class="catalog-navigation" [class.is-open]="menuOpen()">
+      <label for="catalog-search">
+        {{ isComponents() ? 'Найти компонент' : 'Найти правило или тему' }}
+      </label>
+      <input id="catalog-search"
+        type="search"
+        placeholder="Поиск"
+        [value]="query()"
+        (input)="query.set($any($event.target).value)" />
+      <nav aria-label="Разделы документации">
+        @for (group of groups(); track group.id) {
+          @if ($first || groups()[$index - 1].section !== group.section) {
+            <h2>{{ sectionTitles[group.section] }}</h2>
+          }
+          @if (group.level === 2) {
+            <h3>{{ group.title }}</h3>
+          }
+          @for (item of group.items; track item.path) {
+            <a [routerLink]="item.path"
+              [queryParams]="settings.queryParams()"
+              routerLinkActive="active"
+              [class.start-link]="group.level === 1"
+              [routerLinkActiveOptions]="{
+                paths: 'exact',
+                queryParams: 'ignored',
+                matrixParams: 'ignored',
+                fragment: 'ignored',
+              }"
+              ariaCurrentWhenActive="page">
+              {{ item.title }}
+            </a>
+          }
+        } @empty {
+          <p role="status">Ничего не найдено.</p>
         }
-        @if (group.level === 2) {
-          <h3>{{ group.title }}</h3>
-        }
-        @for (item of group.items; track item.path) {
-          <a [routerLink]="item.path"
-            [queryParams]="settings.queryParams()"
-            routerLinkActive="active"
-            [class.start-link]="group.level === 1"
-            [routerLinkActiveOptions]="{
-              paths: 'exact',
-              queryParams: 'ignored',
-              matrixParams: 'ignored',
-              fragment: 'ignored',
-            }"
-            ariaCurrentWhenActive="page">
-            {{ item.title }}
-          </a>
-        }
-      } @empty {
-        <p role="status">Ничего не найдено.</p>
-      }
-    </nav>
-  </aside>
+      </nav>
+    </aside>
+  }
   <main id="catalog-main" tabindex="-1"><router-outlet></router-outlet></main>
 </div>

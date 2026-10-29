@@ -21,7 +21,7 @@ export async function checkShell({ page, url, modes, browser }) {
     await expect(page.locator('aurora-code-block code')).toContainText(
       'font: var(--ds-type-title)',
     );
-    await expect(page.locator('.related-links a')).toHaveCount(2);
+    await expect(page.locator('.related-links a')).toHaveCount(3);
     assert.equal(
       await page.locator('.related-links').evaluate((el) => getComputedStyle(el).paddingLeft),
       '40px',
@@ -34,7 +34,10 @@ export async function checkShell({ page, url, modes, browser }) {
       '0px',
     );
     for (const link of await page.locator('.related-links a').all()) {
-      await expect(link).toHaveAttribute('href', /foundations\/(colors|density)/);
+      await expect(link).toHaveAttribute(
+        'href',
+        /foundations\/(colors|density)|documents\/typography-migration/,
+      );
     }
     await expect(page.locator('.page-contents a')).toHaveText(headings.map((text) => text.trim()));
     const accessibility = await new AxeBuilder({ page }).analyze();
@@ -186,7 +189,12 @@ export async function checkShell({ page, url, modes, browser }) {
   await expect(page.locator('h1')).toHaveText('Страница не найдена');
   await page.getByRole('link', { name: 'Aurora Design — главная' }).click();
   await expect(page.locator('h1')).toHaveText('Прочитать первым');
-  await expect(page.locator('#catalog-navigation h2')).toHaveText(['Начало', 'Основы']);
+  await expect(page.locator('#catalog-navigation h2')).toHaveText([
+    'Начало',
+    'Основы',
+    'Angular UI kit',
+    'Миграция',
+  ]);
   await expect(page.locator('.page-contents a')).toHaveCount(4);
   await page.getByRole('searchbox').fill('Типографика');
   await expect(page.locator('#catalog-navigation nav a')).toHaveCount(1);

@@ -84,13 +84,7 @@
               title="Страница ещё не перенесена">
               Спарклайн
             </span>
-            — тенденция в строке;
-            <span data-migration-placeholder
-              class="migration-placeholder"
-              title="Страница ещё не перенесена">
-              шкала оценки
-            </span>
-            — значение на именованных зонах.
+            — тенденция в строке; шкала оценки — значение на именованных зонах.
           </p>
         </div>
       </details>
@@ -204,29 +198,12 @@
       <h2 id="дальше" tabindex="-1">Дальше</h2>
       <ul>
         <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница ещё не перенесена">
+          <a routerLink="/angular/setup" fragment="echarts" [queryParams]="settings.queryParams()">
             Интеграция ECharts
-          </span>
+          </a>
           — подключение, легенда, подсказка и код примера.
         </li>
-        <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница ещё не перенесена">
-            DsSparkline
-          </span>
-          — тенденция в строке.
-        </li>
-        <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница ещё не перенесена">
-            DsScoreBar
-          </span>
-          — шкала оценки.
-        </li>
+
         <li>
           <a routerLink="/foundations/status" [queryParams]="settings.queryParams()">
             Цвета статусов

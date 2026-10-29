@@ -1,0 +1,381 @@
+<article class="document">
+  <a routerLink="/" [queryParams]="settings.queryParams()">На главную</a>
+  <h1 id="page-title" tabindex="-1">Версии и публикация</h1>
+  <p>
+    Репозиторий —
+    <code>github.com/PrimaSoftLLC/aurora-web-design-system</code>
+    (публичный), пакет —
+    <code>&#64;primasoftllc/design-system</code>
+    в GitHub Packages. Исходники и правки живут в репозитории; правила разработки —
+    <code>CONTRIBUTING.md</code>.
+  </p>
+  <h2 id="выпуск-версии" tabindex="-1">Выпуск версии</h2>
+  <p>
+    Версия в
+    <code>package.json</code>
+    — разрабатываемая.
+    <code>/aurora-release</code>
+    оформляет раздел CHANGELOG, переводит
+    <code>master</code>
+    fast-forward на релизный коммит, затем поднимает версию
+    <code>develop</code>
+    без Git-тега и открывает новый
+    <code>[Unreleased]</code>. Push делает человек.
+  </p>
+  <p>
+    <code>/aurora-release</code>
+    в develop (
+    <code>AGENTS.md</code>, раздел «Релиз»). Push в master запускает
+    <code>.github/workflows/ci.yml</code>: проверки,
+    <code>npm publish</code>, тег
+    <code>v&lt;version&gt;</code>, GitHub Release из раздела CHANGELOG. Секреты не нужны —
+    <code>GITHUB_TOKEN</code>. Руками теги не ставятся и
+    <code>npm publish</code>
+    не запускается. CI публикует проверенную staging-директорию командой
+    <code>npm publish ./.tmp/package --ignore-scripts</code>: повторная сборка при публикации не нужна. Для локального tarball используется
+    <code>npm run pack</code>; упаковка самого корня запрещена.
+  </p>
+  <h3 id="проверки-и-продвижение-артефакта" tabindex="-1">Проверки и продвижение артефакта</h3>
+  <p>
+    CI собирает пакет один раз и проверяет его независимыми заданиями: компоненты и npm-поставка,
+    каталог, растровые эталоны, Angular-потребители. Каталог использует два worker; растровые
+    сравнения и Angular выполняются отдельно. При падении можно повторить только неуспешные задания
+    через
+    <strong>Re-run failed jobs</strong>.
+  </p>
+  <p>
+    После полного успеха сохраняется
+    <code>verified-package</code>
+    на 90 дней. В нём находятся архив staging-пакета, SHA исходного коммита, отпечаток
+    Git-исходников и SHA256 архива и каждого файла. В
+    <code>master</code>
+    CI ищет этот артефакт только среди успешных push-запусков
+    <code>develop</code>
+    того же workflow в этом репозитории; исходный коммит должен быть предком релизного. PR и
+    артефакты других репозиториев не подходят.
+  </p>
+  <p>
+    Чтобы использовать быстрый путь, сначала отправьте в
+    <code>develop</code>
+    код будущего выпуска и дождитесь зелёного CI, затем оформляйте релизный коммит и перенос в
+    <code>master</code>. Если впервые отправить изменения только вместе с
+    <code>chore: start ...</code>
+    после подготовки релиза, подходящего проверенного предка может ещё не быть:
+    <code>master</code>
+    не ждёт будущего артефакта и выполняет полную проверку.
+  </p>
+  <p>
+    Повторные проверки в
+    <code>master</code>
+    пропускаются лишь при совпадении всех отслеживаемых файлов, кроме корневого
+    <code>CHANGELOG.md</code>
+    и полей
+    <code>version</code>
+    в
+    <code>package.json</code>,
+    <code>package-lock.json</code>
+    и
+    <code>packages[""].version</code>. Зависимости, exports, инструменты, тесты и сам workflow входят в отпечаток. После проверки
+    целостности архив восстанавливается без сборки: меняются только версия публичного manifest и
+    CHANGELOG. Скомпилированные файлы остаются побайтово теми же.
+  </p>
+  <p>
+    Если подходящего успешного запуска нет, артефакт истёк или поиск недоступен,
+    <code>master</code>
+    выполняет полный набор. Если найденный артефакт не проходит проверку целостности или
+    происхождения, публикация останавливается. Задание публикации ещё раз проверяет артефакт против
+    своего SHA, версии lock-файла и release notes. Обычная защита от повторного тега и ошибок
+    npm-реестра сохраняется.
+  </p>
+  <p>
+    Первая проверка после изменения CI выполняется полностью: прежние запуски не содержат нового
+    артефакта. Каталог Pages по-прежнему строится из релизного тега отдельным workflow; повторная
+    публикация каталога не публикует npm-пакет.
+  </p>
+  <p>
+    Механизм передачи использует
+    <a href="https://docs.github.com/en/actions/tutorials/store-and-share-data"
+      target="_blank"
+      rel="noopener noreferrer">
+      GitHub Actions artifacts
+    </a>
+    и
+    <a href="https://docs.github.com/en/rest/actions/artifacts"
+      target="_blank"
+      rel="noopener noreferrer">
+      API артефактов
+    </a>.
+  </p>
+  <h3 id="каталог-на-github-pages" tabindex="-1">Каталог на GitHub Pages</h3>
+  <p>
+    Опубликованный каталог: https://primasoftllc.github.io/aurora-web-design-system/. Источник в
+    Settings → Pages → Build and deployment —
+    <strong>GitHub Actions</strong>. Workflow
+    <code>.github/workflows/pages.yml</code>
+    собирает
+    <code>site/</code>
+    из тега
+    <code>vX.Y.Z</code>, проверяет совпадение с
+    <code>package.json</code>
+    и публикует каталог с учётом пути репозитория. Обычные push в develop и pull request сайт не
+    обновляют.
+  </p>
+  <p>
+    Релизный CI после создания тега вызывает этот workflow напрямую: события, созданные через
+    <code>GITHUB_TOKEN</code>, не запускают новый workflow на push тега. Отдельный триггер
+    <code>push.tags: v*</code>
+    поддерживает теги, отправленные человеком; правило проекта о создании релизных тегов только
+    через CI сохраняется. Для повторной публикации существующей версии используйте Actions → GitHub
+    Pages → Run workflow, укажите тег в поле
+    <code>tag</code>. Это не публикует npm-пакет повторно. Environment
+    <code>github-pages</code>
+    должен разрешать master, develop (ручной повторный запуск) и теги
+    <code>v*</code>. Теги версий не перемещаются: следующая публикация получает новый тег.
+  </p>
+  <h3 id="порядок-подготовки-релиза" tabindex="-1">Порядок подготовки релиза</h3>
+  <p>
+    Этот проект — npm-пакет: Docker-образ и Maven не участвуют в релизе. Подготовка настроек релиза
+    сама по себе не разрешает выпуск версии.
+  </p>
+  <ol>
+    <li>
+      Выполнить
+      <code>git fetch origin</code>. Рабочее дерево должно быть чистым, текущая ветка —
+      <code>develop</code>, она не должна отставать от
+      <code>origin/develop</code>. Проверить
+      <code>git merge-base --is-ancestor origin/master develop</code>: ожидается код 0. При нарушении остановиться и показать состояние; ветки автоматически не
+      чинить.
+    </li>
+    <li>
+      Прочитать разрабатываемую версию из package.json; сверить package-lock.json и
+      <code>packages[""].version</code>
+      в нём. Проверить отсутствие
+      <code>v&lt;version&gt;</code>
+      локально (
+      <code>git tag -l v&lt;version&gt;</code>
+      ) и на сервере (
+      <code>git ls-remote --tags origin refs/tags/v&lt;version&gt;</code>
+      ). Ошибка сети не означает отсутствие тега.
+    </li>
+    <li>
+      Согласовать выпускаемую и следующую версии по правилам ниже. Обычно выпускаемая уже записана в
+      package.json; её не повышают перед релизом. Если пользователь явно назвал большую версию для
+      legacy-проекта, оставшегося на выпущенной версии, выполнить
+      <code>mise exec -- npm version &lt;version&gt; --no-git-tag-version</code>
+      в рамках релизного коммита. Меньшая или уже выпущенная версия — причина остановиться.
+      Следующая версия задаётся пользователем, иначе увеличивается PATCH. Ломающие изменения требуют
+      MAJOR; этот выбор проверяется по составу изменений.
+    </li>
+    <li>
+      Выполнить
+      <code>mise exec -- npm run verify</code>
+      полностью. Красные проверки останавливают выпуск. Подготовка браузера и Angular-кешей описана
+      в
+      <code>CONTRIBUTING.md#checks</code>.
+    </li>
+    <li>
+      Переименовать
+      <code>## [Unreleased]</code>
+      в
+      <code>## [&lt;version&gt;] — YYYY-MM-DD</code>. Если раздела нет, составить черновик из
+      <code>git log --no-merges origin/master..develop</code>
+      и согласовать текст. Проверить
+      <code>mise exec -- node tools/release-check.mjs</code>: версии совпадают, раздел выпуска существует и не пуст.
+    </li>
+    <li>
+      Создать
+      <code>chore: release &lt;version&gt;</code>. В коммите только CHANGELOG, плюс package.json и package-lock.json для legacy-исключения.
+      Версии в README и других файлах не править заодно. Для многострочного сообщения использовать
+      <code>git commit -F &lt;файл&gt;</code>.
+    </li>
+    <li>
+      Показать пользователю версии, раздел CHANGELOG,
+      <code>git log --oneline origin/master..develop</code>, результат проверок и последствия push: публикация пакета, тег и GitHub Release. Перед
+      переходом к выпуску получить явное подтверждение сводки.
+    </li>
+    <li>
+      Выполнить
+      <code>git switch master</code>
+      и
+      <code>git merge --ff-only develop</code>. Если локального master нет, создать его от origin/master. При невозможности fast-forward
+      остановиться: не использовать force или merge-коммит. Защиту веток не обходить; если требуется
+      PR, использовать принятый процесс и проверить точный SHA выпуска.
+    </li>
+    <li>
+      Вернуться в develop, выполнить
+      <code>mise exec -- npm version &lt;next&gt; --no-git-tag-version</code>, сверить обе версии в lock-файле, добавить новый пустой
+      <code>## [Unreleased]</code>
+      перед разделом выпуска. Создать
+      <code>chore: start &lt;next&gt;</code>
+      из package.json, package-lock.json и CHANGELOG.
+    </li>
+    <li>
+      Передать человеку команду
+      <code>git push origin develop master</code>. Это отдельная последняя команда, без цепочки с commit или merge. Агент в этом проекте
+      релизный push не выполняет: это локальное ограничение AGENTS.md, сохраняемое поверх общего
+      навыка aurora-release.
+    </li>
+    <li>
+      После ручного push проверить
+      <code>git ls-remote origin refs/heads/master refs/heads/develop</code>: master должен указывать на релизный коммит, develop — на
+      <code>chore: start</code>. Проверить
+      <code>gh run list --workflow ci.yml --limit 3</code>
+      и результат CI для релизного SHA.
+    </li>
+  </ol>
+  <h3 id="контроль-публикации-в-ci" tabindex="-1">Контроль публикации в CI</h3>
+  <ul>
+    <li>PR в develop/master и push в develop выполняют verify, без публикации.</li>
+    <li>
+      Push в master и ручной запуск на master сначала проверяют тег выпуска, согласованность
+      package.json/package-lock.json и непустой раздел CHANGELOG.
+    </li>
+    <li>
+      Ошибка проверки удалённого тега, авторизации или сети останавливает публикацию. Только явный
+      E404 от реестра означает отсутствие пакета.
+    </li>
+    <li>
+      Если пакет уже существует, CI пропускает npm publish и продолжает создание тега и GitHub
+      Release. Готовый тег версии запрещает повторный выпуск.
+    </li>
+    <li>Версия берётся из package.json; тег является результатом CI, а не источником версии.</li>
+  </ul>
+  <h2 id="восстановление-после-частичного-релиза" tabindex="-1">
+    Восстановление после частичного релиза
+  </h2>
+  <p>
+    Публикация в
+    <code>npm publish</code>, тег и
+    <code>gh release</code>
+    идут одним шагом; если
+    <code>npm publish</code>
+    прошёл, а дальше упало (сеть, права), повторный запуск workflow на том же релизном SHA сам всё
+    доводит: гейт смотрит только на тег (его ещё нет), а шаг публикации видит версию в реестре и
+    пропускает
+    <code>npm publish</code>, идёт сразу ставить тег и релиз (
+    <code>.github/workflows/ci.yml</code>
+    ). Донастраивать вручную ничего не нужно.
+  </p>
+  <p>
+    Если упал только
+    <code>gh release create</code>
+    — тег
+    <code>v&lt;version&gt;</code>
+    уже запушен, поэтому повторный push в master теперь остановится на гейте («уже выпущена»).
+    Единственное ручное вмешательство, которое здесь допустимо: человек выполняет
+    <code>
+      gh release create v&lt;version&gt; --title v&lt;version&gt; --notes-file &lt;файл с разделом
+      CHANGELOG&gt;
+    </code>
+    из commit'а релиза сам, без повторного прогона CI.
+  </p>
+  <h2 id="доступ-потребителей" tabindex="-1">Доступ потребителей</h2>
+  <p>
+    Локальный доступ и настройка CI приложения описаны в
+    <a routerLink="/angular/setup" [queryParams]="settings.queryParams()">
+      руководстве по использованию
+    </a>.
+  </p>
+  <h2 id="лицензия" tabindex="-1">Лицензия</h2>
+  <p>
+    Перед публикацией
+    <code>npm run verify</code>
+    собирает пакет и каталог, проверяет исходный Git-эталон в установленном Playwright Chromium и
+    устанавливает tarball в пустой offline-каталог.
+    <code>site/</code>, исходники каталога и инструменты браузерных тестов не поставляются потребителю.
+    <code>prepack</code>
+    создаёт совместимые файлы из исходников.
+  </p>
+  <p>
+    <code>UNLICENSED</code>
+    — внутренний пакет. Шрифты — SIL OFL 1.1 (
+    <code>design-system/assets/fonts/*/OFL.txt</code>
+    ).
+  </p>
+  <h2 id="versioning" tabindex="-1">Versioning</h2>
+  <p>
+    Semantic versioning,
+    <code>MAJOR.MINOR.PATCH</code>, released as a git tag
+    <code>vX.Y.Z</code>. The public surface is:
+    <strong>token names and their roles</strong>,
+    <strong>component names, inputs and outputs</strong>, the three scope attributes, and the package entry points. Guideline cards and reference
+    screens are documentation — they never drive the number alone.
+  </p>
+  <h3 id="major--a-consumer-must-edit-code" tabindex="-1">MAJOR — a consumer must edit code</h3>
+  <ul>
+    <li>
+      A token is removed or renamed (
+      <code>--ds-*</code>
+      ), or its
+      <em>role</em>
+      changes so an existing use now reads wrong (e.g. an ink token becoming a fill).
+    </li>
+    <li>
+      A component is removed or renamed; an input or output is removed or renamed; an input's type
+      narrows; a default changes what is already on screen.
+    </li>
+    <li>
+      A value of
+      <code>data-ds-theme</code>
+      /
+      <code>-appearance</code>
+      /
+      <code>-density</code>
+      is dropped.
+    </li>
+    <li>An entry point moves.</li>
+    <li>The minimum supported Angular version rises.</li>
+  </ul>
+  <h3 id="minor--new-surface-nothing-breaks" tabindex="-1">MINOR — new surface, nothing breaks</h3>
+  <ul>
+    <li>
+      A new token, component, prop (with a backwards-compatible default), tenant theme block, icon
+      in the vocabulary, or guideline card.
+    </li>
+    <li>
+      A deprecation: the old name keeps working as an alias and is marked
+      <code>&#64;deprecated</code>
+      in the
+      <code>.d.ts</code>
+      with the replacement named.
+      <strong>Every removal must ship one minor as an alias first</strong>
+      — a rename is never a single release.
+    </li>
+  </ul>
+  <h3 id="patch--same-surface-better-behaviour" tabindex="-1">
+    PATCH — same surface, better behaviour
+  </h3>
+  <ul>
+    <li>A colour, size or duration corrected inside an existing token role.</li>
+    <li>A bug fix, an accessibility fix, a contrast fix that keeps the API.</li>
+    <li>
+      Docs, cards, reference screens,
+      <code>design-system/docs/migration.md</code>.
+    </li>
+  </ul>
+  <h3 id="rules" tabindex="-1">Rules</h3>
+  <ol>
+    <li>
+      <strong>Tokens are the contract, not the hexes.</strong>
+      Retuning a ramp is a patch; renaming a step is a major.
+    </li>
+    <li>
+      <strong>Pre-1.0 does not apply</strong>
+      — the system shipped internally, so start at 1.0.0.
+    </li>
+    <li>
+      One tag, one CHANGELOG entry, one line per change, written for the consumer ("a component
+      gains an optional input"), not for the author ("refactored component").
+    </li>
+    <li>
+      A theme added for a new tenant is a minor, even though it is only a CSS block: consumers list
+      themes in their own settings UI.
+    </li>
+    <li>
+      Generated files (
+      <code>dist/</code>,
+      <code>site/</code>, compatible token CSS/JSON and component bundles) come from repository sources via
+      <code>npm run build</code>. Do not edit generated copies; describe the consumer-facing change in the changelog.
+    </li>
+  </ol>
+</article>

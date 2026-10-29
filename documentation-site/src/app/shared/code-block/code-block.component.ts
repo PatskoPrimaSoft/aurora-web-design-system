@@ -18,6 +18,7 @@ import css from 'highlight.js/lib/languages/css';
 import scss from 'highlight.js/lib/languages/scss';
 import json from 'highlight.js/lib/languages/json';
 import bash from 'highlight.js/lib/languages/bash';
+import yaml from 'highlight.js/lib/languages/yaml';
 import type { CodeLanguage, CodeSnippet } from './code-snippet';
 
 hljs.registerLanguage('typescript', typescript);
@@ -26,6 +27,7 @@ hljs.registerLanguage('css', css);
 hljs.registerLanguage('scss', scss);
 hljs.registerLanguage('json', json);
 hljs.registerLanguage('shell', bash);
+hljs.registerLanguage('yaml', yaml);
 
 const labels: Record<CodeLanguage, string> = {
   typescript: 'TypeScript',
@@ -33,6 +35,7 @@ const labels: Record<CodeLanguage, string> = {
   css: 'CSS',
   scss: 'SCSS',
   json: 'JSON',
+  yaml: 'YAML',
   shell: 'Shell',
   text: 'Текст',
 };

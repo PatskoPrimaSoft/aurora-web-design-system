@@ -1,0 +1,173 @@
+<article class="document">
+  <a routerLink="/" [queryParams]="settings.queryParams()">На главную</a>
+  <h1 id="page-title" tabindex="-1">Линтер системы</h1>
+  <p>
+    Пять правил stylelint, которые проверяют то, что нельзя проверить глазами на ревью. Правила
+    живут внутри пакета системы и читают тот же
+    <code>tokens.json</code>, из которого генерируется
+    <code>tokens.css</code>, — поэтому линтер не может разойтись с системой: переименовали токен в мажоре, и у всех
+    потребителей это стало ошибкой сборки, ничего рассылать не нужно.
+  </p>
+  <p>
+    Чего здесь нет: TypeScript и шаблоны Angular (литералы в конфигах ECharts, inline
+    <code>[style]</code>, глубокие импорты) — это отдельный ESLint-слой, он не сделан. Baseline-режима для легаси тоже
+    нет: существующее приложение включает линтер на срезе 1, когда цвета уже переведены на токены.
+  </p>
+  <h2 id="установка" tabindex="-1">Установка</h2>
+  <aurora-code-block [snippet]="snippets.install"></aurora-code-block>
+  <p>
+    <code>.stylelintrc.json</code>
+    приложения:
+  </p>
+  <aurora-code-block [snippet]="snippets.configuration"></aurora-code-block>
+  <p>
+    <code>package.json</code>:
+  </p>
+  <aurora-code-block [snippet]="snippets.overrides"></aurora-code-block>
+  <p>
+    Исключения пишутся в конфиге приложения поверх готового, а не прячутся в
+    <code>stylelint-disable</code>
+    по файлам: исключение должно быть видно в дифе одного файла, а не растворяться по репозиторию.
+  </p>
+  <h2 id="правила" tabindex="-1">Правила</h2>
+  <h3 id="known-token" tabindex="-1">known-token</h3>
+  <p>
+    <code>var(--ds-…)</code>
+    должен указывать на токен, который существует в
+    <code>tokens.json</code>. Плюс приложение не имеет права объявлять свои
+    <code>--ds-*</code>
+    — это пространство имён системы.
+  </p>
+  <aurora-code-block [snippet]="snippets.styles"></aurora-code-block>
+  <p>
+    Второй случай — имя, скопированное со страницы артефакта: её
+    <code>tokens.css</code>
+    называет семейства с префиксом
+    <code>--font-</code>. В приложениях этого имени нет — продуктовая таблица стилей называет их так же, как
+    <code>tokens.json</code>.
+  </p>
+  <p>
+    Опции:
+    <code>tokensPath</code>
+    — читать список прямо из
+    <code>tokens.json</code>
+    вместо предсобранного;
+    <code>allowDeclare: true</code>
+    — разрешить объявлять
+    <code>--ds-*</code>
+    (нужно только самой системе).
+  </p>
+  <h3 id="no-literal-color" tabindex="-1">no-literal-color</h3>
+  <p>
+    Любой литеральный цвет в значении: hex,
+    <code>rgb()</code>,
+    <code>hsl()</code>,
+    <code>oklch()</code>,
+    <code>color-mix()</code>, именованные цвета.
+    <code>transparent</code>,
+    <code>currentColor</code>
+    и содержимое
+    <code>url()</code>
+    разрешены. Литерал в фоллбэке
+    <code>var(--ds-fg, #333)</code>
+    тоже ошибка — это обход, а не подстраховка.
+  </p>
+  <p>
+    Опции:
+    <code>ignoreProperties</code>
+    — список свойств, где литерал допустим (например
+    <code>filter</code>
+    ).
+  </p>
+  <h3 id="no-rem" tabindex="-1">no-rem</h3>
+  <p>
+    Размеры задаются в
+    <code>px</code>: порталы ставят
+    <code>html &#123; font-size: 10px &#125;</code>, поэтому
+    <code>rem</code>
+    из старого кода умножается на 10 один раз и остаётся
+    <code>px</code>.
+  </p>
+  <p>
+    Опции:
+    <code>units</code>
+    (по умолчанию
+    <code>["rem"]</code>
+    ),
+    <code>ignoreProperties</code>.
+  </p>
+  <h3 id="focus-from-tokens" tabindex="-1">focus-from-tokens</h3>
+  <p>
+    Кольцо фокуса приходит из
+    <code>dist/styles.css</code>. Правило ловит
+    <code>outline</code>,
+    <code>box-shadow</code>
+    и
+    <code>border-color</code>
+    внутри
+    <code>:focus</code>
+    /
+    <code>:focus-visible</code>, если значение не ссылается на токен, а также
+    <code>outline: none</code>
+    где угодно.
+  </p>
+  <h3 id="shadow-token-only" tabindex="-1">shadow-token-only</h3>
+  <p>
+    <code>box-shadow</code>
+    — только ссылка на ступень тени из системы или
+    <code>none</code>. Составное значение
+    <code>var(--ds-shadow-sm), 0 0 0 1px</code>
+    не проходит: вторая тень — это своё кольцо, а оно приходит из токенов фокуса. Список доступных
+    ступеней в тексте ошибки берётся из системы, а не из текста правила.
+  </p>
+  <p>
+    Опции:
+    <code>tokenPattern</code>
+    — регулярное выражение имени ступени.
+  </p>
+  <h2 id="проверка-имён-токенов" tabindex="-1">Проверка имён токенов</h2>
+  <p>
+    <code>node design-system/lint/scripts/check-names.js</code>
+    — отдельная проверка, не stylelint: она читает
+    <code>tokens.json</code>
+    и сверяет имена с регламентом (
+    <a routerLink="/documents/token-names" [queryParams]="settings.queryParams()">имена токенов</a>
+    ) — форма, лестницы ступеней, четвёрка слотов у статусов, уникальность, чернила без парной
+    заливки, безсуффиксное имя рядом с
+    <code>-md</code>.
+  </p>
+  <p>
+    Проверяется система, а не приложения: имя токена заводится здесь, здесь и контролируется.
+    Лестницы доменов и список сегодняшних долгов —
+    <code>design-system/lint/naming.config.json</code>; долг записывается с причиной, и новых он не разрешает.
+  </p>
+  <h2 id="разработка" tabindex="-1">Разработка</h2>
+  <aurora-code-block [snippet]="snippets.checks"></aurora-code-block>
+  <p>
+    <code>design-system/lint/tokens.allowed.json</code>
+    генерируется и руками не правится. Тест падает, если его забыли пересобрать после правки
+    <code>tokens.json</code>, — то же поведение, что у
+    <code>tokens.g.dart</code>
+    в мобильной системе.
+  </p>
+  <p>
+    Новое правило принимается только с парой строк в
+    <code>design-system/lint/test/run.js</code>: «плохой код — ожидаемая ошибка» и «похожий хороший код — ноль ошибок». Правило без теста тихо
+    перестаёт срабатывать при первом рефакторинге, и никто этого не замечает.
+  </p>
+  <h3 id="no-deprecated-token" tabindex="-1">no-deprecated-token</h3>
+  <p>
+    Предупреждает о ссылке на устаревшее имя, пока оно живёт алиасом. Список и версия удаления —
+    <code>aliases</code>
+    в
+    <code>design-system/lint/naming.config.json</code>; сейчас список пуст. В готовом конфиге —
+    <code>severity: warning</code>. Удалённые в 4.0.0
+    <code>--ds-gap</code>,
+    <code>--ds-pad</code>
+    и
+    <code>--ds-fresh-on</code>
+    отклоняет
+    <code>aurora/known-token</code>; замены описаны в
+    <code>design-system/docs/migration.md</code>.
+  </p>
+</article>

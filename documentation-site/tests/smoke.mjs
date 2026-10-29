@@ -3,8 +3,15 @@ import { createSiteFixture } from './fixture.mjs';
 import { checkArticles } from './articles.mjs';
 import { checkTokens } from './tokens.mjs';
 import { checkShell } from './shell.mjs';
+import { checkDocuments, checkGuides } from './guides.mjs';
 
-const checks = { articles: checkArticles, tokens: checkTokens, shell: checkShell };
+const checks = {
+  articles: checkArticles,
+  tokens: checkTokens,
+  shell: checkShell,
+  guides: checkGuides,
+  documents: checkDocuments,
+};
 const args = process.argv.slice(2);
 const pageFlag = args.find((arg) => arg.startsWith('--pages='));
 const selectedPages = pageFlag?.slice('--pages='.length).split(',').filter(Boolean);

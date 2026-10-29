@@ -33,6 +33,12 @@ export class AppComponent {
     this.navigation();
     return this.router.url.split(/[?#]/)[0].startsWith('/components');
   });
+  protected readonly isDocument = computed(() => {
+    this.navigation();
+    let route = this.router.routerState.snapshot.root;
+    while (route.firstChild) route = route.firstChild;
+    return route.data['layout'] === 'document';
+  });
   protected readonly groups = computed(() => {
     const query = this.query().trim().toLocaleLowerCase('ru');
     return (this.isComponents() ? componentNavigation : foundationNavigation)

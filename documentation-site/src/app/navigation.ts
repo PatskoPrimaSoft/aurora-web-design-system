@@ -12,6 +12,8 @@ export interface NavigationGroup {
 export const navigationSectionTitles = {
   start: 'Начало',
   foundations: 'Основы',
+  angular: 'Angular UI kit',
+  migration: 'Миграция',
   components: 'Компоненты',
 };
 export const foundationNavigation: NavigationGroup[] = [
@@ -92,6 +94,23 @@ export const foundationNavigation: NavigationGroup[] = [
       { title: 'Подбор цветов темы', path: '/foundations/theme-colors' },
       { title: 'Логотип бренда', path: '/foundations/logo' },
     ],
+  },
+  {
+    id: 'angular-guides',
+    section: 'angular',
+    level: 1,
+    title: navigationSectionTitles.angular,
+    items: [
+      { title: 'Подключение Angular', path: '/angular/setup' },
+      { title: 'Добавление компонентов', path: '/angular/adding-components' },
+    ],
+  },
+  {
+    id: 'migration-guides',
+    section: 'migration',
+    level: 1,
+    title: navigationSectionTitles.migration,
+    items: [{ title: 'Брейкпоинты: решения по миграции', path: '/migration/breakpoints' }],
   },
 ];
 export const componentNavigation: NavigationGroup[] = [

@@ -76,6 +76,10 @@ button {
   min-height: 0;
 }
 
+.layout.document-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .catalog-navigation {
   overflow: auto;
   padding: 24px 16px;

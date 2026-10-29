@@ -1,34 +1,9 @@
 import assert from 'node:assert/strict';
 import { expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
+import { pageViolations } from './accessibility.mjs';
 import { join } from 'node:path';
 import { readFileSync } from 'node:fs';
 import { parseFragment } from 'parse5';
-
-async function articleViolations(page) {
-  const { violations } = await new AxeBuilder({ page }).analyze();
-  const remaining = [];
-  for (const violation of violations) {
-    const nodes = [];
-    for (const node of violation.nodes) {
-      // Temporary yellow review markers are removed with their placeholders.
-      // Ignore only their colour contrast; keep all other accessibility checks.
-      const temporaryContrast =
-        violation.id === 'color-contrast' &&
-        node.target.length === 1 &&
-        typeof node.target[0] === 'string' &&
-        (await page
-          .locator(node.target[0])
-          .evaluate((element) =>
-            Boolean(element.closest('.migration-placeholder[data-migration-placeholder]')),
-          ));
-      if (!temporaryContrast) nodes.push(node);
-    }
-    if (nodes.length)
-      remaining.push({ id: violation.id, targets: nodes.map((node) => node.target) });
-  }
-  return remaining;
-}
 
 export async function checkArticles({ root, page, url, modes }, selectedPages) {
   const migratedFoundations = [
@@ -81,7 +56,7 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
     const textOf = (node) =>
       node.nodeName === '#text' ? node.value : (node.childNodes ?? []).map(textOf).join('');
     const collectParagraphs = (node) => {
-      if (node.tagName === 'p') originalParagraphs.push(textOf(node).replace(/\s/g, ''));
+      if (node.tagName === 'p') originalParagraphs.push(textOf(node));
       for (const child of node.childNodes ?? []) collectParagraphs(child);
     };
     collectParagraphs(parseFragment(main));
@@ -114,16 +89,17 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
         );
       }
       const migratedText = (await page.locator('article').textContent()).replace(/\s/g, '');
-      for (const paragraph of originalParagraphs) {
-        assert.ok(
-          migratedText.includes(
-            slug === 'iconography'
-              ? paragraph.replace('APIипримерыReact', 'APIипримеры')
-              : paragraph,
-          ),
-          `${slug}: original paragraph must be preserved`,
-        );
-      }
+      // Copy is adapted for Angular; preserve the token contract, not legacy React API wording.
+      const documentedTokens = new Set(
+        originalParagraphs.flatMap((paragraph) => paragraph.match(/--ds-[a-z][a-z0-9-]*/g) ?? []),
+      );
+      for (const token of documentedTokens)
+        assert.ok(migratedText.includes(token), `${slug}: documented token must remain: ${token}`);
+      assert.doesNotMatch(
+        migratedText,
+        /React|DsAppHeader|DsUserMenu|DsPageLayout|DsFilterMenu|DsIconButton|onApply|onClear/,
+        `${slug}: do not expose legacy API or promise unapproved components`,
+      );
       await expect(page.locator('[data-migration-placeholder]').first()).toBeVisible();
       assert.equal(await page.locator('iframe').count(), 0);
       await page.evaluate(() => document.fonts.ready);
@@ -547,7 +523,7 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
         }
       }
       assert.deepEqual(
-        await articleViolations(page),
+        await pageViolations(page),
         [],
         `${slug}/${theme}/${appearance}/${density}: accessibility`,
       );
@@ -575,7 +551,7 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
     await page.goto(url + `foundations/${slug}?theme=RED2&appearance=dark&density=compact`);
     await expect(page.locator('h1')).toHaveText(title);
     for (const summary of await page.locator('article summary').all()) await summary.click();
-    assert.deepEqual(await articleViolations(page), [], `${slug}: mobile accessibility`);
+    assert.deepEqual(await pageViolations(page), [], `${slug}: mobile accessibility`);
     assert.equal(
       await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),
       false,

@@ -75,8 +75,8 @@ test('direct dev preview displays failed builds and reloads after recovery',asyn
   const path=join(fixture,'design-system/tokens/source.json'),original=readFileSync(path,'utf8');writeFileSync(path,'invalid JSON');
   await expect(page.locator('[role="alert"]')).toBeVisible();await expect(page.locator('#root')).toHaveText('hello');
   const example=join(fixture,'design-system/components/Example/preview.html');writeFileSync(example,readFileSync(example,'utf8').replace('hello','recovered'));writeFileSync(path,original);
-  // Восстановление включает полную сборку каталога; на CI она может занять больше 5 секунд.
-  await expect(page.locator('#root')).toHaveText('recovered',{timeout:15000});await expect(page.locator('[role="alert"]')).toHaveCount(0);
+  // Восстановление включает полную сборку каталога; на Windows она может занять больше 15 секунд.
+  await expect(page.locator('#root')).toHaveText('recovered',{timeout:60000});await expect(page.locator('[role="alert"]')).toHaveCount(0);
  }finally{await test.step('leave preview',()=>page.goto('about:blank'));if(dev)await test.step('close dev server',()=>dev.close());rmSync(fixture,{recursive:true,force:true});}
 });
 

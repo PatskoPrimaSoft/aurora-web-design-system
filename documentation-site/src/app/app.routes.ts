@@ -1,4 +1,11 @@
+import { AngularUiKitPageComponent } from './pages/documents/angular-ui-kit/angular-ui-kit-page.component';
+import { DesignPageComponent } from './pages/documents/design/design-page.component';
+import { TokenNamesPageComponent } from './pages/documents/token-names/token-names-page.component';
+import { ReleasePageComponent } from './pages/documents/release/release-page.component';
+import { LintPageComponent } from './pages/documents/lint/lint-page.component';
 import { Routes } from '@angular/router';
+import { AddingComponentsPageComponent } from './pages/angular/adding-components/adding-components-page.component';
+import { AngularSetupPageComponent } from './pages/angular/setup/angular-setup-page.component';
 import { ButtonPageComponent } from './pages/components/button/button-page.component';
 import { IconPageComponent } from './pages/components/icon/icon-page.component';
 import { ComponentsIndexPageComponent } from './pages/components/index/components-index-page.component';
@@ -23,6 +30,8 @@ import { StatusPageComponent } from './pages/foundations/status/status-page.comp
 import { ThemeColorsPageComponent } from './pages/foundations/theme-colors/theme-colors-page.component';
 import { ThemesPageComponent } from './pages/foundations/themes/themes-page.component';
 import { TypographyPageComponent } from './pages/foundations/typography/typography-page.component';
+import { BreakpointMigrationPageComponent } from './pages/migration/breakpoints/breakpoint-migration-page.component';
+import { TypographyMigrationPageComponent } from './pages/documents/typography-migration/typography-migration-page.component';
 import { NotFoundPageComponent } from './pages/not-found/not-found-page.component';
 import { TokensPageComponent } from './pages/tokens/tokens-page.component';
 
@@ -117,5 +126,56 @@ export const routes: Routes = [
   { path: 'tokens', component: TokensPageComponent, title: 'Дизайн-токены — Aurora' },
   { path: 'components/icon', component: IconPageComponent, title: 'Icon — Aurora' },
   { path: 'components/button', component: ButtonPageComponent, title: 'Button — Aurora' },
+  {
+    path: 'angular/setup',
+    component: AngularSetupPageComponent,
+    title: 'Подключение Angular — Aurora',
+  },
+  {
+    path: 'angular/adding-components',
+    component: AddingComponentsPageComponent,
+    title: 'Добавление компонентов — Aurora',
+  },
+  {
+    path: 'migration/breakpoints',
+    component: BreakpointMigrationPageComponent,
+    title: 'Брейкпоинты: решения по миграции — Aurora',
+  },
+  {
+    path: 'documents/typography-migration',
+    component: TypographyMigrationPageComponent,
+    title: 'Смена типографической системы — Aurora',
+    data: { layout: 'document' },
+  },
+  {
+    path: 'documents/angular-ui-kit',
+    component: AngularUiKitPageComponent,
+    title: 'Правила Angular UI kit — Aurora',
+    data: { layout: 'document' },
+  },
+  {
+    path: 'documents/design',
+    component: DesignPageComponent,
+    title: 'Дизайн-правила Aurora — Aurora',
+    data: { layout: 'document' },
+  },
+  {
+    path: 'documents/token-names',
+    component: TokenNamesPageComponent,
+    title: 'Регламент имён токенов — Aurora',
+    data: { layout: 'document' },
+  },
+  {
+    path: 'documents/release',
+    component: ReleasePageComponent,
+    title: 'Версии и публикация — Aurora',
+    data: { layout: 'document' },
+  },
+  {
+    path: 'documents/lint',
+    component: LintPageComponent,
+    title: 'Линтер системы — Aurora',
+    data: { layout: 'document' },
+  },
   { path: '**', component: NotFoundPageComponent, title: 'Страница не найдена — Aurora' },
 ];

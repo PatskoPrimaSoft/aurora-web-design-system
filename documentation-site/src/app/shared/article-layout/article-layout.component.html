@@ -7,7 +7,9 @@
     <ng-content></ng-content>
   </article>
   @if (headings().length) {
-    <aside class="page-contents" aria-label="Оглавление страницы">
+    <aside class="page-contents"
+      aria-label="Оглавление страницы"
+      [style.max-height.px]="wide() ? contentsHeight() : null">
       <details [open]="wide()">
         <summary>На этой странице</summary>
         <nav>

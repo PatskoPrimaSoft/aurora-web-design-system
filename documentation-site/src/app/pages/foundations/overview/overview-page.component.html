@@ -14,7 +14,7 @@
         [attr.data-ds-theme]="settings.theme()"
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
-        Пример поиска будет перенесён после подготовки Angular-компонентов поля и метки состояния.
+        Пример поиска будет перенесён при наполнении Angular-примеров.
       </div>
     </section>
     <section aria-labelledby="start">
@@ -47,9 +47,9 @@
         <dt>Подключить в проект</dt>
         <dd>
           Откройте
-          <span class="migration-placeholder" data-migration-placeholder>
-            руководство по подключению (ещё не перенесено)
-          </span>: установка пакета, стили и использование в Angular.
+          <a routerLink="/angular/setup" [queryParams]="settings.queryParams()">
+            руководство по подключению
+          </a>: установка пакета, стили и использование в Angular.
         </dd>
       </dl>
     </section>

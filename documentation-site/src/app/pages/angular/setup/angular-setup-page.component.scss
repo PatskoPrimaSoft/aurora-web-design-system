@@ -1,0 +1,4 @@
+@use '../../../../styles/article';
+
+// Shared typography, links and lists for the complete instruction.
+@include article.document;

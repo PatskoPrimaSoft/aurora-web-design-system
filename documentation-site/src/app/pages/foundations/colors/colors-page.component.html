@@ -3,21 +3,21 @@
   <div class="guide-content">
     <section aria-labelledby="in-interface">
       <h2 id="in-interface" tabindex="-1">Нейтрали в интерфейсе</h2>
-      <p class="lead">
-        В готовых компонентах цвета заголовков, подписей и элементов управления уже заданы. При
-        смене оформления компоненты получают нужные значения автоматически. Пример ниже собран из
-        DsPanel и DsField без отдельных настроек цвета текста.
+      <p>
+        В готовых компонентах цвета заголовков, подписей и элементов управления задаются их стилями.
+        При смене оформления компоненты получают значения через токены. Здесь будет пример панели и
+        поля без отдельных настроек цвета текста.
       </p>
       <aurora-example-block class="scene migration-placeholder"
         id="ready-interface"
-        aria-label="Готовая панель объекта"
+        aria-label="Будущий пример панели объекта"
         role="note"
         data-migration-placeholder=""
         background="subtle"
         [attr.data-ds-theme]="settings.theme()"
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
-        Демонстрация панели объекта ожидает Angular-компонентов Panel и Field.
+        Демонстрация панели объекта ожидает подготовки Angular-примера.
       </aurora-example-block>
       <p style="margin-top: 16px">
         Вы задаёте содержимое и параметры компонентов. Панель оформляет свой заголовок, поле —
@@ -85,8 +85,7 @@
         [attr.data-ds-theme]="settings.theme()"
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
-        Демонстрация поверхностей и меню действий ожидает Angular-компонентов Panel, Menu и
-        доработки Button.
+        Демонстрация поверхностей и меню действий ожидает подготовки Angular-примера.
       </aurora-example-block>
       <p style="margin-top: 16px">
         Откройте меню «Действия объекта»: оно появляется над панелью на
@@ -304,7 +303,7 @@
           [attr.data-ds-theme]="settings.theme()"
           [attr.data-ds-appearance]="settings.appearance()"
           [attr.data-ds-density]="settings.density()">
-          Демонстрация границы поля ожидает Angular-компонента Field.
+          Демонстрация границы поля ожидает подготовки Angular-примера.
         </aurora-example-block>
         <div>
           <code class="role-token">--ds-border-field</code>
@@ -319,7 +318,7 @@
           [attr.data-ds-theme]="settings.theme()"
           [attr.data-ds-appearance]="settings.appearance()"
           [attr.data-ds-density]="settings.density()">
-          Демонстрация границы чекбокса ожидает Angular-компонента Checkbox.
+          Демонстрация границы чекбокса ожидает подготовки Angular-примера.
         </aurora-example-block>
         <div>
           <code class="role-token">--ds-border-control</code>
@@ -376,7 +375,7 @@
           [attr.data-ds-theme]="settings.theme()"
           [attr.data-ds-appearance]="settings.appearance()"
           [attr.data-ds-density]="settings.density()">
-          Интерактивная демонстрация выбора и фокуса ожидает доработки Angular-компонента Button.
+          Интерактивная демонстрация выбора и фокуса ожидает подготовки Angular-примера.
         </aurora-example-block>
         <p>
           Обычная поверхность, hover и нажатие используют
@@ -937,22 +936,21 @@
     <section aria-labelledby="пример-кода">
       <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
       <p>
-        Готовые компоненты оформляют свои заголовки, подписи и состояния. В этом примере цвет текста
-        отдельно не задаётся: его выбирают DsPanel и DsField, а обычный текст наследует цвет
-        страницы.
+        Пример покажет наследование текста страницы и оформление заголовков и подписей по
+        семантическим ролям, без отдельных настроек цвета для каждого элемента.
       </p>
       <aurora-example-block class="pending-code migration-placeholder"
         role="note"
         data-migration-placeholder>
-        Angular-пример кода будет добавлен после реализации Panel и Field. React-код здесь не
-        показывается как Angular API.
+        Angular-пример кода будет добавлен при наполнении Angular-примеров. Состав компонентов для
+        демонстрации будет определён отдельно.
       </aurora-example-block>
       <p>
-        Внешние отступы и промежутки между дочерними элементами задаёт родитель. Цветовые токены из
-        справочника нужны при создании собственной разметки и стилей. Токен
+        Внешние отступы и промежутки между дочерними элементами задаёт родитель. Цветовые токены
+        нужны при создании собственной разметки и стилей.
         <code>--ds-type-title</code>
-        задаёт параметры шрифта; сам по себе он не назначает цвет. Готовый заголовок DsPanel
-        объединяет нужные стили.
+        задаёт параметры шрифта; сам по себе он не назначает цвет. Заголовку собственной панели
+        нужно выбрать и типографическую роль, и семантический цвет.
       </p>
     </section>
     <section aria-labelledby="дальше">

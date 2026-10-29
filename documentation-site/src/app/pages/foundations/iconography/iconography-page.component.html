@@ -13,10 +13,7 @@
         [attr.data-ds-density]="settings.density()"
         role="note"
         data-migration-placeholder>
-        <p>
-          Пример поиска и добавления объекта появится после подготовки Angular-компонентов Field и
-          Button.
-        </p>
+        Пример поиска и добавления объекта появится при наполнении Angular-примеров.
       </aurora-example-block>
       <p>
         Готовые компоненты сами задают размер, цвет и положение иконки. Вам нужно выбрать её смысл и
@@ -56,8 +53,7 @@
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
         <p class="caption migration-placeholder" role="note" data-migration-placeholder>
-          Поиск по словарю появится после подготовки Angular-компонента Field. Пока показан полный
-          словарь.
+          Поиск по словарю появится при наполнении Angular-примеров. Пока показан полный словарь.
         </p>
         <div class="dictionary">
           @for (icon of icons; track icon.name) {
@@ -135,11 +131,9 @@
         <p>
           Шрифт поставляется вместе с пакетом и подключается общим
           <code>styles.css</code>. Дополнительный CDN не нужен.
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница ещё не перенесена">
+          <a routerLink="/angular/setup" [queryParams]="settings.queryParams()">
             Подключение в Angular
-          </span>
+          </a>
           и
           <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">
             плотность интерфейса
@@ -165,8 +159,7 @@
           <ds-icon name="lock" label="Доступ ограничен"></ds-icon>
         </div>
         <p class="caption migration-placeholder" role="note" data-migration-placeholder>
-          Пример кнопки настроек появится после согласования и подготовки компонента кнопки с
-          иконкой.
+          Пример кнопки настроек появится при наполнении примеров действий с иконкой.
         </p>
       </aurora-example-block>
       <ul>
@@ -181,7 +174,7 @@
           и доступное имя.
         </li>
         <li>
-          Для действия используйте DsIconButton с доступным именем. Подсказка при наведении не
+          Для действия используйте кнопку с иконкой и доступным именем. Подсказка при наведении не
           заменяет имя кнопки. Иконка сама не становится кнопкой; область нажатия должна быть не
           меньше 24×24 px.
         </li>
@@ -208,7 +201,7 @@
             [attr.data-ds-density]="settings.density()"
             role="note"
             data-migration-placeholder>
-            <p>Пример действия удаления появится после подготовки Angular-компонента Button.</p>
+            Пример действия удаления появится при наполнении Angular-примеров.
           </aurora-example-block>
           <p>Корзина и подпись однозначно обозначают удаление.</p>
         </div>
@@ -221,7 +214,7 @@
             [attr.data-ds-density]="settings.density()"
             role="note"
             data-migration-placeholder>
-            <p>Пример действия удаления появится после подготовки Angular-компонента Button.</p>
+            Пример действия удаления появится при наполнении Angular-примеров.
           </aurora-example-block>
           <p>Крестик с той же подписью смешивает удаление и закрытие.</p>
         </div>
@@ -265,20 +258,14 @@
     </section>
     <section aria-labelledby="пример-кода">
       <p>
-        Правила выбора и словарь показаны в живых примерах выше. Для API используйте
-        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">DsIcon</a>
-        и
-        <span data-migration-placeholder
-          class="migration-placeholder"
-          title="Страница ещё не перенесена">
-          DsIconButton
-        </span>.
+        Правила выбора и словарь показаны выше. Текущий Angular API иконки описан на
+        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">странице Icon</a>. Выделение кнопки с иконкой в отдельный компонент решается отдельно.
       </p>
       <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
       <p>
-        Использование готовых компонентов: кнопка сама размещает иконку, а DsIcon рядом с текстом
-        остаётся декоративной. Angular API описывается в разделе
-        <span title="Руководство находится в ng-ui-kit/docs/adding-components.md">UI-kit</span>.
+        Иконка рядом с поясняющим текстом декоративная. Если она находится внутри кнопки, действие и
+        доступное имя принадлежат кнопке. Angular-пример будет добавлен после доработки иконки и
+        кнопки.
       </p>
       <aurora-example-block class="pending-code migration-placeholder"
         role="note"

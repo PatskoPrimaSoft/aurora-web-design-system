@@ -121,6 +121,64 @@
   @include base($plain: true);
 }
 
+// Long-form instructions share article typography; their examples remain text snippets.
+@mixin document {
+  @include base;
+  @include links;
+  @include inline-code;
+
+  .guide-introduction + section {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--ds-divider);
+  }
+
+  h3 {
+    margin-top: 24px;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin: 16px 0;
+  }
+
+  li + li {
+    margin-top: 8px;
+  }
+
+  li > p + p {
+    margin-top: 8px;
+  }
+
+  aurora-code-block {
+    margin: 20px 0;
+  }
+
+  .table-scroll {
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--ds-divider);
+    vertical-align: top;
+  }
+
+  th {
+    font: var(--ds-type-body-strong);
+    background: var(--ds-bg);
+  }
+}
+
 @mixin choices {
   .choices {
     display: grid;
@@ -162,5 +220,85 @@
 @mixin migration-note {
   [data-migration-placeholder] {
     color: var(--ds-fg-muted);
+  }
+}
+
+// Standalone reference documents share the approved centered reading layout.
+@mixin standalone-document {
+  @include links;
+  @include inline-code;
+
+  :host {
+    display: block;
+  }
+
+  .document {
+    max-width: 920px;
+    margin-inline: auto;
+    font: var(--ds-type-body);
+    color: var(--ds-fg);
+    overflow-wrap: anywhere;
+  }
+
+  h1 {
+    font: var(--ds-type-title);
+    letter-spacing: var(--ds-tracking-tight);
+    color: var(--ds-fg-strong);
+    margin: 24px 0 16px;
+  }
+
+  h2 {
+    font: var(--ds-type-section);
+    color: var(--ds-fg-strong);
+    margin: 32px 0 16px;
+  }
+
+  p {
+    margin: 16px 0;
+    line-height: 1.6;
+  }
+
+  ul,
+  ol {
+    margin: 16px 0;
+    padding-left: 24px;
+  }
+
+  li + li {
+    margin-top: 8px;
+  }
+
+  h3,
+  h4 {
+    font: var(--ds-type-body-strong);
+    color: var(--ds-fg-strong);
+    margin: 24px 0 12px;
+  }
+  aurora-code-block {
+    margin: 20px 0;
+  }
+  .table-scroll {
+    overflow-x: auto;
+    margin: 20px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  th,
+  td {
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--ds-divider);
+    vertical-align: top;
+  }
+  th {
+    font: var(--ds-type-body-strong);
+    background: var(--ds-bg);
+  }
+  hr {
+    border: 0;
+    border-top: 1px solid var(--ds-divider);
+    margin: 32px 0;
   }
 }

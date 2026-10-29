@@ -14,19 +14,12 @@
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
         <p class="migration-placeholder" role="note" data-migration-placeholder>
-          Пример выбора объекта в списке и на карте появится после подготовки необходимых
-          Angular-компонентов.
+          Пример выбора объекта в списке и на карте появится при наполнении Angular-примеров.
         </p>
       </aurora-example-block>
       <p>
         Ширина панели определяется её задачей, а не долей экрана. Основной регион может
-        растягиваться. Готовый
-        <span data-migration-placeholder
-          class="migration-placeholder"
-          title="Страница компонента ещё не перенесена">
-          DsPageLayout
-        </span>
-        размещает регионы; приложение выбирает их состав и наполнение. В примере выше каркас задан
+        растягиваться. Приложение выбирает состав и наполнение регионов. В схеме выше каркас задан
         собственной CSS-сеткой. Колонки интерфейса не определяют положение объектов на карте: оно
         задаётся географическими координатами.
       </p>
@@ -74,8 +67,8 @@
         [attr.data-ds-density]="settings.density()">
         <div class="stack">
           <p class="migration-placeholder" role="note" data-migration-placeholder>
-            Переключение направляющих появится после подготовки Angular-компонентов Switch и Button.
-            Пока показана исходная схема каркаса.
+            Переключение направляющих появится при наполнении Angular-примеров. Пока показана
+            исходная схема каркаса.
           </p>
           <div class="frame-diagram">
             <div class="frame-header">Шапка приложения</div>
@@ -424,8 +417,7 @@
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
         <p class="migration-placeholder" role="note" data-migration-placeholder>
-          Интерактивное сравнение ширины формы и карты появится после подготовки Angular-компонентов
-          Button, Switch и Field.
+          Интерактивное сравнение ширины формы и карты появится при наполнении Angular-примеров.
         </p>
       </aurora-example-block>
       <p>
@@ -448,8 +440,7 @@
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
         <p class="migration-placeholder" role="note" data-migration-placeholder>
-          Пример фильтров и таблицы появится после подготовки Angular-компонентов Field, Switch и
-          Table.
+          Пример фильтров и таблицы появится при наполнении Angular-примеров.
         </p>
       </aurora-example-block>
       <p>
@@ -474,7 +465,7 @@
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
         <p class="migration-placeholder" role="note" data-migration-placeholder>
-          Пример формы появится после подготовки Angular-компонентов Field, Button и Switch.
+          Пример формы появится при наполнении Angular-примеров.
         </p>
       </aurora-example-block>
       <p>
@@ -500,16 +491,9 @@
         </li>
       </ul>
       <p>
-        У DsPageLayout есть режимы
-        <code>scroll="page"</code>
-        и
-        <code>scroll="regions"</code>; для них родитель задаёт высоту. Обычному потоку подходит
-        <code>scroll="none"</code>. Контракт — на
-        <span data-migration-placeholder
-          class="migration-placeholder"
-          title="Страница компонента ещё не перенесена">
-          странице компонента
-        </span>.
+        Владелец прокрутки определяется компоновкой: вся страница либо отдельные регионы. Для
+        независимо прокручиваемых областей родитель задаёт ограниченную высоту. Конкретная
+        реализация остаётся в разметке приложения; готовый API каркаса здесь не предполагается.
       </p>
     </section>
     <section aria-labelledby="reference">
@@ -548,13 +532,8 @@
     <section aria-labelledby="пример-кода">
       <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
       <p>
-        Примеры и правила выбора регионов показаны выше. Размеры и поведение готового каркаса
-        описаны в
-        <span data-migration-placeholder
-          class="migration-placeholder"
-          title="Страница компонента ещё не перенесена">
-          DsPageLayout
-        </span>.
+        Состав регионов и правила распределения места описаны выше. Следующий код показывает
+        собственную компоновку на CSS, без отдельного компонента каркаса.
       </p>
 
       <p>
@@ -565,9 +544,8 @@
       </p>
       <aurora-code-block [snippet]="snippets.workspace"></aurora-code-block>
       <p>
-        Ширина 240 px служит только демонстрации. У DsPageLayout ширина боковой панели по умолчанию
-        определяется токеном
-        <code>--ds-panel-w</code>.
+        Ширина 240 px служит только демонстрации. Для системной ширины боковой панели используется
+        <code>--ds-panel-w</code>; выбор ширины зависит от задачи и содержимого.
       </p>
       <h3>Применение стандарта расстояний</h3>
       <p>
@@ -583,9 +561,9 @@
         <a routerLink="/foundations/breakpoints" [queryParams]="settings.queryParams()">
           адаптивность
         </a>,
-        <span title="Руководство находится в ng-ui-kit/docs/adding-components.md">
+        <a routerLink="/angular/adding-components" [queryParams]="settings.queryParams()">
           Angular UI kit
-        </span>.
+        </a>.
       </p>
     </section>
   </div>

@@ -4,13 +4,8 @@
     <section aria-labelledby="in-interface">
       <h2 id="in-interface" tabindex="-1">Логотип в шапке</h2>
       <p class="lead">
-        В шапке используйте знак и название продукта. Готовая
-        <span data-migration-placeholder
-          class="migration-placeholder"
-          title="Страница ещё не перенесена">
-          DsAppHeader
-        </span>
-        задаёт плашку, размеры и отступы.
+        В шапке используйте знак и название продукта. Плашка, размеры и отступы задаются по правилам
+        этой страницы; отдельный библиотечный компонент шапки не предполагается.
       </p>
       <div class="pair">
         <div>
@@ -22,7 +17,7 @@
             [attr.data-ds-appearance]="settings.appearance()"
             [attr.data-ds-density]="settings.density()">
             <p class="migration-placeholder" role="note" data-migration-placeholder>
-              Пример обычной шапки будет собран после подготовки необходимых Angular-компонентов.
+              Пример обычной шапки будет собран при наполнении Angular-примеров.
             </p>
           </aurora-example-block>
         </div>
@@ -35,14 +30,14 @@
             [attr.data-ds-appearance]="settings.appearance()"
             [attr.data-ds-density]="settings.density()">
             <p class="migration-placeholder" role="note" data-migration-placeholder>
-              Пример компактной шапки будет собран после подготовки необходимых Angular-компонентов.
+              Пример компактной шапки будет собран при наполнении Angular-примеров.
             </p>
           </aurora-example-block>
         </div>
       </div>
       <p class="caption" style="margin-top: 12px">
-        Скрывать название и метку DEV решает приложение: DsAppHeader не переключает композицию
-        автоматически. В компактном примере название сохранено для скринридера.
+        Скрывать название и метку DEV решает приложение. Если название скрыто визуально, сохраните
+        доступное имя для пользователей экранных дикторов.
       </p>
       <p style="margin-top: 16px">
         Проверьте знак в обоих оформлениях переключателем вверху страницы: брендовая плашка может
@@ -190,8 +185,8 @@
     <section aria-labelledby="пример-кода">
       <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
       <p>
-        Готовая шапка задаёт размеры и оформление композиции. Путь к PNG замените путём к ресурсу
-        вашего приложения; файл должен быть доступен в его сборке.
+        Размеры и оформление композиции задаются по правилам этой страницы. Путь к PNG замените
+        путём к ресурсу вашего приложения; файл должен быть доступен в его сборке.
       </p>
       <aurora-example-block class="pending-code">
         <p class="migration-placeholder" role="note" data-migration-placeholder>

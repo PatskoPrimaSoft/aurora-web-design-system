@@ -18,9 +18,10 @@
         Копировать
       </button>
     </div>
+    <!-- Multiple snippets may share a language; they are groups, not page landmarks. -->
     <pre #source
       tabindex="0"
-      role="region"
+      role="group"
       [attr.aria-label]="'Код: ' + label()"><code [innerHTML]="highlighted()"></code></pre>
     <span class="status" role="status" aria-atomic="true">{{ status() }}</span>
   </div>

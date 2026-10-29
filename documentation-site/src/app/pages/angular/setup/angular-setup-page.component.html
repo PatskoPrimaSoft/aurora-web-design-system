@@ -1,0 +1,910 @@
+<aurora-article-layout title="Подключение Angular"
+  subtitle="Установка пакета, стили, тема и первый компонент Angular UI kit.">
+  <div class="guide-content">
+    <div class="guide-introduction">
+      <p>
+        <a routerLink="/" [queryParams]="settings.queryParams()">Начало</a>
+        ·
+        <a routerLink="/documents/design" [queryParams]="settings.queryParams()">Дизайн-правила</a>
+      </p>
+      <p>
+        Новое приложение проходит подключение ниже. Для существующего приложения сначала выберите
+        <a routerLink="." fragment="существующее-приложение" [queryParams]="settings.queryParams()">
+          срез внедрения
+        </a>.
+      </p>
+      <p>
+        Дизайн-система и Angular UI kit устанавливаются одним пакетом
+        <code>&#64;primasoftllc/design-system</code>. CSS, токены, шрифты и Angular-компоненты согласованы по версии; отдельный пакет
+        <code>ng-ui-kit</code>
+        и React-зависимости для Angular не нужны.
+      </p>
+      <ul>
+        <li>
+          <a routerLink="." fragment="1-доступ-к-пакету" [queryParams]="settings.queryParams()">
+            Подключение
+          </a>
+        </li>
+        <li>
+          <a routerLink="." fragment="10-компоненты" [queryParams]="settings.queryParams()">
+            Angular-компоненты
+          </a>
+        </li>
+        <li>
+          <a routerLink="." fragment="локальные-скоупы" [queryParams]="settings.queryParams()">
+            Локальные скоупы
+          </a>
+          и
+          <a routerLink="." fragment="echarts" [queryParams]="settings.queryParams()">графики</a>
+        </li>
+        <li>
+          <a routerLink="." fragment="что-проверяет-линтер" [queryParams]="settings.queryParams()">
+            Проверки линтера
+          </a>
+          и
+          <a routerLink="." fragment="приёмка-экрана" [queryParams]="settings.queryParams()">
+            приёмка экрана
+          </a>
+        </li>
+        <li>
+          <a routerLink="." fragment="пилот" [queryParams]="settings.queryParams()">Пилот</a>
+          и
+          <a routerLink="."
+            fragment="существующее-приложение"
+            [queryParams]="settings.queryParams()">
+            внедрение в существующее приложение
+          </a>
+        </li>
+        <li>
+          <a routerLink="." fragment="обновление-системы" [queryParams]="settings.queryParams()">
+            Обновления
+          </a>
+          и
+          <a routerLink="." fragment="если-что-то-не-так" [queryParams]="settings.queryParams()">
+            устранение проблем
+          </a>
+        </li>
+      </ul>
+      <p>
+        Для разработки UI kit используется Angular 19.2.25 и TypeScript 5.8.3. Проверенные
+        потребители — Angular 19.2.25 и 20.3.34 с Zone.js. Peer range —
+        <code>^19.2.25 || &gt;=20.3.34</code>; более новые major не проверены. SSR, hydration и zoneless пока не проверены. Node 22.12+
+        (в проекте 22.23.2), доступ к GitHub. Для графиков — ECharts 6.1+; ECharts 5 не
+        поддерживается. Правила компонентов и критерии совместимости описаны в
+        <a routerLink="/documents/angular-ui-kit" [queryParams]="settings.queryParams()">
+          правилах UI kit
+        </a>.
+      </p>
+    </div>
+    <section aria-labelledby="1-доступ-к-пакету">
+      <h2 id="1-доступ-к-пакету" tabindex="-1">1. Доступ к пакету</h2>
+      <p>
+        Репозиторий
+        <code>PrimaSoftLLC/aurora-web-design-system</code>
+        публичный: для чтения исходников отдельный доступ не нужен. Пакет
+        <code>&#64;primasoftllc/design-system</code>
+        распространяется через GitHub Packages.
+      </p>
+      <p>
+        Для установки npm-пакетов GitHub Packages требует авторизацию даже при публичной видимости
+        пакета. Публичность исходников и права на пакет — разные настройки; подробнее —
+        <a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages"
+          target="_blank"
+          rel="noopener noreferrer">
+          документация GitHub Packages
+        </a>.
+      </p>
+      <ol>
+        <li>
+          Создайте PAT
+          <strong>classic</strong>
+          со scope
+          <code>read:packages</code>
+          (GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)).
+          Fine-grained токен GitHub Packages не принимает.
+        </li>
+        <li>
+          Положите токен в переменную окружения
+          <code>NODE_AUTH_TOKEN</code>
+          (в профиль оболочки, не в репозиторий).
+        </li>
+      </ol>
+    </section>
+    <section aria-labelledby="2-npmrc-в-корне-приложения">
+      <h2 id="2-npmrc-в-корне-приложения" tabindex="-1">
+        2.
+        <code>.npmrc</code>
+        в корне приложения
+      </h2>
+      <aurora-code-block [snippet]="snippets.registry"></aurora-code-block>
+      <p>Файл коммитится: токена в нём нет, только ссылка на переменную.</p>
+    </section>
+    <section aria-labelledby="3-установка">
+      <h2 id="3-установка" tabindex="-1">3. Установка</h2>
+      <aurora-code-block [snippet]="snippets.install"></aurora-code-block>
+      <p>
+        Базовый Angular-вход не требует ECharts. Устанавливайте
+        <code>echarts</code>
+        отдельно, если используете графики. Выбирайте выпущенную версию, в которой уже есть нужный
+        Angular-компонент: наличие компонента в ветке разработки не означает его наличие в реестре.
+      </p>
+    </section>
+    <section aria-labelledby="4-стили-angularjson">
+      <h2 id="4-стили-angularjson" tabindex="-1">
+        4. Стили:
+        <code>angular.json</code>
+      </h2>
+      <p>
+        В
+        <code>projects.&lt;app&gt;.architect.build.options</code>
+        добавьте или обновите свойство
+        <code>styles</code>. CSS пакета должен идти перед стилями приложения:
+      </p>
+      <aurora-code-block [snippet]="snippets.globalStyles"></aurora-code-block>
+      <p>
+        Шрифты (Inter Tight, JetBrains Mono) и иконки Material Symbols подключаются самим
+        <code>styles.css</code>
+        — в
+        <code>assets</code>
+        ничего добавлять не нужно, в Google Fonts интерфейс не ходит.
+      </p>
+    </section>
+    <section aria-labelledby="5-публичные-входы-пакета">
+      <h2 id="5-публичные-входы-пакета" tabindex="-1">5. Публичные входы пакета</h2>
+      <p>
+        Пакет содержит скомпилированную Angular-библиотеку с типами. Для нового проекта алиас в
+        <code>tsconfig.paths</code>
+        не нужен. Используйте публичные входы:
+      </p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                Импорт от
+                <code>&#64;primasoftllc/design-system</code>
+              </th>
+              <th>Что подключает</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>/angular</code></td>
+              <td>
+                <code>provideAurora</code>,
+                <code>AuroraThemeService</code>,
+                <code>AuroraScopeDirective</code>,
+                <code>DsButtonComponent</code>,
+                <code>DsIconComponent</code>
+                и их типы
+              </td>
+            </tr>
+            <tr>
+              <td><code>/angular/echarts</code></td>
+              <td>Angular-интеграция графиков; требует отдельной установки ECharts</td>
+            </tr>
+            <tr>
+              <td><code>/styles.css</code></td>
+              <td>
+                Общие стили, токены, шрифты и иконки; физический путь для
+                <code>angular.json</code>
+                показан выше
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>/tokens.css</code>,
+                <code>/tokens.json</code>
+              </td>
+              <td>
+                Отдельные CSS-токены и JSON-справочник; для обычного UI kit достаточно
+                <code>styles.css</code>
+              </td>
+            </tr>
+            <tr>
+              <td><code>/stylelint-config</code></td>
+              <td>Конфиг линтера для CSS/SCSS приложения</td>
+            </tr>
+            <tr>
+              <td><code>/echarts-theme</code></td>
+              <td>Самостоятельный JavaScript-мост токенов к ECharts</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Каталоги
+        <code>design-system/</code>
+        и
+        <code>ng-ui-kit/</code>
+        разделяют исходники в этом репозитории, но не меняют npm-импорты.
+        <code>.tmp/package/</code>
+        — внутренняя директория подготовки поставки: копировать её файлы в приложение или ссылаться
+        на неё из
+        <code>tsconfig</code>
+        не нужно. Прежние исходные TypeScript-адаптеры оставлены только для
+        <a routerLink="."
+          fragment="переход-со-старого-алиаса"
+          [queryParams]="settings.queryParams()">
+          миграции существующих алиасов
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="6-тема-оформление-плотность">
+      <h2 id="6-тема-оформление-плотность" tabindex="-1">6. Тема, оформление, плотность</h2>
+      <p>
+        <code>app.config.ts</code>:
+      </p>
+      <aurora-code-block [snippet]="snippets.appConfig"></aurora-code-block>
+      <p>
+        Передайте
+        <code>appConfig</code>
+        вторым аргументом
+        <code>bootstrapApplication</code>
+        в
+        <code>src/main.ts</code>:
+      </p>
+      <aurora-code-block [snippet]="snippets.bootstrap"></aurora-code-block>
+      <p>
+        Пути соответствуют приложению с
+        <code>src/app/app.component.ts</code>
+        и
+        <code>src/app/app.config.ts</code>; при другой структуре измените только относительные импорты. Провайдер запускает сервис при
+        bootstrap и выставляет атрибуты на
+        <code>&lt;body&gt;</code>. Для переключателей оформления или плотности внедряйте
+        <code>AuroraThemeService</code>
+        в компонент через
+        <code>inject(AuroraThemeService)</code>; доступны
+        <code>appearance()</code>,
+        <code>density()</code>,
+        <code>setAppearance('dark')</code>,
+        <code>setDensity('compact')</code>
+        и
+        <code>setTheme('RED2')</code>.
+      </p>
+      <p>
+        <code>src/index.html</code>
+        — те же значения статически, чтобы до старта Angular страница не мигнула без темы:
+      </p>
+      <aurora-code-block [snippet]="snippets.initialScope"></aurora-code-block>
+      <p>
+        Сервис держит на
+        <code>&lt;body&gt;</code>
+        три атрибута:
+        <code>data-ds-theme</code>
+        (
+        <code>DEFAULT</code>
+        |
+        <code>RED2</code>
+        ),
+        <code>data-ds-appearance</code>
+        (
+        <code>light</code>
+        |
+        <code>dark</code>
+        ),
+        <code>data-ds-density</code>
+        (
+        <code>cozy</code>
+        |
+        <code>compact</code>
+        ). Оформление и плотность он запоминает в
+        <code>localStorage</code>, тему — нет: это свойство тенанта. Пользователю дайте переключатели оформления и плотности,
+        обе плотности обязательны.
+      </p>
+      <p>
+        Корректные значения в storage имеют приоритет над конфигурацией; при недоступном storage
+        используются значения конфигурации.
+        <code>FRONT_BRAND</code>
+        и классы
+        <code>theme-*</code>
+        можно сохранить: сервис меняет только
+        <code>data-ds-*</code>. Передавайте бренд в
+        <code>provideAurora(&#123;theme&#125;)</code>, после загрузки конфигурации — в
+        <code>AuroraThemeService.setTheme(theme)</code>.
+      </p>
+      <p>
+        Переопределить скоуп на части страницы —
+        <a routerLink="." fragment="локальные-скоупы" [queryParams]="settings.queryParams()">
+          директива или атрибут на обёртке
+        </a>:
+      </p>
+      <aurora-code-block [snippet]="snippets.localScope"></aurora-code-block>
+    </section>
+    <section aria-labelledby="7-графики-если-нужны">
+      <h2 id="7-графики-если-нужны" tabindex="-1">7. Графики, если нужны</h2>
+      <aurora-code-block [snippet]="snippets.installCharts"></aurora-code-block>
+      <aurora-code-block [snippet]="snippets.chartImports"></aurora-code-block>
+      <p>
+        Стройте опции от DOM-узла графика и перестраивайте их при смене скоупа. Пример и отписка —
+        <a routerLink="." fragment="echarts" [queryParams]="settings.queryParams()">ниже</a>. Самостоятельный JS-вход
+        <code>/echarts-theme</code>
+        также сохранён.
+      </p>
+    </section>
+    <section aria-labelledby="8-линтер--в-первый-день">
+      <h2 id="8-линтер--в-первый-день" tabindex="-1">8. Линтер — в первый день</h2>
+      <p>
+        <code>.stylelintrc.json</code>:
+      </p>
+      <aurora-code-block [snippet]="snippets.stylelint"></aurora-code-block>
+      <p>
+        <code>package.json</code>:
+        <code>"lint:css": "stylelint \"src/**/*.&#123;css,scss&#125;\""</code>, запуск в CI рядом с тестами. Что он ловит и чего не видит —
+        <a routerLink="." fragment="что-проверяет-линтер" [queryParams]="settings.queryParams()">
+          проверки линтера
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="9-как-писать-стили">
+      <h2 id="9-как-писать-стили" tabindex="-1">9. Как писать стили</h2>
+      <ul>
+        <li>
+          Цвет — только
+          <code>var(--ds-*)</code>. Размеры — только
+          <code>px</code>, без
+          <code>rem</code>.
+        </li>
+        <li>
+          Свой
+          <code>:focus</code>, рамку текстового поля и
+          <code>box-shadow</code>
+          не рисовать: кольцо фокуса и рамка уже в системе.
+        </li>
+        <li>
+          Шрифт — ролью:
+          <code>font: var(--ds-type-body)</code>.
+        </li>
+        <li>
+          Литералы цветов в TypeScript (конфиги ECharts) линтер не видит — берите
+          <code>dsEChartsTheme</code>
+          из
+          <code>&#64;primasoftllc/design-system/echarts-theme</code>
+          и перестраивайте график при смене скоупа (
+          <code>auroraWatchScopes</code>,
+          <a routerLink="." fragment="echarts" [queryParams]="settings.queryParams()">графики</a>
+          ).
+        </li>
+      </ul>
+      <p>
+        Пример —
+        <a routerLink="." fragment="стили-компонентов" [queryParams]="settings.queryParams()">
+          стили компонентов
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="10-компоненты">
+      <h2 id="10-компоненты" tabindex="-1">10. Компоненты</h2>
+      <p>
+        Angular UI-компоненты импортируются из
+        <code>&#64;primasoftllc/design-system/angular</code>. В текущей реализации доступны
+        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">DsIconComponent</a>
+        и
+        <a routerLink="/components/button" [queryParams]="settings.queryParams()">
+          DsButtonComponent
+        </a>. Добавьте нужный компонент в
+        <code>imports</code>
+        компонента приложения, чей шаблон его использует. Страницы и API иконки и кнопки ещё
+        дорабатываются; наличие другого примера в дизайн-системе не означает наличия готового
+        Angular-компонента.
+      </p>
+      <p>
+        Standalone-компоненты UI kit добавляются в
+        <code>imports</code>
+        каждого компонента, чей шаблон их использует. Провайдер темы не регистрирует компоненты
+        автоматически. Полный пример кнопки приведён ниже;
+        <code>loading</code>
+        управляется приложением.
+      </p>
+      <aurora-code-block [snippet]="snippets.button"></aurora-code-block>
+      <p>
+        Доступные inputs, тип кнопки и правила доступности — в
+        <a routerLink="/components/button" [queryParams]="settings.queryParams()">API кнопки</a>.
+      </p>
+      <p>
+        Правила применения, состояния и токены сверяйте со статьями дизайн-системы. Доступные
+        Angular-компоненты и их API ищите в разделе
+        <a routerLink="/components" [queryParams]="settings.queryParams()">«Компоненты»</a>. Для ещё не реализованного элемента приложение может создать собственную разметку по
+        правилам системы. Не используйте внутренние пути репозитория как публичные импорты пакета.
+      </p>
+      <p>
+        Не хватило токена или компонента, спецификация не покрывает состояние — не изобретайте:
+        <code>// TODO: DS-&lt;n&gt;</code>
+        в коде и задача в репозитории системы. Подробнее —
+        <a routerLink="."
+          fragment="когда-токена-или-компонента-не-хватает"
+          [queryParams]="settings.queryParams()">
+          когда токена или компонента не хватает
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="11-ci-приложения">
+      <h2 id="11-ci-приложения" tabindex="-1">11. CI приложения</h2>
+      <ol>
+        <li>
+          Если workflow приложения не имеет доступа к пакету, владелец выдаёт его через Package
+          settings → Manage Actions access → репозиторий приложения → Read.
+        </li>
+        <li>Workflow приложения:</li>
+      </ol>
+      <aurora-code-block [snippet]="snippets.ci"></aurora-code-block>
+    </section>
+    <section aria-labelledby="локальные-скоупы">
+      <h2 id="локальные-скоупы" tabindex="-1">Локальные скоупы</h2>
+      <p>
+        Добавьте standalone-директиву
+        <code>AuroraScopeDirective</code>
+        из
+        <code>&#64;primasoftllc/design-system/angular</code>
+        в
+        <code>imports</code>
+        компонента. Например, вместе с кнопкой:
+        <code>imports: [DsButtonComponent, AuroraScopeDirective]</code>. После этого в шаблоне доступны локальные скоупы:
+      </p>
+      <aurora-code-block [snippet]="snippets.scopeTemplate"></aurora-code-block>
+      <p>
+        Каждый атрибут переопределяет только свою ось. Компактная таблица наследует тему и
+        оформление страницы; светлая панель внутри тёмной страницы сохраняет плотность. Не заданный
+        input директивы удаляет локальный атрибут и возвращает наследование.
+      </p>
+    </section>
+    <section aria-labelledby="стили-компонентов">
+      <h2 id="стили-компонентов" tabindex="-1">Стили компонентов</h2>
+      <aurora-code-block [snippet]="snippets.rowStyles"></aurora-code-block>
+      <p>
+        Цвета задаются токенами, размеры — в px. Фокус и рамки полей включены в
+        <code>dist/styles.css</code>; собственное кольцо фокуса не требуется. Необязательный SCSS-партиал с миксинами сохранён:
+        <code>design-system/templates/angular/README.md</code>.
+      </p>
+    </section>
+    <section aria-labelledby="echarts">
+      <h2 id="echarts" tabindex="-1">ECharts</h2>
+      <p>
+        Установите ECharts только для приложений с графиками. Отдельный вход сохраняет базовый
+        Angular-пакет независимым от него:
+      </p>
+      <aurora-code-block [snippet]="snippets.chartOptions"></aurora-code-block>
+      <p>
+        Используйте собственные данные серии. Сохраняйте вложенные опции
+        <code>chrome.xAxis</code>
+        и
+        <code>chrome.yAxis</code>, когда добавляете тип оси, категории или пределы:
+      </p>
+      <aurora-code-block [snippet]="snippets.watchScopes"></aurora-code-block>
+      <p>
+        Мост читает токены с реального DOM-узла. Наблюдение покрывает сам узел и цепочку предков до
+        <code>&lt;html&gt;</code>, включая промежуточную панель с локальным скоупом. После изменения темы, оформления или
+        плотности пересобирайте опции; при уничтожении компонента обязательно вызывайте функцию
+        отписки. Статическая зарегистрированная JSON-тема не отслеживает смену атрибутов.
+      </p>
+      <p>
+        Самостоятельный JS-вход
+        <code>/echarts-theme</code>, глобальный
+        <code>dsEChartsTheme</code>
+        и старые TypeScript-адаптеры сохранены. Механический переход со старого алиаса описан в
+        <a routerLink="."
+          fragment="переход-со-старого-алиаса"
+          [queryParams]="settings.queryParams()">
+          переходе со старого алиаса
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="что-проверяет-линтер">
+      <h2 id="что-проверяет-линтер" tabindex="-1">Что проверяет линтер</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Правило</th>
+              <th>Что ловит</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>aurora/known-token</code></td>
+              <td>
+                <code>var(--ds-…)</code>
+                на несуществующий токен; объявление своих
+                <code>--ds-*</code>
+              </td>
+            </tr>
+            <tr>
+              <td><code>aurora/no-literal-color</code></td>
+              <td>
+                hex,
+                <code>rgb()</code>,
+                <code>hsl()</code>,
+                <code>oklch()</code>, именованные цвета
+              </td>
+            </tr>
+            <tr>
+              <td><code>aurora/no-rem</code></td>
+              <td>
+                <code>rem</code>
+                вместо
+                <code>px</code>
+              </td>
+            </tr>
+            <tr>
+              <td><code>aurora/focus-from-tokens</code></td>
+              <td>
+                свой
+                <code>outline</code>
+                /
+                <code>box-shadow</code>
+                в состоянии фокуса,
+                <code>outline: none</code>
+              </td>
+            </tr>
+            <tr>
+              <td><code>aurora/shadow-token-only</code></td>
+              <td>
+                <code>box-shadow</code>
+                мимо ступеней системы
+              </td>
+            </tr>
+            <tr>
+              <td><code>aurora/no-deprecated-token</code></td>
+              <td>
+                устаревшее имя-алиас (список
+                <code>aliases</code>
+                в
+                <code>design-system/lint/naming.config.json</code>
+                ); предупреждение, не ошибка
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Версия правил совпадает с версией токенов: линтер поставляется в том же пакете. Правила и
+        опции —
+        <a routerLink="/documents/lint" [queryParams]="settings.queryParams()">
+          справочник линтера
+        </a>. В новом приложении включайте его сразу, в существующем — на срезе 1, после перевода цветов
+        на токены.
+      </p>
+      <h3 id="ограничения" tabindex="-1">Ограничения</h3>
+      <p>
+        Литералы в TypeScript (конфиги ECharts — главный канал, через который цвета просачиваются
+        мимо SCSS), inline
+        <code>[style]</code>
+        в шаблонах Angular, глубокие импорты внутренностей пакета. Это ESLint-слой, его пока нет.
+      </p>
+      <p>
+        И он ничего не знает про роль токена:
+        <code>color: var(--ds-surface)</code>
+        — формально валидно, содержательно ошибка. Это видит только ревьюер, и ради этого приёмка
+        по-прежнему существует.
+      </p>
+    </section>
+    <section aria-labelledby="приёмка-экрана">
+      <h2 id="приёмка-экрана" tabindex="-1">Приёмка экрана</h2>
+      <p>Шесть пунктов. Формулировки проверяемые — «выглядит как система» критерием не является.</p>
+      <ol>
+        <li>Ни одного литерального цвета вне токенов — ни в SCSS, ни в шаблоне, ни в TS.</li>
+        <li>
+          Размеры в
+          <code>px</code>.
+          <code>rem</code>
+          в новом коде нет (порталы ставят
+          <code>html &#123; font-size: 10px &#125;</code>
+          ).
+        </li>
+        <li>
+          Собственных
+          <code>:focus</code>
+          и рамок полей нет — фокус и поле приходят из общего
+          <code>dist/styles.css</code>
+          пакета.
+        </li>
+        <li>
+          Тени — только ступенями системы (
+          <code>var(--ds-shadow-*)</code>
+          ), своих
+          <code>box-shadow</code>
+          нет.
+        </li>
+        <li>
+          Экран отрисован в четырёх режимах и в каждом читается: DEFAULT/light/cozy,
+          DEFAULT/dark/compact, RED2/light/cozy, RED2/dark/compact.
+        </li>
+        <li>
+          У каждой кнопки, которая шлёт запрос, есть состояние загрузки; AXE чистый;
+          <code>:focus-visible</code>
+          проверен с клавиатуры, а не в devtools.
+        </li>
+      </ol>
+      <h3 id="передача-на-ревью" tabindex="-1">Передача на ревью</h3>
+      <p>
+        Заявка на приёмку — это ссылка на PR плюс четыре скриншота экрана в четырёх режимах. Без
+        скриншотов заявка не рассматривается: их отсутствие почти всегда означает, что в тёмной теме
+        экран не открывали.
+      </p>
+      <p>
+        Владелец смотрит: соответствие спецификации компонента, выбор токена по роли (не по цвету),
+        поведение в compact и в dark, пустое состояние и состояние загрузки.
+      </p>
+      <p>
+        CSS-нарушения должны быть исправлены до ревью. Литералы в TS, inline-стили и глубокие
+        импорты текущий stylelint не проверяет — их нужно смотреть отдельно.
+      </p>
+      <p>
+        Предметом приёмки не является вёрстка бизнес-логики, тексты и раскладка полей — система
+        задаёт внешний вид, а не структуру экрана.
+      </p>
+    </section>
+    <section aria-labelledby="ответственность">
+      <h2 id="ответственность" tabindex="-1">Ответственность</h2>
+      <p>
+        Подтверждённый первый потребитель пакета — aur-billing. Состояние пилотов и готовность
+        каждого приложения фиксируются в его задачах; этот документ не объявляет внедрение
+        завершённым. Найденные пробелы оформляются в репозитории системы. Экран принимает владелец
+        системы или назначенный ревьюер команды.
+      </p>
+    </section>
+    <section aria-labelledby="пилот">
+      <h2 id="пилот" tabindex="-1">Пилот</h2>
+      <p>
+        Пилот существует не чтобы «первое приложение выглядело хорошо», а чтобы вскрыть дыры в
+        системе до того, как в неё упрутся команды с легаси. Пилот обязан ответить на список
+        вопросов и закрыть каждый задачей в репозитории системы:
+      </p>
+      <ul>
+        <li>каких токенов не хватило и в каких ролях;</li>
+        <li>какие компоненты пришлось писать с нуля, потому что в системе нет спецификации;</li>
+        <li>
+          где спецификация есть, но она не покрывает реальное состояние (ошибка, загрузка, пусто,
+          очень длинный текст, очень много колонок);
+        </li>
+        <li>что ломается в compact, что — в dark;</li>
+        <li>что происходит с графиками при смене скоупа;</li>
+        <li>что пришлось сделать вопреки правилам и почему.</li>
+      </ul>
+      <p>
+        Пока пилот идёт, каждое «сделаю пока по-своему» фиксируется как
+        <code>// TODO: DS-&lt;id&gt;</code>
+        со ссылкой на задачу. Список этих TODO — и есть отчёт пилота.
+      </p>
+      <p>
+        <strong>Пилот закрыт, когда:</strong>
+        все экраны приняты, список TODO пуст или сознательно отложен владельцем, и правки, которые
+        пилот породил, выпущены версией системы. До этого момента существующие приложения не
+        подключаются — иначе они получат систему, которую придётся ломать мажором через месяц.
+      </p>
+    </section>
+    <section aria-labelledby="существующее-приложение">
+      <h2 id="существующее-приложение" tabindex="-1">Существующее приложение</h2>
+      <p>
+        Главное правило:
+        <strong>срез делается по всему приложению целиком, а не экран за экраном</strong>. «Три экрана полностью на системе, остальные как были» выглядит хуже, чем приложение,
+        которое вообще её не подключало, и команда быстро теряет к затее интерес.
+      </p>
+      <p>Порядок срезов — по возрастанию визуального риска:</p>
+      <p>
+        <strong>Срез 0 — подключение.</strong>
+        Пакет ставится, стили подключаются, но ничего своего не удаляется. Вид приложения не
+        меняется. Если меняется — значит есть конфликт глобальных селекторов, и до его разбора
+        дальше идти нельзя: скоуп вешается на контейнер вместо
+        <code>&lt;body&gt;</code>, пока легаси не вычищено.
+      </p>
+      <p>
+        <strong>Срез 1 — цвета.</strong>
+        Литеральные цвета заменяются семантическими токенами по назначению: текст, поверхность,
+        граница, статус. Вид не меняется, дифф механический, делается массово и ревьюится быстро.
+        Здесь же включается линтер системы — с этого момента новые литералы в проект не попадают.
+      </p>
+      <p>
+        <strong>Срез 2 — типографика и плотность.</strong>
+        Вид меняется. Делается экраном за экраном и согласуется до начала работ, а не после.
+      </p>
+      <p>
+        <strong>Срез 3 — компоненты.</strong>
+        По одному, в порядке частоты: кнопка, поле, таблица, диалог, дальше по месту. Каждый
+        компонент — отдельный PR по всему приложению.
+      </p>
+      <p>
+        <strong>Срез 4 — уборка.</strong>
+        Собственные
+        <code>:focus</code>, тени, рамки, дубли переменных. Делается последним, когда токены уже везде: раньше это
+        просто сломает вид.
+      </p>
+      <p>
+        Не переписывается: бизнес-логика, структура экранов, роутинг. Если срез тянет за собой
+        рефакторинг логики — срез разбит неправильно.
+      </p>
+    </section>
+    <section aria-labelledby="когда-токена-или-компонента-не-хватает">
+      <h2 id="когда-токена-или-компонента-не-хватает" tabindex="-1">
+        Когда токена или компонента не хватает
+      </h2>
+      <p>
+        Локальный
+        <code>#3A7BD5</code>
+        «на время» — главный способ убить систему, и он всегда появляется под дедлайном. Поэтому
+        путь должен быть короче обхода:
+      </p>
+      <ol>
+        <li>Задача в репозиторий системы: что за роль, где именно, скриншот.</li>
+        <li>
+          Сегодня, пока токена нет: ближайший подходящий токен по роли плюс
+          <code>// TODO: DS-&lt;id&gt;</code>. Литерал не коммитится никогда.
+        </li>
+        <li>Согласуйте срок ответа с владельцем в задаче. Общий SLA пока не установлен.</li>
+      </ol>
+      <p>
+        Отдельно: запрос «нам нужен свой цвет» почти всегда означает «нам нужна роль, которой нет в
+        системе». Обсуждается роль, а не hex.
+      </p>
+    </section>
+    <section aria-labelledby="антипаттерны">
+      <h2 id="антипаттерны" tabindex="-1">Антипаттерны</h2>
+      <ul>
+        <li>
+          Скопировать
+          <code>tokens.css</code>
+          к себе и «немного поправить».
+        </li>
+        <li>Форкнуть пакет под нужды одного приложения.</li>
+        <li>Обернуть компонент системы в свою обёртку, которая переопределяет его стили.</li>
+        <li>Принять экран, не открыв его в dark и compact.</li>
+        <li>
+          Переводить приложение без выбранного среза, критериев приёмки и задач на выявленные
+          пробелы.
+        </li>
+        <li>Держать в приложении свой набор переменных, который «мапится» на токены.</li>
+      </ul>
+    </section>
+    <section aria-labelledby="обновление-системы">
+      <h2 id="обновление-системы" tabindex="-1">Обновление системы</h2>
+      <p>
+        <code>npm i -E &#64;primasoftllc/design-system&#64;X.Y.Z</code>
+        отдельным коммитом. MAJOR — ломающие изменения: прочитайте раздел версии в
+        <code>CHANGELOG.md</code>, правки кода — в том же коммите. Patch и minor не должны ломать приложение; major
+        планируется отдельной задачей. Приложение не остаётся на старом мажоре дольше одного
+        релизного цикла системы. Критерии выбора версии —
+        <a routerLink="/documents/release"
+          [queryParams]="settings.queryParams()"
+          fragment="versioning">
+          политика версий
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="переход-со-старого-алиаса">
+      <h2 id="переход-со-старого-алиаса" tabindex="-1">Переход со старого алиаса</h2>
+      <p>
+        Существующий алиас
+        <code>/angular</code>
+        на
+        <code>components/src/templates/angular/index.ts</code>
+        внутри пакета сохранён. Старые адаптеры используют тот же сервис и InjectionToken, что и
+        новые входы. Для Angular application-builder старый исходный
+        <code>index.ts</code>
+        должен быть включён в
+        <code>tsconfig.files</code>:
+      </p>
+      <aurora-code-block [snippet]="snippets.legacyAlias"></aurora-code-block>
+      <p>
+        Для перехода удалите только алиас
+        <code>&#64;primasoftllc/design-system/angular</code>
+        из
+        <code>paths</code>. Импорты сервиса и директивы оставьте;
+        <code>auroraChartChrome</code>
+        и
+        <code>auroraWatchScopes</code>
+        перенесите на
+        <code>/angular/echarts</code>. Запись совместимого
+        <code>index.ts</code>
+        в
+        <code>files</code>
+        после перехода можно удалить. CSS-путь, имена токенов и SCSS-партиал сохраняются.
+      </p>
+    </section>
+    <section aria-labelledby="если-что-то-не-так">
+      <h2 id="если-что-то-не-так" tabindex="-1">Если что-то не так</h2>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Симптом</th>
+              <th>Причина</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <code>npm i</code>
+                — 401/403 от
+                <code>npm.pkg.github.com</code>
+              </td>
+              <td>
+                проверьте
+                <code>NODE_AUTH_TOKEN</code>, PAT classic со scope
+                <code>read:packages</code>
+                и права на пакет; публичность исходников не отменяет авторизацию npm
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>npm i</code>
+                — ERESOLVE по
+                <code>echarts</code>
+                или
+                <code>stylelint</code>
+              </td>
+              <td>проверьте диапазоны: echarts 6.1+, stylelint 16–17</td>
+            </tr>
+            <tr>
+              <td>
+                <code>Cannot find module 'echarts'</code>
+                при сборке
+              </td>
+              <td>
+                установите ECharts при использовании
+                <code>/angular/echarts</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Не найден
+                <code>/angular</code>
+              </td>
+              <td>
+                проверьте установленную версию и оставшийся старый
+                <code>paths</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Интерфейс в Helvetica, иконки — текстом</td>
+              <td>
+                проверьте массив
+                <code>styles</code>
+                в
+                <code>angular.json</code>, порядок CSS и загрузку шрифтов; путь —
+                <code>node_modules/&#64;primasoftllc/design-system/dist/styles.css</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Angular не распознаёт
+                <code>dsButton</code>,
+                <code>loading</code>
+                или
+                <code>auroraScope</code>
+              </td>
+              <td>
+                проверьте версию пакета и наличие
+                <code>DsButtonComponent</code>
+                /
+                <code>AuroraScopeDirective</code>
+                в
+                <code>imports</code>
+                компонента
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Тема не меняется, на
+                <code>&lt;body&gt;</code>
+                нет
+                <code>data-ds-*</code>
+              </td>
+              <td>
+                проверьте включение
+                <code>...provideAurora(...)</code>
+                в bootstrap-конфигурацию
+              </td>
+            </tr>
+            <tr>
+              <td>
+                CI: 403 на
+                <code>npm ci</code>
+              </td>
+              <td>репозиторию приложения не выдан доступ в настройках пакета (шаг 11)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</aurora-article-layout>

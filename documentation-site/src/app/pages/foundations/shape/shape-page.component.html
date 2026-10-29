@@ -16,12 +16,11 @@
         [attr.data-ds-theme]="settings.theme()"
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
-        Демонстрация панели, меню и диалога ожидает Angular-компонентов Panel, Field, Menu, Dialog и
-        доработки Button.
+        Демонстрация панели, меню и диалога ожидает подготовки Angular-примера.
       </aurora-example-block>
       <p style="margin-top: 16px">
-        Откройте меню или диалог, чтобы увидеть, как они перекрывают содержимое. В этом примере
-        диалог ограничен областью демонстрации.
+        Пример покажет, как меню и диалог перекрывают содержимое. Диалог будет ограничен областью
+        демонстрации.
       </p>
     </section>
     <section aria-labelledby="choosing">
@@ -37,22 +36,13 @@
         <dd>Для связанных данных в потоке страницы. Обычно достаточно поверхности и границы.</dd>
         <dt>Меню</dt>
         <dd>
-          Для списка действий поверх содержимого. Используйте готовый
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница компонента ещё не перенесена">
-            DsMenu
-          </span>.
+          Для списка действий поверх содержимого; меню должно поддерживать клавиатуру и возврат
+          фокуса.
         </dd>
         <dt>Диалог</dt>
         <dd>
-          Для отдельной задачи с временной блокировкой остального интерфейса.
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница компонента ещё не перенесена">
-            DsDialog
-          </span>
-          управляет также фокусом и закрытием.
+          Для отдельной задачи с временной блокировкой остального интерфейса. Диалог управляет также
+          фокусом и закрытием.
         </dd>
       </dl>
     </section>
@@ -69,7 +59,7 @@
         [attr.data-ds-theme]="settings.theme()"
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
-        Демонстрация скруглений контролов ожидает Angular-компонента Checkbox и доработки Button.
+        Демонстрация скруглений контролов ожидает подготовки Angular-примера.
       </aurora-example-block>
       <p style="margin-bottom: 24px">
         Чекбокс использует xs · 4 px, кнопка и поле — md · 8 px. Панель и диалог показаны выше: lg ·
@@ -178,22 +168,12 @@
       <h3 style="margin-top: 24px">Что перекрывает что</h3>
       <ul class="rules">
         <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница компонента ещё не перенесена">
-            Меню
-          </span>
-          раскрывается над содержимым, к которому относится. Перед открытием диалога из пункта меню
-          закройте меню. Меню внутри диалога должно оставаться над его поверхностью.
+          Меню раскрывается над содержимым, к которому относится. Перед открытием диалога из пункта
+          меню закройте меню. Меню внутри диалога должно оставаться над его поверхностью.
         </li>
         <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница компонента ещё не перенесена">
-            Диалог
-          </span>
-          перекрывает страницу подложкой и удерживает клавиатурный фокус внутри. Не оставляйте
-          поверх него меню фоновой страницы.
+          Диалог перекрывает страницу подложкой и удерживает клавиатурный фокус внутри. Не
+          оставляйте поверх него меню фоновой страницы.
         </li>
         <li>
           <span data-migration-placeholder
@@ -258,7 +238,7 @@
             [attr.data-ds-theme]="settings.theme()"
             [attr.data-ds-appearance]="settings.appearance()"
             [attr.data-ds-density]="settings.density()">
-            Демонстрация фокуса кнопки ожидает доработки Angular-компонента Button.
+            Демонстрация фокуса кнопки ожидает подготовки Angular-примера.
           </aurora-example-block>
         </aurora-example-block>
         <aurora-example-block class="sample"
@@ -347,14 +327,15 @@
     <section aria-labelledby="пример-кода">
       <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
       <p>
-        Для обычной панели используйте готовый
-        <code>DsPanel</code>: поверхность, граница и скругление уже настроены. Вложенные компоненты оформляют себя сами.
+        Панель объединяет связанные данные на поверхности с границей и скруглением. При создании
+        собственного контейнера используйте семантические токены; состав библиотечных компонентов
+        согласуется отдельно.
       </p>
       <aurora-example-block class="pending-code migration-placeholder"
         role="note"
         data-migration-placeholder>
-        Angular-пример кода будет добавлен после реализации Panel и Field. React-код здесь не
-        показывается как Angular API.
+        Angular-пример кода будет добавлен при наполнении Angular-примеров. Состав компонентов для
+        демонстрации будет определён отдельно.
       </aurora-example-block>
       <p>Если создаёте собственный контейнер, используйте токены в его стилях:</p>
       <aurora-code-block [snippet]="snippets.panel"></aurora-code-block>
@@ -367,30 +348,6 @@
             Нейтральные цвета
           </a>
           — поверхности и границы.
-        </li>
-        <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница компонента ещё не перенесена">
-            DsPanel
-          </span>
-          — контейнер для связанных данных.
-        </li>
-        <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница компонента ещё не перенесена">
-            DsMenu
-          </span>
-          — готовое меню действий.
-        </li>
-        <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница компонента ещё не перенесена">
-            DsDialog
-          </span>
-          — модальный диалог.
         </li>
       </ul>
     </section>
