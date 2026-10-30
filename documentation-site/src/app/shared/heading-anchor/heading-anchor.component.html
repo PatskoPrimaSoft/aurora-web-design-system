@@ -1,0 +1,6 @@
+<a class="heading-link"
+  [routerLink]="target()"
+  [attr.aria-label]="'Ссылка на раздел «' + headingTitle() + '»'"
+  (click)="activated.emit($event)">
+  <ds-icon name="link" size="sm"></ds-icon>
+</a>

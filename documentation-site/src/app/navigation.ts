@@ -121,6 +121,7 @@ export const componentNavigation: NavigationGroup[] = [
     title: 'Кнопки и иконки',
     items: [
       { title: 'Button', path: '/components/button' },
+      { title: 'FAB', path: '/components/fab' },
       { title: 'Icon', path: '/components/icon' },
     ],
   },

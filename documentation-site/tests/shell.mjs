@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 export async function checkShell({ page, url, modes, browser }) {
+  const demo = page.locator('#basic-demo');
   for (const [theme, appearance, density] of modes) {
     const query = `?theme=${theme}&appearance=${appearance}&density=${density}`;
     await page.goto(url + 'foundations/typography' + query);
@@ -16,7 +17,13 @@ export async function checkShell({ page, url, modes, browser }) {
     await page.keyboard.press('Enter');
     await expect(disclosure).not.toHaveAttribute('open');
     await page.evaluate(() => document.fonts.ready);
-    const headings = await page.locator('article h2[id], article h3[id]').allTextContents();
+    const headings = await page.locator('article h2[id], article h3[id]').evaluateAll((elements) =>
+      elements.map((heading) => {
+        const copy = heading.cloneNode(true);
+        copy.querySelectorAll('aurora-heading-anchor').forEach((anchor) => anchor.remove());
+        return copy.textContent ?? '';
+      }),
+    );
     assert.deepEqual(headings.slice(-2), ['Пример кода', 'Дальше']);
     await expect(page.locator('aurora-code-block code')).toContainText(
       'font: var(--ds-type-title)',
@@ -83,27 +90,27 @@ export async function checkShell({ page, url, modes, browser }) {
       'Типографика',
     );
     await page.goto(url + 'components/icon' + query);
-    await expect(page.locator('.demo')).toHaveAttribute('data-ds-appearance', appearance);
-    await expect(page.locator('.demo')).toHaveAttribute('data-ds-theme', theme);
-    await expect(page.locator('.demo')).toHaveAttribute('data-ds-density', density);
-    await expect(page.getByRole('img', { name: 'Поиск', exact: true })).toBeVisible();
+    await expect(demo).toHaveAttribute('data-ds-appearance', appearance);
+    await expect(demo).toHaveAttribute('data-ds-theme', theme);
+    await expect(demo).toHaveAttribute('data-ds-density', density);
+    await expect(page.getByRole('img', { name: 'Доступ ограничен', exact: true })).toBeVisible();
     await page.evaluate(() => document.fonts.ready);
     assert.ok(await page.evaluate(() => document.fonts.check('20px "Material Symbols Outlined"')));
     if (appearance === 'dark') {
       assert.notEqual(
-        await page.locator('.demo').evaluate((el) => getComputedStyle(el).backgroundColor),
+        await demo.evaluate((el) => getComputedStyle(el).backgroundColor),
         await page.locator('body').evaluate((el) => getComputedStyle(el).backgroundColor),
       );
     }
   }
-  const visibleCode = page.locator('aurora-code-block').first();
-  const collapsibleCode = page.locator('aurora-code-block').nth(1);
+  const visibleCode = page.locator('#usage-code aurora-code-block');
+  const collapsibleCode = page.locator('section[aria-labelledby="basic"] aurora-code-block');
   await expect(visibleCode.locator('pre')).toBeVisible();
   await expect(visibleCode.locator('.language')).toHaveText('HTML');
   await expect(collapsibleCode.locator('.language')).toHaveText('TypeScript');
   assert.equal(
     await visibleCode.locator('code').textContent(),
-    '<ds-icon name="search" label="Поиск"></ds-icon>\n',
+    '<ds-icon name="lock" label="Доступ ограничен"></ds-icon>\n',
   );
   assert.ok(await visibleCode.locator('.hljs-name').count());
   assert.notEqual(
@@ -165,23 +172,23 @@ export async function checkShell({ page, url, modes, browser }) {
   await collapsibleCode.locator('summary').click();
   await expect(collapsibleCode.locator('pre')).not.toBeVisible();
   await page.getByRole('combobox', { name: 'Бренд демонстраций' }).selectOption('DEFAULT');
-  await expect(page.locator('.demo')).toHaveAttribute('data-ds-theme', 'DEFAULT');
+  await expect(demo).toHaveAttribute('data-ds-theme', 'DEFAULT');
   await page.getByRole('combobox', { name: 'Оформление демонстраций' }).selectOption('light');
-  await expect(page.locator('.demo')).toHaveAttribute('data-ds-appearance', 'light');
+  await expect(demo).toHaveAttribute('data-ds-appearance', 'light');
   await page.getByRole('combobox', { name: 'Плотность демонстраций' }).selectOption('cozy');
-  await expect(page.locator('.demo')).toHaveAttribute('data-ds-density', 'cozy');
+  await expect(demo).toHaveAttribute('data-ds-density', 'cozy');
   await expect(page).toHaveURL(/density=cozy/);
   await page.reload();
   await expect(page.getByRole('combobox', { name: 'Плотность демонстраций' })).toHaveValue('cozy');
   await page.goto(url + 'components/icon?theme=unknown&appearance=unknown&density=unknown');
-  await expect(page.locator('.demo')).toHaveAttribute('data-ds-theme', 'DEFAULT');
-  await expect(page.locator('.demo')).toHaveAttribute('data-ds-appearance', 'light');
-  await expect(page.locator('.demo')).toHaveAttribute('data-ds-density', 'cozy');
+  await expect(demo).toHaveAttribute('data-ds-theme', 'DEFAULT');
+  await expect(demo).toHaveAttribute('data-ds-appearance', 'light');
+  await expect(demo).toHaveAttribute('data-ds-density', 'cozy');
   await page.goto(url + 'components');
   await expect(page.locator('h1')).toHaveText('Компоненты');
   await page.locator('#catalog-main').getByRole('link', { name: 'Button', exact: true }).click();
   await expect(page.locator('h1')).toHaveText('Button');
-  await expect(page.locator('.placeholder')).toBeVisible();
+  await expect(page.locator('#button-basic-demo')).toBeVisible();
   await page.goto(url + 'foundations/colors');
   await expect(page.locator('h1')).toHaveText('Нейтральные цвета');
   await expect(page.locator('#contrast-values td')).toHaveCount(12);

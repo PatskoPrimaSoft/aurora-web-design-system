@@ -25,8 +25,9 @@ Angular 19.2.25 и 20.3.34.
 запускает его на http://127.0.0.1:4200, `npm run build:site-angular` собирает отдельно.
 Команды подготавливают стили и Angular-библиотеку; dev-режим отслеживает их исходники.
 Сайт использует публичный вход `@primasoftllc/design-system/angular`.
-У иконки есть минимальная демонстрация на `/components/icon`; полная страница
-с API ещё не готова. Примеры сайта не входят в библиотеку и не заменяют проверки tarball.
+Страница `/components/icon` содержит примеры, правила применения, API и токены.
+Пример иконки включён в Angular 19 и 20 consumers; запуск проверок подтверждает
+его работу из tarball. Примеры сайта не входят в библиотеку и не заменяют эти проверки.
 
 [Устройство и команды сайта](../documentation-site/README.md).
 [Согласованное направление](../docs/plans/angular-ui-kit-vision.md).
@@ -63,5 +64,10 @@ mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
 - [Добавление компонентов](docs/adding-components.md)
 - [Кнопка DsButtonComponent](src/components/button/README.md)
 - [Иконка DsIconComponent](src/components/icon/README.md)
+- [FAB DsFabComponent](src/components/fab/README.md)
 - [Подключение к приложению](../design-system/docs/usage.md)
 - [Разработка дизайн-системы](../CONTRIBUTING.md)
+
+На новом сайте доступны `/components/icon` и `/components/button`. Кнопка
+использует DsIconComponent внутри, сохраняет нативный button и поддерживает
+вариант без текста с aria-label. Последние изменения ожидают сборки и проверок.

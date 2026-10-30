@@ -121,3 +121,12 @@ details > div {
 .pending-code {
   margin: 20px 0;
 }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-gap-md);
+}
+.action-result {
+  margin-top: var(--ds-gap-md);
+}

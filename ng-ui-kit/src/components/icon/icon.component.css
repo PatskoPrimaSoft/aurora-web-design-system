@@ -10,9 +10,19 @@
   vertical-align: middle;
   flex: none;
 }
-:host([data-ds-icon-size="xs"]) { --_ds-icon-size: var(--ds-icon-xs); }
-:host([data-ds-icon-size="sm"]) { --_ds-icon-size: var(--ds-icon-sm); }
-:host([data-ds-icon-size="lg"]) { --_ds-icon-size: var(--ds-icon-lg); }
+
+:host([data-ds-icon-size='xs']) {
+  --_ds-icon-size: var(--ds-icon-xs);
+}
+
+:host([data-ds-icon-size='sm']) {
+  --_ds-icon-size: var(--ds-icon-sm);
+}
+
+:host([data-ds-icon-size='lg']) {
+  --_ds-icon-size: var(--ds-icon-lg);
+}
+
 .material-symbols-outlined {
   display: inline-grid;
   place-items: center;
@@ -22,8 +32,9 @@
   line-height: 1;
   font-variation-settings: 'wght' 400;
 }
+
 /* Центрируем рисунок navigation внутри области, не меняя внешние отступы.
    Поворот хоста сохраняет центр уже выровненного глифа. */
-:host([data-ds-icon-nudge="navigation"]) .material-symbols-outlined {
+:host([data-ds-icon-nudge='navigation']) .material-symbols-outlined {
   transform: translateY(calc(var(--_ds-icon-size) * 0.0225));
 }

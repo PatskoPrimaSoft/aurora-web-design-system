@@ -1,0 +1,321 @@
+<aurora-article-layout title="FAB"
+  subtitle="Кнопка главного действия области: круглая или расширенная с подписью.">
+  <div class="guide-content">
+    <section aria-labelledby="examples">
+      <h2 id="examples" tabindex="-1">Живые примеры</h2>
+      <section class="example" aria-labelledby="basic">
+        <h3 id="basic" tabindex="-1">Главное действие области</h3>
+        <p>
+          Круглый вариант подходит для знакомого действия. Подпись расширенного варианта явно
+          объясняет действие.
+        </p>
+        <aurora-example-block class="demo"
+          id="fab-basic-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            <button dsFab label="Добавить объект" (click)="added.set(added() + 1)"></button>
+            <button dsFab
+              extended
+              label="Добавить объект"
+              (click)="added.set(added() + 1)"></button>
+          </div>
+          <p role="status">Добавлено объектов: {{ added() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.basic" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="tones">
+        <h3 id="tones" tabindex="-1">Тоны</h3>
+        <p>
+          Primary выделяет главное действие, accent добавляет акцент, surface сохраняет нейтральную
+          поверхность.
+        </p>
+        <aurora-example-block class="demo"
+          id="fab-tones-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            @for (tone of tones; track tone) {
+              <span class="sample">
+                <button dsFab
+                  [tone]="tone"
+                  [label]="'Действие: ' + tone"
+                  (click)="selectedTone.set(tone)"></button>
+                <code>{{ tone }}</code>
+              </span>
+            }
+          </div>
+          <p role="status">Выбран тон: {{ selectedTone() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.tones" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="sizes">
+        <h3 id="sizes" tabindex="-1">Размеры и плотность</h3>
+        <p>Размеры sm/md/lg — 40/48/56 px при любой плотности интерфейса. Иконки — 18/24/24 px.</p>
+        <aurora-example-block class="demo"
+          id="fab-sizes-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            @for (size of sizes; track size) {
+              <span class="sample">
+                <button dsFab
+                  [size]="size"
+                  [label]="'Добавить объект: ' + size"
+                  (click)="selectedSize.set(size)"></button>
+                <code>{{ size }}</code>
+              </span>
+            }
+          </div>
+          <p role="status">Выбран размер: {{ selectedSize() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.sizes" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="states">
+        <h3 id="states" tabindex="-1">Загрузка и недоступность</h3>
+        <p>
+          Загрузка сохраняет размеры и фокус, блокируя повторное действие. Disabled использует
+          нативную блокировку.
+        </p>
+        <aurora-example-block class="demo"
+          id="fab-states-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            <button dsFab
+              extended
+              icon="save"
+              label="Сохранить изменения"
+              [loading]="loading()"
+              (click)="save()"></button>
+            <button dsFab
+              icon="delete"
+              label="Удалить объект"
+              [disabled]="locked()"
+              (click)="message.set('Объект удалён.')"></button>
+            <button dsButton tone="secondary" (click)="locked.set(!locked())">
+              {{ locked() ? 'Разрешить удаление' : 'Запретить удаление' }}
+            </button>
+          </div>
+          <p role="status">{{ message() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.states" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="tooltip">
+        <h3 id="tooltip" tabindex="-1">Длинная подпись и подсказка</h3>
+        <p>
+          Наведение или фокус показывают подсказку у круглой кнопки и у обрезанной подписи. Escape
+          закрывает её. Полное имя остаётся доступным.
+        </p>
+        <aurora-example-block class="demo"
+          id="fab-tooltip-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="limited">
+            <button dsFab
+              extended
+              label="Добавить новый объект в выбранную группу"
+              (click)="added.set(added() + 1)"></button>
+          </div>
+          <p role="status">Добавлено объектов: {{ added() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.tooltip" collapsible></aurora-code-block>
+      </section>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul>
+        <li>
+          Используйте один FAB для главного действия области. Примеры выше показывают варианты,
+          которые не нужно одновременно размещать на экране.
+        </li>
+        <li>Для неоднозначного или важного действия предпочитайте extended с понятной подписью.</li>
+        <li>
+          Размещение, внешние отступы и свободное место вокруг кнопки задаёт родитель. Компонент не
+          закрепляет себя у края экрана.
+        </li>
+        <li>
+          Label обязателен и не должен быть пустым: это доступное имя и текст подсказки. Иконка
+          декоративная; имя символа проверяет приложение.
+        </li>
+        <li>
+          Приложение выполняет запросы, меняет loading, сообщает результат и объясняет причину
+          disabled. Не меняйте подпись во время загрузки, если нужно сохранить ширину.
+        </li>
+        <li>Enter и Space активируют нативную кнопку. Для перехода используйте ссылку.</li>
+      </ul>
+      <p>
+        Обычные действия и кнопки с иконкой показаны на странице
+        <a routerLink="/components/button" [queryParams]="settings.queryParams()">Button</a>
+        .
+      </p>
+    </section>
+    <section aria-labelledby="usage">
+      <h2 id="usage" tabindex="-1">Пример подключения</h2>
+      <p>
+        Подключите общий styles.css и импортируйте DsFabComponent из публичного Angular-входа.
+        Дополнительный импорт иконки не требуется.
+      </p>
+      <aurora-code-block [snippet]="snippets.usage"></aurora-code-block>
+    </section>
+    <section aria-labelledby="parameters">
+      <h2 id="parameters" tabindex="-1">Параметры</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Параметры FAB">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Параметр</th>
+              <th scope="col">Тип / значения</th>
+              <th scope="col">По умолчанию</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>label</code></th>
+              <td>string; обязательное непустое имя</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>icon</code></th>
+              <td>string; имя Material Symbols</td>
+              <td>add</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>tone</code></th>
+              <td>DsFabTone: primary, accent, surface</td>
+              <td>primary</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>size</code></th>
+              <td>DsFabSize: sm, md, lg</td>
+              <td>md</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>extended</code></th>
+              <td>boolean; видимая подпись</td>
+              <td>false</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>loading</code></th>
+              <td>boolean; блокировка активации с сохранением фокуса</td>
+              <td>false</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>disabled</code></th>
+              <td>boolean; нативная блокировка</td>
+              <td>false</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>type</code></th>
+              <td>button, submit, reset</td>
+              <td>button</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>aria-busy, aria-disabled</code></th>
+              <td>string | boolean | null; внешние значения восстанавливаются после loading</td>
+              <td>null</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>aria-describedby</code></th>
+              <td>string | null; внешние описания сохраняются при показе подсказки</td>
+              <td>null</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Булевы inputs поддерживают атрибутную запись и binding. Событие click нативное; name, value,
+        form и остальные HTML-атрибуты остаются на кнопке. Подпись задаёт label, проекции
+        содержимого и дополнительных outputs нет. Публичные экспорты: DsFabComponent, DsFabTone,
+        DsFabSize.
+      </p>
+    </section>
+    <section aria-labelledby="tokens">
+      <h2 id="tokens" tabindex="-1">Токены</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Токены FAB">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Токены</th>
+              <th scope="col">Назначение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>--ds-brand, --ds-on-brand</code></th>
+              <td>Primary</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-accent, --ds-accent-on</code></th>
+              <td>Accent</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-surface, --ds-fg, --ds-border</code></th>
+              <td>Surface</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-surface-hover, --ds-surface-active</code></th>
+              <td>Взаимодействие surface</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-overlay-hover, --ds-overlay-press</code></th>
+              <td>Наведение и нажатие залитых тонов</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-surface-disabled, --ds-fg-disabled</code></th>
+              <td>Недоступное состояние</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-radius-circle, --ds-radius-pill</code></th>
+              <td>Круглая и расширенная форма</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-shadow-md, --ds-shadow-lg</code></th>
+              <td>Тень и наведение</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-gap-sm, --ds-type-body-strong</code></th>
+              <td>Интервал и подпись</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-focus-width, --ds-focus-color, --ds-focus-offset</code>
+              </th>
+              <td>Клавиатурный фокус</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-transition-control</code></th>
+              <td>Переходы</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-surface-inverse, --ds-fg-on-inverse</code></th>
+              <td>Поверхность и текст подсказки</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>
+                  --ds-pad-tight, --ds-pad-sm, --ds-radius-sm, --ds-type-caption, --ds-shadow-sm
+                </code>
+              </th>
+              <td>Оформление подсказки</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Диаметры и размеры иконок — фиксированные значения дизайн-системы; токены высоты обычных
+        контролов здесь не применяются.
+      </p>
+    </section>
+  </div>
+</aurora-article-layout>

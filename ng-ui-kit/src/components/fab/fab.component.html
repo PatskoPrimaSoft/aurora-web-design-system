@@ -1,0 +1,17 @@
+<span data-ds-fab-content>
+  <ds-icon [name]="icon()"></ds-icon>
+  @if (extended()) {
+    <span #text data-ds-fab-label>{{ label() }}</span>
+  }
+</span>
+@if (loading()) {
+  <span data-ds-fab-spinner aria-hidden="true"><span></span></span>
+}
+<span #tip
+  popover="manual"
+  role="tooltip"
+  [id]="tooltipId"
+  (pointerenter)="keepTip()"
+  (pointerleave)="leaveTip($event)"
+  >{{ label() }}</span
+>

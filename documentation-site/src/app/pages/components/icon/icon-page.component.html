@@ -1,13 +1,263 @@
-<aurora-article-layout title="Icon" subtitle="Шрифтовая иконка дизайн-системы Aurora.">
-  <h2 id="basic" tabindex="-1">Обычное использование</h2>
-  <aurora-example-block class="demo"
-    auroraScope
-    [theme]="settings.theme()"
-    [appearance]="settings.appearance()"
-    [density]="settings.density()">
-    <ds-icon name="search" label="Поиск"></ds-icon>
-  </aurora-example-block>
-  <aurora-code-block [snippet]="snippets.template"></aurora-code-block>
-  <aurora-code-block [snippet]="snippets.component" collapsible></aurora-code-block>
-  <p>Полное описание, параметры и примеры будут добавлены при доработке страницы компонента.</p>
+<aurora-article-layout title="Icon"
+  subtitle="Символ Material Symbols Outlined: размер, цвет, направление и доступное имя.">
+  <div class="guide-content">
+    <section aria-labelledby="examples">
+      <h2 id="examples" tabindex="-1">Живые примеры</h2>
+      <section class="example" aria-labelledby="basic">
+        <h3 id="basic" tabindex="-1">Рядом с текстом</h3>
+        <p>
+          Текст сообщает смысл, поэтому иконка декоративная и не повторяет подпись для экранного
+          диктора.
+        </p>
+        <aurora-example-block class="demo"
+          id="basic-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <span class="sample">
+            <ds-icon name="search"></ds-icon>
+            Поиск объекта
+          </span>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.component" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="sizes">
+        <h3 id="sizes" tabindex="-1">Размеры и плотность</h3>
+        <p>
+          Меняйте плотность в шапке сайта: размер глифа и его квадратной области меняется через
+          токены.
+        </p>
+        <aurora-example-block class="demo"
+          id="sizes-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            @for (size of sizes; track size) {
+              <span class="sample">
+                <ds-icon name="search" [size]="size"></ds-icon>
+                <code>{{ size }}</code>
+              </span>
+            }
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.sizes" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="color">
+        <h3 id="color" tabindex="-1">Цвет от родителя</h3>
+        <p>Компонент наследует цвет. Родитель выбирает семантический токен с учётом поверхности.</p>
+        <aurora-example-block class="demo"
+          id="color-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            <span class="sample muted">
+              <ds-icon name="info"></ds-icon>
+              Дополнительная информация
+            </span>
+            <span class="sample warning">
+              <ds-icon name="warning"></ds-icon>
+              Предупреждение
+            </span>
+            <span class="sample brand">
+              <ds-icon name="done"></ds-icon>
+              Сохранено
+            </span>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.color" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="accessibility">
+        <h3 id="accessibility" tabindex="-1">Декоративная и смысловая иконка</h3>
+        <p>
+          Если символ сам передаёт информацию, задайте label. Это доступное имя, а не видимая
+          подсказка.
+        </p>
+        <aurora-example-block class="demo"
+          id="accessibility-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            <span class="sample">
+              <ds-icon name="warning"></ds-icon>
+              Нет связи с объектом
+            </span>
+            <ds-icon name="lock" label="Доступ ограничен"></ds-icon>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.accessibility" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="rotation">
+        <h3 id="rotation" tabindex="-1">Поворот</h3>
+        <p>
+          Угол задаётся в градусах по часовой стрелке. Приложение обновляет доступное описание
+          вместе с направлением.
+        </p>
+        <aurora-example-block class="demo"
+          id="rotation-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            <ds-icon name="navigation"
+              size="lg"
+              [rotate]="angle()"
+              [label]="directionLabel()"></ds-icon>
+            <output>Курс: {{ angle() }}°</output>
+            <button dsButton tone="secondary" size="sm" icon="refresh" (click)="turn()">
+              Повернуть на 45°
+            </button>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.rotation" collapsible></aurora-code-block>
+      </section>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul>
+        <li>
+          Выбирайте символ по назначению из
+          <a routerLink="/foundations/iconography"
+            fragment="dictionary"
+            [queryParams]="settings.queryParams()">
+            словаря иконографики
+          </a>. API принимает string; корректность имени остаётся ответственностью приложения.
+          Неизвестное имя может отобразиться буквами: проверки и подстановки другого символа нет.
+        </li>
+        <li>
+          Размер выбирайте по роли. Не переопределяйте отдельно font-size, ширину или высоту иконки.
+        </li>
+        <li>
+          Цвет наследуется от родителя; для собственной разметки используйте семантические токены.
+        </li>
+        <li>
+          Без непустого label иконка скрыта от экранного диктора. Пробельная подпись считается
+          отсутствующей. Не задавайте отдельно управляемые компонентом role, aria-label и
+          aria-hidden.
+        </li>
+        <li>
+          Иконка не является действием и не получает фокус. Для действия используйте содержащую её
+          кнопку или ссылку с доступным именем. Область нажатия и внешние отступы задаёт родитель.
+        </li>
+      </ul>
+      <p>
+        Композиция кнопки с иконкой показана на
+        <a routerLink="/components/button" fragment="icons" [queryParams]="settings.queryParams()">
+          странице Button
+        </a>
+        в примерах с подписью и без неё.
+      </p>
+    </section>
+    <section id="usage-code" aria-labelledby="usage">
+      <h2 id="usage" tabindex="-1">Пример подключения</h2>
+      <p>
+        Подключите пакетный styles.css и добавьте DsIconComponent из
+        <code>&#64;primasoftllc/design-system/angular</code>
+        в imports компонента приложения. Полный пример импорта раскрывается под первым сценарием.
+      </p>
+      <aurora-code-block [snippet]="snippets.template"></aurora-code-block>
+      <p>
+        Шрифт Material Symbols Outlined поставляется локально; дополнительный CDN не нужен.
+        Подключение общих стилей описано в
+        <a routerLink="/angular/setup" [queryParams]="settings.queryParams()">
+          руководстве Angular
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="parameters">
+      <h2 id="parameters" tabindex="-1">Параметры</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Параметры Icon">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Input</th>
+              <th scope="col">Тип</th>
+              <th scope="col">По умолчанию</th>
+              <th scope="col">Назначение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>name</code></th>
+              <td><code>string</code></td>
+              <td>Обязательный</td>
+              <td>Имя глифа в поставляемом шрифте.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>size</code></th>
+              <td><code>DsIconSize</code></td>
+              <td><code>md</code></td>
+              <td>Роль: xs, sm, md или lg.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>label</code></th>
+              <td><code>string | undefined</code></td>
+              <td>Нет</td>
+              <td>Доступное имя самостоятельной смысловой иконки.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>rotate</code></th>
+              <td><code>number</code></td>
+              <td><code>0</code></td>
+              <td>Поворот по часовой стрелке в градусах; например, [rotate]="90".</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Публичные экспорты: DsIconComponent и тип DsIconSize. Собственных событий и проекции
+        содержимого нет.
+      </p>
+    </section>
+    <section aria-labelledby="tokens">
+      <h2 id="tokens" tabindex="-1">Токены</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Токены размеров Icon">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Токен</th>
+              <th scope="col">Cozy / compact</th>
+              <th scope="col">Назначение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>--ds-icon-xs</code></th>
+              <td>14 / 12 px</td>
+              <td>Вспомогательный символ рядом с мелким текстом.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-icon-sm</code></th>
+              <td>16 / 14 px</td>
+              <td>Плотная строка.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-icon</code></th>
+              <td>20 / 18 px</td>
+              <td>Иконка внутри обычного контрола.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-icon-lg</code></th>
+              <td>24 / 20 px</td>
+              <td>Отдельно стоящая иконка.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Толщина — wght=400. Оптическая поправка navigation применяется внутри области. Собственного
+        токена цвета у иконки нет; подробные роли цвета и правила выбора символов — в
+        <a routerLink="/foundations/iconography" [queryParams]="settings.queryParams()">
+          «Иконографике»
+        </a>.
+      </p>
+    </section>
+  </div>
 </aurora-article-layout>

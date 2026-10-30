@@ -121,6 +121,59 @@
   @include base($plain: true);
 }
 
+// Shared by articles, standalone documents and component API/token tables.
+@mixin tables {
+  .table-scroll {
+    margin: 20px 0;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--ds-divider);
+    vertical-align: top;
+  }
+
+  th {
+    font: var(--ds-type-body-strong);
+    background: var(--ds-bg);
+  }
+}
+
+// Component pages share scenario spacing and demo rows without a page-schema abstraction.
+@mixin example-layout {
+  .example + .example {
+    margin-top: 32px;
+  }
+  .demo {
+    margin-top: 16px;
+  }
+  // Feedback belongs to the example, with a small gap after its controls.
+  .demo > p:not(:first-child),
+  .demo > [role='status']:not(:first-child) {
+    margin-top: var(--ds-gap-sm);
+  }
+  .row,
+  .sample {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .row {
+    gap: 24px;
+  }
+  .sample {
+    gap: 8px;
+  }
+}
+
 // Long-form instructions share article typography; their examples remain text snippets.
 @mixin document {
   @include base;
@@ -155,28 +208,7 @@
     margin: 20px 0;
   }
 
-  .table-scroll {
-    margin: 20px 0;
-    overflow-x: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-  }
-
-  th,
-  td {
-    padding: 12px 8px;
-    border-bottom: 1px solid var(--ds-divider);
-    vertical-align: top;
-  }
-
-  th {
-    font: var(--ds-type-body-strong);
-    background: var(--ds-bg);
-  }
+  @include tables;
 }
 
 @mixin choices {
@@ -277,25 +309,8 @@
   aurora-code-block {
     margin: 20px 0;
   }
-  .table-scroll {
-    overflow-x: auto;
-    margin: 20px 0;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-  }
-  th,
-  td {
-    padding: 12px 8px;
-    border-bottom: 1px solid var(--ds-divider);
-    vertical-align: top;
-  }
-  th {
-    font: var(--ds-type-body-strong);
-    background: var(--ds-bg);
-  }
+  @include tables;
+
   hr {
     border: 0;
     border-top: 1px solid var(--ds-divider);

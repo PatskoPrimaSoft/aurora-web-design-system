@@ -1,3 +1,4 @@
+import { HeadingAnchorsDirective } from './shared/heading-anchor/heading-anchors.directive';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,7 +15,7 @@ import { SiteSettingsService } from './site-settings.service';
 
 @Component({
   selector: 'aurora-documentation',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, HeadingAnchorsDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

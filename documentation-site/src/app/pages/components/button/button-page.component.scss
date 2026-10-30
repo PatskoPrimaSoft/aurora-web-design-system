@@ -1,1 +1,44 @@
-@use '../../../shared/page';
+@use '../../../../styles/article';
+@include article.document;
+@include article.example-layout;
+.tone-sample {
+  display: inline-flex;
+  padding: 8px;
+  border-radius: var(--ds-radius-sm);
+}
+.inverse-surface {
+  background: var(--ds-surface-inverse);
+  color: var(--ds-fg-on-inverse);
+}
+.icon-only-samples {
+  margin-top: 24px;
+}
+.limited {
+  width: 100%;
+  max-width: 320px;
+}
+.limited + .limited {
+  margin-top: 16px;
+}
+// Native field is only a form demonstration, not an exported field component.
+.form-field {
+  display: grid;
+  gap: 8px;
+  max-width: 320px;
+  margin-bottom: 16px;
+}
+input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--ds-border-field);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface);
+  color: var(--ds-fg);
+  font: var(--ds-type-body);
+}
+input:focus-visible {
+  outline: var(--ds-focus-width) solid var(--ds-focus-color);
+  outline-offset: var(--ds-focus-offset);
+}

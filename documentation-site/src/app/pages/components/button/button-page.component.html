@@ -1,5 +1,481 @@
-<aurora-article-layout title="Button">
-  <p data-migration-placeholder class="placeholder migration-placeholder">
-    Страница будет заполнена после доработки Angular-компонента кнопки.
-  </p>
+<aurora-article-layout title="Button"
+  subtitle="Нативная кнопка действия: оформление, иконки, загрузка и работа в форме.">
+  <div class="guide-content">
+    <section aria-labelledby="examples">
+      <h2 id="examples" tabindex="-1">Живые примеры</h2>
+      <section class="example" aria-labelledby="basic">
+        <h3 id="basic" tabindex="-1">Обычное действие</h3>
+        <p>Подпись передаётся содержимым кнопки, действие — нативным событием click.</p>
+        <aurora-example-block class="demo"
+          id="button-basic-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <button dsButton (click)="clicks.set(clicks() + 1)">Выполнить действие</button>
+          <p role="status">Нажатий: {{ clicks() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.component" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="tones">
+        <h3 id="tones" tabindex="-1">Тоны</h3>
+        <p>
+          Выбирайте оформление по назначению действия. Inverse показан на инверсной поверхности.
+        </p>
+        <aurora-example-block class="demo"
+          id="button-tones-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            @for (tone of tones; track tone) {
+              <span class="tone-sample" [class.inverse-surface]="tone === 'inverse'">
+                <button dsButton [tone]="tone" (click)="selectedTone.set(tone)">{{ tone }}</button>
+              </span>
+            }
+          </div>
+          <p role="status">Нажата кнопка: {{ selectedTone() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.tones" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="sizes">
+        <h3 id="sizes" tabindex="-1">Размеры и плотность</h3>
+        <p>
+          Связанные действия используют одинаковый размер. Плотность меняет высоту и отступы через
+          токены.
+        </p>
+        <aurora-example-block class="demo"
+          id="button-sizes-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            @for (size of sizes; track size) {
+              <button dsButton [size]="size" (click)="selectedSize.set(size)">
+                Размер {{ size }}
+              </button>
+            }
+          </div>
+          <p role="status">Нажат размер: {{ selectedSize() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.sizes" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="icons">
+        <h3 id="icons" tabindex="-1">Иконки и кнопка без текста</h3>
+        <p>
+          Внутренние иконки декоративные. Без подписи обязательно доступное имя на самой кнопке.
+        </p>
+        <aurora-example-block class="demo"
+          id="button-icons-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            <button dsButton icon="add" (click)="added.set(added() + 1)">Добавить запись</button>
+            <button dsButton
+              tone="secondary"
+              iconRight="arrow_forward"
+              (click)="added.set(added() + 1)">
+              Продолжить
+            </button>
+          </div>
+          <div class="row icon-only-samples">
+            @for (size of sizes; track size) {
+              <span class="sample">
+                <button dsButton
+                  icon="add"
+                  [size]="size"
+                  [attr.aria-label]="'Добавить запись: ' + size"
+                  (click)="added.set(added() + 1)"></button>
+                <code>{{ size }}</code>
+              </span>
+            }
+          </div>
+          <p role="status">Действий выполнено: {{ added() }}</p>
+          <p>
+            Без проецируемой подписи и с одной иконкой кнопка квадратная: 28/36/44 px в cozy и
+            24/30/36 px в compact. Это тот же Button без отдельного IconButton и автоматической
+            подсказки.
+          </p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.icons" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="disabled">
+        <h3 id="disabled" tabindex="-1">Недоступное действие</h3>
+        <p>
+          Disabled использует нативную блокировку и исключает кнопку из Tab. Причину показывайте
+          рядом.
+        </p>
+        <aurora-example-block class="demo"
+          id="button-disabled-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            <button dsButton [disabled]="locked()" (click)="performed.set(performed() + 1)">
+              Выполнить
+            </button>
+            <button dsButton tone="secondary" (click)="locked.set(!locked())">
+              {{ locked() ? 'Разрешить действие' : 'Отключить действие' }}
+            </button>
+          </div>
+          <p>
+            {{
+              locked()
+                ? 'Действие временно недоступно. Нажмите «Разрешить действие», чтобы попробовать.'
+                : 'Действие доступно.'
+            }}
+          </p>
+          <p role="status">Выполнено: {{ performed() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.disabled" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="loading">
+        <h3 id="loading" tabindex="-1">Загрузка</h3>
+        <p>
+          Приложение управляет loading и сообщает результат. Кнопка сохраняет размеры, доступное имя
+          и фокус.
+        </p>
+        <aurora-example-block class="demo"
+          id="button-loading-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <button dsButton icon="save" [loading]="saving()" (click)="save()">
+            Сохранить изменения
+          </button>
+          <p role="status">{{ saveMessage() }}</p>
+          <p>Запущено операций: {{ saves() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.loading" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="layout">
+        <h3 id="layout" tabindex="-1">Длинная подпись и полная ширина</h3>
+        <p>
+          Ширину области задаёт родитель. FullWidth заполняет её, длинный текст переносится без
+          обрезания.
+        </p>
+        <aurora-example-block class="demo"
+          id="button-layout-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="limited">
+            <button dsButton fullWidth tone="secondary">Действие на всю ширину</button>
+          </div>
+          <div class="limited">
+            <button dsButton fullWidth icon="save" iconRight="arrow_forward">
+              ОченьДлинноеНазваниеДействияБезПробеловКотороеНужноПеренестиПолностью
+            </button>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.layout" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="form">
+        <h3 id="form" tabindex="-1">Кнопка в форме</h3>
+        <p>
+          Submit отправляет форму, reset возвращает исходное значение, обычная кнопка форму не
+          отправляет. Поле здесь нативное — только для демонстрации поведения формы.
+        </p>
+        <aurora-example-block class="demo"
+          id="button-form-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <form (submit)="submit($event)" (reset)="reset()">
+            <label class="form-field" for="button-object-name">
+              Название объекта
+              <input id="button-object-name" name="objectName" value="Новый объект" required />
+            </label>
+            <div class="row">
+              <button dsButton type="submit" name="action" value="save">Отправить</button>
+              <button dsButton type="reset" tone="secondary">Сбросить</button>
+              <button dsButton
+                tone="ghost"
+                (click)="formMessage.set('Обычное действие: форма не отправлена.')">
+                Обычное действие
+              </button>
+            </div>
+          </form>
+          <p role="status">{{ formMessage() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.form" collapsible></aurora-code-block>
+      </section>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul>
+        <li>
+          Выделяйте одно главное действие через primary. Secondary и ghost подходят для
+          сопутствующих действий, subtle — для мягкого брендового акцента, danger — для
+          разрушительного действия. Inverse используйте на инверсной поверхности.
+        </li>
+        <li>
+          Подпись объясняет результат: «Сохранить изменения», «Удалить объект». Для переходов
+          используйте ссылку, а не кнопку.
+        </li>
+        <li>
+          Не помещайте внутрь кнопки ссылки, поля и другие интерактивные элементы. Внешние отступы и
+          расположение задаёт родитель.
+        </li>
+        <li>
+          Loading не запускает запрос самостоятельно. Приложение меняет состояние, сообщает
+          результат и обрабатывает ошибку. Активация и отправка формы этой кнопкой блокируются, но
+          фокус сохраняется. Не меняйте подпись во время загрузки, если нужно сохранить ширину.
+        </li>
+        <li>
+          Disabled исключает кнопку из Tab. Объясняйте причину ограничения рядом; не отключайте
+          отправку формы только из-за незаполненных полей — покажите ошибки после отправки.
+        </li>
+        <li>
+          Без текста используйте одну иконку и aria-label на кнопке. Иконка декоративная, фокус
+          принадлежит кнопке. Квадратная геометрия включается при пустой подписи; fullWidth явно
+          растягивает кнопку. Подсказка автоматически не создаётся.
+        </li>
+        <li>
+          Нативные type, id, name, value, form и ARIA-атрибуты остаются на button. Для собственной
+          активации используйте (click), дополнительных outputs нет.
+        </li>
+      </ul>
+      <p>
+        Правила выбора символов — в
+        <a routerLink="/foundations/iconography" [queryParams]="settings.queryParams()">
+          «Иконографике»
+        </a>, API изображения — на странице
+        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">Icon</a>.
+      </p>
+    </section>
+    <section id="usage-code" aria-labelledby="usage">
+      <h2 id="usage" tabindex="-1">Пример подключения</h2>
+      <p>
+        Подключите общий styles.css и добавьте DsButtonComponent из
+        <code>&#64;primasoftllc/design-system/angular</code>
+        в imports. Отдельно импортировать DsIconComponent для icon/iconRight не требуется.
+      </p>
+      <aurora-code-block [snippet]="snippets.template"></aurora-code-block>
+      <p>
+        Для действия по умолчанию используется type="button"; submit и reset задаются явно.
+        Подробности — в
+        <a routerLink="/angular/setup" [queryParams]="settings.queryParams()">
+          подключении Angular
+        </a>.
+      </p>
+    </section>
+    <section aria-labelledby="parameters">
+      <h2 id="parameters" tabindex="-1">Параметры</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Параметры Button">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Параметр</th>
+              <th scope="col">Тип / значения</th>
+              <th scope="col">По умолчанию</th>
+              <th scope="col">Назначение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>tone</code></th>
+              <td><code>DsButtonTone</code></td>
+              <td>primary</td>
+              <td>primary, secondary, subtle, ghost, danger, accent, inverse.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>size</code></th>
+              <td><code>DsButtonSize</code></td>
+              <td>md</td>
+              <td>sm, md или lg; учитывает плотность.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>icon</code>,
+                <code>iconRight</code>
+              </th>
+              <td><code>string | undefined</code></td>
+              <td>Нет</td>
+              <td>Имя иконки слева или справа. Корректность имени проверяет приложение.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>loading</code></th>
+              <td><code>boolean</code></td>
+              <td>false</td>
+              <td>Индикатор выполнения и блокировка повторной активации.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>disabled</code></th>
+              <td><code>boolean</code></td>
+              <td>false</td>
+              <td>Нативное недоступное состояние.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>fullWidth</code></th>
+              <td><code>boolean</code></td>
+              <td>false</td>
+              <td>Заполняет ширину родителя, в том числе у кнопки без текста.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>type</code></th>
+              <td>button, submit, reset</td>
+              <td>button</td>
+              <td>Нативное поведение в форме.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>aria-busy</code>,
+                <code>aria-disabled</code>
+              </th>
+              <td><code>string | boolean | null</code></td>
+              <td>null</td>
+              <td>
+                Внешние ARIA-значения; loading временно устанавливает true, затем возвращает
+                заданные значения.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Публичные экспорты: DsButtonComponent, DsButtonTone и DsButtonSize. Булевы inputs
+        поддерживают атрибутную запись и binding. Подпись передаётся проекцией. ControlValueAccessor
+        кнопке не нужен.
+      </p>
+    </section>
+    <section aria-labelledby="tokens">
+      <h2 id="tokens" tabindex="-1">Токены</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Токены Button">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Токены</th>
+              <th scope="col">Назначение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                <code>--ds-brand</code>,
+                <code>--ds-on-brand</code>
+              </th>
+              <td>Заливка и содержимое primary.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-surface</code>,
+                <code>--ds-fg</code>,
+                <code>--ds-border-field</code>
+              </th>
+              <td>Secondary.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-brand-subtle</code>,
+                <code>--ds-brand-text</code>
+              </th>
+              <td>Subtle.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-fg-muted</code></th>
+              <td>Содержимое ghost.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-danger-solid</code>,
+                <code>--ds-on-solid</code>
+              </th>
+              <td>Danger.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-accent</code>,
+                <code>--ds-accent-on</code>
+              </th>
+              <td>Accent.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-fg-action-on-inverse</code></th>
+              <td>Inverse на инверсной поверхности.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-overlay-hover</code>,
+                <code>--ds-overlay-press</code>
+              </th>
+              <td>Оверлей цвета содержимого у залитых тонов.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-surface-hover</code>,
+                <code>--ds-surface-active</code>
+              </th>
+              <td>Наведение и нажатие secondary и ghost.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-surface-disabled</code>,
+                <code>--ds-fg-disabled</code>,
+                <code>--ds-border</code>
+              </th>
+              <td>Недоступное состояние. Загрузка сохраняет оформление тона.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-control-h-sm</code>,
+                <code>--ds-control-h</code>,
+                <code>--ds-control-h-lg</code>
+              </th>
+              <td>Минимальная высота; ширина и высота кнопки с одной иконкой без подписи.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-control-pad-x</code>,
+                <code>--ds-gap-sm</code>
+              </th>
+              <td>
+                Отступы md/lg и интервал между иконкой и подписью. У sm горизонтальный отступ 10 px;
+                у одной иконки без подписи — 0.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-radius-md</code>,
+                <code>--ds-type-ui</code>,
+                <code>--ds-type-body-strong</code>
+              </th>
+              <td>Скругление и текст кнопки.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-icon-sm</code>,
+                <code>--ds-icon</code>
+              </th>
+              <td>Иконки и индикатор загрузки: уменьшенный размер для sm, обычный для md/lg.</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-focus-width</code>,
+                <code>--ds-focus-color</code>,
+                <code>--ds-focus-offset</code>
+              </th>
+              <td>Клавиатурный фокус.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-transition-control</code></th>
+              <td>Переходы оформления.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Размеры и цвета наследуют бренд, оформление и плотность. Отдельных параметров цветов и
+        пиксельных размеров у кнопки нет.
+      </p>
+    </section>
+  </div>
 </aurora-article-layout>

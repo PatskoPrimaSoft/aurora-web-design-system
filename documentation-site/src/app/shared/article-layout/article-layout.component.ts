@@ -1,3 +1,4 @@
+import { readHeadingTitle } from '../heading-anchor/heading-anchor.component';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -71,7 +72,7 @@ export class ArticleLayoutComponent {
       const refresh = () => {
         elements = Array.from(article.querySelectorAll<HTMLElement>('h2[id], h3[id]'));
         this.headings.set(
-          elements.map((heading) => ({ id: heading.id, title: heading.textContent?.trim() ?? '' })),
+          elements.map((heading) => ({ id: heading.id, title: readHeadingTitle(heading) })),
         );
         schedule();
       };

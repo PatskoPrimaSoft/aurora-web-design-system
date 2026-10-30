@@ -1,0 +1,40 @@
+<section id="icon-consumer"
+  auroraScope
+  [theme]="theme()"
+  [appearance]="appearance()"
+  [density]="density()">
+  <h2>Иконки из установленного пакета</h2>
+  <div id="icon-sizes">
+    @for (size of sizes; track size) {
+    <ds-icon name="search" [size]="size" [attr.data-sample-size]="size"></ds-icon>
+    }
+  </div>
+  <button id="icon-focus-before" type="button">До иконки</button>
+  <span id="icon-ink" style="color: var(--ds-warning-fg)">
+    <ds-icon id="icon-dynamic"
+      [name]="name()"
+      [size]="size()"
+      [rotate]="angle()"
+      [label]="label()"></ds-icon>
+  </span>
+  <button id="icon-focus-after" type="button">После иконки</button>
+  <button id="icon-update" type="button" (click)="update()">Обновить параметры</button>
+  <button id="icon-clear-label" type="button" (click)="label.set(undefined)">Убрать подпись</button>
+  <button id="icon-blank-label" type="button" (click)="label.set('   ')">Пробельная подпись</button>
+  <button id="icon-unknown" type="button" (click)="name.set('__aurora_missing_symbol__')">
+    Неизвестное имя
+  </button>
+  <button id="icon-compact" type="button" (click)="density.set('compact'); appearance.set('dark')">
+    DEFAULT dark compact
+  </button>
+  <button id="icon-red-light"
+    type="button"
+    (click)="theme.set('RED2'); appearance.set('light'); density.set('cozy')">
+    RED2 light cozy
+  </button>
+  <button id="icon-dark"
+    type="button"
+    (click)="theme.set('RED2'); appearance.set('dark'); density.set('compact')">
+    Другой режим
+  </button>
+</section>

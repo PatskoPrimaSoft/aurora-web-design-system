@@ -1,0 +1,7 @@
+@use '../../../../styles/article';
+@include article.document;
+@include article.example-layout;
+.limited {
+  width: 100%;
+  max-width: 240px;
+}

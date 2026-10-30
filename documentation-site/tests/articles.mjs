@@ -72,7 +72,18 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
           assert.equal(await item.evaluate((el) => getComputedStyle(el).marginTop), '0px');
         }
       }
-      await expect(page.locator('article h2')).toHaveText([...headings, ...supplementalHeadings]);
+      // The generated anchor icon is service content, not part of the section title.
+      await expect
+        .poll(() =>
+          page.locator('article h2').evaluateAll((elements) =>
+            elements.map((heading) => {
+              const copy = heading.cloneNode(true);
+              copy.querySelectorAll('aurora-heading-anchor').forEach((anchor) => anchor.remove());
+              return copy.textContent.trim().replace(/\s+/g, ' ');
+            }),
+          ),
+        )
+        .toEqual([...headings, ...supplementalHeadings]);
       const codeSection = page.locator(
         'section[aria-labelledby="' +
           supplementalHeadings[0].toLowerCase().replaceAll(' ', '-') +
@@ -100,7 +111,11 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
         /React|DsAppHeader|DsUserMenu|DsPageLayout|DsFilterMenu|DsIconButton|onApply|onClear/,
         `${slug}: do not expose legacy API or promise unapproved components`,
       );
-      await expect(page.locator('[data-migration-placeholder]').first()).toBeVisible();
+      if (slug === 'hover' || slug === 'theme-colors') {
+        await expect(page.locator('[data-migration-placeholder]')).toHaveCount(0);
+      } else {
+        await expect(page.locator('[data-migration-placeholder]').first()).toBeVisible();
+      }
       assert.equal(await page.locator('iframe').count(), 0);
       await page.evaluate(() => document.fonts.ready);
       if (slug === 'colors') {
@@ -226,6 +241,14 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
           await expect(scene).toHaveAttribute('data-ds-density', density);
         }
         if (slug === 'hover') {
+          const action = page.locator('#ready-interface');
+          await action.getByRole('button', { name: 'Сохранить', exact: true }).click();
+          await expect(action.locator('[role="status"]')).toHaveText('Изменения сохранены.');
+          await action.getByRole('button', { name: 'Отмена', exact: true }).click();
+          await expect(action.locator('[role="status"]')).toHaveText('Изменения отменены.');
+          await expect(
+            action.getByRole('button', { name: 'Недоступно', exact: true }),
+          ).toBeDisabled();
           await expect(page.locator('#state-comparison .state-label')).toHaveText([
             'Обычно',
             'Наведение',
@@ -247,7 +270,19 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
           await expect(page.locator('.try-it kbd').first()).toHaveText('Tab');
         }
       }
+      if (slug === 'shape') {
+        const focusButton = page.locator('#focus-demo button[dsButton]');
+        await focusButton.focus();
+        await expect(focusButton).toBeFocused();
+      }
       if (slug === 'iconography') {
+        for (const id of ['correct-example', 'incorrect-example']) {
+          const example = page.locator('#' + id);
+          await example.getByRole('button', { name: 'Удалить объект', exact: true }).click();
+          await expect(example.locator('[role="status"]')).toContainText('удаление объекта');
+          await example.getByRole('button', { name: 'Удалить объект', exact: true }).click();
+          await expect(example.locator('[role="status"]')).toHaveCount(0);
+        }
         const dictionary = page.locator('#icon-dictionary');
         const groupSource = original.match(/const groups=(\[[\s\S]*?\]);/)[1];
         const names = [...groupSource.matchAll(/'([a-z_ ]+)'/g)].flatMap((match) =>
@@ -437,6 +472,13 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
             theme,
           );
         } else {
+          for (const prefix of ['p', 'd']) {
+            const button = page.locator('#' + prefix + '-btn');
+            await button.click();
+            await expect(page.locator('#' + prefix + '-result')).toHaveText(
+              'Отчёт построен. Объектов: 4. Запуск: 1.',
+            );
+          }
           await expect(page.locator('.contrast-pair')).toHaveCount(6);
           await expect(page.locator('#out .language')).toHaveText('CSS');
           await expect(page.locator('#palette-reference .tok')).toHaveCount(15);

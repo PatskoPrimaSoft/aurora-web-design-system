@@ -1,5 +1,5 @@
 import{spawnSync}from'node:child_process';import{mkdtempSync,mkdirSync,readFileSync,writeFileSync,copyFileSync,readdirSync,rmSync,existsSync,realpathSync}from'node:fs';import{tmpdir}from'node:os';import{join,dirname,resolve,relative,isAbsolute}from'node:path';import{fileURLToPath}from'node:url';import{createRequire}from'node:module';import assert from'node:assert/strict';
-import{serveRoot}from'../../design-system/tools/baseline/render.mjs';import{chromium}from'@playwright/test';
+import{serveRoot}from'../../design-system/tools/baseline/render.mjs';import{chromium,expect}from'@playwright/test';
 import{assertAngularButton}from'./check-angular-button.mjs';
 const toolRoot=fileURLToPath(new URL('../../',import.meta.url));
 export function validateConsumerInputs(root=toolRoot){
@@ -14,7 +14,8 @@ export function validateConsumerInputs(root=toolRoot){
 function npmCli(){const base=dirname(process.execPath);const candidates=[process.env.npm_execpath,join(base,'node_modules/npm/bin/npm-cli.js'),join(base,'../lib/node_modules/npm/bin/npm-cli.js')].filter(Boolean);const path=candidates.find(existsSync);if(!path)throw Error('Cannot locate npm CLI; run through npm run check:angular');return path;}
 function npm(args,cwd,log){const result=spawnSync(process.execPath,[npmCli(),...args],{cwd,encoding:'utf8',maxBuffer:64*1024*1024,env:{...process.env,NG_CLI_ANALYTICS:'false'}});if(log)writeFileSync(log,(result.stdout??'')+(result.stderr??''));if(result.error||result.status!==0)throw Error(`${cwd}: npm ${args.join(' ')} failed (${result.status}): ${result.error?.message??result.stdout+result.stderr}`);return result.stdout;}
 function copy(from,to){mkdirSync(to,{recursive:true});for(const entry of readdirSync(from,{withFileTypes:true})){if(['node_modules','dist','.angular'].includes(entry.name))continue;const source=join(from,entry.name),target=join(to,entry.name);if(entry.isDirectory())copy(source,target);else copyFileSync(source,target);}}
-export async function checkAngular({root=toolRoot,tarball,workRoot}={}){
+export async function checkAngular({root=toolRoot,tarball,workRoot,consumerNames=['19','base','charts','legacy']}={}){
+ assert.ok(consumerNames.length && consumerNames.every(name=>['19','base','charts','legacy'].includes(name)), 'Unknown Angular consumer');
  validateConsumerInputs(root);
  const parent=resolve(workRoot??tmpdir());mkdirSync(parent,{recursive:true});const work=mkdtempSync(join(parent,'aurora-angular-'));const servers=[];
  const close=async()=>{for(const served of servers){served.server.closeAllConnections();await new Promise(r=>served.server.close(r));}const rel=relative(parent,resolve(work));if(rel==='..'||rel.startsWith('..')||isAbsolute(rel)||!rel.startsWith('aurora-angular-'))throw Error('Unsafe Angular consumer cleanup');rmSync(work,{recursive:true,force:true});};
@@ -22,9 +23,13 @@ export async function checkAngular({root=toolRoot,tarball,workRoot}={}){
   const logRoot=join(root,'.tmp/migration/angular');mkdirSync(logRoot,{recursive:true});
   if(!tarball){const packed=JSON.parse(npm(['pack','--json','--ignore-scripts','--pack-destination',work],join(root,'.tmp/package')))[0];tarball=join(work,packed.filename);}
   const result={close,work};
-  for(const name of ['19','base','charts','legacy']){
+  for(const name of consumerNames){
    const consumer=join(work,name);copy(join(root,'ng-ui-kit/tests/consumers/angular-'+name),consumer);
-   if(name==='19'||name==='base')for(const file of ['button-demo.ts','button-example.ts'])copyFileSync(join(root,'ng-ui-kit/tests/consumers/shared',file),join(consumer,'src',file));
+   if(name==='19'||name==='base'){
+    for(const file of ['button-demo.ts','button-example.ts','icon-demo.ts','icon-demo.html','fab-demo.ts']){
+     copyFileSync(join(root,'ng-ui-kit/tests/consumers/shared',file),join(consumer,'src',file));
+    }
+   }
    npm(['ci','--offline','--no-audit','--no-fund'],consumer,join(logRoot,name+'-install.log'));
    npm(['install','--offline','--ignore-scripts','--no-audit','--no-fund',resolve(tarball)],consumer,join(logRoot,name+'-package.log'));
    assert.equal(realpathSync(join(consumer,'node_modules/@primasoftllc/design-system')),join(realpathSync(consumer),'node_modules/@primasoftllc/design-system'),'installed package must be a real tarball directory, not a source link');
@@ -41,10 +46,12 @@ export async function assertConsumers(page,consumers){
  page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
  await page.route('**/*',route=>{const url=route.request().url();if([consumers['19Url'],consumers.baseUrl,consumers.chartsUrl,consumers.legacyUrl].some(origin=>url.startsWith(origin+'/'))||/^(data:|blob:)/.test(url))return route.continue();errors.push('external request: '+url);return route.abort();});
  for(const url of [consumers['19Url'],consumers.baseUrl]){
- await page.goto(url+'/index.html');await page.waitForSelector('app-root[data-ready]');assert.equal(await page.locator('body').getAttribute('data-ds-theme'),'RED2');assert.equal(await page.locator('[auroraScope]').getAttribute('data-ds-density'),'compact');
+ await page.goto(url+'/index.html');await page.waitForSelector('app-root[data-ready]');assert.equal(await page.locator('body').getAttribute('data-ds-theme'),'RED2');assert.equal(await page.locator('#theme-toggle').locator('..').getAttribute('data-ds-density'),'compact');
  await page.locator('#theme-toggle').click();await page.waitForFunction(()=>document.body.getAttribute('data-ds-appearance')==='dark');
  await page.evaluate(()=>{localStorage.setItem('ds-appearance','dark');localStorage.setItem('ds-density','compact');});await page.reload();await page.waitForSelector('app-root[data-ready]');assert.equal(await page.locator('body').getAttribute('data-ds-appearance'),'dark');assert.equal(await page.locator('body').getAttribute('data-ds-density'),'compact');
  await assertAngularButton(page,url);
+ await assertAngularIcon(page,url);
+ await assertAngularFab(page,url);
  }
  await page.goto(consumers.legacyUrl+'/index.html');await page.waitForFunction(()=>window.legacyCheck);assert.deepEqual(await page.evaluate(()=>[window.legacyCheck.sameService,window.legacyCheck.sameConfig,window.legacyCheck.sameInstance,window.legacyCheck.chart,window.legacyCheck.watch]),[true,true,true,true,true]);
  await page.goto(consumers.chartsUrl+'/index.html');await page.waitForFunction(()=>window.auroraCheck);assert.equal(await page.evaluate(()=>window.auroraCheck.sameTheme),true);const before=await page.evaluate(()=>window.auroraCheck.read.fg);
@@ -52,7 +59,156 @@ export async function assertConsumers(page,consumers){
  const stopped=await page.evaluate(()=>{window.auroraCheck.stop();const n=window.auroraCheck.callbacks;document.getElementById('panel').setAttribute('data-ds-appearance','dark');return n;});await page.evaluate(()=>new Promise(r=>setTimeout(r,30)));assert.equal(await page.evaluate(()=>window.auroraCheck.callbacks),stopped);
  await page.goto(consumers.chartsUrl+'/global.html');await page.waitForFunction(()=>window.globalCheck);assert.equal(await page.evaluate(()=>window.globalCheck.registered),true);assert.ok(await page.evaluate(()=>window.globalCheck.option.color.length>0&&window.globalCheck.read.fg));assert.deepEqual(errors,[]);
 }
+// Exercise the public icon contract in both independently compiled Angular consumers.
+export async function assertAngularIcon(page, url) {
+  await page.goto(url + '/index.html');
+  await page.locator('#icon-consumer').waitFor();
+  await page.evaluate(() => document.fonts.ready);
+  const sizes = page.locator('#icon-sizes ds-icon');
+  const readSizes = () =>
+    sizes.evaluateAll((icons) =>
+      icons.map((icon) => ({
+        width: getComputedStyle(icon).width,
+        height: getComputedStyle(icon).height,
+        font: getComputedStyle(icon.querySelector('span')).fontSize,
+      })),
+    );
+  assert.deepEqual(
+    await readSizes(),
+    [14, 16, 20, 24].map((n) => ({ width: n + 'px', height: n + 'px', font: n + 'px' })),
+  );
+  const icon = page.locator('#icon-dynamic');
+  assert.equal(await icon.getAttribute('aria-hidden'), 'true');
+  assert.equal(await icon.getAttribute('role'), null);
+  assert.equal(await icon.getAttribute('tabindex'), null);
+  await page.locator('#icon-focus-before').focus();
+  await page.keyboard.press('Tab');
+  assert.equal(
+    await page.locator('#icon-focus-after').evaluate((el) => el === document.activeElement),
+    true,
+  );
+  assert.equal(
+    await icon.evaluate((el) => getComputedStyle(el).color),
+    await page.locator('#icon-ink').evaluate((el) => getComputedStyle(el).color),
+  );
+  const glyph = icon.locator('span');
+  assert.match(
+    await glyph.evaluate((el) => getComputedStyle(el).fontFamily),
+    /Material Symbols Outlined/,
+  );
+  assert.match(
+    await glyph.evaluate((el) => getComputedStyle(el).fontVariationSettings),
+    /["']wght["']\s+400/,
+    'icon weight is fixed by the design system',
+  );
+  assert.equal(
+    await page.evaluate(() =>
+      Array.from(document.fonts).some(
+        (face) => face.family.includes('Material Symbols Outlined') && face.status === 'loaded',
+      ),
+    ),
+    true,
+    'icon font must be shipped and loaded locally',
+  );
+  assert.equal(await glyph.getAttribute('aria-hidden'), 'true');
+  await page.locator('#icon-update').click();
+  await page.waitForFunction(
+    () =>
+      document.getElementById('icon-dynamic').getAttribute('aria-label') === 'Направление: восток',
+  );
+  assert.equal(await icon.getAttribute('role'), 'img');
+  assert.equal(await icon.getAttribute('aria-hidden'), null);
+  assert.equal(await glyph.textContent(), 'navigation');
+  assert.equal(await icon.evaluate((el) => getComputedStyle(el).width), '24px');
+  assert.equal(
+    await icon.evaluate((el) => getComputedStyle(el).transform),
+    'matrix(0, 1, -1, 0, 0, 0)',
+  );
+  await page.locator('#icon-blank-label').click();
+  await page.waitForFunction(
+    () => document.getElementById('icon-dynamic').getAttribute('aria-hidden') === 'true',
+  );
+  assert.equal(await icon.getAttribute('aria-label'), null);
+  assert.equal(await icon.getAttribute('role'), null);
+  await page.locator('#icon-update').click();
+  await page.waitForFunction(
+    () => document.getElementById('icon-dynamic').getAttribute('role') === 'img',
+  );
+  await page.locator('#icon-clear-label').click();
+  await page.waitForFunction(
+    () => document.getElementById('icon-dynamic').getAttribute('aria-hidden') === 'true',
+  );
+  await page.locator('#icon-compact').click();
+  await page.waitForFunction(
+    () => document.getElementById('icon-consumer').getAttribute('data-ds-density') === 'compact',
+  );
+  assert.deepEqual(
+    await readSizes(),
+    [12, 14, 18, 20].map((n) => ({ width: n + 'px', height: n + 'px', font: n + 'px' })),
+  );
+  await page.locator('#icon-red-light').click();
+  await page.waitForFunction(
+    () => document.getElementById('icon-consumer').getAttribute('data-ds-density') === 'cozy',
+  );
+  assert.deepEqual(
+    await readSizes(),
+    [14, 16, 20, 24].map((n) => ({ width: n + 'px', height: n + 'px', font: n + 'px' })),
+  );
+  const before = await icon.evaluate((el) => getComputedStyle(el).color);
+  await page.locator('#icon-dark').click();
+  await page.waitForFunction(
+    (before) => getComputedStyle(document.getElementById('icon-dynamic')).color !== before,
+    before,
+  );
+  assert.equal(
+    await icon.evaluate((el) => getComputedStyle(el).color),
+    await page.locator('#icon-ink').evaluate((el) => getComputedStyle(el).color),
+  );
+  assert.deepEqual(
+    await readSizes(),
+    [12, 14, 18, 20].map((n) => ({ width: n + 'px', height: n + 'px', font: n + 'px' })),
+  );
+  await page.locator('#icon-unknown').click();
+  await page.waitForFunction(
+    () => document.querySelector('#icon-dynamic span').textContent === '__aurora_missing_symbol__',
+  );
+}
 if(process.argv[1]===fileURLToPath(import.meta.url)){
  const consumers=await checkAngular({tarball:process.argv[2]});let browser;
  try{browser=await chromium.launch();const context=await browser.newContext();const page=await context.newPage();await assertConsumers(page,consumers);console.log('angular-consumer: bootstrap, scopes, persisted settings, identities, chart updates, unsubscribe and global bridge passed');}finally{if(browser)await browser.close();await consumers.close();}
+}
+
+async function assertAngularFab(page, url) {
+  await page.goto(url + '/index.html');
+  const fab = page.locator('#fab-action');
+  await expect(fab).toHaveAccessibleName('Добавить объект');
+  assert.equal(await fab.evaluate(el => el.getBoundingClientRect().width), 48);
+  assert.equal(await fab.evaluate(el => el.getBoundingClientRect().height), 48);
+  await fab.focus();
+  const tip = fab.locator('[role="tooltip"]');
+  await expect(tip).toBeVisible();
+  await expect(fab).toHaveAttribute('aria-describedby', /fab-description ds-fab-tooltip-/);
+  await page.keyboard.press('Escape');
+  await expect(tip).toBeHidden();
+  await expect(fab).toHaveAttribute('aria-describedby', 'fab-description');
+  await page.keyboard.press('Space');
+  await expect(page.locator('#fab-count')).toHaveText('1');
+  await page.locator('#fab-size').click();
+  assert.equal(await fab.evaluate(el => el.getBoundingClientRect().width), 40);
+  await page.locator('#fab-size').click();
+  assert.equal(await fab.evaluate(el => el.getBoundingClientRect().width), 56);
+  await page.locator('#fab-extended').click();
+  await expect(fab.locator('[data-ds-fab-label]')).toHaveText('Добавить объект');
+  await fab.focus();
+  await expect(tip).toBeHidden();
+  await page.locator('#fab-loading').click();
+  await expect(fab).toHaveAttribute('aria-busy', 'true');
+  assert.equal(await fab.evaluate(el => el.disabled), false);
+  await fab.evaluate(el => el.click());
+  await expect(page.locator('#fab-count')).toHaveText('1');
+  await page.locator('#fab-loading').click();
+  await page.locator('#fab-disabled').click();
+  await expect(fab).toBeDisabled();
+  await fab.evaluate(el => el.click());
+  await expect(page.locator('#fab-count')).toHaveText('1');
 }

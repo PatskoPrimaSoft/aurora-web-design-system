@@ -1,0 +1,41 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.heading-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-fg-muted);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--ds-brand-text);
+    background: var(--ds-surface-hover);
+  }
+
+  &:focus-visible {
+    outline: var(--ds-focus-width) solid var(--ds-focus-color);
+    outline-offset: var(--ds-focus-offset);
+  }
+}
+
+// Reserve space even when hidden, and keep the link available to keyboard users.
+@media (hover: hover) and (pointer: fine) {
+  .heading-link {
+    opacity: 0;
+  }
+
+  :host-context(h2:hover) .heading-link,
+  :host-context(h3:hover) .heading-link,
+  :host-context(h2:focus-within) .heading-link,
+  :host-context(h3:focus-within) .heading-link,
+  .heading-link:focus-visible {
+    opacity: 1;
+  }
+}

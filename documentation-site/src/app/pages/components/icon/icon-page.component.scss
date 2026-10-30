@@ -1,5 +1,18 @@
-@use '../../../shared/page';
+@use '../../../../styles/article';
 
-aurora-code-block {
-  margin-top: 16px;
+// Shared article typography, links, code spacing and API/token tables.
+@include article.document;
+
+@include article.example-layout;
+.muted {
+  color: var(--ds-fg-muted);
+}
+.warning {
+  color: var(--ds-warning-fg);
+}
+.brand {
+  padding: 8px 12px;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-brand);
+  color: var(--ds-on-brand);
 }

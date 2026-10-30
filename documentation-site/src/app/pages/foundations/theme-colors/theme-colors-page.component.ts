@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
+import { DsButtonComponent } from '@primasoftllc/design-system/angular';
 import { RouterLink } from '@angular/router';
 import { ArticleLayoutComponent } from '../../../shared/article-layout/article-layout.component';
 import { CodeBlockComponent } from '../../../shared/code-block/code-block.component';
@@ -8,12 +9,16 @@ import { calculatePalette } from './palette-calculator';
 
 @Component({
   selector: 'aurora-theme-colors-page',
-  imports: [RouterLink, ArticleLayoutComponent, CodeBlockComponent],
+  imports: [DsButtonComponent, RouterLink, ArticleLayoutComponent, CodeBlockComponent],
   templateUrl: './theme-colors-page.component.html',
   styleUrl: './theme-colors-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThemeColorsPageComponent {
+  protected readonly reportRuns = signal({ light: 0, dark: 0 });
+  protected buildReport(mode: 'light' | 'dark'): void {
+    this.reportRuns.update((runs) => ({ ...runs, [mode]: runs[mode] + 1 }));
+  }
   protected readonly settings = inject(SiteSettingsService);
   // Keep native pickers and preview on the last valid input while the text field contains an error.
   protected readonly pickerColors = signal({ brand: '#2b5f9e', accent: '#efd63c' });

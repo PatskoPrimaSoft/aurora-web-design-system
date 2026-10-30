@@ -1,3 +1,4 @@
+import { FabPageComponent } from './pages/components/fab/fab-page.component';
 import { AngularUiKitPageComponent } from './pages/documents/angular-ui-kit/angular-ui-kit-page.component';
 import { DesignPageComponent } from './pages/documents/design/design-page.component';
 import { TokenNamesPageComponent } from './pages/documents/token-names/token-names-page.component';
@@ -36,6 +37,7 @@ import { NotFoundPageComponent } from './pages/not-found/not-found-page.componen
 import { TokensPageComponent } from './pages/tokens/tokens-page.component';
 
 export const routes: Routes = [
+  { path: 'components/fab', component: FabPageComponent, title: 'FAB — Aurora' },
   {
     path: '',
     pathMatch: 'full',

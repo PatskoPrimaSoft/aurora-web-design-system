@@ -163,7 +163,8 @@
         различать слои. Подробнее о цветовых ролях — в разделе
         <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
           «Нейтральные цвета»
-        </a>.
+        </a>
+        .
       </p>
       <h3 style="margin-top: 24px">Что перекрывает что</h3>
       <ul class="rules">
@@ -232,13 +233,11 @@
             компонент уже оформляет фокус.
           </p>
           <aurora-example-block id="focus-demo"
-            class="component-row migration-placeholder"
-            role="note"
-            data-migration-placeholder=""
+            class="component-row"
             [attr.data-ds-theme]="settings.theme()"
             [attr.data-ds-appearance]="settings.appearance()"
             [attr.data-ds-density]="settings.density()">
-            Демонстрация фокуса кнопки ожидает подготовки Angular-примера.
+            <button dsButton tone="secondary">Проверить фокус</button>
           </aurora-example-block>
         </aurora-example-block>
         <aurora-example-block class="sample"

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { DsButtonComponent } from '@primasoftllc/design-system/angular';
 import { RouterLink } from '@angular/router';
 import { radiusSamples, shadowSamples } from '../../../data/reference-samples';
 import { ArticleLayoutComponent } from '../../../shared/article-layout/article-layout.component';
@@ -9,7 +10,13 @@ import { shapeSnippets } from './shape-page.snippets';
 
 @Component({
   selector: 'aurora-shape-page',
-  imports: [RouterLink, ArticleLayoutComponent, ExampleBlockComponent, CodeBlockComponent],
+  imports: [
+    DsButtonComponent,
+    RouterLink,
+    ArticleLayoutComponent,
+    ExampleBlockComponent,
+    CodeBlockComponent,
+  ],
   templateUrl: './shape-page.component.html',
   styleUrl: './shape-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

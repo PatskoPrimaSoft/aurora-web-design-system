@@ -18,7 +18,8 @@
       <p>
         Готовые компоненты сами задают размер, цвет и положение иконки. Вам нужно выбрать её смысл и
         понятную подпись. Для собственной разметки используйте
-        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">DsIcon</a>; API и примеры находятся на его странице.
+        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">DsIcon</a>
+        ; API и примеры находятся на его странице.
       </p>
     </section>
     <section aria-labelledby="choose">
@@ -27,8 +28,10 @@
         <li>Один смысл — один символ во всём продукте. Начинайте с утверждённого словаря ниже.</li>
         <li>
           Закрытие окна —
-          <code>close</code>, удаление данных —
-          <code>delete</code>. Крестик не обозначает удаление.
+          <code>close</code>
+          , удаление данных —
+          <code>delete</code>
+          . Крестик не обозначает удаление.
         </li>
         <li>
           Редкое или неоднозначное действие сопровождайте видимой подписью. Если иконка не помогает,
@@ -126,18 +129,21 @@
           его область, толщину
           <code>wght=400</code>
           и оптические поправки; не переопределяйте отдельно только
-          <code>fontSize</code>.
+          <code>fontSize</code>
+          .
         </p>
         <p>
           Шрифт поставляется вместе с пакетом и подключается общим
-          <code>styles.css</code>. Дополнительный CDN не нужен.
+          <code>styles.css</code>
+          . Дополнительный CDN не нужен.
           <a routerLink="/angular/setup" [queryParams]="settings.queryParams()">
             Подключение в Angular
           </a>
           и
           <a routerLink="/foundations/density" [queryParams]="settings.queryParams()">
             плотность интерфейса
-          </a>.
+          </a>
+          .
         </p>
       </details>
     </section>
@@ -169,7 +175,8 @@
         </li>
         <li>
           Самостоятельной смысловой иконке задайте
-          <code>label</code>: DsIcon добавит
+          <code>label</code>
+          : DsIcon добавит
           <code>role="img"</code>
           и доступное имя.
         </li>
@@ -183,10 +190,12 @@
         Подробности:
         <a routerLink="/foundations/accessibility" [queryParams]="settings.queryParams()">
           доступность
-        </a>,
+        </a>
+        ,
         <a routerLink="/foundations/status" [queryParams]="settings.queryParams()">статусы</a>
         и
-        <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">цветовые роли</a>.
+        <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">цветовые роли</a>
+        .
       </p>
     </section>
     <section aria-labelledby="mistakes">
@@ -194,27 +203,43 @@
       <div class="pair">
         <div>
           <h3>Рекомендуется</h3>
-          <aurora-example-block class="scene migration-placeholder"
+          <aurora-example-block class="scene"
             id="correct-example"
             [attr.data-ds-theme]="settings.theme()"
             [attr.data-ds-appearance]="settings.appearance()"
-            [attr.data-ds-density]="settings.density()"
-            role="note"
-            data-migration-placeholder>
-            Пример действия удаления появится при наполнении Angular-примеров.
+            [attr.data-ds-density]="settings.density()">
+            <button dsButton
+              tone="danger"
+              icon="delete"
+              (click)="removedCorrectly.set(!removedCorrectly())">
+              Удалить объект
+            </button>
+            @if (removedCorrectly()) {
+              <p class="action-result" role="status">
+                Пример: выбранное действие — удаление объекта.
+              </p>
+            }
           </aurora-example-block>
           <p>Корзина и подпись однозначно обозначают удаление.</p>
         </div>
         <div>
           <h3>Избегайте</h3>
-          <aurora-example-block class="scene migration-placeholder"
+          <aurora-example-block class="scene"
             id="incorrect-example"
             [attr.data-ds-theme]="settings.theme()"
             [attr.data-ds-appearance]="settings.appearance()"
-            [attr.data-ds-density]="settings.density()"
-            role="note"
-            data-migration-placeholder>
-            Пример действия удаления появится при наполнении Angular-примеров.
+            [attr.data-ds-density]="settings.density()">
+            <button dsButton
+              tone="danger"
+              icon="close"
+              (click)="removedIncorrectly.set(!removedIncorrectly())">
+              Удалить объект
+            </button>
+            @if (removedIncorrectly()) {
+              <p class="action-result" role="status">
+                Пример: выбранное действие — удаление объекта.
+              </p>
+            }
           </aurora-example-block>
           <p>Крестик с той же подписью смешивает удаление и закрытие.</p>
         </div>
@@ -238,7 +263,8 @@
           class="migration-placeholder"
           title="Страница ещё не перенесена">
           стрелки и направления
-        </span>.
+        </span>
+        .
       </p>
       <p>
         Маркеры карты используют отдельные SVG-ресурсы и растры: это исключение из шрифтовой
@@ -253,13 +279,15 @@
           class="migration-placeholder"
           title="Страница ещё не перенесена">
           трек на карте
-        </span>.
+        </span>
+        .
       </p>
     </section>
     <section aria-labelledby="пример-кода">
       <p>
         Правила выбора и словарь показаны выше. Текущий Angular API иконки описан на
-        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">странице Icon</a>. Выделение кнопки с иконкой в отдельный компонент решается отдельно.
+        <a routerLink="/components/icon" [queryParams]="settings.queryParams()">странице Icon</a>
+        . Выделение кнопки с иконкой в отдельный компонент решается отдельно.
       </p>
       <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
       <p>

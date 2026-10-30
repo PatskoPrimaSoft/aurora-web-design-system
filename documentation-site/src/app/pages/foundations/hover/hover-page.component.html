@@ -7,15 +7,20 @@
         Готовые компоненты автоматически реагируют на наведение и нажатие. Приложение обрабатывает
         действие и сообщает результат.
       </p>
-      <aurora-example-block class="scene migration-placeholder"
+      <aurora-example-block class="scene"
         id="ready-interface"
         background="subtle"
         [attr.data-ds-theme]="settings.theme()"
         [attr.data-ds-appearance]="settings.appearance()"
-        [attr.data-ds-density]="settings.density()"
-        role="note"
-        data-migration-placeholder>
-        Пример действий и подтверждения результата появится при наполнении Angular-примеров.
+        [attr.data-ds-density]="settings.density()">
+        <div class="actions">
+          <button dsButton (click)="result.set('Изменения сохранены.')">Сохранить</button>
+          <button dsButton tone="secondary" (click)="result.set('Изменения отменены.')">
+            Отмена
+          </button>
+          <button dsButton disabled>Недоступно</button>
+        </div>
+        <p class="action-result" role="status">{{ result() }}</p>
       </aurora-example-block>
       <p class="caption" style="margin-top: 16px">
         Наведите указатель и удержите кнопку. С клавиатуры используйте Tab, затем Space или Enter.
@@ -63,7 +68,8 @@
           <strong>Сохраняйте клавиатурный фокус.</strong>
           Он показывает, где находится управление с клавиатуры, и может быть виден вместе с
           наведением. Подробнее —
-          <a routerLink="/foundations/focus" [queryParams]="settings.queryParams()">«Фокус»</a>.
+          <a routerLink="/foundations/focus" [queryParams]="settings.queryParams()">«Фокус»</a>
+          .
         </li>
         <li>
           <strong>Не прячьте действие за наведением.</strong>
@@ -88,7 +94,8 @@
       <p>
         Собственной кнопке нужны не только цвета состояний, но и семантика, фокус и обработка мыши,
         касания и клавиатуры. Для обычных действий используйте
-        <a routerLink="/components/button" [queryParams]="settings.queryParams()">DsButton</a>.
+        <a routerLink="/components/button" [queryParams]="settings.queryParams()">DsButton</a>
+        .
       </p>
       <details id="hover-reference">
         <summary>Показать токены и принцип оформления</summary>
@@ -97,8 +104,10 @@
             <h3>Кнопки с цветной заливкой</h3>
             <p>
               У
-              <code>primary</code>,
-              <code>accent</code>,
+              <code>primary</code>
+              ,
+              <code>accent</code>
+              ,
               <code>danger</code>
               и
               <code>subtle</code>
@@ -131,7 +140,8 @@
                 <tr>
                   <td>
                     Фон кнопок
-                    <code>secondary</code>,
+                    <code>secondary</code>
+                    ,
                     <code>ghost</code>
                     и обычных интерактивных строк
                   </td>
@@ -152,25 +162,11 @@
     <section aria-labelledby="пример-кода">
       <h2 id="пример-кода" tabindex="-1">Пример кода</h2>
       <p>Для готовой кнопки достаточно передать обработчик действия — состояния уже реализованы.</p>
-      <aurora-example-block class="pending-code migration-placeholder"
-        role="note"
-        data-migration-placeholder>
-        <p>
-          Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
-          компонентов.
-        </p>
-      </aurora-example-block>
+      <aurora-code-block [snippet]="snippets.template"></aurora-code-block>
       <details>
         <summary>Полный код примера с подтверждением действия</summary>
         <p>Код воспроизводит первый пример: кнопки обновляют сообщение о результате.</p>
-        <aurora-example-block class="pending-code migration-placeholder"
-          role="note"
-          data-migration-placeholder>
-          <p>
-            Код будет добавлен вместе с Angular-демонстрацией после подготовки необходимых
-            компонентов.
-          </p>
-        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.component"></aurora-code-block>
         <p>
           Подтверждение в примере локальное. В приложении сообщайте об успешном сохранении после
           ответа сервера.

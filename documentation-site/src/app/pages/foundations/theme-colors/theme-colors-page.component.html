@@ -53,12 +53,13 @@
           [style.background]="'var(--ds-bg)'">
           <span class="pl">Светлое оформление</span>
           <div class="row">
-            <span class="cap migration-placeholder"
+            <button dsButton
               id="p-btn"
-              role="note"
-              data-migration-placeholder>
-              Кнопка «Построить отчёт» ожидает подготовки Angular-примера.
-            </span>
+              [style.--ds-brand]="palette().light.brand"
+              [style.--ds-on-brand]="palette().light.onBrand"
+              (click)="buildReport('light')">
+              Построить отчёт
+            </button>
             <span class="pill"
               id="p-pill"
               [style.background]="palette().light.subtle"
@@ -80,7 +81,13 @@
               7
             </span>
           </div>
-          <p class="cap" role="status" id="p-result">Отчёт ещё не построен.</p>
+          <p class="cap" role="status" id="p-result">
+            {{
+              reportRuns().light
+                ? 'Отчёт построен. Объектов: 4. Запуск: ' + reportRuns().light + '.'
+                : 'Отчёт ещё не построен.'
+            }}
+          </p>
         </div>
         <div class="pane"
           id="pd"
@@ -89,12 +96,13 @@
           [style.background]="'var(--ds-surface)'">
           <span class="pl">Тёмное оформление</span>
           <div class="row">
-            <span class="cap migration-placeholder"
+            <button dsButton
               id="d-btn"
-              role="note"
-              data-migration-placeholder>
-              Кнопка «Построить отчёт» ожидает подготовки Angular-примера.
-            </span>
+              [style.--ds-brand]="palette().dark.brand"
+              [style.--ds-on-brand]="palette().dark.onBrand"
+              (click)="buildReport('dark')">
+              Построить отчёт
+            </button>
             <span class="pill"
               id="d-pill"
               [style.background]="palette().dark.subtle"
@@ -116,12 +124,19 @@
               7
             </span>
           </div>
-          <p class="cap" role="status" id="d-result">Отчёт ещё не построен.</p>
+          <p class="cap" role="status" id="d-result">
+            {{
+              reportRuns().dark
+                ? 'Отчёт построен. Объектов: 4. Запуск: ' + reportRuns().dark + '.'
+                : 'Отчёт ещё не построен.'
+            }}
+          </p>
         </div>
       </div>
       <p class="cap">
         Нажмите «Построить отчёт», чтобы проверить кнопку. Для существующего бренда используйте
-        <a routerLink="/foundations/themes" [queryParams]="settings.queryParams()">готовую тему</a>.
+        <a routerLink="/foundations/themes" [queryParams]="settings.queryParams()">готовую тему</a>
+        .
       </p>
       <p id="check-summary" role="status" style="margin-top: 16px">{{ palette().summary }}</p>
       <a [routerLink]="[]"
@@ -564,7 +579,8 @@
         в
         <code>tokens/source.json</code>
         и выполните
-        <code>npm run build</code>. Готовые компоненты используют токены выбранной темы автоматически.
+        <code>npm run build</code>
+        . Готовые компоненты используют токены выбранной темы автоматически.
       </p>
       <details id="export-css">
         <summary>Показать CSS палитры</summary>
