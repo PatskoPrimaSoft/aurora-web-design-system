@@ -1,0 +1,28 @@
+<section id="spinner-consumer">
+  <h2>Spinner из установленного пакета</h2>
+  <button id="spinner-focus-before" type="button">До индикатора</button>
+  <ds-spinner id="spinner-main" [size]="size()" [tone]="tone()" [label]="label()"></ds-spinner>
+  <span id="spinner-inverse-parent" style="color: var(--ds-danger-solid)">
+    <ds-spinner id="spinner-inverse" tone="inverse" label="Загрузка карты"></ds-spinner>
+  </span>
+  <button id="spinner-focus-after" type="button">После индикатора</button>
+  <button id="spinner-size" type="button" (click)="size.set(48)">Размер 48</button>
+  <button id="spinner-invalid-size" type="button" (click)="size.set(-1)">
+    Некорректный размер
+  </button>
+  <button id="spinner-tone" type="button" (click)="tone.set('muted')">Приглушённый цвет</button>
+  <button id="spinner-label" type="button" (click)="label.set('Обновление отчёта')">
+    Изменить название
+  </button>
+  <button id="spinner-show" type="button" (click)="shown.set(!shown())">Показать или убрать</button>
+  <button id="spinner-delay-zero" type="button" (click)="delay.set(0)">Без задержки</button>
+  <button id="spinner-delay-restart" type="button" (click)="delay.set(1200)">Новая задержка</button>
+  <div id="spinner-delay-slot">
+    @if (shown()) {
+    <ds-spinner id="spinner-delayed"
+      label="Загрузка объектов"
+      [size]="48"
+      [delay]="delay()"></ds-spinner>
+    }
+  </div>
+</section>

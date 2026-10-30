@@ -1,0 +1,355 @@
+<aurora-article-layout title="Spinner"
+  subtitle="Индикатор ожидания операции с неизвестным прогрессом.">
+  <div class="guide-content">
+    <section aria-labelledby="examples">
+      <h2 id="examples" tabindex="-1">Живые примеры</h2>
+      <section class="example" aria-labelledby="basic">
+        <h3 id="basic" tabindex="-1">Обновление данных</h3>
+        <p>
+          Spinner показывает неизвестный прогресс. Приложение сохраняет прежние данные, блокирует
+          повторный запуск и сообщает результат.
+        </p>
+        <aurora-example-block class="demo"
+          id="spinner-basic-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <button dsButton tone="secondary" [aria-disabled]="refreshing()" (click)="refresh()">
+            Обновить отчёт
+          </button>
+          <div class="loading-line">
+            <span class="spinner-slot">
+              @if (refreshing()) {
+                <ds-spinner label="Обновление отчёта" [size]="32"></ds-spinner>
+              }
+            </span>
+            <div [attr.aria-busy]="refreshing()">
+              <p>{{ report() }}</p>
+            </div>
+          </div>
+          <p [attr.role]="refreshing() ? null : 'status'">{{ refreshMessage() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.basic" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="sizes">
+        <h3 id="sizes" tabindex="-1">Размеры</h3>
+        <p>
+          Диаметр не зависит от плотности: 16–20 px для строки, 32 px для области, 48 px для
+          страницы. Толщина кольца рассчитывается автоматически.
+        </p>
+        <aurora-example-block class="demo"
+          id="spinner-sizes-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="variants">
+            @for (size of sizes; track size) {
+              <span class="size-sample">
+                <ds-spinner [size]="size"
+                  label="Образец размера индикатора"
+                  aria-hidden="true"></ds-spinner>
+                <span>{{ size }} px</span>
+              </span>
+            }
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.sizes" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="tones">
+        <h3 id="tones" tabindex="-1">Цвет и поверхность</h3>
+        <p>
+          Brand использует цвет бренда, muted — приглушённый цвет текста. Inverse наследует
+          currentColor от родителя; контрастный цвет задаёт контейнер.
+        </p>
+        <aurora-example-block class="demo"
+          id="spinner-tones-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="variants">
+            <span class="size-sample">
+              <ds-spinner label="Образец брендового цвета"
+                tone="brand"
+                [size]="32"
+                aria-hidden="true"></ds-spinner>
+              <code>brand</code>
+            </span>
+            <span class="size-sample">
+              <ds-spinner label="Образец приглушённого цвета"
+                tone="muted"
+                [size]="32"
+                aria-hidden="true"></ds-spinner>
+              <code>muted</code>
+            </span>
+            <span class="size-sample inverse-surface">
+              <ds-spinner label="Образец унаследованного цвета"
+                tone="inverse"
+                [size]="32"
+                aria-hidden="true"></ds-spinner>
+              <code>inverse</code>
+            </span>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.tones" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="delay">
+        <h3 id="delay" tabindex="-1">Задержка появления</h3>
+        <p>
+          Задержка 500 ms помогает избежать мелькания при короткой фоновой операции. Место
+          зарезервировано сразу; до появления кольца Spinner не объявляет загрузку.
+        </p>
+        <aurora-example-block class="demo"
+          id="spinner-delay-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="row">
+            <button dsButton
+              tone="secondary"
+              [aria-disabled]="delayed()"
+              (click)="startDelayed(200)">
+              Короткая операция · 200 ms
+            </button>
+            <button dsButton
+              tone="secondary"
+              [aria-disabled]="delayed()"
+              (click)="startDelayed(1500)">
+              Длинная операция · 1500 ms
+            </button>
+          </div>
+          <div class="loading-line">
+            <span class="spinner-slot">
+              @if (delayed()) {
+                <ds-spinner label="Загрузка списка объектов" [size]="32" [delay]="500"></ds-spinner>
+              }
+            </span>
+            <p [attr.role]="delayed() ? null : 'status'">{{ delayMessage() }}</p>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.delay" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="retry">
+        <h3 id="retry" tabindex="-1">Ошибка и повторная попытка</h3>
+        <p>
+          Spinner не обрабатывает ошибки. Пример имитирует неудачу первой попытки и успешный повтор;
+          фокус остаётся на той же кнопке.
+        </p>
+        <aurora-example-block class="demo"
+          id="spinner-retry-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <button dsButton
+            tone="secondary"
+            [aria-disabled]="retryState() === 'loading'"
+            (click)="loadReport()">
+            {{ retryState() === 'error' ? 'Повторить загрузку' : 'Загрузить отчёт' }}
+          </button>
+          <div class="loading-line">
+            <span class="spinner-slot">
+              @if (retryState() === 'loading') {
+                <ds-spinner label="Загрузка отчёта" [size]="32"></ds-spinner>
+              }
+            </span>
+            <div [attr.aria-busy]="retryState() === 'loading'">
+              <p>
+                {{
+                  retryState() === 'done'
+                    ? 'Получены сведения о четырёх объектах.'
+                    : 'Данные отчёта пока недоступны.'
+                }}
+              </p>
+            </div>
+          </div>
+          <p [attr.role]="retryState() === 'loading' ? null : 'status'">{{ retryMessage() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.retry" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="accessibility">
+        <h3 id="accessibility" tabindex="-1">Одно объявление загрузки</h3>
+        <p>
+          Самостоятельный Spinner объявляет label через role=status. Если видимый текст уже
+          находится в role=status, скрывайте от скринридера только декоративный Spinner.
+        </p>
+        <aurora-example-block class="demo"
+          id="spinner-accessibility-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="stack">
+            <div class="sample">
+              <ds-spinner label="Загрузка маршрута"></ds-spinner>
+              <span>Индикатор с собственным доступным именем</span>
+            </div>
+            <div class="sample" role="status">
+              <ds-spinner label="Загрузка событий" aria-hidden="true"></ds-spinner>
+              <span>Загружаем события…</span>
+            </div>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.accessibility" collapsible></aurora-code-block>
+      </section>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul>
+        <li>
+          Используйте Spinner, когда объём работы неизвестен. Он не показывает процент и не
+          определяет завершение операции.
+        </li>
+        <li>
+          Для действия в кнопке используйте её loading; для загружаемого содержимого с известной
+          геометрией позднее предусмотрим отдельный Skeleton. Spinner не заменяет данные без
+          необходимости.
+        </li>
+        <li>
+          После явного запуска показывайте индикатор сразу. Задержка подходит для фоновых
+          обновлений, где важно избежать мелькания.
+        </li>
+        <li>
+          Задавайте осмысленный непустой label. Не объявляйте одну загрузку одновременно Spinner и
+          вторым status. Нефокусируемый Spinner не блокирует взаимодействие.
+        </li>
+        <li>
+          Приложение добавляет компонент через
+          <code>&#64;if</code>, задаёт aria-busy области данных, защищает от повторных действий, сообщает ошибку и
+          убирает индикатор после завершения.
+        </li>
+        <li>
+          При уменьшении движения плавное появление отключается, но вращение сохраняется. Это
+          поведение общих стилей дизайн-системы.
+        </li>
+      </ul>
+      <p>
+        Загрузка внутри кнопки показана на странице
+        <a routerLink="/components/button"
+          fragment="loading"
+          [queryParams]="settings.queryParams()">
+          Button
+        </a>. Внутренние индикаторы Button и FAB на этом этапе не заменяются.
+      </p>
+    </section>
+    <section aria-labelledby="usage">
+      <h2 id="usage" tabindex="-1">Пример подключения</h2>
+      <p>
+        Добавьте DsSpinnerComponent из публичного Angular-входа в imports и подключите общий
+        styles.css. Иконка, изображение и SVG для кольца не нужны.
+      </p>
+      <aurora-code-block [snippet]="snippets.usage"></aurora-code-block>
+    </section>
+    <section aria-labelledby="parameters">
+      <h2 id="parameters" tabindex="-1">Параметры</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Параметры Spinner">
+        <table class="parameters-table">
+          <colgroup>
+            <col class="parameter-column" />
+            <col class="type-column" />
+            <col class="default-column" />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Параметр</th>
+              <th scope="col">Тип</th>
+              <th scope="col">По умолчанию</th>
+              <th scope="col">Назначение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>size</code></th>
+              <td>number</td>
+              <td>20</td>
+              <td>
+                Диаметр в px, независимый от плотности. Некорректное или неположительное значение
+                заменяется на 20.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><code>tone</code></th>
+              <td>DsSpinnerTone</td>
+              <td>brand</td>
+              <td>brand, muted или inverse.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>label</code></th>
+              <td>string</td>
+              <td>Обязателен</td>
+              <td>
+                Непустое доступное название операции; видимый текст автоматически не выводится.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><code>delay</code></th>
+              <td>number</td>
+              <td>0</td>
+              <td>
+                Задержка появления в ms. Отрицательные и неконечные значения означают отсутствие
+                задержки.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Публичные экспорты: DsSpinnerComponent, DsSpinnerTone. Числовые inputs поддерживают binding
+        и числовые атрибуты. Толщина рассчитывается по правилу max(2, round(size / 9)),
+        ограничивается половиной диаметра для очень маленьких размеров. Параметров loading,
+        thickness, событий и Angular Forms нет.
+      </p>
+      <p>
+        Изменение delay перезапускает отсчёт; изменение размера, цвета или label не перезапускает
+        операцию. При уничтожении таймер отменяется.
+      </p>
+    </section>
+    <section aria-labelledby="tokens">
+      <h2 id="tokens" tabindex="-1">Токены и анимация</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Токены Spinner">
+        <table class="tokens-table">
+          <colgroup>
+            <col class="token-column" />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Токен / правило</th>
+              <th scope="col">Назначение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>--ds-brand</code></th>
+              <td>Цвет brand.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-fg-muted</code></th>
+              <td>Цвет muted.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>currentColor</code></th>
+              <td>Наследуемый цвет inverse; кольцо имеет opacity 0.85, как в эталоне.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-radius-circle</code></th>
+              <td>Круглая форма рамки.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>ds-spin</code></th>
+              <td>Вращение 700 ms linear infinite.</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>ds-spinner-enter</code></th>
+              <td>Появление 300 ms ease-out; отключается при reduced motion.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</aurora-article-layout>

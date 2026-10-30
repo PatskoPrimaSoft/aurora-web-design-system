@@ -4,7 +4,7 @@ import { checkArticles } from './articles.mjs';
 import { checkTokens } from './tokens.mjs';
 import { checkShell } from './shell.mjs';
 import { checkDocuments, checkGuides } from './guides.mjs';
-import { checkComponents, checkCheckboxPage } from './components.mjs';
+import { checkComponents, checkCheckboxPage, checkSpinnerPage } from './components.mjs';
 
 const checks = {
   articles: checkArticles,
@@ -14,6 +14,7 @@ const checks = {
   documents: checkDocuments,
   components: checkComponents,
   checkbox: checkCheckboxPage,
+  spinner: checkSpinnerPage,
 };
 const args = process.argv.slice(2);
 const pageFlag = args.find((arg) => arg.startsWith('--pages='));

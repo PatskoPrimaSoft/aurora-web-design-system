@@ -66,12 +66,15 @@ mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
 - [Иконка DsIconComponent](src/components/icon/README.md)
 - [FAB DsFabComponent](src/components/fab/README.md)
 - [Checkbox DsCheckboxComponent](src/components/checkbox/README.md)
+- [Spinner DsSpinnerComponent](src/components/spinner/README.md)
 - [Подключение к приложению](../design-system/docs/usage.md)
 - [Разработка дизайн-системы](../CONTRIBUTING.md)
 
-На новом сайте доступны Icon, Button, FAB и Checkbox по маршрутам
-`/components/icon`, `/components/button`, `/components/fab`, `/components/checkbox`.
-Button использует DsIconComponent внутри; Checkbox поддерживает CVA и отдельные
+На новом сайте доступны Icon, Button, FAB, Checkbox и Spinner по маршрутам
+`/components/icon`, `/components/button`, `/components/fab`, `/components/checkbox`,
+`/components/spinner`. Точечные проверки Spinner, Button и FAB на сайте и
+в потребителях Angular 19/20 прошли; полный verify не запускался.
+Button и FAB используют DsIconComponent и DsSpinnerComponent внутри; Checkbox поддерживает CVA и отдельные
 checked/indeterminate. Angular-вход использует стандартный `@angular/forms`
 той же версии, что `@angular/core`. Точечные проверки компонентов и потребителей
 Angular 19/20 прошли; полный verify текущего этапа не запускался.

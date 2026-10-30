@@ -26,7 +26,7 @@ export async function checkAngular({root=toolRoot,tarball,workRoot,consumerNames
   for(const name of consumerNames){
    const consumer=join(work,name);copy(join(root,'ng-ui-kit/tests/consumers/angular-'+name),consumer);
    if(name==='19'||name==='base'){
-    for(const file of ['button-demo.ts','button-example.ts','icon-demo.ts','icon-demo.html','fab-demo.ts','checkbox-demo.ts']){
+    for(const file of ['button-demo.ts','button-example.ts','icon-demo.ts','icon-demo.html','fab-demo.ts','checkbox-demo.ts','spinner-demo.ts','spinner-demo.html']){
      copyFileSync(join(root,'ng-ui-kit/tests/consumers/shared',file),join(consumer,'src',file));
     }
    }
@@ -53,6 +53,7 @@ export async function assertConsumers(page,consumers){
  await assertAngularIcon(page,url);
  await assertAngularFab(page,url);
  await assertAngularCheckbox(page,url);
+ await assertAngularSpinner(page,url);
  }
  await page.goto(consumers.legacyUrl+'/index.html');await page.waitForFunction(()=>window.legacyCheck);assert.deepEqual(await page.evaluate(()=>[window.legacyCheck.sameService,window.legacyCheck.sameConfig,window.legacyCheck.sameInstance,window.legacyCheck.chart,window.legacyCheck.watch]),[true,true,true,true,true]);
  await page.goto(consumers.chartsUrl+'/index.html');await page.waitForFunction(()=>window.auroraCheck);assert.equal(await page.evaluate(()=>window.auroraCheck.sameTheme),true);const before=await page.evaluate(()=>window.auroraCheck.read.fg);
@@ -179,7 +180,7 @@ if(process.argv[1]===fileURLToPath(import.meta.url)){
  try{browser=await chromium.launch();const context=await browser.newContext();const page=await context.newPage();await assertConsumers(page,consumers);console.log('angular-consumer: bootstrap, scopes, persisted settings, identities, chart updates, unsubscribe and global bridge passed');}finally{if(browser)await browser.close();await consumers.close();}
 }
 
-async function assertAngularFab(page, url) {
+export async function assertAngularFab(page, url) {
   await page.goto(url + '/index.html');
   const fab = page.locator('#fab-action');
   await expect(fab).toHaveAccessibleName('Добавить объект');
@@ -204,7 +205,16 @@ async function assertAngularFab(page, url) {
   await expect(tip).toBeHidden();
   await page.locator('#fab-loading').click();
   await expect(fab).toHaveAttribute('aria-busy', 'true');
+  await expect(fab.locator('ds-spinner [data-ds-spinner-ring]')).toBeVisible();
+  await expect(fab.locator('[data-ds-fab-spinner]')).toHaveAttribute('aria-hidden', 'true');
   assert.equal(await fab.evaluate(el => el.disabled), false);
+  const spinner = fab.locator('ds-spinner');
+  assert.equal(await spinner.evaluate(el => getComputedStyle(el).color),
+    await fab.evaluate(el => getComputedStyle(el).color));
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  assert.equal(await spinner.locator('[data-ds-spinner-ring]')
+    .evaluate(el => getComputedStyle(el).animationName), 'ds-spin');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   await fab.evaluate(el => el.click());
   await expect(page.locator('#fab-count')).toHaveText('1');
   await page.locator('#fab-loading').click();
@@ -264,4 +274,81 @@ export async function assertAngularCheckbox(page, url) {
   assert.equal(await mark.evaluate(el => el.getBoundingClientRect().width), 18);
   assert.equal(await page.locator('#checkbox-compact .hit').evaluate(el => el.getBoundingClientRect().height), 24);
   await expect(page.locator('#checkbox-disabled input')).toBeDisabled();
+}
+
+export async function assertAngularSpinner(page, url) {
+  await page.goto(url + '/index.html');
+  const spinner = page.locator('#spinner-main');
+  await expect(spinner).toHaveRole('status');
+  await expect(spinner).toHaveAccessibleName('Загрузка отчёта');
+  const size = () =>
+    spinner.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      return [rect.width, rect.height];
+    });
+  assert.deepEqual(await size(), [20, 20]);
+  await expect(spinner.locator('[data-ds-spinner-label]')).toHaveText('Загрузка отчёта');
+  await page.locator('#spinner-focus-before').focus();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#spinner-focus-after')).toBeFocused();
+  await page.locator('#spinner-size').click();
+  assert.deepEqual(await size(), [48, 48]);
+  assert.equal(
+    await spinner
+      .locator('[data-ds-spinner-ring]')
+      .evaluate((el) => getComputedStyle(el).borderRightWidth),
+    '5px',
+  );
+  await page.locator('#spinner-invalid-size').click();
+  assert.deepEqual(await size(), [20, 20]);
+  await page.locator('#spinner-tone').click();
+  assert.equal(
+    await spinner.evaluate((el) => getComputedStyle(el).color),
+    await spinner.evaluate((el) => {
+      const probe = el.ownerDocument.createElement('span');
+      probe.style.color = 'var(--ds-fg-muted)';
+      el.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }),
+  );
+  assert.equal(
+    await page.locator('#spinner-inverse').evaluate((el) => getComputedStyle(el).color),
+    await page.locator('#spinner-inverse-parent').evaluate((el) => getComputedStyle(el).color),
+  );
+  await page.locator('#spinner-label').click();
+  await expect(spinner).toHaveAccessibleName('Обновление отчёта');
+  await page.locator('#spinner-show').click();
+  const delayed = page.locator('#spinner-delayed');
+  await expect(delayed).not.toHaveAttribute('role', 'status');
+  await expect(delayed.locator('[data-ds-spinner-ring]')).toHaveCount(0);
+  const before = await delayed.boundingBox();
+  assert.equal(before.width, 48);
+  assert.equal(before.height, 48);
+  await expect(delayed).toHaveRole('status');
+  const after = await delayed.boundingBox();
+  assert.equal(after.width, before.width);
+  assert.equal(after.height, before.height);
+  await page.locator('#spinner-delay-restart').click();
+  await expect(delayed.locator('[data-ds-spinner-ring]')).toHaveCount(0);
+  await page.locator('#spinner-delay-zero').click();
+  await expect(delayed).toHaveRole('status');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  assert.equal(
+    await spinner
+      .locator('[data-ds-spinner-intro]')
+      .evaluate((el) => getComputedStyle(el).animationName),
+    'none',
+  );
+  assert.equal(
+    await spinner
+      .locator('[data-ds-spinner-ring]')
+      .evaluate((el) => getComputedStyle(el).animationName),
+    'ds-spin',
+  );
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.locator('#spinner-delay-restart').click();
+  await page.locator('#spinner-show').click();
+  await expect(delayed).toHaveCount(0);
 }

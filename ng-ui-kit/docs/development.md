@@ -22,7 +22,7 @@ Peer range — `^19.2.25 || >=20.3.34`: поддержка ветки 19.2 до�
 Версия 5.1.0 была собрана на Angular 20; описанный переход относится к Unreleased.
 
 В исходниках экспортируются `DsButtonComponent`, `DsIconComponent`, `DsFabComponent`,
-`DsCheckboxComponent`, сервис темы,
+`DsCheckboxComponent`, `DsSpinnerComponent`, сервис темы,
 директива скоупа и отдельная интеграция ECharts. Для иконки добавлены сценарии
 независимых потребителей Angular 19/20 и страница `/components/icon` с примерами,
 API и токенами. Результат этих сценариев подтверждается запуском проверок.

@@ -87,6 +87,7 @@ export async function checkComponents({ page, url, modes }) {
   await checkButtonPage({ page, url, modes });
   await checkFabPage({ page, url, modes });
   await checkCheckboxPage({ page, url, modes });
+  await checkSpinnerPage({ page, url, modes });
 }
 
 async function checkButtonPage({ page, url, modes }) {
@@ -164,6 +165,9 @@ async function checkButtonPage({ page, url, modes }) {
 
       const save = page.getByRole('button', { name: 'Сохранить изменения', exact: true });
       const before = await save.boundingBox();
+      const clockTime = new Date();
+      await page.clock.install({ time: clockTime });
+      await page.clock.pauseAt(clockTime);
       await save.click();
       await expect(save).toHaveAttribute('aria-busy', 'true');
       await expect(save).toHaveAttribute('aria-disabled', 'true');
@@ -174,7 +178,9 @@ async function checkButtonPage({ page, url, modes }) {
       assert.equal(during.height, before.height);
       await save.evaluate((el) => el.click());
       await expect(page.locator('#button-loading-demo')).toContainText('Запущено операций: 1');
-      await expect(page.locator('#button-loading-demo [role="status"]')).toHaveText(
+      await page.clock.runFor(2000);
+      await page.clock.resume();
+      await expect(page.locator('#button-loading-demo p[role="status"]')).toHaveText(
         'Изменения сохранены.',
       );
       await expect(save).not.toHaveAttribute('aria-busy', 'true');
@@ -253,7 +259,7 @@ async function checkFabPage({ page, url, modes }) {
       await save.click();
       await expect(save).toHaveAttribute('aria-busy', 'true');
       assert.equal((await save.boundingBox()).width, before.width);
-      await expect(page.locator('#fab-states-demo [role="status"]')).toHaveText(
+      await expect(page.locator('#fab-states-demo p[role="status"]')).toHaveText(
         'Изменения сохранены.',
       );
       assert.equal(
@@ -340,6 +346,92 @@ export async function checkCheckboxPage({ page, url, modes }) {
         false,
       );
       assert.deepEqual(await pageViolations(page), [], 'Checkbox page accessibility');
+    }
+  }
+  await page.setViewportSize({ width: 1472, height: 1000 });
+}
+
+export async function checkSpinnerPage({ page, url, modes }) {
+  for (const width of [1472, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const [theme, appearance, density] of modes) {
+      await page.goto(
+        url +
+          'components/spinner?theme=' +
+          theme +
+          '&appearance=' +
+          appearance +
+          '&density=' +
+          density,
+      );
+      await expect(page.locator('h1')).toHaveText('Spinner');
+      await expect(page.locator('.example')).toHaveCount(6);
+      for (const demo of await page.locator('.demo').all()) {
+        await expect(demo).toHaveAttribute('data-ds-theme', theme);
+        await expect(demo).toHaveAttribute('data-ds-appearance', appearance);
+        await expect(demo).toHaveAttribute('data-ds-density', density);
+      }
+      const sizes = await page.locator('#spinner-sizes-demo ds-spinner').evaluateAll((items) =>
+        items.map((el) => {
+          const rect = el.getBoundingClientRect();
+          return [rect.width, rect.height];
+        }),
+      );
+      assert.deepEqual(sizes, [
+        [16, 16],
+        [20, 20],
+        [32, 32],
+        [48, 48],
+      ]);
+      const refresh = page.locator('#spinner-basic-demo button');
+      await refresh.click();
+      await expect(page.locator('#spinner-basic-demo ds-spinner')).toHaveAccessibleName(
+        'Обновление отчёта',
+      );
+      await expect(page.locator('#spinner-basic-demo [aria-busy]')).toHaveAttribute(
+        'aria-busy',
+        'true',
+      );
+      await expect(refresh).toBeFocused();
+      await expect(page.locator('#spinner-basic-demo p[role="status"]')).toHaveText(
+        'Обновление завершено.',
+      );
+      await expect(page.locator('#spinner-basic-demo ds-spinner')).toHaveCount(0);
+      const retry = page.locator('#spinner-retry-demo button');
+      await retry.click();
+      await expect(page.locator('#spinner-retry-demo p[role="status"]')).toContainText(
+        'Не удалось',
+      );
+      await expect(retry).toHaveText('Повторить загрузку');
+      await retry.click();
+      await expect(page.locator('#spinner-retry-demo p[role="status"]')).toHaveText(
+        'Отчёт загружен.',
+      );
+      await expect(retry).toBeFocused();
+      const long = page.getByRole('button', { name: 'Длинная операция · 1500 ms', exact: true });
+      await long.click();
+      const delayed = page.locator('#spinner-delay-demo ds-spinner');
+      await expect(delayed.locator('[data-ds-spinner-ring]')).toHaveCount(0);
+      await expect(delayed).toHaveRole('status');
+      await expect(delayed).toHaveCount(0);
+      const decorative = page.locator('#spinner-accessibility-demo [role="status"] ds-spinner');
+      await expect(decorative).toHaveAttribute('aria-hidden', 'true');
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      const ring = page.locator('#spinner-sizes-demo [data-ds-spinner-ring]').first();
+      assert.equal(await ring.evaluate((el) => getComputedStyle(el).animationName), 'ds-spin');
+      assert.equal(
+        await page
+          .locator('#spinner-sizes-demo [data-ds-spinner-intro]')
+          .first()
+          .evaluate((el) => getComputedStyle(el).animationName),
+        'none',
+      );
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+      assert.equal(
+        await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),
+        false,
+      );
+      assert.deepEqual(await pageViolations(page), [], 'Spinner page accessibility');
     }
   }
   await page.setViewportSize({ width: 1472, height: 1000 });

@@ -1,0 +1,6 @@
+@if (ready()) {
+  <span data-ds-spinner-intro aria-hidden="true">
+    <span data-ds-spinner-ring [style.border-width.px]="thickness()"></span>
+  </span>
+  <span data-ds-spinner-label>{{ label() }}</span>
+}

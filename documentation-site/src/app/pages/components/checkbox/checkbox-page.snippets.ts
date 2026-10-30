@@ -376,6 +376,9 @@ import { DsCheckboxComponent } from '@primasoftllc/design-system/angular';
       border-bottom: 1px solid var(--ds-divider);
       text-align: center;
     }
+    th:first-child {
+      text-align: left;
+    }
     th {
       font: var(--ds-type-body-strong);
       background: var(--ds-bg);

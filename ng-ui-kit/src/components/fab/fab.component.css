@@ -109,15 +109,6 @@ ds-icon {
   display: grid;
   place-items: center;
 }
-[data-ds-fab-spinner] > span {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  border-radius: var(--ds-radius-circle);
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  animation: ds-spin 700ms linear infinite;
-}
 [popover] {
   position: fixed;
   inset: auto;
@@ -132,9 +123,4 @@ ds-icon {
   font: var(--ds-type-caption);
   overflow-wrap: anywhere;
   box-shadow: var(--ds-shadow-sm);
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-ds-fab-spinner] > span {
-    animation: none;
-  }
 }

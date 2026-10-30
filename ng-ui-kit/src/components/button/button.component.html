@@ -8,5 +8,11 @@
   }
 </span>
 @if (loading()) {
-  <span data-ds-button-spinner aria-hidden="true"><span></span></span>
+  <span data-ds-button-spinner aria-hidden="true">
+    <ds-spinner label="Выполнение действия"
+      [size]="20"
+      [style.width]="'100%'"
+      [style.height]="'100%'"
+      [style.color]="'inherit'"></ds-spinner>
+  </span>
 }

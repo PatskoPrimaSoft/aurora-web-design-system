@@ -13,6 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { DsIconComponent } from '../icon/icon.component';
+import { DsSpinnerComponent } from '../spinner/spinner.component';
 
 export type DsFabTone = 'primary' | 'accent' | 'surface';
 export type DsFabSize = 'sm' | 'md' | 'lg';
@@ -21,7 +22,7 @@ let nextTooltipId = 0;
 /** Главное действие области. Размещение задаёт родитель, запросы выполняет приложение. */
 @Component({
   selector: 'button[dsFab]',
-  imports: [DsIconComponent],
+  imports: [DsIconComponent, DsSpinnerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './fab.component.html',
   styleUrl: './fab.component.css',

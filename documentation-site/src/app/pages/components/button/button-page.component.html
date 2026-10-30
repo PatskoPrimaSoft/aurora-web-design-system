@@ -271,11 +271,17 @@
     <section aria-labelledby="parameters">
       <h2 id="parameters" tabindex="-1">Параметры</h2>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Параметры Button">
-        <table>
+        <table class="parameters-table">
+          <colgroup>
+            <col class="parameter-column" />
+            <col class="type-column" />
+            <col class="default-column" />
+            <col />
+          </colgroup>
           <thead>
             <tr>
               <th scope="col">Параметр</th>
-              <th scope="col">Тип / значения</th>
+              <th scope="col">Тип</th>
               <th scope="col">По умолчанию</th>
               <th scope="col">Назначение</th>
             </tr>
@@ -350,7 +356,11 @@
     <section aria-labelledby="tokens">
       <h2 id="tokens" tabindex="-1">Токены</h2>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Токены Button">
-        <table>
+        <table class="tokens-table">
+          <colgroup>
+            <col class="token-column" />
+            <col />
+          </colgroup>
           <thead>
             <tr>
               <th scope="col">Токены</th>

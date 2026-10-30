@@ -5,3 +5,4 @@ export * from './components/button/button.component';
 export * from './components/icon/icon.component';
 export * from './components/fab/fab.component';
 export * from './components/checkbox/checkbox.component';
+export * from './components/spinner/spinner.component';

@@ -5,7 +5,13 @@
   }
 </span>
 @if (loading()) {
-  <span data-ds-fab-spinner aria-hidden="true"><span></span></span>
+  <span data-ds-fab-spinner aria-hidden="true">
+    <ds-spinner label="Выполнение действия"
+      [size]="size() === 'sm' ? 18 : 24"
+      [style.width]="'100%'"
+      [style.height]="'100%'"
+      [style.color]="'inherit'"></ds-spinner>
+  </span>
 }
 <span #tip
   popover="manual"

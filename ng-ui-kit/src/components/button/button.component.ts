@@ -11,6 +11,7 @@ import {
   signal,
 } from '@angular/core';
 import { DsIconComponent, type DsIconSize } from '../icon/icon.component';
+import { DsSpinnerComponent } from '../spinner/spinner.component';
 
 export type DsButtonTone =
   | 'primary'
@@ -25,7 +26,7 @@ export type DsButtonSize = 'sm' | 'md' | 'lg';
 /** Нативная кнопка Aurora. Loading сохраняет геометрию и фокус, блокируя активацию. */
 @Component({
   selector: 'button[dsButton]',
-  imports: [DsIconComponent],
+  imports: [DsIconComponent, DsSpinnerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './button.component.css',
   templateUrl: './button.component.html',

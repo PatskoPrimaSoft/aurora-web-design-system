@@ -4,6 +4,7 @@
 @include article.document;
 
 @include article.example-layout;
+@include article.component-tables;
 .muted {
   color: var(--ds-fg-muted);
 }

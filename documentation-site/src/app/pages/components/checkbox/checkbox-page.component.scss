@@ -1,6 +1,7 @@
 @use '../../../../styles/article';
 @include article.document;
 @include article.example-layout;
+@include article.component-tables;
 .stack,
 .selection-tree,
 .branches,
@@ -33,7 +34,4 @@ legend {
 }
 .form-actions {
   margin-top: var(--ds-gap-md);
-}
-.table-scroll td {
-  text-align: center;
 }

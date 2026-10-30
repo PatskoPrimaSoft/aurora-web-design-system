@@ -351,7 +351,20 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
       if (slug === 'motion') {
         await page.locator('section[aria-labelledby="reduced"] summary').focus();
         await page.keyboard.press('Enter');
-        await expect(page.locator('#loading-demo')).toBeVisible();
+        const loadingDemo = page.locator('#loading-demo');
+        await expect(loadingDemo).toBeVisible();
+        await expect(loadingDemo).not.toHaveAttribute('data-migration-placeholder');
+        const startLoading = loadingDemo.getByRole('button', { name: 'Проверить загрузку' });
+        await expect(loadingDemo.getByRole('status')).toHaveText('Готово к проверке.');
+        await startLoading.click();
+        await expect(startLoading).toBeDisabled();
+        await expect(loadingDemo.locator('ds-spinner')).toHaveAttribute('aria-hidden', 'true');
+        await expect(loadingDemo.getByRole('status')).toHaveText('Загружаем объекты…');
+        await expect(loadingDemo.getByRole('status')).toHaveText('Объекты загружены.');
+        await expect(loadingDemo.locator('ds-spinner')).toHaveCount(0);
+        await expect(startLoading).toBeEnabled();
+        await expect(page.locator('section[aria-labelledby="дальше"] a[href*="/components/spinner"]'))
+          .toHaveText('Spinner');
         await page.locator('section[aria-labelledby="для-разработчика"] summary').focus();
         await page.keyboard.press('Enter');
         await expect(page.locator('.reference-table tbody tr')).toHaveCount(4);

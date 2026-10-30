@@ -28,6 +28,13 @@ export async function assertAngularButton(page, url) {
     false,
     'loading must preserve focusability',
   );
+  const spinner = action.locator('ds-spinner');
+  await expect(spinner.locator('[data-ds-spinner-ring]')).toBeVisible();
+  await expect(action.locator('[data-ds-button-spinner]')).toHaveAttribute('aria-hidden', 'true');
+  assert.equal(await spinner.evaluate(el => getComputedStyle(el).color),
+    await action.evaluate(el => getComputedStyle(el).color));
+  assert.equal(await spinner.locator('[data-ds-spinner-ring]')
+    .evaluate(el => getComputedStyle(el).animationName), 'ds-spin');
   const during = await action.boundingBox();
   assert.equal(during.width, before.width);
   assert.equal(during.height, before.height);

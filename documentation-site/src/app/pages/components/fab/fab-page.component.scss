@@ -1,6 +1,7 @@
 @use '../../../../styles/article';
 @include article.document;
 @include article.example-layout;
+@include article.component-tables;
 .limited {
   width: 100%;
   max-width: 240px;

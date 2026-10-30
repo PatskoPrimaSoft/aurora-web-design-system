@@ -66,15 +66,25 @@
           Вращение сохраняется как признак выполняющейся операции. Ниже — двухсекундная имитация
           загрузки, без запроса к серверу.
         </p>
-        <aurora-example-block class="scene migration-placeholder"
+        <aurora-example-block class="scene"
           id="loading-demo"
           style="margin-top: 16px"
           [attr.data-ds-theme]="settings.theme()"
           [attr.data-ds-appearance]="settings.appearance()"
-          [attr.data-ds-density]="settings.density()"
-          role="note"
-          data-migration-placeholder>
-          Пример загрузки появится при наполнении Angular-примеров.
+          [attr.data-ds-density]="settings.density()">
+          <div class="stack">
+            <div>
+              <button dsButton type="button" [disabled]="loading()" (click)="startLoading()">
+                Проверить загрузку
+              </button>
+            </div>
+            <div class="row">
+              @if (loading()) {
+                <ds-spinner label="Загрузка объектов" [size]="24" aria-hidden="true"></ds-spinner>
+              }
+              <p class="loading-message" role="status">{{ loadingMessage() }}</p>
+            </div>
+          </div>
         </aurora-example-block>
       </details>
     </section>
@@ -127,11 +137,7 @@
           </a>
         </li>
         <li>
-          <span data-migration-placeholder
-            class="migration-placeholder"
-            title="Страница ещё не перенесена">
-            Spinner
-          </span>
+          <a routerLink="/components/spinner" [queryParams]="settings.queryParams()">Spinner</a>
         </li>
         <li>
           <span data-migration-placeholder

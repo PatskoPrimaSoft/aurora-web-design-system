@@ -1,6 +1,7 @@
 @use '../../../../styles/article';
 @include article.document;
 @include article.example-layout;
+@include article.component-tables;
 .tone-sample {
   display: inline-flex;
   padding: 8px;

@@ -1,3 +1,4 @@
+import { SpinnerPageComponent } from './pages/components/spinner/spinner-page.component';
 import { CheckboxPageComponent } from './pages/components/checkbox/checkbox-page.component';
 import { FabPageComponent } from './pages/components/fab/fab-page.component';
 import { AngularUiKitPageComponent } from './pages/documents/angular-ui-kit/angular-ui-kit-page.component';
@@ -38,6 +39,7 @@ import { NotFoundPageComponent } from './pages/not-found/not-found-page.componen
 import { TokensPageComponent } from './pages/tokens/tokens-page.component';
 
 export const routes: Routes = [
+  { path: 'components/spinner', component: SpinnerPageComponent, title: 'Spinner — Aurora' },
   { path: 'components/checkbox', component: CheckboxPageComponent, title: 'Checkbox — Aurora' },
   { path: 'components/fab', component: FabPageComponent, title: 'FAB — Aurora' },
   {

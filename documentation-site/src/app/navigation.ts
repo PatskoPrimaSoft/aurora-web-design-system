@@ -132,4 +132,11 @@ export const componentNavigation: NavigationGroup[] = [
       { title: 'Icon', path: '/components/icon' },
     ],
   },
+  {
+    id: 'feedback',
+    section: 'components',
+    level: 2,
+    title: 'Обратная связь',
+    items: [{ title: 'Spinner', path: '/components/spinner' }],
+  },
 ];

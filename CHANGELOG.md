@@ -5,6 +5,12 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ## [Unreleased]
 
+- Angular: Button и FAB используют общий Spinner для loading; вращение FAB
+  сохраняется при уменьшении движения согласно дизайн-системе.
+
+- Angular: добавлен DsSpinnerComponent с размерами, тонами, обязательным названием
+  операции и задержкой появления. На новом сайте — страница Spinner с примерами.
+
 - Angular: добавлен DsCheckboxComponent с checked/indeterminate, подписями,
   доступностью и ControlValueAccessor. Добавлены страница с деревом выбора и
   примеры Reactive Forms. Чекбокс применён в примерах границ и скруглений

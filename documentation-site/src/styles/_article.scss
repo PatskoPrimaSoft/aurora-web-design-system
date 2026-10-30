@@ -147,6 +147,63 @@
   }
 }
 
+// Component reference tables have stable column geometry; demo matrices remain a separate variant.
+@mixin component-tables {
+  .parameters-table {
+    min-width: 640px;
+    table-layout: fixed;
+
+    .parameter-column {
+      width: 144px;
+    }
+    .type-column {
+      width: 176px;
+    }
+    .default-column {
+      width: 144px;
+    }
+    th,
+    td {
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: normal;
+    }
+    code {
+      overflow-wrap: normal;
+    }
+  }
+
+  .tokens-table {
+    min-width: 560px;
+    .token-column {
+      width: 40%;
+    }
+    .value-column {
+      width: 160px;
+    }
+    code {
+      overflow-wrap: normal;
+    }
+    th,
+    td {
+      text-align: left;
+      vertical-align: top;
+    }
+  }
+
+  .states-table {
+    min-width: 480px;
+    th,
+    td {
+      text-align: center;
+      vertical-align: middle;
+    }
+    th:first-child {
+      text-align: left;
+    }
+  }
+}
+
 // Component pages share scenario spacing and demo rows without a page-schema abstraction.
 @mixin example-layout {
   .example + .example {

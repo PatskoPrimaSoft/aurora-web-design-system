@@ -204,7 +204,7 @@
           [appearance]="settings.appearance()"
           [density]="settings.density()">
           <div class="table-scroll" tabindex="0" role="region" aria-label="Состояния Checkbox">
-            <table>
+            <table class="states-table">
               <thead>
                 <tr>
                   <th scope="col">Начальное состояние</th>
@@ -277,66 +277,85 @@
     <section aria-labelledby="parameters">
       <h2 id="parameters" tabindex="-1">Параметры</h2>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Параметры Checkbox">
-        <table>
+        <table class="parameters-table">
+          <colgroup>
+            <col class="parameter-column" />
+            <col class="type-column" />
+            <col class="default-column" />
+            <col />
+          </colgroup>
           <thead>
             <tr>
               <th scope="col">Параметр</th>
-              <th scope="col">Назначение</th>
+              <th scope="col">Тип</th>
               <th scope="col">По умолчанию</th>
+              <th scope="col">Назначение</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <th scope="row"><code>checked</code></th>
-              <td>boolean; выбранное значение вне Angular Forms</td>
+              <td><code>boolean</code></td>
               <td>false</td>
+              <td>Выбранное значение вне Angular Forms.</td>
             </tr>
             <tr>
               <th scope="row"><code>indeterminate</code></th>
-              <td>boolean; частичный выбор, не отдельное значение формы</td>
+              <td><code>boolean</code></td>
               <td>false</td>
+              <td>Частичный выбор; не отдельное значение формы.</td>
             </tr>
             <tr>
               <th scope="row"><code>disabled</code></th>
-              <td>boolean; нативная блокировка, дополняет disabled формы</td>
+              <td><code>boolean</code></td>
               <td>false</td>
+              <td>Нативная блокировка, дополняющая disabled формы.</td>
             </tr>
             <tr>
               <th scope="row"><code>compact</code></th>
-              <td>boolean; область нажатия 24 px для табличной строки</td>
+              <td><code>boolean</code></td>
               <td>false</td>
+              <td>Область нажатия 24 px для табличной строки.</td>
             </tr>
             <tr>
               <th scope="row"><code>label</code></th>
-              <td>string; видимая подпись</td>
+              <td><code>string | undefined</code></td>
               <td>Нет</td>
+              <td>Видимая подпись.</td>
             </tr>
             <tr>
               <th scope="row"><code>description</code></th>
-              <td>string; пояснение под подписью</td>
+              <td><code>string | undefined</code></td>
               <td>Нет</td>
+              <td>Пояснение под подписью.</td>
             </tr>
             <tr>
               <th scope="row"><code>inputId</code></th>
-              <td>string; ID внутреннего input</td>
+              <td><code>string | undefined</code></td>
               <td>Генерируется</td>
+              <td>ID внутреннего input для внешних связей.</td>
             </tr>
             <tr>
               <th scope="row"><code>name</code></th>
-              <td>
-                string; имя input для FormData; отмеченный input передаёт нативное значение on
-              </td>
+              <td><code>string | undefined</code></td>
               <td>Нет</td>
+              <td>Имя поля для FormData. Отмеченный input передаёт нативное значение on.</td>
             </tr>
             <tr>
-              <th scope="row"><code>aria-label / aria-labelledby</code></th>
-              <td>Доступное имя внутреннего input, если нет видимой подписи</td>
+              <th scope="row">
+                <code>aria-label</code>
+                /
+                <code>aria-labelledby</code>
+              </th>
+              <td><code>string | undefined</code></td>
               <td>Из label</td>
+              <td>Доступное имя внутреннего input; задайте явно, если нет видимой подписи.</td>
             </tr>
             <tr>
               <th scope="row"><code>aria-describedby</code></th>
-              <td>Внешние ID описаний, дополняются ID description</td>
+              <td><code>string | undefined</code></td>
               <td>Нет</td>
+              <td>Внешние ID описаний дополняются ID description.</td>
             </tr>
           </tbody>
         </table>
@@ -352,7 +371,11 @@
     <section aria-labelledby="tokens">
       <h2 id="tokens" tabindex="-1">Токены</h2>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Токены Checkbox">
-        <table>
+        <table class="tokens-table">
+          <colgroup>
+            <col class="token-column" />
+            <col />
+          </colgroup>
           <thead>
             <tr>
               <th scope="col">Токены</th>
