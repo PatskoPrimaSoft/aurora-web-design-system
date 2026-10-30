@@ -86,6 +86,7 @@ export async function checkComponents({ page, url, modes }) {
   await expect(page.locator('.page-contents a[aria-current="location"]')).toHaveText('Поворот');
   await checkButtonPage({ page, url, modes });
   await checkFabPage({ page, url, modes });
+  await checkCheckboxPage({ page, url, modes });
 }
 
 async function checkButtonPage({ page, url, modes }) {
@@ -260,6 +261,85 @@ async function checkFabPage({ page, url, modes }) {
         false,
       );
       assert.deepEqual(await pageViolations(page), [], 'FAB page accessibility');
+    }
+  }
+  await page.setViewportSize({ width: 1472, height: 1000 });
+}
+
+export async function checkCheckboxPage({ page, url, modes }) {
+  for (const width of [1472, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const [theme, appearance, density] of modes) {
+      await page.goto(
+        url +
+          'components/checkbox?theme=' +
+          theme +
+          '&appearance=' +
+          appearance +
+          '&density=' +
+          density,
+      );
+      await expect(page.locator('h1')).toHaveText('Checkbox');
+      await expect(page.locator('.example')).toHaveCount(7);
+      for (const demo of await page.locator('.demo').all()) {
+        await expect(demo).toHaveAttribute('data-ds-theme', theme);
+        await expect(demo).toHaveAttribute('data-ds-appearance', appearance);
+        await expect(demo).toHaveAttribute('data-ds-density', density);
+      }
+      const basic = page.locator('#checkbox-basic-demo input');
+      await expect(basic).toBeChecked();
+      await page.locator('#checkbox-basic-demo .description').click();
+      await expect(basic).not.toBeChecked();
+      await basic.focus();
+      await page.keyboard.press('Space');
+      await expect(basic).toBeChecked();
+      await page.keyboard.press('Enter');
+      await expect(basic).toBeChecked();
+      const all = page.locator('#checkbox-tree-demo input').first();
+      await expect(all).toHaveAttribute('aria-checked', 'mixed');
+      await all.click();
+      await expect(all).toBeChecked();
+      await expect(page.locator('#checkbox-tree-demo [role="status"]')).toHaveText(
+        'Выбрано объектов: 4 из 4.',
+      );
+      await page
+        .locator('#checkbox-tree-demo')
+        .getByRole('checkbox', { name: 'МАЗ 5440', exact: true })
+        .uncheck();
+      await expect(all).toHaveAttribute('aria-checked', 'mixed');
+      const input = page.locator('#checkbox-forms-demo input').first();
+      await input.check();
+      await expect(page.locator('#checkbox-forms-demo code').first()).toContainText('true');
+      await page
+        .locator('#checkbox-forms-demo')
+        .getByRole('button', { name: 'Сбросить форму', exact: true })
+        .click();
+      await expect(input).not.toBeChecked();
+      const align = page.locator('#checkbox-alignment-demo .control');
+      for (const control of await align.all()) {
+        const centers = await control.evaluate((el) => {
+          const mark = el.querySelector('.mark').getBoundingClientRect();
+          const text = el.querySelector('.text')?.getBoundingClientRect();
+          return text ? Math.abs(mark.top + mark.height / 2 - text.top - text.height / 2) : 0;
+        });
+        assert.ok(centers < 1, 'mark is centered against the whole text block');
+      }
+      const label = await align.last().boundingBox();
+      const outer = await page.locator('#checkbox-alignment-demo').boundingBox();
+      if (outer.x + outer.width - 24 > label.x + label.width + 8) {
+        const before = await align.last().locator('input').isChecked();
+        await page.mouse.click(outer.x + outer.width - 24, label.y + label.height / 2);
+        assert.equal(
+          await align.last().locator('input').isChecked(),
+          before,
+          'empty row area must not toggle',
+        );
+      }
+      assert.equal(
+        await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),
+        false,
+      );
+      assert.deepEqual(await pageViolations(page), [], 'Checkbox page accessibility');
     }
   }
   await page.setViewportSize({ width: 1472, height: 1000 });

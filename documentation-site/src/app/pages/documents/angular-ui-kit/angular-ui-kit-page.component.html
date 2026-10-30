@@ -10,8 +10,7 @@
   </p>
   <p>
     UI kit разрабатывается в этом репозитории и поставляется через
-    <code>&#64;primasoftllc/design-system/angular</code>
-    . Приложения устанавливают пакет и импортируют готовые компоненты. Общие токены, состояния и
+    <code>&#64;primasoftllc/design-system/angular</code>. Приложения устанавливают пакет и импортируют готовые компоненты. Общие токены, состояния и
     правила применения едины с дизайн-системой; состав и публичный Angular API каждого компонента
     согласуются отдельно.
   </p>
@@ -19,67 +18,55 @@
     Практический порядок работы —
     <a routerLink="/angular/adding-components" [queryParams]="settings.queryParams()">
       добавление компонентов
-    </a>
-    .
+    </a>.
   </p>
   <h2 id="версия-и-текущая-готовность" tabindex="-1">Версия и текущая готовность</h2>
   <p>
     Библиотека компилируется на
-    <strong>Angular 19.2.25</strong>
-    , Node 22, TypeScript 5.8.3. Независимые потребители используют Angular 19.2.25 / CLI 19.2.27 и
+    <strong>Angular 19.2.25</strong>, Node 22, TypeScript 5.8.3. Независимые потребители используют Angular 19.2.25 / CLI 19.2.27 и
     Angular 20.3.34 / CLI 20.3.40, RxJS 7.8.2 и Zone.js 0.15.1. Поддержка 19.0/19.1 и других major
     не подразумевается автоматически: для них нужна отдельная проверка совместимости. SSR, hydration
     и zoneless пока не заявлены.
   </p>
   <p>
     Peer range —
-    <code>^19.2.25 || &gt;=20.3.34</code>
-    : поддержка ветки 19.2 добавлена без удаления прежнего диапазона. Реально проверяются 19.2.25 и
+    <code>^19.2.25 || &gt;=20.3.34</code>: поддержка ветки 19.2 добавлена без удаления прежнего диапазона. Реально проверяются 19.2.25 и
     20.3.34, не все будущие major. Версия 5.1.0 была собрана на Angular 20; описанный переход
     относится к Unreleased.
   </p>
   <p>
     В текущем публичном Angular-входе экспортируются
-    <code>DsButtonComponent</code>
-    ,
-    <code>DsIconComponent</code>
-    ,
-    <code>DsFabComponent</code>
-    , сервис темы и директива скоупа; интеграция ECharts подключается отдельно. Для иконки
+    <code>DsButtonComponent</code>,
+    <code>DsIconComponent</code>,
+    <code>DsFabComponent</code>, сервис темы и директива скоупа; интеграция ECharts подключается отдельно. Для иконки
     подготовлена страница с примерами, API и токенами; кнопка ещё дорабатывается. Доступные
     компоненты представлены в
     <a routerLink="/components" [queryParams]="settings.queryParams()">
       каталоге Angular-компонентов
-    </a>
-    . Это не утверждённый перечень будущих компонентов.
+    </a>. Это не утверждённый перечень будущих компонентов.
   </p>
   <p>
     Версия приложения должна быть не ниже версии компилятора библиотеки. Матрица Node/TypeScript
     взята из
     <a href="https://angular.dev/reference/versions" target="_blank" rel="noopener noreferrer">
       таблицы Angular
-    </a>
-    , правило компиляции — из
+    </a>, правило компиляции — из
     <a href="https://angular.dev/tools/libraries/creating-libraries"
       target="_blank"
       rel="noopener noreferrer">
       руководства по библиотекам
-    </a>
-    . Angular 19 уже вне upstream LTS; здесь он выбран как версия целевого приложения.
+    </a>. Angular 19 уже вне upstream LTS; здесь он выбран как версия целевого приложения.
   </p>
   <h2 id="расположение-и-поставка" tabindex="-1">Расположение и поставка</h2>
   <ul>
     <li>
       Реализации:
-      <code>ng-ui-kit/src/components/&lt;name&gt;/</code>
-      ; публичные экспорты:
-      <code>ng-ui-kit/src/core.ts</code>
-      .
+      <code>ng-ui-kit/src/components/&lt;name&gt;/</code>; публичные экспорты:
+      <code>ng-ui-kit/src/core.ts</code>.
     </li>
     <li>
       Standalone-компоненты с
-      <code>ChangeDetectionStrategy.OnPush</code>
-      , строгими шаблонами и типами.
+      <code>ChangeDetectionStrategy.OnPush</code>, строгими шаблонами и типами.
     </li>
     <li>
       Начиная с Angular 19 компоненты, директивы и pipes standalone по умолчанию; избыточный
@@ -89,25 +76,21 @@
     <li>
       Библиотека поставляется с partial compilation и сгенерированными декларациями. Потребитель не
       компилирует исходники из репозитория через
-      <code>tsconfig.paths</code>
-      .
+      <code>tsconfig.paths</code>.
     </li>
     <li>
       Angular остаётся peer dependency. Базовый Angular-вход не импортирует React или ECharts;
       графики остаются в
-      <code>/angular/echarts</code>
-      . Не добавлять зависимость от приложения.
+      <code>/angular/echarts</code>. Не добавлять зависимость от приложения.
     </li>
     <li>
       Стили и шрифты подключаются один раз через пакетный
-      <code>styles.css</code>
-      , как в руководстве. Компонентные стили поставляются вместе с компонентом; установка не
+      <code>styles.css</code>, как в руководстве. Компонентные стили поставляются вместе с компонентом; установка не
       требует копирования файлов.
     </li>
     <li>
       Текущие публичные имена
-      <code>provideAurora</code>
-      ,
+      <code>provideAurora</code>,
       <code>AuroraThemeService</code>
       и
       <code>AuroraScopeDirective</code>
@@ -118,59 +101,44 @@
   <p>
     Исходники оформляются читаемо: два пробела, ориентир 100 символов и перенос строк до 120
     символов. Нетривиальные шаблоны и стили выносятся в отдельные файлы рядом с
-    <code>.ts</code>
-    ; inline допустим только для небольших фрагментов. HTML сохраняет отступы и иерархию, CSS/SCSS —
+    <code>.ts</code>; inline допустим только для небольших фрагментов. HTML сохраняет отступы и иерархию, CSS/SCSS —
     отдельные строки для свойств. SCSS нового сайта не означает автоматической поддержки SCSS
     текущим сборщиком библиотеки.
   </p>
   <p>
     Классы компонентов —
-    <code>Ds&lt;Name&gt;Component</code>
-    , директив —
-    <code>Ds&lt;Name&gt;Directive</code>
-    . Для нативного элемента используется атрибутный селектор с ограничением по тегу: первая кнопка
+    <code>Ds&lt;Name&gt;Component</code>, директив —
+    <code>Ds&lt;Name&gt;Directive</code>. Для нативного элемента используется атрибутный селектор с ограничением по тегу: первая кнопка
     —
-    <code>DsButtonComponent</code>
-    , селектор
-    <code>button[dsButton]</code>
-    . Для составного виджета без подходящего нативного корня —
-    <code>ds-&lt;name&gt;</code>
-    . Не создавать универсальный элемент с ручной имитацией клавиатуры обычной кнопки.
+    <code>DsButtonComponent</code>, селектор
+    <code>button[dsButton]</code>. Для составного виджета без подходящего нативного корня —
+    <code>ds-&lt;name&gt;</code>. Не создавать универсальный элемент с ручной имитацией клавиатуры обычной кнопки.
   </p>
   <p>
     Inputs объявляются через
-    <code>input()</code>
-    . Имена, типы и значения по умолчанию согласуются для конкретного компонента с учётом
+    <code>input()</code>. Имена, типы и значения по умолчанию согласуются для конкретного компонента с учётом
     дизайн-системы и нативного HTML. Булевы атрибуты используют
-    <code>booleanAttribute</code>
-    . Публичные типы и события должны соответствовать Angular и оставаться независимыми от
+    <code>booleanAttribute</code>. Публичные типы и события должны соответствовать Angular и оставаться независимыми от
     приложения.
   </p>
   <p>
     Текст и произвольное содержимое передаются через
-    <code>ng-content</code>
-    ; именованные области нужны только при отдельном сценарии. Доступное имя остаётся на
+    <code>ng-content</code>; именованные области нужны только при отдельном сценарии. Доступное имя остаётся на
     интерактивном элементе. Нативные
-    <code>type</code>
-    ,
-    <code>name</code>
-    ,
-    <code>value</code>
-    ,
-    <code>aria-*</code>
-    ,
+    <code>type</code>,
+    <code>name</code>,
+    <code>value</code>,
+    <code>aria-*</code>,
     <code>data-*</code>
     и событие
     <code>(click)</code>
     сохраняют обычный смысл. Не добавлять output
     <code>click</code>
     или дублирующий
-    <code>onClick</code>
-    . Для собственных событий —
+    <code>onClick</code>. Для собственных событий —
     <code>output&lt;T&gt;()</code>
     с типизированным значением, без префикса
-    <code>on</code>
-    .
+    <code>on</code>.
   </p>
   <p>
     Компоненты ввода значений поддерживают Angular Forms через ControlValueAccessor: значение,
@@ -182,8 +150,7 @@
   <p>
     Цвета берутся из семантических токенов, размеры задаются в px, внешние отступы — родителем.
     Компонент наследует тему, оформление и плотность через CSS-переменные и
-    <code>auroraScope</code>
-    ; не читает глобальную тему для вычисления inline-цветов. Локальный скоуп имеет тот же
+    <code>auroraScope</code>; не читает глобальную тему для вычисления inline-цветов. Локальный скоуп имеет тот же
     приоритет, что в эталоне.
   </p>
   <p>
@@ -197,18 +164,15 @@
     Доступна
     <a routerLink="/components/button" [queryParams]="settings.queryParams()">
       кнопка DsButtonComponent
-    </a>
-    :
+    </a>:
   </p>
   <aurora-code-block [snippet]="snippets.button"></aurora-code-block>
   <p>
     Кнопка поддерживает тон, размер, иконки слева и справа, loading, disabled и fullWidth. Подпись
     передаётся содержимым button; действие обрабатывается нативным click. Для отправки формы
     задаётся
-    <code>type="submit"</code>
-    ; обычное действие использует
-    <code>type="button"</code>
-    . Загрузка должна защищать от повторных действий, сохранять подпись, размеры и фокус.
+    <code>type="submit"</code>; обычное действие использует
+    <code>type="button"</code>. Загрузка должна защищать от повторных действий, сохранять подпись, размеры и фокус.
     Недоступное состояние использует нативную блокировку кнопки.
   </p>
   <h2 id="документация-и-критерии-готовности" tabindex="-1">Документация и критерии готовности</h2>
@@ -232,10 +196,8 @@
     подготавливает зависимости и отслеживает изменения;
     <code>npm run build:site-angular</code>
     выполняет production-сборку. Подробности —
-    <code>documentation-site/README.md</code>
-    , направление миграции —
-    <code>docs/plans/angular-ui-kit-vision.md</code>
-    .
+    <code>documentation-site/README.md</code>, направление миграции —
+    <code>docs/plans/angular-ui-kit-vision.md</code>.
   </p>
   <p>Компонент готов к поставке, когда:</p>
   <ul>

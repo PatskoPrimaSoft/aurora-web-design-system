@@ -1,0 +1,31 @@
+<label class="control" [class.disabled]="isDisabled()">
+  <input type="checkbox"
+    [id]="nativeId()"
+    [attr.name]="name() || null"
+    [checked]="currentChecked()"
+    [indeterminate]="currentMixed()"
+    [disabled]="isDisabled()"
+    [attr.aria-label]="ariaLabel() || null"
+    [attr.aria-labelledby]="labelledBy()"
+    [attr.aria-describedby]="describedBy()"
+    [attr.aria-checked]="currentMixed() ? 'mixed' : null"
+    (change)="change($event)"
+    (blur)="onTouched()" />
+  <span class="hit" [class.unlabelled]="!label()" aria-hidden="true">
+    <span class="mark" [class.selected]="currentChecked() || currentMixed()">
+      @if (currentChecked() || currentMixed()) {
+        <span class="material-symbols-outlined">{{ currentMixed() ? 'remove' : 'check' }}</span>
+      }
+    </span>
+  </span>
+  @if (label() || description()) {
+    <span class="text">
+      @if (label()) {
+        <span class="label" [id]="labelId()">{{ label() }}</span>
+      }
+      @if (description()) {
+        <span class="description" [id]="descriptionId()">{{ description() }}</span>
+      }
+    </span>
+  }
+</label>

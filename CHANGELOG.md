@@ -5,6 +5,12 @@ Policy: [Versions and publishing](docs/release.md#versioning).
 
 ## [Unreleased]
 
+- Angular: добавлен DsCheckboxComponent с checked/indeterminate, подписями,
+  доступностью и ControlValueAccessor. Добавлены страница с деревом выбора и
+  примеры Reactive Forms. Чекбокс применён в примерах границ и скруглений
+  статей дизайн-системы. Для Angular-входа требуется @angular/forms
+  совместимой версии; диапазон peer соответствует @angular/core.
+
 - Angular: добавлен DsFabComponent (button[dsFab]) — круглая и расширенная кнопка
   главного действия с подсказкой, состояниями загрузки и недоступности.
   На новом сайте добавлена страница FAB с примерами, параметрами и токенами.

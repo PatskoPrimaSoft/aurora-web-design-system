@@ -52,14 +52,16 @@
         У вложенного элемента может быть меньшее скругление, чем у контейнера. Сохраняйте
         достаточный отступ, чтобы контуры не слипались.
       </p>
-      <aurora-example-block class="migration-placeholder"
-        id="component-shapes"
-        role="note"
-        data-migration-placeholder=""
+      <aurora-example-block id="component-shapes"
         [attr.data-ds-theme]="settings.theme()"
         [attr.data-ds-appearance]="settings.appearance()"
         [attr.data-ds-density]="settings.density()">
-        Демонстрация скруглений контролов ожидает подготовки Angular-примера.
+        <div class="component-row">
+          <ds-checkbox label="Показывать треки"
+            [checked]="showTracks()"
+            (checkedChange)="showTracks.set($event)"></ds-checkbox>
+          <button dsButton tone="secondary">Кнопка · 8 px</button>
+        </div>
       </aurora-example-block>
       <p style="margin-bottom: 24px">
         Чекбокс использует xs · 4 px, кнопка и поле — md · 8 px. Панель и диалог показаны выше: lg ·
@@ -163,8 +165,7 @@
         различать слои. Подробнее о цветовых ролях — в разделе
         <a routerLink="/foundations/colors" [queryParams]="settings.queryParams()">
           «Нейтральные цвета»
-        </a>
-        .
+        </a>.
       </p>
       <h3 style="margin-top: 24px">Что перекрывает что</h3>
       <ul class="rules">

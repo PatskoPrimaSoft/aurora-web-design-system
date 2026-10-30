@@ -115,6 +115,13 @@ export const foundationNavigation: NavigationGroup[] = [
 ];
 export const componentNavigation: NavigationGroup[] = [
   {
+    id: 'selection',
+    section: 'components',
+    level: 2,
+    title: 'Поля и выбор',
+    items: [{ title: 'Checkbox', path: '/components/checkbox' }],
+  },
+  {
     id: 'buttons-icons',
     section: 'components',
     level: 2,

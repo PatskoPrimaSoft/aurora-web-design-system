@@ -65,9 +65,13 @@ mise exec -- npm ci --prefix ng-ui-kit/tests/consumers/angular-legacy
 - [Кнопка DsButtonComponent](src/components/button/README.md)
 - [Иконка DsIconComponent](src/components/icon/README.md)
 - [FAB DsFabComponent](src/components/fab/README.md)
+- [Checkbox DsCheckboxComponent](src/components/checkbox/README.md)
 - [Подключение к приложению](../design-system/docs/usage.md)
 - [Разработка дизайн-системы](../CONTRIBUTING.md)
 
-На новом сайте доступны `/components/icon` и `/components/button`. Кнопка
-использует DsIconComponent внутри, сохраняет нативный button и поддерживает
-вариант без текста с aria-label. Последние изменения ожидают сборки и проверок.
+На новом сайте доступны Icon, Button, FAB и Checkbox по маршрутам
+`/components/icon`, `/components/button`, `/components/fab`, `/components/checkbox`.
+Button использует DsIconComponent внутри; Checkbox поддерживает CVA и отдельные
+checked/indeterminate. Angular-вход использует стандартный `@angular/forms`
+той же версии, что `@angular/core`. Точечные проверки компонентов и потребителей
+Angular 19/20 прошли; полный verify текущего этапа не запускался.

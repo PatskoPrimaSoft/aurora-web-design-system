@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { DsButtonComponent } from '@primasoftllc/design-system/angular';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { DsButtonComponent, DsCheckboxComponent } from '@primasoftllc/design-system/angular';
 import { RouterLink } from '@angular/router';
 import { radiusSamples, shadowSamples } from '../../../data/reference-samples';
 import { ArticleLayoutComponent } from '../../../shared/article-layout/article-layout.component';
@@ -12,6 +12,7 @@ import { shapeSnippets } from './shape-page.snippets';
   selector: 'aurora-shape-page',
   imports: [
     DsButtonComponent,
+    DsCheckboxComponent,
     RouterLink,
     ArticleLayoutComponent,
     ExampleBlockComponent,
@@ -22,6 +23,7 @@ import { shapeSnippets } from './shape-page.snippets';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShapePageComponent {
+  protected readonly showTracks = signal(false);
   protected readonly snippets = shapeSnippets;
   protected readonly radiusSamples = radiusSamples;
   protected readonly shadowSamples = shadowSamples;

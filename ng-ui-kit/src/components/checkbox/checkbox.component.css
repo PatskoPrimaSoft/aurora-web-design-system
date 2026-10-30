@@ -1,0 +1,116 @@
+:host {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.control {
+  position: relative;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  gap: var(--ds-gap-sm);
+  cursor: pointer;
+}
+.control:has(input:disabled) {
+  cursor: not-allowed;
+}
+/* The native input covers the hit area; the surrounding label forwards text clicks natively. */
+input {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--ds-control-h);
+  height: var(--ds-control-h);
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.hit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: var(--ds-control-h);
+  min-height: var(--ds-control-h);
+  border-radius: var(--ds-radius-circle);
+  transition: var(--ds-transition-control);
+}
+:host([data-ds-compact='true']) .hit {
+  min-width: 24px;
+  min-height: 24px;
+}
+:host([data-ds-compact='true']) input {
+  width: 24px;
+  height: 24px;
+}
+.mark {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--ds-radius-xs);
+  border: var(--ds-border-width-control) solid var(--ds-border-control);
+  background: var(--ds-surface);
+  color: var(--ds-on-brand);
+  transition: var(--ds-transition-control);
+}
+.mark.selected {
+  background: var(--ds-brand);
+  border-color: var(--ds-brand);
+}
+.material-symbols-outlined {
+  font-size: 14px;
+  line-height: 1;
+  font-variation-settings: 'wght' 600;
+}
+.text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.label {
+  display: block;
+  font: var(--ds-type-body);
+  color: var(--ds-fg);
+}
+.description {
+  display: block;
+  margin-top: 2px;
+  font: var(--ds-type-caption);
+  color: var(--ds-fg-subtle);
+}
+.description:first-child {
+  margin-top: 0;
+}
+input:focus-visible + .hit .mark {
+  outline: var(--ds-focus-width) solid var(--ds-focus-color);
+  outline-offset: var(--ds-focus-offset);
+}
+@media (hover: hover) {
+  .control:hover:has(input:enabled) .mark:not(.selected) {
+    border-color: var(--ds-border-control-hover);
+  }
+  .control:hover:has(input:enabled) .mark.selected {
+    background-image: linear-gradient(
+      0deg,
+      color-mix(in oklab, var(--ds-on-brand) var(--ds-overlay-hover), transparent),
+      color-mix(in oklab, var(--ds-on-brand) var(--ds-overlay-hover), transparent)
+    );
+  }
+  .control:hover:has(input:enabled) .hit.unlabelled {
+    background: var(--ds-surface-hover);
+  }
+}
+.control:has(input:disabled) .mark {
+  background: var(--ds-surface-disabled);
+  border-color: var(--ds-border-control-disabled);
+  color: var(--ds-fg-control-disabled);
+}
+.control:has(input:disabled) .label {
+  color: var(--ds-fg-subtle);
+}

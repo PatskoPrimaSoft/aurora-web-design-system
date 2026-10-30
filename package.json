@@ -93,7 +93,8 @@
     "echarts": "^6.1.0",
     "react": "^18.3.0 || ^19.3.1",
     "react-dom": "^18.3.0 || ^19.3.1",
-    "stylelint": "^16.10.0 || ^17.0.0"
+    "stylelint": "^16.10.0 || ^17.0.0",
+    "@angular/forms": "^19.2.25 || >=20.3.34"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -112,6 +113,9 @@
       "optional": true
     },
     "stylelint": {
+      "optional": true
+    },
+    "@angular/forms": {
       "optional": true
     }
   },
@@ -142,7 +146,8 @@
     "rxjs": "7.8.2",
     "stylelint": "^16.10.0",
     "typescript": "5.8.3",
-    "zone.js": "0.15.1"
+    "zone.js": "0.15.1",
+    "@angular/forms": "19.2.25"
   },
   "engines": {
     "node": ">=20"

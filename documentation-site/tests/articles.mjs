@@ -92,6 +92,15 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
       assert.equal(await codeSection.evaluate((el) => getComputedStyle(el).marginTop), '40px');
       assert.equal(await codeSection.evaluate((el) => getComputedStyle(el).paddingTop), '32px');
       if (slug === 'colors') {
+        const checkbox = page
+          .locator('#checkbox-demo')
+          .getByRole('checkbox', { name: 'Показывать треки', exact: true });
+        await expect(checkbox).not.toBeChecked();
+        await checkbox.check();
+        await expect(checkbox).toBeChecked();
+        await expect(page.locator('#checkbox-demo')).not.toHaveAttribute(
+          'data-migration-placeholder',
+        );
         assert.ok(
           (await page.locator('section[aria-labelledby="usage"]').textContent()).includes(
             '--ds-fg-disabled;',
@@ -136,6 +145,18 @@ export async function checkArticles({ root, page, url, modes }, selectedPages) {
         await page.locator('.reference-details').nth(1).locator('summary').click();
         await expect(page.locator('#alpha-values .alpha-row')).toHaveCount(7);
       } else if (slug === 'shape') {
+        const checkbox = page
+          .locator('#component-shapes')
+          .getByRole('checkbox', { name: 'Показывать треки', exact: true });
+        await checkbox.focus();
+        await page.keyboard.press('Space');
+        await expect(checkbox).toBeChecked();
+        await expect(page.locator('#component-shapes button[dsButton]')).toHaveText(
+          'Кнопка · 8 px',
+        );
+        await expect(page.locator('#component-shapes')).not.toHaveAttribute(
+          'data-migration-placeholder',
+        );
         await page.locator('#radius-reference summary').focus();
         await page.keyboard.press('Enter');
         await expect(page.locator('#radius-values li')).toHaveCount(7);

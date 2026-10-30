@@ -1,0 +1,39 @@
+@use '../../../../styles/article';
+@include article.document;
+@include article.example-layout;
+.stack,
+.selection-tree,
+.branches,
+.leaves,
+.alignment {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ds-gap-sm);
+}
+.branches,
+.leaves {
+  padding-left: 28px;
+  max-width: 100%;
+}
+fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+legend {
+  font: var(--ds-type-body-strong);
+  margin-bottom: var(--ds-gap-sm);
+}
+.alignment {
+  width: 100%;
+  max-width: 320px;
+  gap: var(--ds-gap-md);
+}
+.form-actions {
+  margin-top: var(--ds-gap-md);
+}
+.table-scroll td {
+  text-align: center;
+}

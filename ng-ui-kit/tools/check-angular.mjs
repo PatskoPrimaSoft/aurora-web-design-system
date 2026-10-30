@@ -26,7 +26,7 @@ export async function checkAngular({root=toolRoot,tarball,workRoot,consumerNames
   for(const name of consumerNames){
    const consumer=join(work,name);copy(join(root,'ng-ui-kit/tests/consumers/angular-'+name),consumer);
    if(name==='19'||name==='base'){
-    for(const file of ['button-demo.ts','button-example.ts','icon-demo.ts','icon-demo.html','fab-demo.ts']){
+    for(const file of ['button-demo.ts','button-example.ts','icon-demo.ts','icon-demo.html','fab-demo.ts','checkbox-demo.ts']){
      copyFileSync(join(root,'ng-ui-kit/tests/consumers/shared',file),join(consumer,'src',file));
     }
    }
@@ -52,6 +52,7 @@ export async function assertConsumers(page,consumers){
  await assertAngularButton(page,url);
  await assertAngularIcon(page,url);
  await assertAngularFab(page,url);
+ await assertAngularCheckbox(page,url);
  }
  await page.goto(consumers.legacyUrl+'/index.html');await page.waitForFunction(()=>window.legacyCheck);assert.deepEqual(await page.evaluate(()=>[window.legacyCheck.sameService,window.legacyCheck.sameConfig,window.legacyCheck.sameInstance,window.legacyCheck.chart,window.legacyCheck.watch]),[true,true,true,true,true]);
  await page.goto(consumers.chartsUrl+'/index.html');await page.waitForFunction(()=>window.auroraCheck);assert.equal(await page.evaluate(()=>window.auroraCheck.sameTheme),true);const before=await page.evaluate(()=>window.auroraCheck.read.fg);
@@ -211,4 +212,56 @@ async function assertAngularFab(page, url) {
   await expect(fab).toBeDisabled();
   await fab.evaluate(el => el.click());
   await expect(page.locator('#fab-count')).toHaveText('1');
+}
+
+export async function assertAngularCheckbox(page, url) {
+  await page.goto(url + '/index.html');
+  const direct = page.locator('#checkbox-direct input');
+  await expect(direct).toHaveAccessibleName('Отправка команд');
+  await expect(direct).toHaveAccessibleDescription('Разрешить команды выбранным объектам');
+  await expect(direct).toHaveAttribute('aria-checked', 'mixed');
+  await page.locator('#checkbox-direct .description').click();
+  await expect(direct).toBeChecked();
+  await expect(direct).not.toHaveAttribute('aria-checked', 'mixed');
+  await expect(page.locator('#checkbox-events')).toHaveText('1');
+  await direct.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#checkbox-events')).toHaveText('1');
+  await page.keyboard.press('Space');
+  await expect(direct).not.toBeChecked();
+  await page.locator('#checkbox-mixed').click();
+  await expect(direct).toHaveAttribute('aria-checked', 'mixed');
+  await page.keyboard.press('Tab');
+  const control = page.locator('#checkbox-form input');
+  await page.locator('#checkbox-set').click();
+  await expect(control).toBeChecked();
+  await expect(page.locator('#checkbox-form-events')).toHaveText('0');
+  await control.uncheck();
+  await control.check();
+  await expect(page.locator('#checkbox-form-events')).toHaveText('2');
+  await expect(page.locator('#checkbox-events')).toHaveText('2');
+  await control.focus();
+  await page.locator('#checkbox-set').focus();
+  await expect(page.locator('#checkbox-form-value')).toHaveText('true / true');
+  await page.locator('#checkbox-disable').click();
+  await expect(control).toBeDisabled();
+  await page.locator('#checkbox-reset').click();
+  await expect(control).not.toBeChecked();
+  await expect(control).toBeEnabled();
+  await expect(page.locator('#checkbox-form-value')).toHaveText('false / false');
+  await expect(page.locator('#checkbox-form-events')).toHaveText('2');
+  // Cover the other mixed combination: checked=true must still become selected, not unchecked.
+  await direct.click();
+  await expect(direct).toBeChecked();
+  await page.locator('#checkbox-mixed').click();
+  await expect(direct).toBeChecked();
+  await expect(direct).toHaveAttribute('aria-checked', 'mixed');
+  await direct.click();
+  await expect(direct).toBeChecked();
+  await expect(direct).not.toHaveAttribute('aria-checked', 'mixed');
+  await expect(page.locator('#checkbox-events')).toHaveText('4');
+  const mark = page.locator('#checkbox-direct .mark');
+  assert.equal(await mark.evaluate(el => el.getBoundingClientRect().width), 18);
+  assert.equal(await page.locator('#checkbox-compact .hit').evaluate(el => el.getBoundingClientRect().height), 24);
+  await expect(page.locator('#checkbox-disabled input')).toBeDisabled();
 }

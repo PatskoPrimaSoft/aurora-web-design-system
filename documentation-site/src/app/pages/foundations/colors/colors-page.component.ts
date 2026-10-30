@@ -7,6 +7,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { DsCheckboxComponent } from '@primasoftllc/design-system/angular';
 import { RouterLink } from '@angular/router';
 import { neutralPalette } from '../../../data/reference-samples';
 import { ArticleLayoutComponent } from '../../../shared/article-layout/article-layout.component';
@@ -15,12 +16,13 @@ import { SiteSettingsService } from '../../../site-settings.service';
 
 @Component({
   selector: 'aurora-colors-page',
-  imports: [RouterLink, ArticleLayoutComponent, ExampleBlockComponent],
+  imports: [DsCheckboxComponent, RouterLink, ArticleLayoutComponent, ExampleBlockComponent],
   templateUrl: './colors-page.component.html',
   styleUrl: './colors-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NeutralColorsPageComponent {
+  protected readonly showTracks = signal(false);
   protected readonly neutralPalette = neutralPalette;
   protected readonly settings = inject(SiteSettingsService);
   private readonly colorProbe = viewChild.required<ElementRef<HTMLElement>>('colorProbe');

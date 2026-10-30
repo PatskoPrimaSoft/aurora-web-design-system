@@ -312,13 +312,13 @@
       </div>
       <div class="role-row">
         <aurora-example-block id="checkbox-demo"
-          class="boundary-demo migration-placeholder"
-          role="note"
-          data-migration-placeholder=""
+          class="boundary-demo"
           [attr.data-ds-theme]="settings.theme()"
           [attr.data-ds-appearance]="settings.appearance()"
           [attr.data-ds-density]="settings.density()">
-          Демонстрация границы чекбокса ожидает подготовки Angular-примера.
+          <ds-checkbox label="Показывать треки"
+            [checked]="showTracks()"
+            (checkedChange)="showTracks.set($event)"></ds-checkbox>
         </aurora-example-block>
         <div>
           <code class="role-token">--ds-border-control</code>

@@ -19,6 +19,13 @@
         <code>ng-ui-kit</code>
         и React-зависимости для Angular не нужны.
       </p>
+      <p>
+        Для Angular-входа также нужен стандартный пакет
+        <code>&#64;angular/forms</code>
+        той же версии, что
+        <code>&#64;angular/core</code>: Checkbox использует ControlValueAccessor. Для привязки формы импортируйте
+        ReactiveFormsModule в компонент приложения.
+      </p>
       <ul>
         <li>
           <a routerLink="." fragment="1-доступ-к-пакету" [queryParams]="settings.queryParams()">

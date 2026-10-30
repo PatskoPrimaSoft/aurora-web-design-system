@@ -1,0 +1,421 @@
+<aurora-article-layout title="Checkbox"
+  subtitle="Выбор независимой опции и частичный выбор группы.">
+  <div class="guide-content">
+    <section aria-labelledby="examples">
+      <h2 id="examples" tabindex="-1">Живые примеры</h2>
+      <section class="example" aria-labelledby="basic">
+        <h3 id="basic" tabindex="-1">Обычный выбор</h3>
+        <p>
+          Нажмите на символ, подпись или пояснение. В фокусе Space переключает значение; Enter его
+          не переключает.
+        </p>
+        <aurora-example-block class="demo"
+          id="checkbox-basic-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <ds-checkbox label="Отправка команд"
+            description="Разрешить отправку команд выбранным объектам"
+            [checked]="basic()"
+            (checkedChange)="basic.set($event)"></ds-checkbox>
+          <p role="status">
+            {{ basic() ? 'Отправка команд разрешена.' : 'Отправка команд запрещена.' }}
+          </p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.basic" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="tree">
+        <h3 id="tree" tabindex="-1">Дерево и выбор всех объектов</h3>
+        <p>
+          Частичный выбор вычисляет родитель примера. Нажатие на минус выбирает все дочерние
+          элементы. Сам Checkbox не знает о дереве.
+        </p>
+        <aurora-example-block class="demo"
+          id="checkbox-tree-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="selection-tree">
+            <ds-checkbox label="Выбрать все объекты"
+              [checked]="allSelected(allIds)"
+              [indeterminate]="partlySelected(allIds)"
+              (checkedChange)="select(allIds, $event)"></ds-checkbox>
+            <div class="branches">
+              @for (group of groups; track group.name) {
+                <fieldset>
+                  <legend>{{ group.name }}</legend>
+                  <ds-checkbox [label]="'Выбрать группу «' + group.name + '»'"
+                    [checked]="allSelected(ids(group))"
+                    [indeterminate]="partlySelected(ids(group))"
+                    (checkedChange)="select(ids(group), $event)"></ds-checkbox>
+                  <div class="leaves">
+                    @for (item of group.items; track item.id) {
+                      <ds-checkbox [label]="item.name"
+                        [checked]="selected().includes(item.id)"
+                        (checkedChange)="select([item.id], $event)"></ds-checkbox>
+                    }
+                  </div>
+                </fieldset>
+              }
+            </div>
+          </div>
+          <p role="status">Выбрано объектов: {{ selected().length }} из {{ allIds.length }}.</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.tree" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="disabled">
+        <h3 id="disabled" tabindex="-1">Недоступное действие</h3>
+        <p>
+          Disabled использует нативную блокировку и исключает input из Tab. Причина ограничения
+          остаётся рядом с подписью.
+        </p>
+        <aurora-example-block class="demo"
+          id="checkbox-disabled-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="stack">
+            <ds-checkbox label="Изменение параметров"
+              description="Недоступно для вашей роли"
+              disabled></ds-checkbox>
+            <ds-checkbox label="Обязательная настройка"
+              description="Включена администратором"
+              [checked]="true"
+              disabled></ds-checkbox>
+            <ds-checkbox label="Выбор ограниченной группы"
+              description="Часть объектов выбрана; изменение запрещено"
+              [indeterminate]="true"
+              disabled></ds-checkbox>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.disabled" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="unlabelled">
+        <h3 id="unlabelled" tabindex="-1">Выбор без подписи</h3>
+        <p>
+          У самого input остаётся доступное имя. В компактном варианте область нажатия — 24 × 24 px;
+          обычный размер следует плотности.
+        </p>
+        <aurora-example-block class="demo"
+          id="checkbox-unlabelled-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="sample">
+            <ds-checkbox compact
+              aria-label="Выбрать объект МАЗ 5440"
+              [checked]="row()"
+              (checkedChange)="row.set($event)"></ds-checkbox>
+            <span>МАЗ 5440</span>
+          </div>
+          <p role="status">{{ row() ? 'Объект выбран.' : 'Объект не выбран.' }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.unlabelled" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="alignment">
+        <h3 id="alignment" tabindex="-1">Выравнивание и область нажатия</h3>
+        <p>
+          Символ центрируется относительно всего блока подписи и пояснения. Свободное место справа
+          не переключает чекбокс.
+        </p>
+        <aurora-example-block class="demo"
+          id="checkbox-alignment-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="alignment">
+            <ds-checkbox aria-label="Выбрать объект без видимой подписи"></ds-checkbox>
+            <ds-checkbox label="Показывать треки"></ds-checkbox>
+            <ds-checkbox label="Показывать события"
+              description="События выбранных объектов за текущий день"></ds-checkbox>
+            <ds-checkbox label="Разрешить отображение подробных сведений обо всех выбранных объектах"
+              description="Длинные подпись и пояснение переносятся; чекбокс остаётся по центру всего текстового блока"></ds-checkbox>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.alignment" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="forms">
+        <h3 id="forms" tabindex="-1">Reactive Forms</h3>
+        <p>
+          Значение формы — boolean. Формы управляют значением, touched, disabled и reset. Не
+          задавайте checked одновременно с formControl или formControlName.
+        </p>
+        <aurora-example-block class="demo"
+          id="checkbox-forms-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <form [formGroup]="form" (submit)="submitForm($event)">
+            <div class="stack">
+              <ds-checkbox formControlName="showTracks"
+                name="showTracks"
+                label="Показывать треки"
+                description="Значение связано с FormControl"></ds-checkbox>
+              <ds-checkbox formControlName="sendCommands"
+                name="sendCommands"
+                label="Разрешить команды"
+                description="Недоступность задаётся через FormControl"></ds-checkbox>
+            </div>
+            <div class="row form-actions">
+              <button dsButton type="submit">Сохранить настройки</button>
+              <button dsButton tone="secondary" (click)="resetForm()">Сбросить форму</button>
+              <button dsButton
+                tone="ghost"
+                (click)="form.controls.showTracks.setValue(!form.controls.showTracks.value)">
+                Изменить значение из кода
+              </button>
+              <button dsButton tone="ghost" (click)="toggleDisabled()">
+                {{
+                  form.controls.sendCommands.disabled
+                    ? 'Разрешить команды'
+                    : 'Заблокировать команды'
+                }}
+              </button>
+            </div>
+          </form>
+          <p>
+            Значение:
+            <code>{{ form.value | json }}</code>
+          </p>
+          <p>
+            Поле треков touched:
+            <code>{{ form.controls.showTracks.touched }}</code>
+          </p>
+          <p role="status">{{ formMessage() }}</p>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.forms" collapsible></aurora-code-block>
+      </section>
+      <section class="example" aria-labelledby="states">
+        <h3 id="states" tabindex="-1">Сравнение состояний</h3>
+        <p>
+          В доступной колонке можно переключать контролы. Indeterminate отображает минус независимо
+          от checked; при нажатии становится checked=true и indeterminate=false.
+        </p>
+        <aurora-example-block class="demo"
+          id="checkbox-states-demo"
+          auroraScope
+          [theme]="settings.theme()"
+          [appearance]="settings.appearance()"
+          [density]="settings.density()">
+          <div class="table-scroll" tabindex="0" role="region" aria-label="Состояния Checkbox">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Начальное состояние</th>
+                  <th scope="col">Доступен</th>
+                  <th scope="col">Недоступен</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (state of states; track state.name) {
+                  <tr>
+                    <th scope="row">{{ state.name }}</th>
+                    <td>
+                      <ds-checkbox [checked]="state.checked"
+                        [indeterminate]="state.mixed"
+                        [aria-label]="state.name + ': доступный образец'"></ds-checkbox>
+                    </td>
+                    <td>
+                      <ds-checkbox [checked]="state.checked"
+                        [indeterminate]="state.mixed"
+                        [aria-label]="state.name + ': недоступный образец'"
+                        disabled></ds-checkbox>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </aurora-example-block>
+        <aurora-code-block [snippet]="snippets.states" collapsible></aurora-code-block>
+      </section>
+    </section>
+    <section aria-labelledby="rules">
+      <h2 id="rules" tabindex="-1">Правила применения</h2>
+      <ul>
+        <li>
+          Используйте Checkbox для независимых опций или выбора нескольких объектов. Выбор одного
+          варианта и переключатель немедленно применяемой настройки — отдельные компоненты.
+        </li>
+        <li>
+          Родитель вычисляет checked и indeterminate для группы. При indeterminate=true виден минус
+          независимо от checked; действие пользователя выбирает контрол и снимает частичное
+          состояние.
+        </li>
+        <li>
+          Label и description образуют кликабельный текстовый блок. Чекбокс центрируется
+          относительно всей его высоты; свободная ширина строки не становится областью нажатия.
+        </li>
+        <li>
+          Без label задайте aria-label или aria-labelledby. Description автоматически связан с
+          input; внешний aria-describedby дополняет его.
+        </li>
+        <li>
+          В Reactive Forms используйте boolean-контрол, задавайте disabled через форму. Programmatic
+          setValue и reset не создают checkedChange; пользовательское изменение создаёт событие.
+        </li>
+        <li>
+          Required, отображение ошибок, radio и дерево как самостоятельный компонент пока в API не
+          входят.
+        </li>
+      </ul>
+    </section>
+    <section aria-labelledby="usage">
+      <h2 id="usage" tabindex="-1">Пример подключения</h2>
+      <p>
+        Импортируйте DsCheckboxComponent из публичного Angular-входа и подключите общий styles.css.
+        Для Reactive Forms добавьте ReactiveFormsModule.
+      </p>
+      <aurora-code-block [snippet]="snippets.usage"></aurora-code-block>
+    </section>
+    <section aria-labelledby="parameters">
+      <h2 id="parameters" tabindex="-1">Параметры</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Параметры Checkbox">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Параметр</th>
+              <th scope="col">Назначение</th>
+              <th scope="col">По умолчанию</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>checked</code></th>
+              <td>boolean; выбранное значение вне Angular Forms</td>
+              <td>false</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>indeterminate</code></th>
+              <td>boolean; частичный выбор, не отдельное значение формы</td>
+              <td>false</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>disabled</code></th>
+              <td>boolean; нативная блокировка, дополняет disabled формы</td>
+              <td>false</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>compact</code></th>
+              <td>boolean; область нажатия 24 px для табличной строки</td>
+              <td>false</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>label</code></th>
+              <td>string; видимая подпись</td>
+              <td>Нет</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>description</code></th>
+              <td>string; пояснение под подписью</td>
+              <td>Нет</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>inputId</code></th>
+              <td>string; ID внутреннего input</td>
+              <td>Генерируется</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>name</code></th>
+              <td>
+                string; имя input для FormData; отмеченный input передаёт нативное значение on
+              </td>
+              <td>Нет</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>aria-label / aria-labelledby</code></th>
+              <td>Доступное имя внутреннего input, если нет видимой подписи</td>
+              <td>Из label</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>aria-describedby</code></th>
+              <td>Внешние ID описаний, дополняются ID description</td>
+              <td>Нет</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        События checkedChange и indeterminateChange передают boolean. Поддерживаются [(checked)] и
+        [(indeterminate)]. Checkbox сам меняет локальное состояние при действии пользователя;
+        приложение может обновить входное значение. При подключённом CVA значение принадлежит
+        Angular Forms. Disabled задаётся формой или параметром; любой из них запрещает
+        взаимодействие.
+      </p>
+    </section>
+    <section aria-labelledby="tokens">
+      <h2 id="tokens" tabindex="-1">Токены</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Токены Checkbox">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Токены</th>
+              <th scope="col">Назначение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"><code>--ds-surface, --ds-border-control</code></th>
+              <td>Невыбранный контрол</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-brand, --ds-on-brand</code></th>
+              <td>Выбранный и частично выбранный контрол</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-border-control-hover, --ds-overlay-hover</code></th>
+              <td>Наведение</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-surface-hover</code></th>
+              <td>Наведение на область без подписи</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>
+                  --ds-surface-disabled, --ds-border-control-disabled, --ds-fg-control-disabled
+                </code>
+              </th>
+              <td>Недоступное состояние</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-border-width-control, --ds-radius-xs</code></th>
+              <td>Граница 2 px и скругление символа</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-control-h, --ds-gap-sm</code></th>
+              <td>Область нажатия и интервал до подписи</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-type-body, --ds-type-caption, --ds-fg, --ds-fg-subtle</code>
+              </th>
+              <td>Подпись и пояснение</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>--ds-focus-width, --ds-focus-color, --ds-focus-offset</code>
+              </th>
+              <td>Клавиатурный фокус</td>
+            </tr>
+            <tr>
+              <th scope="row"><code>--ds-transition-control</code></th>
+              <td>Переходы состояний</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Символ — 18 × 18 px при любой плотности. Галочка и минус — декоративные глифы локального
+        Material Symbols 14 px с wght=600, как в оформлении Checkbox. Они не являются отдельными
+        фокусируемыми элементами.
+      </p>
+    </section>
+  </div>
+</aurora-article-layout>
